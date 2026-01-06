@@ -1,16 +1,27 @@
 {
-    "name": "ar-assets-api",
+    "name": "reskins-assets-api",
     "version": "1.0.0",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "title": "Artisanal Reskins: Assets API",
     "author": "Kirazy",
     "contact": "https://discord.gg/qAvSyzZFPr",
+    "homepage": "https://github.com/kirazy/reskins-assets-api",
     "dependencies": [
         "base",
+        "reskins-sprite-utils",
         "flib",
-        "? ar-assets-base",
-        "? ar-assets-bobs",
-        "? ar-assets-angels",
-        "? ar-assets-assorted"
+        "? reskins-assets-base",
+        "? reskins-assets-bobs",
+        "? reskins-assets-angels",
+        "? reskins-assets-assorted",
+        "? space-age",
+        "? reskins-assets-space-age",
+        "? angelsrefininggraphics",
+        "? angelssmeltinggraphics",
+        "? angelspetrochemgraphics",
+        "? angelsbioprocessinggraphics",
+        "? angelsaddons-mobility-graphics-crawler",
+        "? angelsaddons-mobility-graphics-petro",
+        "? angelsaddons-mobility-graphics-smelting"
     ]
 }
