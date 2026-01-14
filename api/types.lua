@@ -80,18 +80,6 @@
 ---@field apply_to_entity fun(prototype: CargoBayConnectablePrototype)
 ---@field apply_to_corpse fun(corpse: CargoBayConnectablePrototype)
 
----Provides the graphics components and applicator methods for an entity that derives from the
----CraftingMachinePrototype.
----@class CraftingMachineGraphicsPack:EntityGraphicsPack
----@field graphics_set data.CraftingMachineGraphicsSet
----Applies the graphics pack to the provided `prototype`.
----This includes setting the icon on the entity and related item, as retrieved by convention.
----@field apply_to_entity fun(self: CraftingMachineGraphicsPack, prototype: data.CraftingMachinePrototype)
----Applies the graphics pack to the provided `corpse`.
----@field apply_to_corpse fun(self: CraftingMachineGraphicsPack, corpse: data.CorpsePrototype)
----@field graphics_set_flipped data.CraftingMachineGraphicsSet?
----@field fluid_boxes FluidBoxGraphics[]
-
 ---@class EnemySpawnerGraphicsPack:EntityGraphicsPack
 ---@field graphics_set data.EnemySpawnerGraphicsSet
 ---@field apply_to_entity fun(prototype: data.EnemySpawnerPrototype)
