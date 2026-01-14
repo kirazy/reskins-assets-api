@@ -17,7 +17,7 @@ local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
 
 ---@class AssemblingMachineGraphicsPack:CraftingMachineGraphicsPack
 local AssemblingMachineGraphicsPack = {}
-AssemblingMachineGraphicsPack.__index = CraftingMachineGraphicsPack
+AssemblingMachineGraphicsPack.__index = AssemblingMachineGraphicsPack
 
 -- Setup inheritance.
 setmetatable(AssemblingMachineGraphicsPack, {
