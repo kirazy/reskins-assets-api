@@ -53,7 +53,7 @@ local entity = get_newly_created_fake("fake-electric-asm-1", "assembling-machine
 AssemblingMachineGraphicsPack:new({
 	tint = colors.from_argb("FF1AE4DA"),
 	machine_tier = 5,
-	electronics_tier = 3,
+	use_electronics_set = true,
 }):apply_to_entity(entity)
 
 _sprites.rescale_prototype(entity, 2 / 3)
