@@ -1,17 +1,6 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
-
-local function throw_when_int_out_of_range(fn_name, param_name, value, min, max)
-	local err_type = string.format("Invalid param in %s: '%s'", fn_name, param_name)
-
-	if type(value) ~= "number" then
-		error(string.format("%s must be a number, got %s", err_type, type(value)))
-	elseif value % 1 ~= 0 then
-		error(string.format("%s must be an integer, got %s", err_type, value))
-	elseif value < min or value > max then
-		error(string.format("%s must be between %d and %d inclusive, got %d", err_type, min, max, value))
-	end
-end
+local _errors = require("prototypes.errors")
 
 local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
 
@@ -27,22 +16,14 @@ setmetatable(AssemblingMachineGraphicsPack, {
 ---@class AssemblingMachineGraphicsParams
 ---@field tint data.Color?
 ---@field machine_tier 1|2|3|4|5|6
----@field electronics_tier (1|2|3)?
+---@field use_electronics_set boolean?
 ---@field use_simple_pipe_pictures boolean?
 
 ---@param params AssemblingMachineGraphicsParams
 ---@return AssemblingMachineGraphicsPack
 ---@nodiscard
 function AssemblingMachineGraphicsPack:new(params)
-	throw_when_int_out_of_range("new", "machine_tier", params.machine_tier, 1, 6)
-
-	local use_electronics_set = false
-	if params.electronics_tier ~= nil then
-		throw_when_int_out_of_range("new", "electronics_tier", params.electronics_tier, 1, 3)
-		use_electronics_set = true
-	end
-
-	local graphics_set = self.get_graphics_set(params.tint, params.machine_tier, use_electronics_set)
+	local graphics_set = self.get_graphics_set(params.tint, params.machine_tier, params.use_electronics_set)
 
 	-- Ensure fluid box pipe pictures draw over the mask and highlights.
 	local draw_order = #graphics_set.animation
@@ -58,7 +39,7 @@ function AssemblingMachineGraphicsPack:new(params)
 		fluid_boxes = { fluid_box },
 	}) --[[@as AssemblingMachineGraphicsPack]]
 
-	if params.electronics_tier then
+	if params.use_electronics_set then
 		table.insert(instance.required_assets, _defines.assets.bobs_assets)
 	end
 
@@ -72,7 +53,9 @@ end
 ---@param use_electronics_set boolean?
 ---@return data.CraftingMachineGraphicsSet
 function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_electronics_set)
-	throw_when_int_out_of_range("get_graphics", "assembly_set", assembly_set, 1, 6)
+	_errors.throw_if_not_integer("get_graphics", "machine_tier", assembly_set)
+	_errors.throw_if_out_of_range("get_graphics", "machine_tier", assembly_set, 1, 6)
+
 	-- animations/shadows are 0-based.
 	local animation_index = assembly_set - 1
 	local shadow_index = math.min(4, animation_index)
