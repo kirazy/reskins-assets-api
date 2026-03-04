@@ -164,3 +164,16 @@ TransportBeltGraphicsPack:configure({
 	tint = tints.red,
 	belt_sprite = _defines.belt_sprites.fast,
 }):apply_to_entity(create_dummy_entity("ar-transport-belt-2", "transport-belt", "fast-transport-belt"))
+
+-- SPLITTER TESTS
+local SplitterGraphicsPack = require("graphics-packs.splitter-graphics-pack")
+
+SplitterGraphicsPack:configure({
+	tint = tints.yellow,
+	belt_sprite = _defines.belt_sprites.standard,
+}):apply_to_entity(create_dummy_entity("ar-splitter-1", "splitter", "splitter"))
+
+SplitterGraphicsPack:configure({
+	tint = tints.red,
+	belt_sprite = _defines.belt_sprites.fast,
+}):apply_to_entity(create_dummy_entity("ar-splitter-2", "splitter", "fast-splitter"))
