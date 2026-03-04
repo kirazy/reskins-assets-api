@@ -19,6 +19,8 @@
 ---
 ---@alias IconCreator fun(shift: data.Vector?, scale: double?): data.IconData[]
 
+---@alias RequiredAssets {[Reskins.Defines.Assets]: true}
+
 ---@class PipeConnectionGraphics
 ---@field enable_working_visualisations string[]
 ---@field direction defines.direction

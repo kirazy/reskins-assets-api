@@ -6,10 +6,10 @@
 ---
 ---### Examples
 ---```lua
----local _sprites = require("__reskins-assets-api__.api.sprites")
+---local sprites_api = require("__reskins-assets-api__.api.sprites")
 ---```
 ---@class Reskins.Sprites:Reskins.SpriteUtils.Sprites
-local _sprites = require("__reskins-sprite-utils__.sprites")
+local sprites_api = require("__reskins-sprite-utils__.sprites")
 
 ---@alias LightSpriteNames
 --- | "atomic-artillery-shell" The name of the sprite for a radioactive atomic artillery shell.
@@ -45,7 +45,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 ---### Returns
 ---@return data.Sprite # A `Sprite` object configured for use as a light layer.
 ---@nodiscard
-function _sprites.get_sprite_light_layer(light_name, tint)
+function sprites_api.get_sprite_light_layer(light_name, tint)
 	---@type data.Sprite
 	local sprite = {
 		flags = { "light", "icon" },
@@ -93,7 +93,7 @@ end
 ---*@throws* `string` — Thrown when `sprite_name` is not a non-empty string.<br/>
 ---*@throws* `string` — Thrown when `num_variations` is not a positive integer.
 ---@nodiscard
-function _sprites.create_sprite_variations(directory, sprite_name, num_variations, is_light, tint)
+function sprites_api.create_sprite_variations(directory, sprite_name, num_variations, is_light, tint)
 	assert(
 		directory and type(directory) == "string" and directory ~= "",
 		"Invalid parameter: `directory` must not be non-empty string."
@@ -158,4 +158,4 @@ function _sprites.create_sprite_variations(directory, sprite_name, num_variation
 	return sprites
 end
 
-return _sprites
+return sprites_api

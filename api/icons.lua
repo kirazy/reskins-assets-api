@@ -6,10 +6,10 @@
 ---
 ---### Examples
 ---```lua
----local _icons = require("__reskins-assets-api__.prototypes.icons")
+---local icons_api = require("__reskins-assets-api__.prototypes.icons")
 ---```
 ---@class Reskins.Icons:Reskins.SpriteUtils.Icons
-local _icons = require("__reskins-sprite-utils__.icons")
+local icons_api = require("__reskins-sprite-utils__.icons")
 
 ---Checks if the given `icon_datum` is using images from Artisanal Reskins.
 ---
@@ -29,7 +29,7 @@ end
 ---
 ---### Parameters
 ---@param icon_data data.IconData[] # An icon represented by an array of `IconData` objects.
-function _icons.is_icons_using_reskins_images(icon_data)
+function icons_api.is_icons_using_reskins_images(icon_data)
 	if icon_data then
 		for i = #icon_data, 1, -1 do
 			if is_icon_using_reskins_images(icon_data[i]) then
@@ -50,7 +50,7 @@ local supported_symbols = {
 ---Gets an icon representing the given `symbol` and colored with the given `tint`.
 ---
 ---### Parameters
----@param symbol Reskins.Defines.Symbols # The symbol to get an icon for.
+---@param symbol Reskins.Defines.Symbol # The symbol to get an icon for.
 ---@param tint data.Color # The color to tint the icon.
 ---
 ---### Returns
@@ -59,13 +59,13 @@ local supported_symbols = {
 ---### Examples
 ---Get the "area-drill" symbol icon in red and add it to the steel furnace.
 ---```lua
----local _icons = require("__reskins-assets-api__.api.icons")
+---local icons_api = require("__reskins-assets-api__.api.icons")
 ---local _defines = require("__reskins-assets-api__.api.defines")
----local symbol_icon = _icons.get_symbol(_defines.symbols.area_drill, util.color("#ff0000"))
+---local symbol_icon = icons_api.get_symbol(_defines.symbols.area_drill, util.color("#ff0000"))
 ---
 ----- Add the symbol to the steel furnace icon.
 ---local steel_furnace = data.raw["furnace"]["steel-furnace"]
----steel_furnace.icons = _icons.compose_icons(_icons.get_icon_from_prototype(steel_furnace), symbol_icon)
+---steel_furnace.icons = icons_api.compose_icons(icons_api.get_icon_from_prototype(steel_furnace), symbol_icon)
 ---```
 ---
 ---### Exceptions
@@ -74,7 +74,7 @@ local supported_symbols = {
 ---@see Reskins.Defines.Symbols
 ---@see Reskins.Icons.get_icon_from_prototype
 ---@nodiscard
-function _icons.get_symbol(symbol, tint)
+function icons_api.get_symbol(symbol, tint)
 	local safe_symbol = tostring(symbol)
 	assert(
 		supported_symbols[safe_symbol],
@@ -114,11 +114,11 @@ end
 ---Assuming that the inserter icon has a filter symbol applied to it, do the following
 ---to remove the symbol from the inserter icon.
 ---```lua
----local _icons = require("__reskins-assets-api__.api.icons")
----local icon_with_symbol = _icons.get_icon_from_named_prototype("inserter", "inserter")
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local icon_with_symbol = icons_api.get_icon_from_named_prototype("inserter", "inserter")
 ---
 ----- Remove any symbols, discarding the removed symbols.
----local icon_without_symbol = _icons.remove_symbols_from_icons(icon_with_symbol)
+---local icon_without_symbol = icons_api.remove_symbols_from_icons(icon_with_symbol)
 ---
 ----- Remove any symbols, and keep a copy of the removed symbol icon layers.
 ---local icon_without_symbol, removed_symbol = __tiers.remove_symbols_from_icons(icon_with_symbol)
@@ -129,7 +129,7 @@ end
 ---
 ---@see Reskins.Icons.get_icon_from_named_prototype
 ---@nodiscard
-function _icons.remove_symbols_from_icons(icon_data)
+function icons_api.remove_symbols_from_icons(icon_data)
 	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
 
 	---@type data.IconData[]
@@ -162,7 +162,7 @@ local supported_letters = {
 ---The icon is comprised of two layers, an untinted base and a tinted mask over top to create the effect.
 ---
 ---### Parameters
----@param letter Reskins.Defines.Letters # The letter to get an icon for.
+---@param letter Reskins.Defines.Letter # The letter to get an icon for.
 ---@param tint data.Color # The color to tint the icon.
 ---
 ---### Returns
@@ -171,12 +171,12 @@ local supported_letters = {
 ---### Examples
 ---Get the "F" letter icon in red and add it to the steel furnace.
 ---```lua
----local _icons = require("__reskins-assets-api__.api.icons")
----local letter_icon = _icons.get_letter("F", util.color("#ff0000"))
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local letter_icon = icons_api.get_letter("F", util.color("#ff0000"))
 ---
 ----- Add the letter to the steel furnace icon.
 ---local steel_furnace = data.raw["furnace"]["steel-furnace"]
----steel_furnace.icons = _icons.compose_icons(_icons.get_icon_from_prototype(steel_furnace), letter_icon)
+---steel_furnace.icons = icons_api.compose_icons(icons_api.get_icon_from_prototype(steel_furnace), letter_icon)
 ---```
 ---
 ---### Exceptions
@@ -185,7 +185,7 @@ local supported_letters = {
 ---@see Reskins.Icons.compose_icons
 ---@see Reskins.Icons.get_icon_from_prototype
 ---@nodiscard
-function _icons.get_letter(letter, tint)
+function icons_api.get_letter(letter, tint)
 	local safe_letter = tostring(letter)
 	assert(supported_letters[safe_letter], "Invalid parameter: 'letter' must be one of 'F', 'H', 'L', 'M', or 'S'.")
 
@@ -221,11 +221,11 @@ end
 ---### Examples
 ---Remove any letters from the `solar-panel-small` icon.
 ---```lua
----local _icons = require("__reskins-assets-api__.api.icons")
----local icon_with_letters = _icons.get_icon_from_named_prototype("solar-panel-small", "solar-panel")
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local icon_with_letters = icons_api.get_icon_from_named_prototype("solar-panel-small", "solar-panel")
 ---
 ----- Remove any letters, discarding the removed letters.
----local icon_without_letters = _icons.remove_letters_from_icons(icon_with_letters)
+---local icon_without_letters = icons_api.remove_letters_from_icons(icon_with_letters)
 ---
 ----- Remove any letters, and keep a copy of the removed symbol icon layers.
 ---local icon_without_letters, removed_letters = __tiers.remove_letters_from_icons(icon_with_letters)
@@ -236,7 +236,7 @@ end
 ---
 ---@see Reskins.Icons.get_icon_from_named_prototype
 ---@nodiscard
-function _icons.remove_letters_from_icons(icon_data)
+function icons_api.remove_letters_from_icons(icon_data)
 	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
 
 	---@type data.IconData[]
@@ -283,17 +283,17 @@ local equipment_background_tints = {
 ---Add a red background layer underneath the iron plate icon.
 ---```lua
 ----- Get the red background layer.
----local _icons = require("__reskins-assets-api__.api.icons")
----local background = _icons.get_icon_background_layer(util.color("#ff0000"))
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local background = icons_api.get_icon_background_layer(util.color("#ff0000"))
 ---
 ----- Add the background under the iron plate icon.
 ---local iron_plate = data.raw["item"]["iron-plate"]
----iron_plate.icons = _icons.compose_icons(background, _icons.get_icon_from_prototype(iron_plate))
+---iron_plate.icons = icons_api.compose_icons(background, icons_api.get_icon_from_prototype(iron_plate))
 ---```
 ---@see Reskins.Icons.compose_icons
 ---@see Reskins.Icons.get_icon_from_prototype
 ---@nodiscard
-function _icons.get_icon_background_layer(tint)
+function icons_api.get_icon_background_layer(tint)
 	---@type data.IconData
 	local icon_data = {
 		icon = "__reskins-assets-api__/graphics/icons/equipment-background.png",
@@ -314,16 +314,16 @@ end
 ---Add the minified symbol to the steel furnace item.
 ---```lua
 ----- Get the overlay
----local _icons = require("__reskins-assets-api__.api.icons")
----local overlay = _icons.get_minified_symbol_overlay()
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local overlay = icons_api.get_minified_symbol_overlay()
 ---
 ----- Add the overlay over the steel furnace icon.
 ---local steel_furnace = data.raw["item"]["steel-furnace"]
----steel_furnace.icons = _icons.compose_icons(_icons.get_icon_from_prototype(steel_furnace), overlay)
+---steel_furnace.icons = icons_api.compose_icons(icons_api.get_icon_from_prototype(steel_furnace), overlay)
 ---```
 ---@see Reskins.Icons.compose_icons
 ---@see Reskins.Icons.get_icon_from_prototype
-function _icons.get_minified_symbol_overlay()
+function icons_api.get_minified_symbol_overlay()
 	---@type data.IconData
 	local icon_data = {
 		icon = "__reskins-assets-api__/graphics/icons/mini-machine-overlay.png",
@@ -334,4 +334,4 @@ function _icons.get_minified_symbol_overlay()
 	return icon_data
 end
 
-return _icons
+return icons_api

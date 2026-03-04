@@ -1,6 +1,6 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
-local _errors = require("prototypes.errors")
+local NumberValidator = require("prototypes.number-validator")
 
 local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
 
@@ -22,7 +22,7 @@ setmetatable(AssemblingMachineGraphicsPack, {
 ---@param params AssemblingMachineGraphicsParams
 ---@return AssemblingMachineGraphicsPack
 ---@nodiscard
-function AssemblingMachineGraphicsPack:new(params)
+function AssemblingMachineGraphicsPack:configure(params)
 	local graphics_set = self.get_graphics_set(params.tint, params.machine_tier, params.use_electronics_set)
 
 	-- Ensure fluid box pipe pictures draw over the mask and highlights.
@@ -31,16 +31,16 @@ function AssemblingMachineGraphicsPack:new(params)
 
 	local remnants = self.get_corpse_animation(params.tint)
 
-	local instance = CraftingMachineGraphicsPack.new(self, {
+	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
 		remnants = remnants,
-		required_assets = { _defines.assets.base },
+		required_assets = { [_defines.assets.base] = true },
 		graphics_set = graphics_set,
 		fluid_boxes = { fluid_box },
 	}) --[[@as AssemblingMachineGraphicsPack]]
 
 	if params.use_electronics_set then
-		table.insert(instance.required_assets, _defines.assets.bobs_assets)
+		instance.required_assets[_defines.assets.bobs_assets] = true
 	end
 
 	-- Set the correct metatable for this class.
@@ -53,8 +53,7 @@ end
 ---@param use_electronics_set boolean?
 ---@return data.CraftingMachineGraphicsSet
 function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_electronics_set)
-	_errors.throw_if_not_integer("get_graphics", "machine_tier", assembly_set)
-	_errors.throw_if_out_of_range("get_graphics", "machine_tier", assembly_set, 1, 6)
+	NumberValidator.validate(assembly_set, "assembly_set"):is_integer():in_range(1, 6)
 
 	-- animations/shadows are 0-based.
 	local animation_index = assembly_set - 1
@@ -183,13 +182,160 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 end
 
 ---@param tint data.Color?
+---@param use_simple_pipe_pictures boolean?
+---@return data.Sprite4Way
+local function get_assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
+	local simple = use_simple_pipe_pictures and "-simple" or ""
+	local assets_base_path = "__reskins-assets-base__/graphics/entity/assembling-machine/pipes/"
+
+	---@type data.Sprite4Way
+	local pictures = {
+		north = {
+			filename = assets_base_path .. "assembling-machine-pipe-north-base.png",
+			priority = "extra-high",
+			width = 71,
+			height = 38,
+			shift = util.by_pixel(2.25, 13.5),
+			scale = 0.5,
+		},
+		east = {
+			filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-base.png",
+			priority = "extra-high",
+			width = 42,
+			height = 76,
+			shift = util.by_pixel(-24.5, 1),
+			scale = 0.5,
+		},
+		south = {
+			filename = assets_base_path .. "assembling-machine-pipe-south-base.png",
+			priority = "extra-high",
+			width = 88,
+			height = 61,
+			shift = util.by_pixel(0, -31.25),
+			scale = 0.5,
+		},
+		west = {
+			filename = assets_base_path .. "assembling-machine-pipe-west-base.png",
+			priority = "extra-high",
+			width = 39,
+			height = 73,
+			shift = util.by_pixel(25.75, 1.25),
+			scale = 0.5,
+		},
+	}
+
+	if tint then
+		if not use_simple_pipe_pictures then
+			pictures.north = {
+				layers = {
+					pictures.north,
+					{
+						filename = assets_base_path .. "assembling-machine-pipe-north-mask.png",
+						priority = "extra-high",
+						width = 71,
+						height = 38,
+						shift = util.by_pixel(2.25, 13.5),
+						tint = tint,
+						scale = 0.5,
+					},
+					{
+						filename = assets_base_path .. "assembling-machine-pipe-north-highlights.png",
+						priority = "extra-high",
+						width = 71,
+						height = 38,
+						shift = util.by_pixel(2.25, 13.5),
+						blend_mode = "additive-soft",
+						scale = 0.5,
+					},
+				},
+			}
+		end
+
+		pictures.east = {
+			layers = {
+				pictures.east,
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-mask.png",
+					priority = "extra-high",
+					width = 42,
+					height = 76,
+					shift = util.by_pixel(-24.5, 1),
+					tint = tint,
+					scale = 0.5,
+				},
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-highlights.png",
+					priority = "extra-high",
+					width = 42,
+					height = 76,
+					shift = util.by_pixel(-24.5, 1),
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+		}
+
+		pictures.south = {
+			layers = {
+				pictures.south,
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-south-mask.png",
+					priority = "extra-high",
+					width = 88,
+					height = 61,
+					shift = util.by_pixel(0, -31.25),
+					tint = tint,
+					scale = 0.5,
+				},
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-south-highlights.png",
+					priority = "extra-high",
+					width = 88,
+					height = 61,
+					shift = util.by_pixel(0, -31.25),
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+		}
+
+		pictures.west = {
+			layers = {
+				pictures.west,
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-west-mask.png",
+					priority = "extra-high",
+					width = 39,
+					height = 73,
+					shift = util.by_pixel(25.75, 1.25),
+					tint = tint,
+					scale = 0.5,
+				},
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-west-highlights.png",
+					priority = "extra-high",
+					width = 39,
+					height = 73,
+					shift = util.by_pixel(25.75, 1.25),
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+		}
+	end
+
+	return pictures
+end
+
+---@param tint data.Color?
 ---@param draw_order int8?
 ---@param use_simple_pipe_pictures boolean?
 ---@return FluidBoxGraphics
 function AssemblingMachineGraphicsPack.get_fluid_box_graphics(tint, draw_order, use_simple_pipe_pictures)
 	---@type FluidBoxGraphics
 	local fluid_box = {
-		pipe_covers = _pipes.pipe_covers(),
+		pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
+		pipe_picture = get_assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures),
 		secondary_draw_orders = {
 			north = -1,
 			east = draw_order,
@@ -197,12 +343,6 @@ function AssemblingMachineGraphicsPack.get_fluid_box_graphics(tint, draw_order, 
 			west = draw_order,
 		},
 	}
-
-	if use_simple_pipe_pictures then
-		fluid_box.pipe_picture = _pipes.simple_pipe_pictures(tint)
-	else
-		fluid_box.pipe_picture = _pipes.pipe_pictures(tint)
-	end
 
 	return fluid_box
 end

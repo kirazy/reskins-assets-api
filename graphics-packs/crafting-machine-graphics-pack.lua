@@ -24,8 +24,8 @@ setmetatable(CraftingMachineGraphicsPack, {
 ---@param params CraftingMachineGraphicsParams
 ---@return CraftingMachineGraphicsPack
 ---@nodiscard
-function CraftingMachineGraphicsPack:new(params)
-	local instance = GraphicsPackBase.new(self, {
+function CraftingMachineGraphicsPack:configure(params)
+	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
 		remnants = params.remnants,
 		required_assets = params.required_assets,
@@ -41,6 +41,57 @@ function CraftingMachineGraphicsPack:new(params)
 	return instance
 end
 
+---@alias FluidBoxDirections {[defines.direction]: boolean}
+
+---Collects the set of directions declared by a fluid box's pipe connections.
+---@param fluid_box data.FluidBox
+---@return FluidBoxDirections
+local function collect_directions_from_fluid_box(fluid_box)
+	---@type FluidBoxDirections
+	local directions = {
+		[defines.direction.north] = false,
+		[defines.direction.east] = false,
+		[defines.direction.south] = false,
+		[defines.direction.west] = false,
+	}
+
+	if fluid_box and fluid_box.pipe_connections then
+		for _, pipe_connection in pairs(fluid_box.pipe_connections) do
+			directions[pipe_connection.direction] = true
+		end
+	end
+
+	return directions
+end
+
+---Finds the first `FluidBoxGraphics` in `fb_graphics_list` that matches the given set of
+---prototype fluid box directions.
+---
+---A match is found when any direction in a `FluidBoxGraphics.pipe_connections` entry is
+---present in `proto_directions`. If no direction-specific match is found, the first entry
+---with no `pipe_connections` is returned as a universal fallback.
+---@param proto_directions FluidBoxDirections
+---@param fb_graphics_list FluidBoxGraphics[]
+---@return FluidBoxGraphics?
+local function find_matching_fluid_box_graphics(proto_directions, fb_graphics_list)
+	---@type FluidBoxGraphics?
+	local fallback = nil
+
+	for _, fb_graphics in pairs(fb_graphics_list) do
+		if fb_graphics.pipe_connections then
+			for _, pipe_connection_graphics in pairs(fb_graphics.pipe_connections) do
+				if proto_directions[pipe_connection_graphics.direction] then
+					return util.copy(fb_graphics)
+				end
+			end
+		elseif not fallback then
+			fallback = fb_graphics
+		end
+	end
+
+	return util.copy(fallback)
+end
+
 ---Applies the graphics pack to the specified crafting machine `prototype`.
 ---
 ---The prototype is mutated in place.
@@ -51,25 +102,54 @@ function CraftingMachineGraphicsPack:apply_to_entity(prototype)
 	prototype.graphics_set_flipped = self.graphics_set_flipped and util.copy(self.graphics_set_flipped) or nil
 	prototype.water_reflection = nil
 
-	-- Apply fluid box configurations if present
+	-- Apply fluid box configurations if present.
 	if self.fluid_boxes and prototype.fluid_boxes then
 		self:apply_fluid_box_graphics(prototype)
-	end
-
-	-- Need to go through energy source and a few other things.
-	if not reskins_suppress_errors then
-		error("apply_to_entity is incomplete")
 	end
 end
 
 ---Applies fluid box graphics to the specified `prototype`.
 ---
+---Each prototype fluid box is matched to a `FluidBoxGraphics` entry by direction. A
+---`FluidBoxGraphics` with no `pipe_connections` acts as a universal fallback and is applied
+---to any fluid box that has no more-specific match.
+---
 ---The prototype is mutated in place.
 ---@param prototype data.CraftingMachinePrototype
 ---@private
 function CraftingMachineGraphicsPack:apply_fluid_box_graphics(prototype)
-	if not reskins_suppress_errors then
-		error("apply_fluid_box_graphics is not implemented")
+	for _, fluid_box in pairs(prototype.fluid_boxes) do
+		local proto_directions = collect_directions_from_fluid_box(fluid_box)
+		local match = find_matching_fluid_box_graphics(proto_directions, self.fluid_boxes)
+
+		if not match then
+			-- No graphics defined for this fluid box; leave it unmodified.
+			goto continue
+		end
+
+		fluid_box.pipe_covers = match.pipe_covers
+		fluid_box.pipe_covers_frozen = match.pipe_covers_frozen
+		fluid_box.pipe_picture = match.pipe_picture
+		fluid_box.pipe_picture_frozen = match.pipe_picture_frozen
+		fluid_box.mirrored_pipe_picture = match.mirrored_pipe_picture
+		fluid_box.mirrored_pipe_picture_frozen = match.mirrored_pipe_picture_frozen
+		fluid_box.secondary_draw_orders = match.secondary_draw_orders
+		fluid_box.render_layer = match.render_layer
+
+		-- Collect working visualisation names from all matched pipe connection graphics.
+		local working_vis = {}
+		if match.pipe_connections then
+			for _, pipe_connection_graphics in pairs(match.pipe_connections) do
+				if proto_directions[pipe_connection_graphics.direction] then
+					for _, name in pairs(pipe_connection_graphics.enable_working_visualisations) do
+						working_vis[#working_vis + 1] = name
+					end
+				end
+			end
+		end
+		fluid_box.enable_working_visualisations = working_vis
+
+		::continue::
 	end
 end
 

@@ -60,20 +60,54 @@ _defines.assets = {
 	mobility_smelting_graphics = "__angelsaddons-mobility-graphics-smelting__",
 }
 
----@enum Reskins.Defines.Symbols
-_defines.symbols = {
+---@enum Reskins.Defines.Symbol
+_defines.symbol = {
 	area_drill = "area-drill",
 	filter = "filter",
 	shield = "shield",
 }
 
----@enum Reskins.Defines.Letters
-_defines.letters = {
+---@enum Reskins.Defines.Letter
+_defines.letter = {
 	F = "F",
 	H = "H",
 	L = "L",
 	M = "M",
 	S = "S",
+}
+
+---@alias PipeMaterialName
+---| '"brass"'
+---| '"bronze"'
+---| '"ceramic"'
+---| '"copper"'
+---| '"copper-tungsten"'
+---| '"iron"'
+---| '"nitinol"'
+---| '"plastic"'
+---| '"steel"'
+---| '"stone"'
+---| '"titanium"'
+---| '"tungsten"'
+
+---@enum Reskins.Defines.PipeMaterial
+_defines.pipe_material = {
+	brass = "brass",
+	bronze = "bronze",
+	ceramic = "ceramic",
+	ceramic_angels = "angels-ceramic",
+	copper = "copper",
+	copper_tungsten = "copper-tungsten",
+	iron = "iron",
+	nitinol = "nitinol",
+	nitinol_angels = "angels-nitinol",
+	plastic = "plastic",
+	steel = "steel",
+	stone = "stone",
+	titanium = "titanium",
+	titanium_angels = "angels-titanium",
+	tungsten = "tungsten",
+	tungsten_angels = "angels-tungsten",
 }
 
 return _defines
