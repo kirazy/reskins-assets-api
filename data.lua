@@ -167,6 +167,17 @@ ChemicalPlantGraphicsPack:configure({
 	tint = tints.tahiti_blue,
 }):apply_to_entity(create_dummy_entity("ar-chemical-plant-3", "assembling-machine", "chemical-plant"))
 
+-- OIL REFINERY TESTS
+local OilRefineryGraphicsPack = require("graphics-packs.oil-refinery-graphics-pack")
+
+OilRefineryGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-oil-refinery-1", "assembling-machine", "oil-refinery"))
+
+OilRefineryGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-oil-refinery-2", "assembling-machine", "oil-refinery"))
+
 -- TRANSPORT BELT TESTS
 local _defines = require("api.defines")
 local TransportBeltGraphicsPack = require("graphics-packs.transport-belt-graphics-pack")
