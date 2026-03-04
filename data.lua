@@ -150,3 +150,17 @@ CentrifugeGraphicsPack:configure({
 CentrifugeGraphicsPack:configure({
 	tint = tints.blue,
 }):apply_to_entity(create_dummy_entity("ar-centrifuge-3", "assembling-machine", "centrifuge"))
+
+-- TRANSPORT BELT TESTS
+local _defines = require("api.defines")
+local TransportBeltGraphicsPack = require("graphics-packs.transport-belt-graphics-pack")
+
+TransportBeltGraphicsPack:configure({
+	tint = tints.yellow,
+	belt_sprite = _defines.belt_sprites.standard,
+}):apply_to_entity(create_dummy_entity("ar-transport-belt-1", "transport-belt", "transport-belt"))
+
+TransportBeltGraphicsPack:configure({
+	tint = tints.red,
+	belt_sprite = _defines.belt_sprites.fast,
+}):apply_to_entity(create_dummy_entity("ar-transport-belt-2", "transport-belt", "fast-transport-belt"))
