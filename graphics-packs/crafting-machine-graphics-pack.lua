@@ -4,6 +4,7 @@ local GraphicsPackBase = require("graphics-pack-base")
 ---@field graphics_set data.CraftingMachineGraphicsSet
 ---@field graphics_set_flipped data.CraftingMachineGraphicsSet?
 ---@field fluid_boxes FluidBoxGraphics[]?
+---@field fluid_boxes_off_when_no_fluid_recipe boolean?
 local CraftingMachineGraphicsPack = {}
 CraftingMachineGraphicsPack.__index = CraftingMachineGraphicsPack
 
@@ -16,6 +17,7 @@ setmetatable(CraftingMachineGraphicsPack, {
 ---@field graphics_set data.CraftingMachineGraphicsSet
 ---@field graphics_set_flipped data.CraftingMachineGraphicsSet?
 ---@field fluid_boxes FluidBoxGraphics[]?
+---@field fluid_boxes_off_when_no_fluid_recipe boolean?
 
 ---Creates a new `CraftingMachineGraphicsPack` instance.
 ---
@@ -35,6 +37,7 @@ function CraftingMachineGraphicsPack:configure(params)
 	instance.graphics_set = params.graphics_set
 	instance.graphics_set_flipped = params.graphics_set_flipped
 	instance.fluid_boxes = params.fluid_boxes
+	instance.fluid_boxes_off_when_no_fluid_recipe = params.fluid_boxes_off_when_no_fluid_recipe
 
 	-- Set the correct metatable for this class
 	setmetatable(instance, CraftingMachineGraphicsPack)
@@ -105,6 +108,11 @@ function CraftingMachineGraphicsPack:apply_to_entity(prototype)
 	-- Apply fluid box configurations if present.
 	if self.fluid_boxes and prototype.fluid_boxes then
 		self:apply_fluid_box_graphics(prototype)
+	end
+
+	-- Apply fluid_boxes_off_when_no_fluid_recipe if explicitly set.
+	if self.fluid_boxes_off_when_no_fluid_recipe ~= nil then
+		prototype.fluid_boxes_off_when_no_fluid_recipe = self.fluid_boxes_off_when_no_fluid_recipe
 	end
 end
 

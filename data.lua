@@ -217,3 +217,62 @@ UndergroundBeltGraphicsPack:configure({
 	tint = tints.tahiti_blue,
 	belt_sprite = _defines.belt_sprites.fast,
 }):apply_to_entity(create_dummy_entity("ar-underground-belt-2", "underground-belt", "fast-underground-belt"))
+
+-- STONE FURNACE TESTS
+local FurnaceStoneGraphicsPack = require("graphics-packs.furnace-stone-graphics-pack")
+
+FurnaceStoneGraphicsPack:configure({
+	tint = tints.yellow,
+	variant = "standard",
+}):apply_to_entity(create_dummy_entity("ar-furnace-stone-1", "furnace", "stone-furnace"))
+
+FurnaceStoneGraphicsPack:configure({
+	tint = tints.red,
+	variant = "chemical",
+}):apply_to_entity(create_dummy_entity("ar-furnace-stone-2", "assembling-machine", "assembling-machine-1"))
+
+-- STEEL FURNACE TESTS
+local FurnaceSteelGraphicsPack = require("graphics-packs.furnace-steel-graphics-pack")
+
+FurnaceSteelGraphicsPack:configure({
+	tint = tints.yellow,
+	variant = "standard",
+}):apply_to_entity(create_dummy_entity("ar-furnace-steel-1", "furnace", "steel-furnace"))
+
+FurnaceSteelGraphicsPack:configure({
+	tint = tints.red,
+	variant = "fluid",
+}):apply_to_entity(create_dummy_entity("ar-furnace-steel-2", "furnace", "steel-furnace"))
+
+FurnaceSteelGraphicsPack:configure({
+	tint = tints.blue,
+	variant = "chemical",
+}):apply_to_entity(create_dummy_entity("ar-furnace-steel-3", "assembling-machine", "assembling-machine-1"))
+
+FurnaceSteelGraphicsPack:configure({
+	tint = tints.purple,
+	variant = "chemical-fluid",
+}):apply_to_entity(create_dummy_entity("ar-furnace-steel-4", "assembling-machine", "assembling-machine-1"))
+
+-- ELECTRIC FURNACE TESTS
+local FurnaceElectricGraphicsPack = require("graphics-packs.furnace-electric-graphics-pack")
+
+FurnaceElectricGraphicsPack:configure({
+	tint = tints.yellow,
+	variant = "standard",
+}):apply_to_entity(create_dummy_entity("ar-furnace-electric-1", "furnace", "electric-furnace"))
+
+FurnaceElectricGraphicsPack:configure({
+	tint = tints.green,
+	variant = "mixing",
+}):apply_to_entity(create_dummy_entity("ar-furnace-electric-2", "assembling-machine", "assembling-machine-1"))
+
+FurnaceElectricGraphicsPack:configure({
+	tint = tints.blue,
+	variant = "chemical",
+}):apply_to_entity(create_dummy_entity("ar-furnace-electric-3", "assembling-machine", "assembling-machine-1"))
+
+FurnaceElectricGraphicsPack:configure({
+	tint = tints.purple,
+	variant = "chemical-mixing",
+}):apply_to_entity(create_dummy_entity("ar-furnace-electric-4", "assembling-machine", "assembling-machine-1"))
