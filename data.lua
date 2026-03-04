@@ -135,3 +135,18 @@ AccumulatorGraphicsPack:configure({
 	tint = tints.purple,
 	sprite_set = "slow",
 }):apply_to_entity(create_dummy_entity("ar-accumulator-slow", "accumulator", "accumulator"))
+
+-- CENTRIFUGE TESTS
+local CentrifugeGraphicsPack = require("graphics-packs.centrifuge-graphics-pack")
+
+CentrifugeGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-centrifuge-1", "assembling-machine", "centrifuge"))
+
+CentrifugeGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-centrifuge-2", "assembling-machine", "centrifuge"))
+
+CentrifugeGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-centrifuge-3", "assembling-machine", "centrifuge"))
