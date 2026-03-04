@@ -52,6 +52,7 @@ local tints = {
 	purple = colors.from_argb("FFB459FF"),
 	green = colors.from_argb("FF2EE55C"),
 	orange = colors.from_argb("FFFF8533"),
+	tahiti_blue = colors.from_argb("FF00C1DF"),
 }
 
 -- STANDARD ASSEMBLY MACHINE TESTS
@@ -151,17 +152,32 @@ CentrifugeGraphicsPack:configure({
 	tint = tints.blue,
 }):apply_to_entity(create_dummy_entity("ar-centrifuge-3", "assembling-machine", "centrifuge"))
 
+-- CHEMICAL PLANT TESTS
+local ChemicalPlantGraphicsPack = require("graphics-packs.chemical-plant-graphics-pack")
+
+ChemicalPlantGraphicsPack:configure({
+	tint = tints.green,
+}):apply_to_entity(create_dummy_entity("ar-chemical-plant-1", "assembling-machine", "chemical-plant"))
+
+ChemicalPlantGraphicsPack:configure({
+	tint = tints.orange,
+}):apply_to_entity(create_dummy_entity("ar-chemical-plant-2", "assembling-machine", "chemical-plant"))
+
+ChemicalPlantGraphicsPack:configure({
+	tint = tints.tahiti_blue,
+}):apply_to_entity(create_dummy_entity("ar-chemical-plant-3", "assembling-machine", "chemical-plant"))
+
 -- TRANSPORT BELT TESTS
 local _defines = require("api.defines")
 local TransportBeltGraphicsPack = require("graphics-packs.transport-belt-graphics-pack")
 
 TransportBeltGraphicsPack:configure({
-	tint = tints.yellow,
+	tint = tints.green,
 	belt_sprite = _defines.belt_sprites.standard,
 }):apply_to_entity(create_dummy_entity("ar-transport-belt-1", "transport-belt", "transport-belt"))
 
 TransportBeltGraphicsPack:configure({
-	tint = tints.red,
+	tint = tints.tahiti_blue,
 	belt_sprite = _defines.belt_sprites.fast,
 }):apply_to_entity(create_dummy_entity("ar-transport-belt-2", "transport-belt", "fast-transport-belt"))
 
@@ -169,12 +185,12 @@ TransportBeltGraphicsPack:configure({
 local SplitterGraphicsPack = require("graphics-packs.splitter-graphics-pack")
 
 SplitterGraphicsPack:configure({
-	tint = tints.yellow,
+	tint = tints.green,
 	belt_sprite = _defines.belt_sprites.standard,
 }):apply_to_entity(create_dummy_entity("ar-splitter-1", "splitter", "splitter"))
 
 SplitterGraphicsPack:configure({
-	tint = tints.red,
+	tint = tints.tahiti_blue,
 	belt_sprite = _defines.belt_sprites.fast,
 }):apply_to_entity(create_dummy_entity("ar-splitter-2", "splitter", "fast-splitter"))
 
@@ -182,11 +198,11 @@ SplitterGraphicsPack:configure({
 local UndergroundBeltGraphicsPack = require("graphics-packs.underground-belt-graphics-pack")
 
 UndergroundBeltGraphicsPack:configure({
-	tint = tints.yellow,
+	tint = tints.green,
 	belt_sprite = _defines.belt_sprites.standard,
 }):apply_to_entity(create_dummy_entity("ar-underground-belt-1", "underground-belt", "underground-belt"))
 
 UndergroundBeltGraphicsPack:configure({
-	tint = tints.red,
+	tint = tints.tahiti_blue,
 	belt_sprite = _defines.belt_sprites.fast,
 }):apply_to_entity(create_dummy_entity("ar-underground-belt-2", "underground-belt", "fast-underground-belt"))
