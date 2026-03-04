@@ -177,3 +177,16 @@ SplitterGraphicsPack:configure({
 	tint = tints.red,
 	belt_sprite = _defines.belt_sprites.fast,
 }):apply_to_entity(create_dummy_entity("ar-splitter-2", "splitter", "fast-splitter"))
+
+-- UNDERGROUND BELT TESTS
+local UndergroundBeltGraphicsPack = require("graphics-packs.underground-belt-graphics-pack")
+
+UndergroundBeltGraphicsPack:configure({
+	tint = tints.yellow,
+	belt_sprite = _defines.belt_sprites.standard,
+}):apply_to_entity(create_dummy_entity("ar-underground-belt-1", "underground-belt", "underground-belt"))
+
+UndergroundBeltGraphicsPack:configure({
+	tint = tints.red,
+	belt_sprite = _defines.belt_sprites.fast,
+}):apply_to_entity(create_dummy_entity("ar-underground-belt-2", "underground-belt", "fast-underground-belt"))
