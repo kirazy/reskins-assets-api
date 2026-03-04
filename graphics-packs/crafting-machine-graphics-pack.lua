@@ -111,7 +111,8 @@ function CraftingMachineGraphicsPack:apply_to_entity(prototype)
 	end
 
 	-- Apply fluid_boxes_off_when_no_fluid_recipe if explicitly set.
-	if self.fluid_boxes_off_when_no_fluid_recipe ~= nil then
+	if self.fluid_boxes_off_when_no_fluid_recipe ~= nil and prototype.type == "assembling-machine" then
+		---@cast prototype data.AssemblingMachinePrototype
 		prototype.fluid_boxes_off_when_no_fluid_recipe = self.fluid_boxes_off_when_no_fluid_recipe
 	end
 end
