@@ -42,6 +42,32 @@ local function create_dummy_entity(name, source_type, source_name, icons)
 	return entity
 end
 
+---Adds a simple always-on fluid box to an entity in the given cardinal direction.
+---
+---Intended for use in the test harness to simulate entities with fluid connections,
+---so that graphics packs that assign pipe pictures to `fluid_boxes` entries can be tested.
+---
+---@param entity data.CraftingMachinePrototype
+---@param direction defines.direction
+---@param position data.MapPosition
+local function add_fluid_box(entity, direction, position)
+	local production_type = "output"
+	local flow_direction = "output"
+
+	entity.fluid_boxes = entity.fluid_boxes or {}
+	table.insert(entity.fluid_boxes, {
+		production_type = production_type,
+		volume = 1000,
+		pipe_connections = {
+			{
+				flow_direction = flow_direction,
+				direction = direction,
+				position = position,
+			},
+		},
+	})
+end
+
 reskins_suppress_errors = true
 
 local tints = {
@@ -113,6 +139,7 @@ _sprites.rescale_prototype(assembly_electric_3, 2 / 3)
 local InductionFurnaceGraphicsPack = require("graphics-packs.induction-furnace-graphics-pack")
 local induction_furnace_1 = create_dummy_entity("ar-induction-furnace-1", "assembling-machine", "assembling-machine-1")
 _sprites.rescale_prototype(induction_furnace_1, 5 / 3)
+add_fluid_box(induction_furnace_1, defines.direction.north, { 2, -2 })
 
 InductionFurnaceGraphicsPack:configure({
 	tint = tints.yellow,
@@ -276,3 +303,26 @@ FurnaceElectricGraphicsPack:configure({
 	tint = tints.purple,
 	variant = "chemical-mixing",
 }):apply_to_entity(create_dummy_entity("ar-furnace-electric-4", "assembling-machine", "assembling-machine-1"))
+
+-- BOILER TESTS
+local BoilerGraphicsPack = require("graphics-packs.boiler-graphics-pack")
+
+BoilerGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-boiler-1", "boiler", "boiler"))
+
+BoilerGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-boiler-2", "boiler", "boiler"))
+
+BoilerGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-boiler-3", "boiler", "boiler"))
+
+BoilerGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-boiler-4", "boiler", "boiler"))
+
+BoilerGraphicsPack:configure({
+	tint = tints.green,
+}):apply_to_entity(create_dummy_entity("ar-boiler-5", "boiler", "boiler"))
