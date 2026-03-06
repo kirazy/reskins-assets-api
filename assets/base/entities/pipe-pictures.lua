@@ -857,4 +857,164 @@ function _pipes.pipe_pictures(pipe_material)
 	return pipe_pictures, required_assets
 end
 
+---Gets the tinted pipe pictures for the assembling machine (and functionally identical entities such as the oil boiler).
+---The `north` direction has no tinted variant when `use_simple_pipe_pictures` is true; the east direction always uses the
+---simple sprite when that flag is set.
+---
+---### Parameters
+---@param tint data.Color? Tint color for the mask and highlights layers. When `nil`, only the base layer is returned.
+---@param use_simple_pipe_pictures boolean? When true, omits the `north` mask/highlights and uses the `-simple` east variant.
+---
+---### Returns
+---@return data.Sprite4Way
+---@return RequiredAssets
+---@nodiscard
+function _pipes.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
+	local simple = use_simple_pipe_pictures and "-simple" or ""
+	local assets_base_path = "__reskins-assets-base__/graphics/entity/assembling-machine/pipes/"
+
+	---@type data.Sprite4Way
+	local pictures = {
+		north = {
+			filename = assets_base_path .. "assembling-machine-pipe-north-base.png",
+			priority = "extra-high",
+			width = 71,
+			height = 38,
+			shift = util.by_pixel(2.25, 13.5),
+			scale = 0.5,
+		},
+		east = {
+			filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-base.png",
+			priority = "extra-high",
+			width = 42,
+			height = 76,
+			shift = util.by_pixel(-24.5, 1),
+			scale = 0.5,
+		},
+		south = {
+			filename = assets_base_path .. "assembling-machine-pipe-south-base.png",
+			priority = "extra-high",
+			width = 88,
+			height = 61,
+			shift = util.by_pixel(0, -31.25),
+			scale = 0.5,
+		},
+		west = {
+			filename = assets_base_path .. "assembling-machine-pipe-west-base.png",
+			priority = "extra-high",
+			width = 39,
+			height = 73,
+			shift = util.by_pixel(25.75, 1.25),
+			scale = 0.5,
+		},
+	}
+
+	if tint then
+		if not use_simple_pipe_pictures then
+			pictures.north = {
+				layers = {
+					pictures.north,
+					{
+						filename = assets_base_path .. "assembling-machine-pipe-north-mask.png",
+						priority = "extra-high",
+						width = 71,
+						height = 38,
+						shift = util.by_pixel(2.25, 13.5),
+						tint = tint,
+						scale = 0.5,
+					},
+					{
+						filename = assets_base_path .. "assembling-machine-pipe-north-highlights.png",
+						priority = "extra-high",
+						width = 71,
+						height = 38,
+						shift = util.by_pixel(2.25, 13.5),
+						blend_mode = "additive-soft",
+						scale = 0.5,
+					},
+				},
+			}
+		end
+
+		pictures.east = {
+			layers = {
+				pictures.east,
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-mask.png",
+					priority = "extra-high",
+					width = 42,
+					height = 76,
+					shift = util.by_pixel(-24.5, 1),
+					tint = tint,
+					scale = 0.5,
+				},
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-highlights.png",
+					priority = "extra-high",
+					width = 42,
+					height = 76,
+					shift = util.by_pixel(-24.5, 1),
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+		}
+
+		pictures.south = {
+			layers = {
+				pictures.south,
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-south-mask.png",
+					priority = "extra-high",
+					width = 88,
+					height = 61,
+					shift = util.by_pixel(0, -31.25),
+					tint = tint,
+					scale = 0.5,
+				},
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-south-highlights.png",
+					priority = "extra-high",
+					width = 88,
+					height = 61,
+					shift = util.by_pixel(0, -31.25),
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+		}
+
+		pictures.west = {
+			layers = {
+				pictures.west,
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-west-mask.png",
+					priority = "extra-high",
+					width = 39,
+					height = 73,
+					shift = util.by_pixel(25.75, 1.25),
+					tint = tint,
+					scale = 0.5,
+				},
+				{
+					filename = assets_base_path .. "assembling-machine-pipe-west-highlights.png",
+					priority = "extra-high",
+					width = 39,
+					height = 73,
+					shift = util.by_pixel(25.75, 1.25),
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+		}
+	end
+
+	---@type RequiredAssets
+	local required_assets = {
+		[_defines.assets.base_assets] = true,
+	}
+
+	return pictures, required_assets
+end
+
 return _pipes
