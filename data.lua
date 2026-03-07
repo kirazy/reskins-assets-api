@@ -509,3 +509,26 @@ ElectricPoleMediumGraphicsPack:configure({
 ElectricPoleMediumGraphicsPack:configure({
 	tint = tints.purple,
 }):apply_to_entity(create_dummy_entity("ar-medium-electric-pole-4", "electric-pole", "medium-electric-pole"))
+
+-- RADAR TESTS
+local RadarGraphicsPack = require("graphics-packs.radar-graphics-pack")
+
+RadarGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-radar-1", "radar", "radar"))
+
+RadarGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-radar-2", "radar", "radar"))
+
+RadarGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-radar-3", "radar", "radar"))
+
+RadarGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-radar-4", "radar", "radar"))
+
+RadarGraphicsPack:configure({
+	tint = tints.green,
+}):apply_to_entity(create_dummy_entity("ar-radar-5", "radar", "radar"))
