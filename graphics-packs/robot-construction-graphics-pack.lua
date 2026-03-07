@@ -85,7 +85,9 @@ function RobotConstructionGraphicsPack.get_animations(tint)
 			direction_count = 16,
 			scale = 0.5,
 		}
-		if y and y ~= 0 then layer.y = y end
+		if y and y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 
@@ -101,7 +103,9 @@ function RobotConstructionGraphicsPack.get_animations(tint)
 			direction_count = 16,
 			scale = 0.5,
 		}
-		if y and y ~= 0 then layer.y = y end
+		if y and y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 
@@ -117,7 +121,9 @@ function RobotConstructionGraphicsPack.get_animations(tint)
 			direction_count = 16,
 			scale = 0.5,
 		}
-		if y and y ~= 0 then layer.y = y end
+		if y and y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 
