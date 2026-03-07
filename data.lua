@@ -532,3 +532,22 @@ RadarGraphicsPack:configure({
 RadarGraphicsPack:configure({
 	tint = tints.green,
 }):apply_to_entity(create_dummy_entity("ar-radar-5", "radar", "radar"))
+
+-- STORAGE TANK TESTS
+local StorageTankGraphicsPack = require("graphics-packs.storage-tank-graphics-pack")
+
+StorageTankGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-storage-tank-1", "storage-tank", "storage-tank"))
+
+StorageTankGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-storage-tank-2", "storage-tank", "storage-tank"))
+
+StorageTankGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-storage-tank-3", "storage-tank", "storage-tank"))
+
+StorageTankGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-storage-tank-4", "storage-tank", "storage-tank"))
