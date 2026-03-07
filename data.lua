@@ -399,3 +399,10 @@ local SteamEngineGraphicsPack = require("graphics-packs.steam-engine-graphics-pa
 SteamEngineGraphicsPack:configure({
 	tint = tints.yellow,
 }):apply_to_entity(create_dummy_entity("ar-steam-engine-1", "generator", "steam-engine"))
+
+-- STEAM TURBINE TESTS
+local SteamTurbineGraphicsPack = require("graphics-packs.steam-turbine-graphics-pack")
+
+SteamTurbineGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-steam-turbine-1", "generator", "steam-turbine"))
