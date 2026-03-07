@@ -551,3 +551,22 @@ StorageTankGraphicsPack:configure({
 StorageTankGraphicsPack:configure({
 	tint = tints.purple,
 }):apply_to_entity(create_dummy_entity("ar-storage-tank-4", "storage-tank", "storage-tank"))
+
+-- PUMP TESTS
+local PumpGraphicsPack = require("graphics-packs.pump-graphics-pack")
+
+PumpGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-pump-1", "pump", "pump"))
+
+PumpGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-pump-2", "pump", "pump"))
+
+PumpGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-pump-3", "pump", "pump"))
+
+PumpGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-pump-4", "pump", "pump"))
