@@ -434,3 +434,21 @@ NuclearReactorGraphicsPack:configure({
 	tint = tints.orange,
 	pipe_material = "gold-copper",
 }):apply_to_entity(create_dummy_entity("ar-nuclear-reactor-5", "reactor", "nuclear-reactor"))
+
+-- SOLAR PANEL TESTS
+local SolarPanelGraphicsPack = require("graphics-packs.solar-panel-graphics-pack")
+
+SolarPanelGraphicsPack:configure({
+	tint = tints.yellow,
+	variant = "small",
+}):apply_to_entity(create_dummy_entity("ar-solar-panel-small-1", "solar-panel", "solar-panel"))
+
+SolarPanelGraphicsPack:configure({
+	tint = tints.red,
+	variant = "standard",
+}):apply_to_entity(create_dummy_entity("ar-solar-panel-1", "solar-panel", "solar-panel"))
+
+SolarPanelGraphicsPack:configure({
+	tint = tints.blue,
+	variant = "large",
+}):apply_to_entity(create_dummy_entity("ar-solar-panel-large-1", "solar-panel", "solar-panel"))
