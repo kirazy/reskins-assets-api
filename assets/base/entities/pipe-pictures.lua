@@ -65,7 +65,7 @@ end
 function _pipes.vertical_pipe_shadow(shift)
 	---@type data.Animation
 	local shadow_animation = {
-		filename = "__reskins-assets-base/graphics/entity/pipe/vertical-pipe-shadow-patch.png",
+		filename = "__reskins-assets-base__/graphics/entity/pipe/vertical-pipe-shadow-patch.png",
 		priority = "high",
 		width = 128,
 		height = 128,
@@ -107,7 +107,7 @@ end
 function _pipes.horizontal_pipe_shadow(shift)
 	---@type data.Animation
 	local shadow_animation = {
-		filename = "__reskins-assets_base__/graphics/entity/pipe/horizontal-pipe-shadow-patch.png",
+		filename = "__reskins-assets-base__/graphics/entity/pipe/horizontal-pipe-shadow-patch.png",
 		priority = "high",
 		width = 128,
 		height = 128,
