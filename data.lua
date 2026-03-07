@@ -570,3 +570,21 @@ PumpGraphicsPack:configure({
 PumpGraphicsPack:configure({
 	tint = tints.purple,
 }):apply_to_entity(create_dummy_entity("ar-pump-4", "pump", "pump"))
+
+-- BEACON TESTS
+local BeaconGraphicsPack = require("graphics-packs.beacon-graphics-pack")
+
+BeaconGraphicsPack:configure({
+	tint = tints.yellow,
+	variant = "2-slots",
+}):apply_to_entity(create_dummy_entity("ar-beacon-1", "beacon", "beacon"))
+
+BeaconGraphicsPack:configure({
+	tint = tints.red,
+	variant = "4-slots",
+}):apply_to_entity(create_dummy_entity("ar-beacon-2", "beacon", "beacon"))
+
+BeaconGraphicsPack:configure({
+	tint = tints.blue,
+	variant = "6-slots",
+}):apply_to_entity(create_dummy_entity("ar-beacon-3", "beacon", "beacon"))
