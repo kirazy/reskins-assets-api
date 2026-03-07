@@ -452,3 +452,22 @@ SolarPanelGraphicsPack:configure({
 	tint = tints.blue,
 	variant = "large",
 }):apply_to_entity(create_dummy_entity("ar-solar-panel-large-1", "solar-panel", "solar-panel"))
+
+-- SUBSTATION TESTS
+local SubstationGraphicsPack = require("graphics-packs.substation-graphics-pack")
+
+SubstationGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-substation-1", "electric-pole", "substation"))
+
+SubstationGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-substation-2", "electric-pole", "substation"))
+
+SubstationGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-substation-3", "electric-pole", "substation"))
+
+SubstationGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-substation-4", "electric-pole", "substation"))
