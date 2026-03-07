@@ -32,7 +32,10 @@ function RoboportGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.bobs_assets] = true },
+		required_assets = {
+			[_defines.assets.base_assets] = true,
+			[_defines.assets.bobs_assets] = true,
+		},
 	}) --[[@as RoboportGraphicsPack]]
 
 	instance.graphics_set = self.get_graphics_set(params.tint, params.antenna_variant, params.door_variant)
@@ -66,11 +69,12 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 	NumberValidator.validate(antenna_variant, "antenna_variant"):is_integer():in_range(1, 4)
 	NumberValidator.validate(door_variant, "door_variant"):is_integer():in_range(1, 4)
 
+	local base_assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/"
 	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/roboport/"
 
 	local base_layers = {
 		{
-			filename = bobs_path .. "roboport-base.png",
+			filename = base_assets_path .. "roboport-base.png",
 			width = 228,
 			height = 277,
 			shift = util.by_pixel(2, 7.75),
@@ -80,7 +84,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 
 	if tint then
 		table.insert(base_layers, {
-			filename = bobs_path .. "roboport-base-mask.png",
+			filename = base_assets_path .. "roboport-base-mask.png",
 			width = 228,
 			height = 277,
 			shift = util.by_pixel(2, 7.75),
@@ -88,7 +92,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 			scale = 0.5,
 		})
 		table.insert(base_layers, {
-			filename = bobs_path .. "roboport-base-highlights.png",
+			filename = base_assets_path .. "roboport-base-highlights.png",
 			width = 228,
 			height = 277,
 			shift = util.by_pixel(2, 7.75),
@@ -98,7 +102,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 	end
 
 	table.insert(base_layers, {
-		filename = bobs_path .. "roboport-shadow.png",
+		filename = base_assets_path .. "roboport-shadow.png",
 		width = 294,
 		height = 201,
 		draw_as_shadow = true,
@@ -115,7 +119,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 			height = 1,
 		},
 		{
-			filename = bobs_path .. "roboport-base-patch.png",
+			filename = base_assets_path .. "roboport-base-patch.png",
 			priority = "medium",
 			width = 138,
 			height = 100,
@@ -126,7 +130,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 
 	if tint then
 		table.insert(base_patch_layers, {
-			filename = bobs_path .. "roboport-base-patch-mask.png",
+			filename = base_assets_path .. "roboport-base-patch-mask.png",
 			priority = "medium",
 			width = 138,
 			height = 100,
@@ -135,7 +139,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 			scale = 0.5,
 		})
 		table.insert(base_patch_layers, {
-			filename = bobs_path .. "roboport-base-patch-highlights.png",
+			filename = base_assets_path .. "roboport-base-patch-highlights.png",
 			priority = "medium",
 			width = 138,
 			height = 100,
@@ -178,7 +182,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 			scale = 0.5,
 		},
 		recharging_animation = {
-			filename = bobs_path .. "roboport-recharging.png",
+			filename = base_assets_path .. "roboport-recharging.png",
 			priority = "high",
 			width = 37,
 			height = 35,
@@ -195,13 +199,13 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function RoboportGraphicsPack.get_corpse_animation(tint)
-	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/roboport/remnants/"
+	local assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {
 		layers = {
 			{
-				filename = bobs_path .. "roboport-remnants.png",
+				filename = assets_path .. "roboport-remnants.png",
 				width = 364,
 				height = 358,
 				direction_count = 1,
@@ -213,7 +217,7 @@ function RoboportGraphicsPack.get_corpse_animation(tint)
 
 	if tint then
 		table.insert(animation.layers, {
-			filename = bobs_path .. "roboport-remnants-mask.png",
+			filename = assets_path .. "roboport-remnants-mask.png",
 			width = 364,
 			height = 358,
 			direction_count = 1,
@@ -222,7 +226,7 @@ function RoboportGraphicsPack.get_corpse_animation(tint)
 			scale = 0.5,
 		})
 		table.insert(animation.layers, {
-			filename = bobs_path .. "roboport-remnants-highlights.png",
+			filename = assets_path .. "roboport-remnants-highlights.png",
 			width = 364,
 			height = 358,
 			direction_count = 1,
