@@ -2,7 +2,7 @@ local _defines = require("api.defines")
 local GraphicsPackBase = require("graphics-pack-base")
 
 ---@class StorageTankGraphicsPack:GraphicsPackBase
----@field picture data.SpriteNWaySheet
+---@field pictures data.StorageTankPictures
 local StorageTankGraphicsPack = {}
 StorageTankGraphicsPack.__index = StorageTankGraphicsPack
 
@@ -24,7 +24,7 @@ function StorageTankGraphicsPack:configure(params)
 		required_assets = { [_defines.assets.base_assets] = true },
 	}) --[[@as StorageTankGraphicsPack]]
 
-	instance.picture = self.get_picture(params.tint)
+	instance.pictures = self.get_pictures(params.tint)
 
 	-- Set the correct metatable for this class.
 	setmetatable(instance, StorageTankGraphicsPack)
@@ -33,15 +33,16 @@ end
 
 ---@param prototype data.StorageTankPrototype
 function StorageTankGraphicsPack:apply_to_entity(prototype)
-	prototype.pictures.picture = util.copy(self.picture)
+	prototype.pictures = util.copy(self.pictures)
 	self:try_apply_to_named_corpse(prototype.name .. "-remnants")
 end
 
 ---@param tint data.Color?
----@return data.SpriteNWaySheet
+---@return data.StorageTankPictures
 ---@nodiscard
-function StorageTankGraphicsPack.get_picture(tint)
+function StorageTankGraphicsPack.get_pictures(tint)
 	local base_path = _defines.assets.base .. "/graphics/entity/storage-tank/"
+	local pipe_path = _defines.assets.base .. "/graphics/entity/pipe/"
 	local assets_path = _defines.assets.base_assets .. "/graphics/entity/storage-tank/base/"
 
 	local sheets = {
@@ -90,7 +91,39 @@ function StorageTankGraphicsPack.get_picture(tint)
 		draw_as_shadow = true,
 	})
 
-	return { sheets = sheets }
+	---@type data.StorageTankPictures
+	return {
+		picture = { sheets = sheets },
+		fluid_background = {
+			filename = base_path .. "fluid-background.png",
+			priority = "extra-high",
+			width = 32,
+			height = 15,
+		},
+		window_background = {
+			filename = base_path .. "window-background.png",
+			priority = "extra-high",
+			width = 34,
+			height = 48,
+			scale = 0.5,
+		},
+		flow_sprite = {
+			filename = pipe_path .. "fluid-flow-low-temperature.png",
+			priority = "extra-high",
+			width = 160,
+			height = 20,
+		},
+		gas_flow = {
+			filename = pipe_path .. "steam.png",
+			priority = "extra-high",
+			line_length = 10,
+			width = 48,
+			height = 30,
+			frame_count = 60,
+			animation_speed = 0.25,
+			scale = 0.5,
+		},
+	}
 end
 
 ---@param tint data.Color?
