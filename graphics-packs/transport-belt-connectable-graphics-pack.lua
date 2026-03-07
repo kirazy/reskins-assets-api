@@ -14,7 +14,7 @@ setmetatable(TransportBeltConnectableGraphicsPack, {
 
 ---@class TransportBeltConnectableGraphicsParams
 ---@field tint data.Color?
----@field belt_sprite 1|2
+---@field belt_sprite Reskins.Defines.BeltSprites
 ---@field remnants data.RotatedAnimationVariations?
 
 ---@param params TransportBeltConnectableGraphicsParams
@@ -38,7 +38,7 @@ end
 
 ---Builds the full `data.TransportBeltAnimationSet` for the given `tint` and `belt_sprite`.
 ---@param tint data.Color?
----@param belt_sprite 1|2
+---@param belt_sprite Reskins.Defines.BeltSprites
 ---@return data.TransportBeltAnimationSet
 ---@nodiscard
 function TransportBeltConnectableGraphicsPack.get_belt_animation_set(tint, belt_sprite)
@@ -47,6 +47,7 @@ function TransportBeltConnectableGraphicsPack.get_belt_animation_set(tint, belt_
 	local frame_counts = {
 		[_defines.belt_sprites.standard] = 16,
 		[_defines.belt_sprites.fast] = 32,
+		[_defines.belt_sprites.turbo] = 64,
 	}
 	local frame_count = frame_counts[belt_sprite]
 

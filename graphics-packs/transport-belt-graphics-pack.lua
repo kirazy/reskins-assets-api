@@ -13,7 +13,7 @@ setmetatable(TransportBeltGraphicsPack, {
 
 ---@class TransportBeltGraphicsParams
 ---@field tint data.Color?
----@field belt_sprite 1|2
+---@field belt_sprite Reskins.Defines.BeltSprites
 
 ---@param params TransportBeltGraphicsParams
 ---@return TransportBeltGraphicsPack
