@@ -490,3 +490,22 @@ ElectricPoleBigGraphicsPack:configure({
 ElectricPoleBigGraphicsPack:configure({
 	tint = tints.purple,
 }):apply_to_entity(create_dummy_entity("ar-big-electric-pole-4", "electric-pole", "big-electric-pole"))
+
+-- ELECTRIC POLE MEDIUM TESTS
+local ElectricPoleMediumGraphicsPack = require("graphics-packs.electric-pole-medium-graphics-pack")
+
+ElectricPoleMediumGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-medium-electric-pole-1", "electric-pole", "medium-electric-pole"))
+
+ElectricPoleMediumGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-medium-electric-pole-2", "electric-pole", "medium-electric-pole"))
+
+ElectricPoleMediumGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-medium-electric-pole-3", "electric-pole", "medium-electric-pole"))
+
+ElectricPoleMediumGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-medium-electric-pole-4", "electric-pole", "medium-electric-pole"))
