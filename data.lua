@@ -392,3 +392,10 @@ HeatExchangerGraphicsPack:configure({
 	tint = tints.green,
 	pipe_material = "gold-copper",
 }):apply_to_entity(create_dummy_entity("ar-heat-exchanger-5", "boiler", "heat-exchanger"))
+
+-- STEAM ENGINE TESTS
+local SteamEngineGraphicsPack = require("graphics-packs.steam-engine-graphics-pack")
+
+SteamEngineGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-steam-engine-1", "generator", "steam-engine"))
