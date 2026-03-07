@@ -634,3 +634,30 @@ RobotLogisticGraphicsPack:configure({
 RobotLogisticGraphicsPack:configure({
 	tint = tints.green,
 }):apply_to_entity(create_dummy_entity("ar-logistic-robot-5", "logistic-robot", "logistic-robot"))
+
+-- ROBOPORT TESTS
+local RoboportGraphicsPack = require("graphics-packs.roboport-graphics-pack")
+
+RoboportGraphicsPack:configure({
+	tint = tints.yellow,
+	antenna_variant = 1,
+	door_variant = 1,
+}):apply_to_entity(create_dummy_entity("ar-roboport-1", "roboport", "roboport"))
+
+RoboportGraphicsPack:configure({
+	tint = tints.red,
+	antenna_variant = 2,
+	door_variant = 2,
+}):apply_to_entity(create_dummy_entity("ar-roboport-2", "roboport", "roboport"))
+
+RoboportGraphicsPack:configure({
+	tint = tints.blue,
+	antenna_variant = 3,
+	door_variant = 3,
+}):apply_to_entity(create_dummy_entity("ar-roboport-3", "roboport", "roboport"))
+
+RoboportGraphicsPack:configure({
+	tint = tints.purple,
+	antenna_variant = 4,
+	door_variant = 4,
+}):apply_to_entity(create_dummy_entity("ar-roboport-4", "roboport", "roboport"))
