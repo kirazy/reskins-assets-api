@@ -406,3 +406,31 @@ local SteamTurbineGraphicsPack = require("graphics-packs.steam-turbine-graphics-
 SteamTurbineGraphicsPack:configure({
 	tint = tints.yellow,
 }):apply_to_entity(create_dummy_entity("ar-steam-turbine-1", "generator", "steam-turbine"))
+
+-- NUCLEAR REACTOR TESTS
+local NuclearReactorGraphicsPack = require("graphics-packs.nuclear-reactor-graphics-pack")
+
+NuclearReactorGraphicsPack:configure({
+	tint = tints.yellow,
+	pipe_material = "base",
+}):apply_to_entity(create_dummy_entity("ar-nuclear-reactor-1", "reactor", "nuclear-reactor"))
+
+NuclearReactorGraphicsPack:configure({
+	tint = tints.red,
+	pipe_material = "aluminum-invar",
+}):apply_to_entity(create_dummy_entity("ar-nuclear-reactor-2", "reactor", "nuclear-reactor"))
+
+NuclearReactorGraphicsPack:configure({
+	tint = tints.blue,
+	pipe_material = "silver-aluminum",
+}):apply_to_entity(create_dummy_entity("ar-nuclear-reactor-3", "reactor", "nuclear-reactor"))
+
+NuclearReactorGraphicsPack:configure({
+	tint = tints.purple,
+	pipe_material = "silver-titanium",
+}):apply_to_entity(create_dummy_entity("ar-nuclear-reactor-4", "reactor", "nuclear-reactor"))
+
+NuclearReactorGraphicsPack:configure({
+	tint = tints.orange,
+	pipe_material = "gold-copper",
+}):apply_to_entity(create_dummy_entity("ar-nuclear-reactor-5", "reactor", "nuclear-reactor"))
