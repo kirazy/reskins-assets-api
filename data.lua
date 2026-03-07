@@ -588,3 +588,26 @@ BeaconGraphicsPack:configure({
 	tint = tints.blue,
 	variant = "6-slots",
 }):apply_to_entity(create_dummy_entity("ar-beacon-3", "beacon", "beacon"))
+
+-- CONSTRUCTION ROBOT TESTS
+local RobotConstructionGraphicsPack = require("graphics-packs.robot-construction-graphics-pack")
+
+RobotConstructionGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-construction-robot-1", "construction-robot", "construction-robot"))
+
+RobotConstructionGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-construction-robot-2", "construction-robot", "construction-robot"))
+
+RobotConstructionGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-construction-robot-3", "construction-robot", "construction-robot"))
+
+RobotConstructionGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-construction-robot-4", "construction-robot", "construction-robot"))
+
+RobotConstructionGraphicsPack:configure({
+	tint = tints.green,
+}):apply_to_entity(create_dummy_entity("ar-construction-robot-5", "construction-robot", "construction-robot"))
