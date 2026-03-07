@@ -611,3 +611,26 @@ RobotConstructionGraphicsPack:configure({
 RobotConstructionGraphicsPack:configure({
 	tint = tints.green,
 }):apply_to_entity(create_dummy_entity("ar-construction-robot-5", "construction-robot", "construction-robot"))
+
+-- LOGISTIC ROBOT TESTS
+local RobotLogisticGraphicsPack = require("graphics-packs.robot-logistic-graphics-pack")
+
+RobotLogisticGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-logistic-robot-1", "logistic-robot", "logistic-robot"))
+
+RobotLogisticGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-logistic-robot-2", "logistic-robot", "logistic-robot"))
+
+RobotLogisticGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-logistic-robot-3", "logistic-robot", "logistic-robot"))
+
+RobotLogisticGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-logistic-robot-4", "logistic-robot", "logistic-robot"))
+
+RobotLogisticGraphicsPack:configure({
+	tint = tints.green,
+}):apply_to_entity(create_dummy_entity("ar-logistic-robot-5", "logistic-robot", "logistic-robot"))
