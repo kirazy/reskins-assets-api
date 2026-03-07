@@ -65,6 +65,7 @@ local function add_fluid_box(entity, direction, position)
 				position = position,
 			},
 		},
+		pipe_covers = pipecoverspictures(),
 	})
 end
 
@@ -137,13 +138,50 @@ _sprites.rescale_prototype(assembly_electric_3, 2 / 3)
 
 -- INDUCTION FURNACE TESTS
 local InductionFurnaceGraphicsPack = require("graphics-packs.induction-furnace-graphics-pack")
+
+-- 0 pipe connections (all capped — degenerate case)
+local induction_furnace_0 = create_dummy_entity("ar-induction-furnace-0", "assembling-machine", "assembling-machine-1")
+_sprites.rescale_prototype(induction_furnace_0, 5 / 3)
+induction_furnace_0.collision_box = { { -2.5, -2.5 }, { 2.5, 2.5 } }
+InductionFurnaceGraphicsPack:configure({ tint = tints.gray }):apply_to_entity(induction_furnace_0)
+
+-- 1 pipe connection (north)
 local induction_furnace_1 = create_dummy_entity("ar-induction-furnace-1", "assembling-machine", "assembling-machine-1")
 _sprites.rescale_prototype(induction_furnace_1, 5 / 3)
+induction_furnace_1.collision_box = { { -2.5, -2.5 }, { 2.5, 2.5 } }
+induction_furnace_1.forced_symmetry = "horizontal"
 add_fluid_box(induction_furnace_1, defines.direction.north, { 2, -2 })
+InductionFurnaceGraphicsPack:configure({ tint = tints.yellow }):apply_to_entity(induction_furnace_1)
 
-InductionFurnaceGraphicsPack:configure({
-	tint = tints.yellow,
-}):apply_to_entity(induction_furnace_1)
+-- 2 pipe connections (north + east)
+local induction_furnace_2 = create_dummy_entity("ar-induction-furnace-2", "assembling-machine", "assembling-machine-1")
+_sprites.rescale_prototype(induction_furnace_2, 5 / 3)
+induction_furnace_2.collision_box = { { -2.5, -2.5 }, { 2.5, 2.5 } }
+induction_furnace_2.forced_symmetry = "horizontal"
+add_fluid_box(induction_furnace_2, defines.direction.north, { 2, -2 })
+add_fluid_box(induction_furnace_2, defines.direction.east, { 2, 2 })
+InductionFurnaceGraphicsPack:configure({ tint = tints.red }):apply_to_entity(induction_furnace_2)
+
+-- 3 pipe connections (north + east + south)
+local induction_furnace_3 = create_dummy_entity("ar-induction-furnace-3", "assembling-machine", "assembling-machine-1")
+_sprites.rescale_prototype(induction_furnace_3, 5 / 3)
+induction_furnace_3.collision_box = { { -2.5, -2.5 }, { 2.5, 2.5 } }
+induction_furnace_3.forced_symmetry = "horizontal"
+add_fluid_box(induction_furnace_3, defines.direction.north, { 2, -2 })
+add_fluid_box(induction_furnace_3, defines.direction.east, { 2, 2 })
+add_fluid_box(induction_furnace_3, defines.direction.south, { -2, 2 })
+InductionFurnaceGraphicsPack:configure({ tint = tints.blue }):apply_to_entity(induction_furnace_3)
+
+-- 4 pipe connections (all)
+local induction_furnace_4 = create_dummy_entity("ar-induction-furnace-4", "assembling-machine", "assembling-machine-1")
+_sprites.rescale_prototype(induction_furnace_4, 5 / 3)
+induction_furnace_4.collision_box = { { -2.5, -2.5 }, { 2.5, 2.5 } }
+induction_furnace_4.forced_symmetry = "horizontal"
+add_fluid_box(induction_furnace_4, defines.direction.north, { 2, -2 })
+add_fluid_box(induction_furnace_4, defines.direction.east, { 2, 2 })
+add_fluid_box(induction_furnace_4, defines.direction.south, { -2, 2 })
+add_fluid_box(induction_furnace_4, defines.direction.west, { -2, -2 })
+InductionFurnaceGraphicsPack:configure({ tint = tints.purple }):apply_to_entity(induction_furnace_4)
 
 -- ACCUMULATOR TESTS
 local AccumulatorGraphicsPack = require("graphics-packs.accumulator-graphics-pack")
