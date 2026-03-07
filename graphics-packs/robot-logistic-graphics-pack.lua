@@ -87,7 +87,9 @@ function RobotLogisticGraphicsPack.get_animations(tint)
 			direction_count = 16,
 			scale = 0.5,
 		}
-		if y ~= 0 then layer.y = y end
+		if y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 
@@ -103,7 +105,9 @@ function RobotLogisticGraphicsPack.get_animations(tint)
 			direction_count = 16,
 			scale = 0.5,
 		}
-		if y ~= 0 then layer.y = y end
+		if y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 
@@ -119,7 +123,9 @@ function RobotLogisticGraphicsPack.get_animations(tint)
 			direction_count = 16,
 			scale = 0.5,
 		}
-		if y ~= 0 then layer.y = y end
+		if y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 
@@ -135,7 +141,9 @@ function RobotLogisticGraphicsPack.get_animations(tint)
 			scale = 0.5,
 			draw_as_shadow = true,
 		}
-		if y ~= 0 then layer.y = y end
+		if y ~= 0 then
+			layer.y = y
+		end
 		return layer
 	end
 

@@ -75,16 +75,13 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 	local base_assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/"
 	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/roboport/"
 
-	local antenna_filename = antenna_variant == 0
-		and base_path .. "roboport-base-animation.png"
+	local antenna_filename = antenna_variant == 0 and base_path .. "roboport-base-animation.png"
 		or bobs_path .. "antennas/roboport-" .. antenna_variant .. "-base-animation.png"
 
-	local door_up_filename = door_variant == 0
-		and base_path .. "roboport-door-up.png"
+	local door_up_filename = door_variant == 0 and base_path .. "roboport-door-up.png"
 		or bobs_path .. "doors/roboport-" .. door_variant .. "-door-up.png"
 
-	local door_down_filename = door_variant == 0
-		and base_path .. "roboport-door-down.png"
+	local door_down_filename = door_variant == 0 and base_path .. "roboport-door-down.png"
 		or bobs_path .. "doors/roboport-" .. door_variant .. "-door-down.png"
 
 	local base_layers = {
