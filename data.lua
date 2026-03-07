@@ -159,7 +159,7 @@ _sprites.rescale_prototype(induction_furnace_2, 5 / 3)
 induction_furnace_2.collision_box = { { -2.5, -2.5 }, { 2.5, 2.5 } }
 induction_furnace_2.forced_symmetry = "horizontal"
 add_fluid_box(induction_furnace_2, defines.direction.north, { 2, -2 })
-add_fluid_box(induction_furnace_2, defines.direction.east, { 2, 2 })
+add_fluid_box(induction_furnace_2, defines.direction.south, { -2, 2 })
 InductionFurnaceGraphicsPack:configure({ tint = tints.red }):apply_to_entity(induction_furnace_2)
 
 -- 3 pipe connections (north + east + south)
@@ -364,3 +364,31 @@ BoilerGraphicsPack:configure({
 BoilerGraphicsPack:configure({
 	tint = tints.green,
 }):apply_to_entity(create_dummy_entity("ar-boiler-5", "boiler", "boiler"))
+
+-- HEAT EXCHANGER TESTS
+local HeatExchangerGraphicsPack = require("graphics-packs.heat-exchanger-graphics-pack")
+
+HeatExchangerGraphicsPack:configure({
+	tint = tints.yellow,
+	pipe_material = "base",
+}):apply_to_entity(create_dummy_entity("ar-heat-exchanger-1", "boiler", "heat-exchanger"))
+
+HeatExchangerGraphicsPack:configure({
+	tint = tints.red,
+	pipe_material = "aluminum-invar",
+}):apply_to_entity(create_dummy_entity("ar-heat-exchanger-2", "boiler", "heat-exchanger"))
+
+HeatExchangerGraphicsPack:configure({
+	tint = tints.blue,
+	pipe_material = "silver-aluminum",
+}):apply_to_entity(create_dummy_entity("ar-heat-exchanger-3", "boiler", "heat-exchanger"))
+
+HeatExchangerGraphicsPack:configure({
+	tint = tints.purple,
+	pipe_material = "silver-titanium",
+}):apply_to_entity(create_dummy_entity("ar-heat-exchanger-4", "boiler", "heat-exchanger"))
+
+HeatExchangerGraphicsPack:configure({
+	tint = tints.green,
+	pipe_material = "gold-copper",
+}):apply_to_entity(create_dummy_entity("ar-heat-exchanger-5", "boiler", "heat-exchanger"))
