@@ -471,3 +471,22 @@ SubstationGraphicsPack:configure({
 SubstationGraphicsPack:configure({
 	tint = tints.purple,
 }):apply_to_entity(create_dummy_entity("ar-substation-4", "electric-pole", "substation"))
+
+-- ELECTRIC POLE BIG TESTS
+local ElectricPoleBigGraphicsPack = require("graphics-packs.electric-pole-big-graphics-pack")
+
+ElectricPoleBigGraphicsPack:configure({
+	tint = tints.yellow,
+}):apply_to_entity(create_dummy_entity("ar-big-electric-pole-1", "electric-pole", "big-electric-pole"))
+
+ElectricPoleBigGraphicsPack:configure({
+	tint = tints.red,
+}):apply_to_entity(create_dummy_entity("ar-big-electric-pole-2", "electric-pole", "big-electric-pole"))
+
+ElectricPoleBigGraphicsPack:configure({
+	tint = tints.blue,
+}):apply_to_entity(create_dummy_entity("ar-big-electric-pole-3", "electric-pole", "big-electric-pole"))
+
+ElectricPoleBigGraphicsPack:configure({
+	tint = tints.purple,
+}):apply_to_entity(create_dummy_entity("ar-big-electric-pole-4", "electric-pole", "big-electric-pole"))
