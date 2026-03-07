@@ -639,6 +639,12 @@ RobotLogisticGraphicsPack:configure({
 local RoboportGraphicsPack = require("graphics-packs.roboport-graphics-pack")
 
 RoboportGraphicsPack:configure({
+	tint = tints.gray,
+	antenna_variant = 0,
+	door_variant = 0,
+}):apply_to_entity(create_dummy_entity("ar-roboport-0", "roboport", "roboport"))
+
+RoboportGraphicsPack:configure({
 	tint = tints.yellow,
 	antenna_variant = 1,
 	door_variant = 1,

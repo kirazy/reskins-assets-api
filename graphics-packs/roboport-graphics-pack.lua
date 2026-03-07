@@ -22,20 +22,22 @@ setmetatable(RoboportGraphicsPack, {
 
 ---@class RoboportGraphicsParams
 ---@field tint data.Color?
----@field antenna_variant 1|2|3|4
----@field door_variant 1|2|3|4
+---@field antenna_variant 0|1|2|3|4  -- 0 = base game, 1-4 = Bob's variants
+---@field door_variant 0|1|2|3|4     -- 0 = base game, 1-4 = Bob's variants
 
 ---@param params RoboportGraphicsParams
 ---@return RoboportGraphicsPack
 ---@nodiscard
 function RoboportGraphicsPack:configure(params)
+	local required_assets = { [_defines.assets.base_assets] = true }
+	if params.antenna_variant > 0 or params.door_variant > 0 then
+		required_assets[_defines.assets.bobs_assets] = true
+	end
+
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = {
-			[_defines.assets.base_assets] = true,
-			[_defines.assets.bobs_assets] = true,
-		},
+		required_assets = required_assets,
 	}) --[[@as RoboportGraphicsPack]]
 
 	instance.graphics_set = self.get_graphics_set(params.tint, params.antenna_variant, params.door_variant)
@@ -61,16 +63,29 @@ function RoboportGraphicsPack:apply_to_entity(prototype)
 end
 
 ---@param tint data.Color?
----@param antenna_variant 1|2|3|4
----@param door_variant 1|2|3|4
+---@param antenna_variant 0|1|2|3|4
+---@param door_variant 0|1|2|3|4
 ---@return RoboportGraphicsSet
 ---@nodiscard
 function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_variant)
-	NumberValidator.validate(antenna_variant, "antenna_variant"):is_integer():in_range(1, 4)
-	NumberValidator.validate(door_variant, "door_variant"):is_integer():in_range(1, 4)
+	NumberValidator.validate(antenna_variant, "antenna_variant"):is_integer():in_range(0, 4)
+	NumberValidator.validate(door_variant, "door_variant"):is_integer():in_range(0, 4)
 
+	local base_path = _defines.assets.base .. "/graphics/entity/roboport/"
 	local base_assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/"
 	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/roboport/"
+
+	local antenna_filename = antenna_variant == 0
+		and base_path .. "roboport-base-animation.png"
+		or bobs_path .. "antennas/roboport-" .. antenna_variant .. "-base-animation.png"
+
+	local door_up_filename = door_variant == 0
+		and base_path .. "roboport-door-up.png"
+		or bobs_path .. "doors/roboport-" .. door_variant .. "-door-up.png"
+
+	local door_down_filename = door_variant == 0
+		and base_path .. "roboport-door-down.png"
+		or bobs_path .. "doors/roboport-" .. door_variant .. "-door-down.png"
 
 	local base_layers = {
 		{
@@ -154,7 +169,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 		base = { layers = base_layers },
 		base_patch = { layers = base_patch_layers },
 		base_animation = {
-			filename = bobs_path .. "antennas/roboport-" .. antenna_variant .. "-base-animation.png",
+			filename = antenna_filename,
 			priority = "medium",
 			width = 83,
 			height = 59,
@@ -164,7 +179,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 			scale = 0.5,
 		},
 		door_animation_up = {
-			filename = bobs_path .. "doors/roboport-" .. door_variant .. "-door-up.png",
+			filename = door_up_filename,
 			priority = "medium",
 			width = 97,
 			height = 38,
@@ -173,7 +188,7 @@ function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_varia
 			scale = 0.5,
 		},
 		door_animation_down = {
-			filename = bobs_path .. "doors/roboport-" .. door_variant .. "-door-down.png",
+			filename = door_down_filename,
 			priority = "medium",
 			width = 97,
 			height = 41,
