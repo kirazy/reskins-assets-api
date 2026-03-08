@@ -667,3 +667,88 @@ RoboportGraphicsPack:configure({
 	antenna_variant = 4,
 	door_variant = 4,
 }):apply_to_entity(create_dummy_entity("ar-roboport-4", "roboport", "roboport"))
+
+-- INSERTER TESTS (Group 1 — tintable, three-layer)
+local InserterGraphicsPack = require("graphics-packs.inserter-graphics-pack")
+
+InserterGraphicsPack:configure({
+	tint = tints.yellow,
+	variant = "inserter",
+}):apply_to_entity(create_dummy_entity("ar-inserter", "inserter", "inserter"))
+
+InserterGraphicsPack:configure({
+	tint = tints.red,
+	variant = "inserter-long",
+}):apply_to_entity(create_dummy_entity("ar-inserter-long", "inserter", "long-handed-inserter"))
+
+InserterGraphicsPack:configure({
+	tint = tints.blue,
+	variant = "inserter-filter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-filter", "inserter", "fast-inserter"))
+
+InserterGraphicsPack:configure({
+	tint = tints.purple,
+	variant = "inserter-filter-long",
+}):apply_to_entity(create_dummy_entity("ar-inserter-filter-long", "inserter", "fast-inserter"))
+
+InserterGraphicsPack:configure({
+	tint = tints.green,
+	variant = "inserter-bulk",
+}):apply_to_entity(create_dummy_entity("ar-inserter-bulk", "inserter", "bulk-inserter"))
+
+InserterGraphicsPack:configure({
+	tint = tints.orange,
+	variant = "inserter-bulk-filter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-bulk-filter", "inserter", "bulk-inserter"))
+
+-- INSERTER TESTS (Group 2 — fixed-color presets)
+local InserterPresetGraphicsPack = require("graphics-packs.inserter-preset-graphics-pack")
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-standard", "inserter", "inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter",
+	is_long = true,
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-standard-long", "inserter", "inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-burner",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-burner", "inserter", "burner-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-fast",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-fast", "inserter", "fast-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-express",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-express", "inserter", "fast-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-filter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-filter", "inserter", "fast-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-express-filter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-express-filter", "inserter", "fast-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-long-handed",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-long-handed", "inserter", "long-handed-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-bulk",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-bulk", "inserter", "bulk-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-express-bulk",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-express-bulk", "inserter", "bulk-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-bulk-filter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-bulk-filter", "inserter", "bulk-inserter"))
+
+InserterPresetGraphicsPack:configure({
+	preset = "inserter-express-bulk-filter",
+}):apply_to_entity(create_dummy_entity("ar-inserter-preset-express-bulk-filter", "inserter", "bulk-inserter"))
