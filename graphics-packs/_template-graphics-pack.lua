@@ -1,6 +1,6 @@
 local GraphicsPackBase = require("graphics-pack-base")
 
----@class __TEMPLATE__Pack:GraphicsPackBase
+---@class __TEMPLATE__Pack:Reskins.Abstractions.GraphicsPackBase
 ---@field field Any
 local __TEMPLATE__Pack = {}
 __TEMPLATE__Pack.__index = GraphicsPackBase
