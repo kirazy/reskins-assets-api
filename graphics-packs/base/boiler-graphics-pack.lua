@@ -1,7 +1,6 @@
 local _defines = require("api.defines")
-local _pipes = require("assets.base.entities.pipe-pictures")
 
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class Reskins.Base.BoilerGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field pictures data.BoilerPictureSet

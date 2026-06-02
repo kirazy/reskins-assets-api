@@ -1,7 +1,8 @@
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local _defines = require("api.defines")
+
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Angels.TreeGeneratorGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
----@field field Any
 local TreeGeneratorGraphicsPack = {}
 TreeGeneratorGraphicsPack.__index = CraftingMachineGraphicsPack
 
@@ -12,16 +13,21 @@ setmetatable(TreeGeneratorGraphicsPack, {
 
 ---@class Reskins.Angels.TreeGeneratorGraphicsPackParams
 ---@field tint data.Color?
+---@field variant "temperate"|"desert"|"swamp"
 
 ---@param params Reskins.Angels.TreeGeneratorGraphicsPackParams
 ---@return Reskins.Angels.TreeGeneratorGraphicsPack
 ---@nodiscard
 function TreeGeneratorGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
-		tint = nil,
+		tint = params.tint,
 		remnants = {},
-		required_assets = {},
-		graphics_set = {},
+		required_assets = {
+			[_defines.assets.bioprocessing_graphics] = true,
+		},
+		nominal_width = 3,
+		nominal_height = 3,
+		graphics_set = self.get_graphics_set(params.tint, params.variant),
 		graphics_set_flipped = {},
 		fluid_boxes = {},
 		fluid_boxes_off_when_no_fluid_recipe = false,
@@ -32,20 +38,101 @@ function TreeGeneratorGraphicsPack:configure(params)
 	return instance
 end
 
----Applies a copy of the graphics pack to the specified `prototype`.
----
----#### Exceptions
----*@throws* - `string` - When `prototype` is `nil`.</br>
----*@throws* - `string` - When `prototype` is is not a `table`.
----
----#### Implementation Guidance
----- This is an abstract method that must be implemented by subclasses.
----- Implementations should mutate the prototype in place, and set copies of the graphics.
----@param prototype data.PrototypeBase
-function TreeGeneratorGraphicsPack:apply_to_entity(prototype)
-	if not reskins_suppress_errors then
-		error("apply_to_entity must be implemented by subclass")
+---@param tint data.Color?
+---@param variant "temperate"|"desert"|"swamp"
+---@return data.CraftingMachineGraphicsSet
+---@nodiscard
+function TreeGeneratorGraphicsPack.get_graphics_set(tint, variant)
+	local variant_filenames = {
+		temperate = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-1.png",
+		swamp = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-2.png",
+		desert = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-3.png",
+	}
+
+	local layers = {
+		{
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-shadow.png",
+			width = 160,
+			height = 160,
+			line_length = 1,
+			frame_count = 1,
+			shift = { 0, 0 },
+		},
+		{
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-base.png",
+			width = 160,
+			height = 160,
+			line_length = 1,
+			frame_count = 1,
+			shift = { 0, 0 },
+		},
+		{
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-pipes.png",
+			width = 160,
+			height = 160,
+			line_length = 1,
+			frame_count = 1,
+			shift = { 0, 0 },
+		},
+		{
+			filename = variant_filenames[variant],
+			width = 160,
+			height = 160,
+			line_length = 1,
+			frame_count = 1,
+			shift = { 0, 0 },
+		},
+		{
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-top.png",
+			width = 160,
+			height = 160,
+			line_length = 1,
+			frame_count = 1,
+			shift = { 0, 0 },
+		},
+	}
+
+	if tint then
+		table.insert(layers, {
+			-- Mask
+			filename = "__reskins-assets-angels__/graphics/entity/tree-generator/tree-generator-mask.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			shift = { 0, 0 },
+			tint = tint,
+		})
+		table.insert(layers, {
+			-- Highlights
+			filename = "__reskins-assets-angels__/graphics/entity/tree-generator/tree-generator-highlights.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			shift = { 0, 0 },
+			blend_mode = "additive-soft",
+		})
 	end
+
+	---@type data.CraftingMachineGraphicsSet
+	local graphics_set = {
+		animation = { layers = layers },
+		working_visualisations = {
+			{
+				fadeout = true,
+				animation = {
+					filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-generator-top-on.png",
+					priority = "extra-high",
+					width = 160,
+					height = 160,
+					shift = { 0, 0 },
+					draw_as_glow = true,
+				},
+				light = { intensity = 4, size = 4, color = { r = 0.5, g = 1.0, b = 0.5 } },
+			},
+		},
+	}
+
+	return graphics_set
 end
 
 return TreeGeneratorGraphicsPack

@@ -1,4 +1,9 @@
-local GraphicsPackBase = require("graphics-pack-base")
+local _sprites = require("__reskins-sprite-utils__.sprites")
+local _pipes = require("assets.base.entities.pipe-pictures")
+
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
+
+local _private = setmetatable({}, { __mode = "k" })
 
 ---@class Reskins.Abstractions.CraftingMachineGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field graphics_set data.CraftingMachineGraphicsSet
@@ -14,6 +19,8 @@ setmetatable(CraftingMachineGraphicsPack, {
 })
 
 ---@class Reskins.Abstractions.CraftingMachineGraphicsParams:Reskins.Abstractions.GraphicsPackParams
+---@field nominal_width double
+---@field nominal_height double
 ---@field graphics_set data.CraftingMachineGraphicsSet
 ---@field graphics_set_flipped data.CraftingMachineGraphicsSet?
 ---@field fluid_boxes FluidBoxGraphics[]?
@@ -38,6 +45,11 @@ function CraftingMachineGraphicsPack:configure(params)
 	instance.graphics_set_flipped = params.graphics_set_flipped
 	instance.fluid_boxes = params.fluid_boxes
 	instance.fluid_boxes_off_when_no_fluid_recipe = params.fluid_boxes_off_when_no_fluid_recipe
+
+	_private[instance] = {
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
+	}
 
 	-- Set the correct metatable for this class
 	setmetatable(instance, CraftingMachineGraphicsPack)
@@ -101,12 +113,34 @@ end
 ---@param prototype data.CraftingMachinePrototype
 function CraftingMachineGraphicsPack:apply_to_entity(prototype)
 	-- Apply graphics set, clear any conflicting properties.
-	prototype.graphics_set = util.copy(self.graphics_set)
-	prototype.graphics_set_flipped = self.graphics_set_flipped and util.copy(self.graphics_set_flipped) or nil
+	local graphics_set = util.copy(self.graphics_set)
+	local graphics_set_flipped = self.graphics_set_flipped and util.copy(self.graphics_set_flipped) or nil
+
+	local priv = _private[self]
+	if priv.nominal_width then
+		local proto_lt = prototype.selection_box.left_top or prototype.selection_box[1]
+		local proto_rb = prototype.selection_box.right_bottom or prototype.selection_box[2]
+		local proto_w = (proto_rb.x or proto_rb[1]) - (proto_lt.x or proto_lt[1])
+		local proto_h = (proto_rb.y or proto_rb[2]) - (proto_lt.y or proto_lt[2])
+
+		-- Cross-multiply to check aspect ratio without division; skip if mismatched.
+		if math.abs(priv.nominal_width * proto_h - proto_w * priv.nominal_height) < 1e-9 then
+			local scalar = proto_w / priv.nominal_width
+			if scalar ~= 1 then
+				_sprites.rescale_prototype(graphics_set, scalar)
+				if graphics_set_flipped then
+					_sprites.rescale_prototype(graphics_set_flipped, scalar)
+				end
+			end
+		end
+	end
+
+	prototype.graphics_set = graphics_set
+	prototype.graphics_set_flipped = graphics_set_flipped
 	prototype.water_reflection = nil
 
 	-- Apply fluid box configurations if present.
-	if self.fluid_boxes and prototype.fluid_boxes then
+	if self.fluid_boxes then
 		self:apply_fluid_box_graphics(prototype)
 	end
 
@@ -127,7 +161,20 @@ end
 ---@param prototype data.CraftingMachinePrototype
 ---@private
 function CraftingMachineGraphicsPack:apply_fluid_box_graphics(prototype)
-	for _, fluid_box in pairs(prototype.fluid_boxes) do
+	local fluid_boxes = {}
+	if prototype.energy_source and prototype.energy_source.fluid_box then
+		table.insert(fluid_boxes, prototype.energy_source.fluid_box)
+	end
+
+	if prototype.fluid_boxes then
+		for _, fluid_box in pairs(prototype.fluid_boxes) do
+			if fluid_box then
+				table.insert(fluid_boxes, fluid_box)
+			end
+		end
+	end
+
+	for _, fluid_box in pairs(fluid_boxes) do
 		local proto_directions = collect_directions_from_fluid_box(fluid_box)
 		local match = find_matching_fluid_box_graphics(proto_directions, self.fluid_boxes)
 
@@ -136,8 +183,9 @@ function CraftingMachineGraphicsPack:apply_fluid_box_graphics(prototype)
 			goto continue
 		end
 
-		fluid_box.pipe_covers = match.pipe_covers
+		fluid_box.pipe_covers = match.pipe_covers or _pipes.pipe_covers("iron")
 		fluid_box.pipe_covers_frozen = match.pipe_covers_frozen
+			or (mods["space-age"] and _pipes.pipe_covers_frozen() or nil)
 		fluid_box.pipe_picture = match.pipe_picture
 		fluid_box.pipe_picture_frozen = match.pipe_picture_frozen
 		fluid_box.mirrored_pipe_picture = match.mirrored_pipe_picture

@@ -1,7 +1,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Base.OilRefineryGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local OilRefineryGraphicsPack = {}
@@ -26,6 +26,8 @@ function OilRefineryGraphicsPack:configure(params)
 		tint = params.tint,
 		remnants = remnants,
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 5,
+		nominal_height = 5,
 		graphics_set = graphics_set,
 	}) --[[@as Reskins.Base.OilRefineryGraphicsPack]]
 

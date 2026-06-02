@@ -2,7 +2,7 @@ local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local NumberValidator = require("prototypes.number-validator")
 
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Base.AssemblingMachineGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local AssemblingMachineGraphicsPack = {}
@@ -35,6 +35,8 @@ function AssemblingMachineGraphicsPack:configure(params)
 		tint = params.tint,
 		remnants = remnants,
 		required_assets = { [_defines.assets.base] = true },
+		nominal_width = 3,
+		nominal_height = 3,
 		graphics_set = graphics_set,
 		fluid_boxes = { fluid_box },
 	}) --[[@as Reskins.Base.AssemblingMachineGraphicsPack]]

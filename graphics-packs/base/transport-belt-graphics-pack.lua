@@ -1,6 +1,7 @@
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local TransportBeltConnectableGraphicsPack = require("transport-belt-connectable-graphics-pack")
+local TransportBeltConnectableGraphicsPack =
+	require("graphics-packs.abstractions.transport-belt-connectable-graphics-pack")
 
 ---@class TransportBeltGraphicsPack:Reskins.Abstractions.TransportBeltConnectableGraphicsPack
 local TransportBeltGraphicsPack = {}
@@ -10,6 +11,9 @@ TransportBeltGraphicsPack.__index = TransportBeltGraphicsPack
 setmetatable(TransportBeltGraphicsPack, {
 	__index = TransportBeltConnectableGraphicsPack,
 })
+
+-- TODO: Lift the hash-based auto-replace logic from Prismatic Belts.
+-- TODO: Strip out the transport-belt-connectable replace from all-things-not-a-transport-belt.
 
 ---@class TransportBeltGraphicsParams
 ---@field tint data.Color?

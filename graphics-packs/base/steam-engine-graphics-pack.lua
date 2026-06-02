@@ -1,6 +1,6 @@
 local _defines = require("api.defines")
 
-local GeneratorGraphicsPack = require("generator-graphics-pack")
+local GeneratorGraphicsPack = require("graphics-packs.abstractions.generator-graphics-pack")
 
 ---@class SteamEngineGraphicsPack:Reskins.Abstractions.GeneratorGraphicsPack
 local SteamEngineGraphicsPack = {}

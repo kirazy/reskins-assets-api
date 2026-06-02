@@ -2,22 +2,22 @@ local _defines = require("api.defines")
 
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
----@class Reskins.Angels.NutrientExtractorGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
-local NutrientExtractorGraphicsPack = {}
-NutrientExtractorGraphicsPack.__index = CraftingMachineGraphicsPack
+---@class Reskins.Angels.OilPressGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
+local OilPressGraphicsPack = {}
+OilPressGraphicsPack.__index = CraftingMachineGraphicsPack
 
 -- Set up inheritance
-setmetatable(NutrientExtractorGraphicsPack, {
+setmetatable(OilPressGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.NutrientExtractorGraphicsPackParams
+---@class Reskins.Angels.OilPressGraphicsPackParams
 ---@field tint data.Color?
 
----@param params Reskins.Angels.NutrientExtractorGraphicsPackParams
----@return Reskins.Angels.NutrientExtractorGraphicsPack
+---@param params Reskins.Angels.OilPressGraphicsPackParams
+---@return Reskins.Angels.OilPressGraphicsPack
 ---@nodiscard
-function NutrientExtractorGraphicsPack:configure(params)
+function OilPressGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
 		remnants = {},
@@ -30,20 +30,21 @@ function NutrientExtractorGraphicsPack:configure(params)
 		graphics_set_flipped = {},
 		fluid_boxes = {},
 		fluid_boxes_off_when_no_fluid_recipe = false,
-	}) --[[@as Reskins.Angels.NutrientExtractorGraphicsPack]]
+	}) --[[@as Reskins.Angels.OilPressGraphicsPack]]
 
 	-- Set the correct metatable for this class.
-	setmetatable(instance, NutrientExtractorGraphicsPack)
+	setmetatable(instance, OilPressGraphicsPack)
 	return instance
 end
 
 ---@param tint data.Color?
 ---@return data.CraftingMachineGraphicsSet
 ---@nodiscard
-function NutrientExtractorGraphicsPack.get_graphics_set(tint)
+function OilPressGraphicsPack.get_graphics_set(tint)
 	local layers = {
+		-- Base
 		{
-			filename = "__angelsbioprocessinggraphics__/graphics/entity/nutrient-extractor/nutrient-extractor.png",
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/bio-press/bio-press.png",
 			priority = "extra-high",
 			width = 160,
 			height = 160,
@@ -57,7 +58,7 @@ function NutrientExtractorGraphicsPack.get_graphics_set(tint)
 	if tint then
 		table.insert(layers, {
 			-- Mask
-			filename = "__reskins-assets-angels__/graphics/entity/nutrient-extractor/nutrient-extractor-mask.png",
+			filename = "__reskins-assets-angels__/graphics/entity/press/press-mask.png",
 			priority = "extra-high",
 			width = 160,
 			height = 160,
@@ -68,7 +69,7 @@ function NutrientExtractorGraphicsPack.get_graphics_set(tint)
 		})
 		table.insert(layers, {
 			-- Highlights
-			filename = "__reskins-assets-angels__/graphics/entity/nutrient-extractor/nutrient-extractor-highlights.png",
+			filename = "__reskins-assets-angels__/graphics/entity/press/press-highlights.png",
 			priority = "extra-high",
 			width = 160,
 			height = 160,
@@ -88,4 +89,4 @@ function NutrientExtractorGraphicsPack.get_graphics_set(tint)
 	return graphics_set
 end
 
-return NutrientExtractorGraphicsPack
+return OilPressGraphicsPack

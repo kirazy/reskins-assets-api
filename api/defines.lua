@@ -22,7 +22,7 @@ _defines.belt_sprites = {
 	fast = 2,
 	---Indicates turbo belt sprites.
 	---
-	---Used for faster belt speeds, typically more than 75 items/s.
+	---Used for faster belt speeds, typically more than 60 items/s.
 	---Has twice as many frames as `defines.belt_sprites.fast` and larger spacing between arrows. Used for fastest belt speeds.
 	turbo = 3,
 }
@@ -77,6 +77,7 @@ _defines.letter = {
 }
 
 ---@alias PipeMaterialName
+---| '"aluminum"'
 ---| '"brass"'
 ---| '"bronze"'
 ---| '"ceramic"'
@@ -92,6 +93,7 @@ _defines.letter = {
 
 ---@enum Reskins.Defines.PipeMaterial
 _defines.pipe_material = {
+	aluminum = "aluminum",
 	brass = "brass",
 	bronze = "bronze",
 	ceramic = "ceramic",

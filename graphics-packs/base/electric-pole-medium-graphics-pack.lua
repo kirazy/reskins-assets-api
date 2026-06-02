@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local ElectricPoleGraphicsPack = require("electric-pole-graphics-pack")
+local ElectricPoleGraphicsPack = require("graphics-packs.abstractions.electric-pole-graphics-pack")
 
 ---@class Reskins.Base.ElectricPoleMediumGraphicsPack:Reskins.Abstractions.ElectricPoleGraphicsPack
 local ElectricPoleMediumGraphicsPack = {}

@@ -1,4 +1,4 @@
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Bobs.DistilleryGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 ---@field field Any
@@ -21,6 +21,8 @@ function ChemicalPlantGraphicsPack:configure(params)
 		tint = nil,
 		remnants = {},
 		required_assets = {},
+		nominal_width = 2,
+		nominal_height = 2,
 		graphics_set = {},
 		graphics_set_flipped = {},
 		fluid_boxes = {},

@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class Reskins.Base.InserterGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field hand_base_picture table
@@ -16,11 +16,6 @@ InserterGraphicsPack.__index = InserterGraphicsPack
 setmetatable(InserterGraphicsPack, {
 	__index = GraphicsPackBase,
 })
-
----@class Reskins.Base.InserterGraphicsParams
----@field tint data.Color?
----@field variant "inserter"|"inserter-long"|"inserter-filter"|"inserter-filter-long"|"inserter-bulk"|"inserter-bulk-filter"
-
 local base_path = "__reskins-assets-base__/graphics/entity/"
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/"
 
@@ -393,6 +388,18 @@ function InserterGraphicsPack.get_corpse_animation(tint, variant)
 end
 
 -- Class methods
+
+---@alias InserterVariants
+--- | "inserter"
+--- | "inserter-long"
+--- | "inserter-filter"
+--- | "inserter-filter-long"
+--- | "inserter-bulk"
+--- | "inserter-bulk-filter"
+
+---@class Reskins.Base.InserterGraphicsParams
+---@field tint data.Color?
+---@field variant InserterVariants
 
 ---@param params Reskins.Base.InserterGraphicsParams
 ---@return Reskins.Base.InserterGraphicsPack

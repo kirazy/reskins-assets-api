@@ -1,6 +1,6 @@
 local _defines = require("api.defines")
 
-local CraftingMachineGraphicsPack = require("graphics-packs.crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Base.CentrifugeGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local CentrifugeGraphicsPack = {}
@@ -24,6 +24,8 @@ function CentrifugeGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
 		remnants = remnants,
+		nominal_width = 3,
+		nominal_height = 3,
 		required_assets = { [_defines.assets.base_assets] = true },
 		graphics_set = graphics_set,
 	}) --[[@as Reskins.Base.CentrifugeGraphicsPack]]
@@ -227,6 +229,7 @@ function CentrifugeGraphicsPack.get_graphics_set(tint)
 	}
 
 	return {
+		always_draw_idle_animation = true,
 		idle_animation = idle_animation,
 		working_visualisations = working_visualisations,
 	}

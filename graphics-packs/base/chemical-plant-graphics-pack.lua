@@ -1,7 +1,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Base.ChemicalPlantGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local ChemicalPlantGraphicsPack = {}
@@ -25,6 +25,8 @@ function ChemicalPlantGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
 		remnants = remnants,
+		nominal_width = 3,
+		nominal_height = 3,
 		required_assets = { [_defines.assets.base_assets] = true },
 		graphics_set = graphics_set,
 	}) --[[@as Reskins.Base.ChemicalPlantGraphicsPack]]

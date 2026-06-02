@@ -1,6 +1,6 @@
 local _defines = require("api.defines")
 local NumberValidator = require("prototypes.number-validator")
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class RoboportGraphicsSet
 ---@field base data.Sprite

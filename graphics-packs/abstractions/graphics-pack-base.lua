@@ -62,6 +62,16 @@ function GraphicsPackBase:apply_to_entity(prototype)
 	end
 end
 
+---Applies a copy of the graphics pack to the specified `prototype`.
+---
+---The prototype is mutated in place if it exists; otherwise, no action is taken.
+---@param prototype data.PrototypeBase|nil
+function GraphicsPackBase:try_apply_to_entity(prototype)
+	if prototype then
+		self:apply_to_entity(prototype)
+	end
+end
+
 ---Applies the explosion and particle configuration to the specified `explosion` that goes with the graphics pack.
 ---
 ---The prototype is mutated in place.

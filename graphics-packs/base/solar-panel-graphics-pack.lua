@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class SolarPanelGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field picture data.Sprite
@@ -177,98 +177,68 @@ function SolarPanelGraphicsPack.get_overlay(variant)
 	return overlay
 end
 
----Builds a single RotatedAnimation layer table and returns two x-offset variations
----from the sheet, replicating make_rotated_animation_variations_from_sheet(2, ...).
----@param base_layers table
----@param variation_width integer # Pixel width of one variation in the sheet.
----@return data.RotatedAnimationVariations
----@nodiscard
-local function make_two_variations(base_layers, variation_width)
-	-- Variation 1 uses x = 0 (default).
-	local variation1 = { layers = base_layers }
-
-	-- Variation 2 is offset by variation_width pixels in x.
-	local layers2 = {}
-	local i = 0
-	for _, layer in pairs(base_layers) do
-		i = i + 1
-		local l = {}
-		for k, v in pairs(layer) do
-			l[k] = v
-		end
-		l.x = (l.x or 0) + variation_width
-		layers2[i] = l
-	end
-	local variation2 = { layers = layers2 }
-
-	return { variation1, variation2 }
-end
-
 ---@param tint data.Color?
----@param variant SolarPanelVariant
----@return data.RotatedAnimationVariations?
----@nodiscard
-function SolarPanelGraphicsPack.get_corpse_animation(tint, variant)
-	-- Large panels have no remnants entity.
-	if variant == "large" then
-		return nil
-	end
-
-	if variant == "small" then
-		local assets_path = _defines.assets.bobs_assets .. "/graphics/entity/solar-panel-small/remnants/"
-
-		local layers = {
+---@return data.RotatedAnimation
+local function get_small_solar_panel_corpse_animation(tint)
+	---@type data.RotatedAnimation
+	local animation = {
+		layers = {
 			{
-				filename = assets_path .. "solar-panel-small-remnants-base.png",
+				filename = "__reskins-assets-bobs__/graphics/entity/solar-panel-small/remnants/small-solar-panel-remnants-base.png",
 				width = 246,
 				height = 198,
 				direction_count = 1,
 				shift = util.by_pixel(-1, -0.5),
 				scale = 0.5,
 			},
-		}
-
-		if tint then
-			table.insert(layers, {
-				filename = assets_path .. "solar-panel-small-remnants-mask.png",
-				width = 246,
-				height = 198,
-				direction_count = 1,
-				shift = util.by_pixel(-1, -0.5),
-				tint = tint,
-				scale = 0.5,
-			})
-			table.insert(layers, {
-				filename = assets_path .. "solar-panel-small-remnants-highlights.png",
-				width = 246,
-				height = 198,
-				direction_count = 1,
-				shift = util.by_pixel(-1, -0.5),
-				blend_mode = "additive-soft",
-				scale = 0.5,
-			})
-		end
-
-		return make_two_variations(layers, 246)
-	end
-
-	-- variant == "standard"
-	local remnants_path = _defines.assets.base_assets .. "/graphics/entity/solar-panel/remnants/"
-
-	local layers = {
-		{
-			filename = "__base__/graphics/entity/solar-panel/remnants/solar-panel-remnants.png",
-			width = 290,
-			height = 282,
-			direction_count = 1,
-			shift = util.by_pixel(3.5, 0),
-			scale = 0.5,
 		},
 	}
 
 	if tint then
-		table.insert(layers, {
-			filename = remnants_path .. "solar-panel-remnants-mask.png",
+		table.insert(animation.layers, {
+			filename = "__reskins-assets-bobs__/graphics/entity/solar-panel-small/remnants/small-solar-panel-remnants-mask.png",
+			width = 246,
+			height = 198,
+			direction_count = 1,
+			shift = util.by_pixel(-1, -0.5),
+			tint = tint,
+			scale = 0.5,
+		})
+
+		table.insert(animation.layers, {
+			filename = "__reskins-assets-bobs__/graphics/entity/solar-panel-small/remnants/small-solar-panel-remnants-highlights.png",
+			width = 246,
+			height = 198,
+			direction_count = 1,
+			shift = util.by_pixel(-1, -0.5),
+			blend_mode = "additive-soft",
+			scale = 0.5,
+		})
+	end
+
+	return animation
+end
+
+---@param tint data.Color?
+---@return data.RotatedAnimation
+local function get_solar_panel_corpse_animation(tint)
+	---@type data.RotatedAnimation
+	local animation = {
+		layers = {
+			{
+				filename = "__base__/graphics/entity/solar-panel/remnants/solar-panel-remnants.png",
+				width = 290,
+				height = 282,
+				direction_count = 1,
+				shift = util.by_pixel(3.5, 0),
+				scale = 0.5,
+			},
+		},
+	}
+
+	if tint then
+		table.insert(animation.layers, {
+			filename = "__reskins-assets-base__/graphics/entity/solar-panel/remnants/solar-panel-remnants-mask.png",
 			width = 290,
 			height = 282,
 			direction_count = 1,
@@ -276,8 +246,9 @@ function SolarPanelGraphicsPack.get_corpse_animation(tint, variant)
 			tint = tint,
 			scale = 0.5,
 		})
-		table.insert(layers, {
-			filename = remnants_path .. "solar-panel-remnants-highlights.png",
+
+		table.insert(animation.layers, {
+			filename = "__reskins-assets-base__/graphics/entity/solar-panel/remnants/solar-panel-remnants-highlights.png",
 			width = 290,
 			height = 282,
 			direction_count = 1,
@@ -287,7 +258,26 @@ function SolarPanelGraphicsPack.get_corpse_animation(tint, variant)
 		})
 	end
 
-	return make_two_variations(layers, 290)
+	return animation
+end
+
+---@param tint data.Color?
+---@param variant SolarPanelVariant
+---@return data.RotatedAnimationVariations?
+---@nodiscard
+function SolarPanelGraphicsPack.get_corpse_animation(tint, variant)
+	-- Large panels have no remnant sprites.
+	if variant == "large" then
+		return nil
+	end
+
+	if variant == "small" then
+		local animation = get_small_solar_panel_corpse_animation(tint)
+		return make_rotated_animation_variations_from_sheet(2, animation)
+	else
+		local animation = get_solar_panel_corpse_animation(tint)
+		return make_rotated_animation_variations_from_sheet(2, animation)
+	end
 end
 
 return SolarPanelGraphicsPack

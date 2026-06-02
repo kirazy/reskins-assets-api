@@ -4,7 +4,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 
 local meld = require("__core__.lualib.meld")
 
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class Reskins.Base.PipeGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field horizontal_window_bounding_box data.BoundingBox

@@ -1,7 +1,8 @@
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local _defines = require("api.defines")
+
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Angels.OreRefineryGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
----@field field Any
 local OreRefineryGraphicsPack = {}
 OreRefineryGraphicsPack.__index = CraftingMachineGraphicsPack
 
@@ -18,10 +19,14 @@ setmetatable(OreRefineryGraphicsPack, {
 ---@nodiscard
 function OreRefineryGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
-		tint = nil,
+		tint = params.tint,
 		remnants = {},
-		required_assets = {},
-		graphics_set = {},
+		required_assets = {
+			[_defines.assets.refining_graphics] = true,
+		},
+		nominal_width = 7,
+		nominal_height = 7,
+		graphics_set = self.get_graphics_set(params.tint),
 		graphics_set_flipped = {},
 		fluid_boxes = {},
 		fluid_boxes_off_when_no_fluid_recipe = false,
@@ -32,20 +37,134 @@ function OreRefineryGraphicsPack:configure(params)
 	return instance
 end
 
----Applies a copy of the graphics pack to the specified `prototype`.
----
----#### Exceptions
----*@throws* - `string` - When `prototype` is `nil`.</br>
----*@throws* - `string` - When `prototype` is is not a `table`.
----
----#### Implementation Guidance
----- This is an abstract method that must be implemented by subclasses.
----- Implementations should mutate the prototype in place, and set copies of the graphics.
----@param prototype data.PrototypeBase
-function OreRefineryGraphicsPack:apply_to_entity(prototype)
-	if not reskins_suppress_errors then
-		error("apply_to_entity must be implemented by subclass")
+---@param tint data.Color?
+---@return data.CraftingMachineGraphicsSet
+---@nodiscard
+function OreRefineryGraphicsPack.get_graphics_set(tint)
+	local animation = {
+		layers = {
+			-- Base
+			{
+				filename = "__angelsrefininggraphics__/graphics/entity/ore-refinery/ore-refinery-base.png",
+				priority = "extra-high",
+				width = 440,
+				height = 509,
+				shift = util.by_pixel(0.5, -16),
+				scale = 0.5,
+			},
+			-- Shadow
+			{
+				filename = "__angelsrefininggraphics__/graphics/entity/ore-refinery/ore-refinery-shadow.png",
+				priority = "extra-high",
+				width = 522,
+				height = 340,
+				shift = util.by_pixel(21.5, 29),
+				draw_as_shadow = true,
+				scale = 0.5,
+			},
+		},
+	}
+
+	if tint then
+		table.insert(animation.layers, {
+			-- Mask
+			filename = "__reskins-assets-angels__/graphics/entity/ore-refinery/ore-refinery-mask.png",
+			priority = "extra-high",
+			width = 440,
+			height = 509,
+			shift = util.by_pixel(0.5, -16),
+			tint = tint,
+			scale = 0.5,
+		})
+		table.insert(animation.layers, {
+			-- Highlights
+			filename = "__reskins-assets-angels__/graphics/entity/ore-refinery/ore-refinery-highlights.png",
+			priority = "extra-high",
+			width = 440,
+			height = 509,
+			shift = util.by_pixel(0.5, -16),
+			blend_mode = "additive-soft",
+			scale = 0.5,
+		})
 	end
+
+	---@type data.CraftingMachineGraphicsSet
+	local graphics_set = {
+		animation = animation,
+		working_visualisations = {
+			{
+				fadeout = true,
+				effect = "uranium-glow",
+				animation = {
+					filename = "__angelsrefininggraphics__/graphics/entity/ore-refinery/ore-refinery-lights.png",
+					priority = "extra-high",
+					width = 440,
+					height = 509,
+					shift = util.by_pixel(0.5, -16),
+					draw_as_glow = true,
+					blend_mode = "additive-soft",
+					scale = 0.5,
+				},
+			},
+			{
+				fadeout = true,
+				constant_speed = true,
+				apply_recipe_tint = "primary",
+				north_position = util.by_pixel_hr(-63, -255),
+				east_position = util.by_pixel_hr(-63, -255),
+				south_position = util.by_pixel_hr(-63, -255),
+				west_position = util.by_pixel_hr(-63, -255),
+				render_layer = "wires",
+				animation = {
+					filename = "__base__/graphics/entity/chemical-plant/chemical-plant-smoke-outer.png",
+					frame_count = 47,
+					line_length = 16,
+					width = 90,
+					height = 188,
+					animation_speed = 0.5,
+					shift = util.by_pixel(-2, -40),
+					tint = util.color("808080"),
+					scale = 0.5,
+				},
+			},
+			{
+				fadeout = true,
+				constant_speed = true,
+				--apply_recipe_tint = "primary",
+				north_position = util.by_pixel_hr(-63, -255),
+				east_position = util.by_pixel_hr(-63, -255),
+				south_position = util.by_pixel_hr(-63, -255),
+				west_position = util.by_pixel_hr(-63, -255),
+				render_layer = "wires",
+				animation = {
+					filename = "__base__/graphics/entity/chemical-plant/chemical-plant-smoke-inner.png",
+					frame_count = 47,
+					line_length = 16,
+					width = 40,
+					height = 84,
+					animation_speed = 0.5,
+					shift = util.by_pixel(0, -14),
+					tint = util.color("b3b3b3"),
+					scale = 0.5 * 1.2,
+				},
+			},
+			{
+				always_draw = true,
+				apply_recipe_tint = "primary",
+				render_layer = "wires",
+				animation = {
+					filename = "__angelsrefininggraphics__/graphics/entity/ore-refinery/stack-patch-overlay.png",
+					priority = "extra-high",
+					width = 46,
+					height = 25,
+					shift = util.by_pixel_hr(-61, -246),
+					scale = 0.5,
+				},
+			},
+		},
+	}
+
+	return graphics_set
 end
 
 return OreRefineryGraphicsPack

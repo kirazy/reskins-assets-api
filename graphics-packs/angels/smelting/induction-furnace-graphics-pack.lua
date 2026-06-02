@@ -1,6 +1,6 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 local StringValidator = require("prototypes.string-validator")
 
 ---@class Reskins.Angels.InductionFurnaceGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
@@ -78,7 +78,6 @@ local h_mirror = {
 
 ---@class Reskins.Angels.InductionFurnaceGraphicsParams
 ---@field tint data.Color?
----@field generate_flipped boolean?
 
 ---Creates a new `InductionFurnaceGraphicsPack` instance.
 ---@param params Reskins.Angels.InductionFurnaceGraphicsParams
@@ -86,11 +85,7 @@ local h_mirror = {
 ---@nodiscard
 function InductionFurnaceGraphicsPack:configure(params)
 	local graphics_set = self.get_graphics_set(params.tint)
-	local graphics_set_flipped = nil
-
-	if params.generate_flipped ~= false then -- Default to true
-		graphics_set_flipped = self.get_graphics_set_flipped(params.tint)
-	end
+	local graphics_set_flipped = self.get_graphics_set_flipped(params.tint)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
@@ -99,6 +94,8 @@ function InductionFurnaceGraphicsPack:configure(params)
 			[_defines.assets.angels_assets] = true,
 			[_defines.assets.base_assets] = true,
 		},
+		nominal_width = 5,
+		nominal_height = 5,
 		graphics_set = graphics_set,
 		graphics_set_flipped = graphics_set_flipped,
 	}) --[[@as Reskins.Angels.InductionFurnaceGraphicsPack]]

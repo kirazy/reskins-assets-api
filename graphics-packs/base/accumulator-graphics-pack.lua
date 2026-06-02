@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 local StringValidator = require("prototypes.string-validator")
 local NumberValidator = require("prototypes.number-validator")
 

@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class Reskins.Base.PumpGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field animations data.Animation4Way

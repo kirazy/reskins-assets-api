@@ -1,7 +1,8 @@
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local _defines = require("api.defines")
+
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Angels.ArboretumGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
----@field field Any
 local ArboretumGraphicsPack = {}
 ArboretumGraphicsPack.__index = CraftingMachineGraphicsPack
 
@@ -18,10 +19,14 @@ setmetatable(ArboretumGraphicsPack, {
 ---@nodiscard
 function ArboretumGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
-		tint = nil,
+		tint = params.tint,
 		remnants = {},
-		required_assets = {},
-		graphics_set = {},
+		required_assets = {
+			[_defines.assets.bioprocessing_graphics] = true,
+		},
+		nominal_width = 5,
+		nominal_height = 5,
+		graphics_set = self.get_graphics_set(params.tint),
 		graphics_set_flipped = {},
 		fluid_boxes = {},
 		fluid_boxes_off_when_no_fluid_recipe = false,
@@ -32,20 +37,84 @@ function ArboretumGraphicsPack:configure(params)
 	return instance
 end
 
----Applies a copy of the graphics pack to the specified `prototype`.
----
----#### Exceptions
----*@throws* - `string` - When `prototype` is `nil`.</br>
----*@throws* - `string` - When `prototype` is is not a `table`.
----
----#### Implementation Guidance
----- This is an abstract method that must be implemented by subclasses.
----- Implementations should mutate the prototype in place, and set copies of the graphics.
----@param prototype data.PrototypeBase
-function ArboretumGraphicsPack:apply_to_entity(prototype)
-	if not reskins_suppress_errors then
-		error("apply_to_entity must be implemented by subclass")
+---@param tint data.Color?
+---@return data.CraftingMachineGraphicsSet
+---@nodiscard
+function ArboretumGraphicsPack.get_graphics_set(tint)
+	local layers = {
+		-- Shadow
+		{
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-shadow.png",
+			width = 224,
+			height = 256,
+			shift = { 0, -0.50 },
+		},
+		-- Base
+		{
+			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-base.png",
+			width = 224,
+			height = 256,
+			shift = { 0, -0.50 },
+		},
+	}
+
+	if tint then
+		table.insert(layers, {
+			-- Mask
+			filename = "__reskins-assets-angels__/graphics/entity/arboretum/arboretum-mask.png",
+			priority = "extra-high",
+			width = 224,
+			height = 256,
+			shift = { 0, -0.5 },
+			tint = tint,
+		})
+		table.insert(layers, {
+			-- Highlights
+			filename = "__reskins-assets-angels__/graphics/entity/arboretum/arboretum-highlights.png",
+			priority = "extra-high",
+			width = 224,
+			height = 256,
+			shift = { 0, -0.5 },
+			blend_mode = "additive-soft",
+		})
 	end
+
+	table.insert(layers, {
+		-- Pipes
+		filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-pipes.png",
+		width = 224,
+		height = 256,
+		shift = { 0, -0.50 },
+	})
+	table.insert(layers, {
+		-- Off state
+		filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-off.png",
+		width = 224,
+		height = 256,
+		shift = { 0, -0.50 },
+	})
+
+	---@type data.CraftingMachineGraphicsSet
+	local graphics_set = {
+		animation = { layers = layers },
+		working_visualisations = {
+			{
+				apply_recipe_tint = "primary",
+				animation = {
+					filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-on.png",
+					blend_mode = "additive",
+					width = 224,
+					height = 256,
+					line_length = 1,
+					frame_count = 1,
+					shift = { 0, -0.50 },
+				},
+				light = { intensity = 1, size = 8, color = { r = 0.5, g = 1.0, b = 0.5 } },
+			},
+		},
+	}
+
+	return graphics_set
 end
 
 return ArboretumGraphicsPack

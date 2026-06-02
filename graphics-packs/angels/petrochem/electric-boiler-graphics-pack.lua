@@ -1,13 +1,26 @@
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local _defines = require("api.defines")
+local _sprites = require("__reskins-sprite-utils__.sprites")
+
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Angels.ElectricBoilerGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
----@field field Any
 local ElectricBoilerGraphicsPack = {}
 ElectricBoilerGraphicsPack.__index = CraftingMachineGraphicsPack
 
 -- Set up inheritance
 setmetatable(ElectricBoilerGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
+})
+
+---@type data.Animation4Way
+local working_lights = _sprites.make_4way_animation_from_spritesheet({
+	filename = "__reskins-assets-angels__/graphics/entity/boiler-electric/boiler-electric-working-lights.png",
+	priority = "extra-high",
+	width = 160,
+	height = 160,
+	shift = { 0, 0 },
+	blend_mode = "additive",
+	draw_as_glow = true,
 })
 
 ---@class Reskins.Angels.ElectricBoilerGraphicsPackParams
@@ -18,10 +31,14 @@ setmetatable(ElectricBoilerGraphicsPack, {
 ---@nodiscard
 function ElectricBoilerGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
-		tint = nil,
+		tint = params.tint,
 		remnants = {},
-		required_assets = {},
-		graphics_set = {},
+		required_assets = {
+			[_defines.assets.angels_assets] = true,
+		},
+		nominal_width = 3,
+		nominal_height = 3,
+		graphics_set = self.get_graphics_set(params.tint),
 		graphics_set_flipped = {},
 		fluid_boxes = {},
 		fluid_boxes_off_when_no_fluid_recipe = false,
@@ -32,20 +49,58 @@ function ElectricBoilerGraphicsPack:configure(params)
 	return instance
 end
 
----Applies a copy of the graphics pack to the specified `prototype`.
----
----#### Exceptions
----*@throws* - `string` - When `prototype` is `nil`.</br>
----*@throws* - `string` - When `prototype` is is not a `table`.
----
----#### Implementation Guidance
----- This is an abstract method that must be implemented by subclasses.
----- Implementations should mutate the prototype in place, and set copies of the graphics.
----@param prototype data.PrototypeBase
-function ElectricBoilerGraphicsPack:apply_to_entity(prototype)
-	if not reskins_suppress_errors then
-		error("apply_to_entity must be implemented by subclass")
+---@param tint data.Color?
+---@return data.CraftingMachineGraphicsSet
+---@nodiscard
+function ElectricBoilerGraphicsPack.get_graphics_set(tint)
+	local layers = {
+		-- Base
+		{
+			filename = "__reskins-assets-angels__/graphics/entity/boiler-electric/boiler-electric-base.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			shift = { 0, 0 },
+		},
+	}
+
+	if tint then
+		table.insert(layers, {
+			-- Mask
+			filename = "__reskins-assets-angels__/graphics/entity/boiler-electric/boiler-electric-mask.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			shift = { 0, 0 },
+			tint = tint,
+		})
+		table.insert(layers, {
+			-- Highlights
+			filename = "__reskins-assets-angels__/graphics/entity/boiler-electric/boiler-electric-highlights.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			shift = { 0, 0 },
+			blend_mode = "additive-soft",
+		})
 	end
+
+	---@type data.CraftingMachineGraphicsSet
+	local graphics_set = {
+		animation = _sprites.make_4way_animation_from_spritesheet({ layers = layers }),
+		working_visualisations = {
+			{
+				fadeout = true,
+				effect = "uranium-glow",
+				north_animation = working_lights.north,
+				east_animation = working_lights.east,
+				south_animation = working_lights.south,
+				west_animation = working_lights.west,
+			},
+		},
+	}
+
+	return graphics_set
 end
 
 return ElectricBoilerGraphicsPack

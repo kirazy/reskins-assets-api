@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class Reskins.Base.InserterPresetGraphicsPack:Reskins.Abstractions.GraphicsPackBase
 ---@field hand_base_picture table
@@ -16,25 +16,6 @@ InserterPresetGraphicsPack.__index = InserterPresetGraphicsPack
 setmetatable(InserterPresetGraphicsPack, {
 	__index = GraphicsPackBase,
 })
-
----Preset inserter type — each value corresponds to one subfolder in
----`reskins-assets-bobs/graphics/entity/inserters/`.
----@alias InserterPreset
----| "inserter"
----| "inserter-burner"
----| "inserter-fast"
----| "inserter-express"
----| "inserter-filter"
----| "inserter-express-filter"
----| "inserter-long-handed"
----| "inserter-bulk"
----| "inserter-express-bulk"
----| "inserter-bulk-filter"
----| "inserter-express-bulk-filter"
-
----@class Reskins.Base.InserterPresetGraphicsParams
----@field preset InserterPreset
----@field is_long boolean? When `true`, selects the long-arm hand sprite variants. Only valid for non-bulk presets that are not `"inserter-long-handed"`.
 
 -- Presets that use bulk-type hand shadows from `inserter-bulk/shadows/`.
 local bulk_presets = {
@@ -57,6 +38,88 @@ local long_capable_presets = {
 
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/inserters/"
 local base_path = "__reskins-assets-base__/graphics/entity/"
+
+-- ---------------------------------------------------------------------------
+-- Class methods
+-- ---------------------------------------------------------------------------
+
+---Preset inserter type — each value corresponds to one subfolder in
+---`reskins-assets-bobs/graphics/entity/inserters/`.
+---@alias InserterPreset
+---| "inserter"
+---| "inserter-burner"
+---| "inserter-fast"
+---| "inserter-express"
+---| "inserter-filter"
+---| "inserter-express-filter"
+---| "inserter-long-handed"
+---| "inserter-bulk"
+---| "inserter-express-bulk"
+---| "inserter-bulk-filter"
+---| "inserter-express-bulk-filter"
+
+---@class Reskins.Base.InserterPresetGraphicsParams
+---@field preset InserterPreset
+---@field is_long boolean? When `true`, selects the long-arm hand sprite variants. Only valid for non-bulk presets that are not `"inserter-long-handed"`.
+
+---@param params Reskins.Base.InserterPresetGraphicsParams
+---@return Reskins.Base.InserterPresetGraphicsPack
+---@nodiscard
+function InserterPresetGraphicsPack:configure(params)
+	local preset = params.preset
+	local is_long = params.is_long or false
+
+	-- Validate: bulk presets and inserter-long-handed do not support is_long.
+	if is_long and not long_capable_presets[preset] then
+		if not reskins_suppress_errors then
+			error(
+				"InserterPresetGraphicsPack: 'is_long' is not valid for preset '"
+					.. tostring(preset)
+					.. "'. Only non-bulk presets (excluding 'inserter-long-handed') support long-arm variants."
+			)
+		end
+		is_long = false
+	end
+
+	local instance = GraphicsPackBase.configure(self, {
+		tint = nil,
+		remnants = InserterPresetGraphicsPack.get_corpse_animation(preset),
+		required_assets = {
+			[_defines.assets.bobs_assets] = true,
+			[_defines.assets.base_assets] = true,
+		},
+	}) --[[@as Reskins.Base.InserterPresetGraphicsPack]]
+
+	instance.hand_base_picture = InserterPresetGraphicsPack.get_arm_picture(preset)
+	instance.hand_base_shadow = InserterPresetGraphicsPack.get_arm_shadow()
+	instance.hand_open_picture = InserterPresetGraphicsPack.get_hand_picture(preset, "open", is_long)
+	instance.hand_closed_picture = InserterPresetGraphicsPack.get_hand_picture(preset, "closed", is_long)
+	instance.hand_open_shadow = InserterPresetGraphicsPack.get_hand_shadow(preset, "open")
+	instance.hand_closed_shadow = InserterPresetGraphicsPack.get_hand_shadow(preset, "closed")
+	instance.platform_picture = InserterPresetGraphicsPack.get_platform_picture(preset)
+
+	setmetatable(instance, InserterPresetGraphicsPack)
+	return instance
+end
+
+---Applies a copy of the graphics pack to the specified `prototype`.
+---
+---Assigns `hand_base_picture`, `hand_base_shadow`, `hand_open_picture`,
+---`hand_closed_picture`, `hand_open_shadow`, `hand_closed_shadow`, and
+---`platform_picture` directly on the prototype (inserters do not use `graphics_set`).
+---@param prototype data.InserterPrototype
+function InserterPresetGraphicsPack:apply_to_entity(prototype)
+	assert(prototype, "'prototype' must not be nil")
+	assert(type(prototype) == "table", "'prototype' must be a table")
+
+	prototype.hand_base_picture = util.copy(self.hand_base_picture)
+	prototype.hand_base_shadow = util.copy(self.hand_base_shadow)
+	prototype.hand_open_picture = util.copy(self.hand_open_picture)
+	prototype.hand_closed_picture = util.copy(self.hand_closed_picture)
+	prototype.hand_open_shadow = util.copy(self.hand_open_shadow)
+	prototype.hand_closed_shadow = util.copy(self.hand_closed_shadow)
+	prototype.platform_picture = util.copy(self.platform_picture)
+end
 
 -- ---------------------------------------------------------------------------
 -- Static sprite builder functions
@@ -189,69 +252,6 @@ function InserterPresetGraphicsPack.get_corpse_animation(preset)
 		shift = util.by_pixel(3, -1.5),
 		scale = 0.5,
 	})
-end
-
--- ---------------------------------------------------------------------------
--- Class methods
--- ---------------------------------------------------------------------------
-
----@param params Reskins.Base.InserterPresetGraphicsParams
----@return Reskins.Base.InserterPresetGraphicsPack
----@nodiscard
-function InserterPresetGraphicsPack:configure(params)
-	local preset = params.preset
-	local is_long = params.is_long or false
-
-	-- Validate: bulk presets and inserter-long-handed do not support is_long.
-	if is_long and not long_capable_presets[preset] then
-		if not reskins_suppress_errors then
-			error(
-				"InserterPresetGraphicsPack: 'is_long' is not valid for preset '"
-					.. tostring(preset)
-					.. "'. Only non-bulk presets (excluding 'inserter-long-handed') support long-arm variants."
-			)
-		end
-		is_long = false
-	end
-
-	local instance = GraphicsPackBase.configure(self, {
-		tint = nil,
-		remnants = InserterPresetGraphicsPack.get_corpse_animation(preset),
-		required_assets = {
-			[_defines.assets.bobs_assets] = true,
-			[_defines.assets.base_assets] = true,
-		},
-	}) --[[@as Reskins.Base.InserterPresetGraphicsPack]]
-
-	instance.hand_base_picture = InserterPresetGraphicsPack.get_arm_picture(preset)
-	instance.hand_base_shadow = InserterPresetGraphicsPack.get_arm_shadow()
-	instance.hand_open_picture = InserterPresetGraphicsPack.get_hand_picture(preset, "open", is_long)
-	instance.hand_closed_picture = InserterPresetGraphicsPack.get_hand_picture(preset, "closed", is_long)
-	instance.hand_open_shadow = InserterPresetGraphicsPack.get_hand_shadow(preset, "open")
-	instance.hand_closed_shadow = InserterPresetGraphicsPack.get_hand_shadow(preset, "closed")
-	instance.platform_picture = InserterPresetGraphicsPack.get_platform_picture(preset)
-
-	setmetatable(instance, InserterPresetGraphicsPack)
-	return instance
-end
-
----Applies a copy of the graphics pack to the specified `prototype`.
----
----Assigns `hand_base_picture`, `hand_base_shadow`, `hand_open_picture`,
----`hand_closed_picture`, `hand_open_shadow`, `hand_closed_shadow`, and
----`platform_picture` directly on the prototype (inserters do not use `graphics_set`).
----@param prototype data.InserterPrototype
-function InserterPresetGraphicsPack:apply_to_entity(prototype)
-	assert(prototype, "'prototype' must not be nil")
-	assert(type(prototype) == "table", "'prototype' must be a table")
-
-	prototype.hand_base_picture = util.copy(self.hand_base_picture)
-	prototype.hand_base_shadow = util.copy(self.hand_base_shadow)
-	prototype.hand_open_picture = util.copy(self.hand_open_picture)
-	prototype.hand_closed_picture = util.copy(self.hand_closed_picture)
-	prototype.hand_open_shadow = util.copy(self.hand_open_shadow)
-	prototype.hand_closed_shadow = util.copy(self.hand_closed_shadow)
-	prototype.platform_picture = util.copy(self.platform_picture)
 end
 
 return InserterPresetGraphicsPack

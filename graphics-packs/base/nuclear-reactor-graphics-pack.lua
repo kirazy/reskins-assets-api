@@ -1,7 +1,7 @@
 local _defines = require("api.defines")
 local StringValidator = require("prototypes.string-validator")
 
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---@class Reskins.Base.NuclearReactorGraphicsSet
 ---@field connection_patches_connected data.SpriteVariations
@@ -119,7 +119,7 @@ function NuclearReactorGraphicsPack:configure(params)
 	}) --[[@as Reskins.Base.NuclearReactorGraphicsPack]]
 
 	instance.graphics_set = graphics_set
-	instance.use_fuel_glow_color = params.use_fuel_glow_color == true or false
+	instance.use_fuel_glow_color = params.use_fuel_glow_color == true
 
 	setmetatable(instance, NuclearReactorGraphicsPack)
 	return instance

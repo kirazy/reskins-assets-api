@@ -1,6 +1,7 @@
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local TransportBeltConnectableGraphicsPack = require("transport-belt-connectable-graphics-pack")
+local TransportBeltConnectableGraphicsPack =
+	require("graphics-packs.abstractions.transport-belt-connectable-graphics-pack")
 
 ---@class SplitterGraphicsPack:Reskins.Abstractions.TransportBeltConnectableGraphicsPack
 ---@field structure data.Animation4Way

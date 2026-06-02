@@ -1,7 +1,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Base.FurnaceStoneGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local FurnaceStoneGraphicsPack = {}
@@ -74,6 +74,27 @@ local function get_stone_furnace_working_light(orientation)
 end
 
 -- Graphics set builders
+
+---Gets the water reflection of a generic stone furnace.
+---@return data.WaterReflectionDefinition
+local function get_stone_furnace_water_reflection()
+	---@type data.WaterReflectionDefinition
+	local water_reflection = {
+		pictures = {
+			filename = "__base__/graphics/entity/stone-furnace/stone-furnace-reflection.png",
+			priority = "extra-high",
+			width = 16,
+			height = 16,
+			shift = util.by_pixel(0, 35),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+
+	return water_reflection
+end
 
 ---@param tint data.Color?
 ---@param variant "standard" | "chemical"
@@ -191,6 +212,7 @@ function FurnaceStoneGraphicsPack.get_graphics_set(tint, variant)
 	return {
 		animation = animation,
 		working_visualisations = working_visualisations,
+		water_reflection = get_stone_furnace_water_reflection(),
 	}
 end
 
@@ -351,14 +373,33 @@ function FurnaceStoneGraphicsPack:configure(params)
 		tint = params.tint,
 		remnants = remnants,
 		required_assets = required_assets,
+		nominal_width = 2,
+		nominal_height = 2,
 		graphics_set = graphics_set,
 		graphics_set_flipped = graphics_set_flipped,
 		-- Chemical variant has fluid boxes but must show them regardless of active recipe.
-		fluid_boxes_off_when_no_fluid_recipe = params.variant == "chemical" and false or nil,
+		fluid_boxes_off_when_no_fluid_recipe = params.variant ~= "chemical" and nil or false,
+		fluid_boxes = {
+			{
+				pipe_picture = nil,
+			},
+		},
 	}) --[[@as Reskins.Base.FurnaceStoneGraphicsPack]]
 
 	setmetatable(instance, FurnaceStoneGraphicsPack)
 	return instance
+end
+
+function FurnaceStoneGraphicsPack:apply_to_entity(prototype)
+	CraftingMachineGraphicsPack.apply_to_entity(self, prototype)
+
+	if prototype.energy_source then
+		prototype.energy_source.light_flicker = {
+			color = { 0, 0, 0 },
+			minimum_intensity = 0.6,
+			maximum_intensity = 0.95,
+		}
+	end
 end
 
 return FurnaceStoneGraphicsPack

@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local RobotGraphicsPack = require("robot-graphics-pack")
+local RobotGraphicsPack = require("graphics-packs.abstractions.robot-graphics-pack")
 
 ---@class RobotConstructionGraphicsPack:Reskins.Abstractions.RobotGraphicsPack
 ---@field idle data.RotatedAnimation

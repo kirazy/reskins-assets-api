@@ -1,7 +1,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local CraftingMachineGraphicsPack = require("crafting-machine-graphics-pack")
+local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
 ---@class Reskins.Base.FurnaceSteelGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local FurnaceSteelGraphicsPack = {}
@@ -22,7 +22,6 @@ setmetatable(FurnaceSteelGraphicsPack, {
 
 ---@param orientation? "left" | "right"
 ---@return data.Animation
----@private
 local function get_steel_furnace_fire_animation(orientation)
 	local filename
 	if orientation then
@@ -48,7 +47,6 @@ local function get_steel_furnace_fire_animation(orientation)
 end
 
 ---@return data.Animation
----@private
 local function get_steel_furnace_glow()
 	return {
 		filename = "__base__/graphics/entity/steel-furnace/steel-furnace-glow.png",
@@ -63,7 +61,6 @@ end
 
 ---@param orientation? "left" | "right"
 ---@return data.Animation
----@private
 local function get_steel_furnace_working_light(orientation)
 	local filename
 	if orientation then
@@ -89,7 +86,6 @@ end
 
 ---@param orientation? "left" | "right"
 ---@return data.Animation
----@private
 local function get_steel_furnace_ground_light(orientation)
 	local filename
 	if orientation then
@@ -113,10 +109,93 @@ local function get_steel_furnace_ground_light(orientation)
 	}
 end
 
+---Gets the water reflection of a generic steel furnace.
+---@return data.WaterReflectionDefinition
+local function get_steel_furnace_water_reflection()
+	---@type data.WaterReflectionDefinition
+	local water_reflection = {
+		pictures = {
+			filename = "__base__/graphics/entity/steel-furnace/steel-furnace-reflection.png",
+			priority = "extra-high",
+			width = 20,
+			height = 24,
+			shift = util.by_pixel(0, 45),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+
+	return water_reflection
+end
+
 -- Working visualisation builders
 
 ---@return data.WorkingVisualisation[]
----@private
+local function get_standard_working_visualisations()
+	return {
+		{
+			fadeout = true,
+			effect = "flicker",
+			animation = {
+				filename = "__base__/graphics/entity/steel-furnace/steel-furnace-fire.png",
+				priority = "high",
+				line_length = 8,
+				width = 57,
+				height = 81,
+				frame_count = 48,
+				draw_as_glow = true,
+				shift = util.by_pixel(-0.75, 5.75),
+				scale = 0.5,
+			},
+		},
+		{
+			fadeout = true,
+			effect = "flicker",
+			animation = {
+				filename = "__base__/graphics/entity/steel-furnace/steel-furnace-glow.png",
+				priority = "high",
+				width = 60,
+				height = 43,
+				draw_as_glow = true,
+				shift = { 0.03125, 0.640625 },
+				blend_mode = "additive",
+			},
+		},
+		{
+			fadeout = true,
+			effect = "flicker",
+			animation = {
+				filename = "__base__/graphics/entity/steel-furnace/steel-furnace-working.png",
+				priority = "high",
+				line_length = 1,
+				width = 128,
+				height = 150,
+				draw_as_glow = true,
+				shift = util.by_pixel(0, -5),
+				blend_mode = "additive",
+				scale = 0.5,
+			},
+		},
+		{
+			fadeout = true,
+			effect = "flicker",
+			animation = {
+				filename = "__base__/graphics/entity/steel-furnace/steel-furnace-ground-light.png",
+				priority = "high",
+				line_length = 1,
+				width = 152,
+				height = 126,
+				draw_as_light = true,
+				shift = util.by_pixel(1, 48),
+				blend_mode = "additive",
+				scale = 0.5,
+			},
+		},
+	}
+end
+---@return data.WorkingVisualisation[]
 local function get_fluid_working_visualisations()
 	return {
 		-- Fire effect
@@ -155,7 +234,6 @@ local function get_fluid_working_visualisations()
 end
 
 ---@return data.WorkingVisualisation[]
----@private
 local function get_chemical_working_visualisations_main()
 	return {
 		-- Fire effect
@@ -194,7 +272,6 @@ local function get_chemical_working_visualisations_main()
 end
 
 ---@return data.WorkingVisualisation[]
----@private
 local function get_chemical_working_visualisations_flipped()
 	return {
 		-- Fire effect
@@ -233,7 +310,6 @@ local function get_chemical_working_visualisations_flipped()
 end
 
 ---@return data.WorkingVisualisation[]
----@private
 local function get_chemical_fluid_working_visualisations_main()
 	return {
 		-- Fire effect
@@ -268,7 +344,6 @@ local function get_chemical_fluid_working_visualisations_main()
 end
 
 ---@return data.WorkingVisualisation[]
----@private
 local function get_chemical_fluid_working_visualisations_flipped()
 	return {
 		-- Fire effect
@@ -309,7 +384,6 @@ end
 ---@param tint data.Color?
 ---@param is_mirror boolean?
 ---@return data.Animation
----@private
 local function build_steel_furnace_animation(variant, tint, is_mirror)
 	local base_path = _defines.assets.base_assets .. "/graphics/entity/furnace-steel/"
 	local bobs_folder = ({
@@ -396,8 +470,8 @@ function FurnaceSteelGraphicsPack.get_graphics_set(tint, variant)
 	local working_visualisations
 
 	if variant == "standard" then
-		-- Simple single-direction animation; vanilla working_visualisations not replicated.
 		animation = raw_animation
+		working_visualisations = get_standard_working_visualisations()
 	elseif variant == "fluid" then
 		animation = _sprites.make_4way_animation_from_spritesheet(raw_animation)
 		working_visualisations = get_fluid_working_visualisations()
@@ -413,13 +487,13 @@ function FurnaceSteelGraphicsPack.get_graphics_set(tint, variant)
 	return {
 		animation = animation,
 		working_visualisations = working_visualisations,
+		water_reflection = get_steel_furnace_water_reflection(),
 	}
 end
 
 ---@param tint data.Color?
 ---@param variant "chemical" | "chemical-fluid"
 ---@return data.CraftingMachineGraphicsSet
----@private
 function FurnaceSteelGraphicsPack.get_graphics_set_flipped(tint, variant)
 	local raw_animation = build_steel_furnace_animation(variant, tint, true)
 
@@ -518,20 +592,39 @@ function FurnaceSteelGraphicsPack:configure(params)
 		required_assets[_defines.assets.bobs_assets] = true
 	end
 
-	local has_fluid_boxes = params.variant == "chemical" or params.variant == "chemical-fluid"
+	local has_fluid_boxes = params.variant ~= "standard"
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
 		remnants = remnants,
 		required_assets = required_assets,
+		nominal_width = 2,
+		nominal_height = 2,
 		graphics_set = graphics_set,
 		graphics_set_flipped = graphics_set_flipped,
 		-- Chemical variants have fluid boxes but must show them regardless of active recipe.
-		fluid_boxes_off_when_no_fluid_recipe = has_fluid_boxes and false or nil,
+		fluid_boxes_off_when_no_fluid_recipe = not has_fluid_boxes,
+		fluid_boxes = {
+			{
+				pipe_picture = nil,
+			},
+		},
 	}) --[[@as Reskins.Base.FurnaceSteelGraphicsPack]]
 
 	setmetatable(instance, FurnaceSteelGraphicsPack)
 	return instance
+end
+
+function FurnaceSteelGraphicsPack:apply_to_entity(prototype)
+	CraftingMachineGraphicsPack.apply_to_entity(self, prototype)
+
+	if prototype.energy_source then
+		prototype.energy_source.light_flicker = {
+			color = { 0, 0, 0 },
+			minimum_intensity = 0.6,
+			maximum_intensity = 0.95,
+		}
+	end
 end
 
 return FurnaceSteelGraphicsPack

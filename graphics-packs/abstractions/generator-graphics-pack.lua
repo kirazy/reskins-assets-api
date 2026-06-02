@@ -1,4 +1,4 @@
-local GraphicsPackBase = require("graphics-pack-base")
+local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
 ---The abstract intermediate class for generator graphics packs. Mirrors the Factorio `GeneratorPrototype` hierarchy.
 ---
