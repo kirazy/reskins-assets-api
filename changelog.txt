@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
-Date: ????
+Date: 2026-06-07
   Bugfixes:
     - Fixed startup crash due to several files that were required with wrong-case, when loading mods from zipped files is case-sensitive.
 ---------------------------------------------------------------------------------------------------
