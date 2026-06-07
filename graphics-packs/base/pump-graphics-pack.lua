@@ -55,7 +55,7 @@ function PumpGraphicsPack.get_animations(tint)
 					line_length = 8,
 					frame_count = 32,
 					animation_speed = 0.5,
-					shift = util.by_pixel(8, -0.85),
+					shift = util.by_pixel(8.25, -1),
 				},
 			},
 		},
