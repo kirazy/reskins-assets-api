@@ -22,16 +22,12 @@ setmetatable(AdvancedGasRefineryGraphicsPack, {
 function AdvancedGasRefineryGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
-		remnants = {},
 		required_assets = {
 			[_defines.assets.petrochem_graphics] = true,
 		},
 		nominal_width = 7,
 		nominal_height = 7,
 		graphics_set = self.get_graphics_set(params.tint),
-		graphics_set_flipped = {},
-		fluid_boxes = {},
-		fluid_boxes_off_when_no_fluid_recipe = false,
 	}) --[[@as Reskins.Angels.AdvancedGasRefineryGraphicsPack]]
 
 	-- Set the correct metatable for this class.

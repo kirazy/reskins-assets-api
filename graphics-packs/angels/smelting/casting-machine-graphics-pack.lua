@@ -21,7 +21,6 @@ setmetatable(CastingMachineGraphicsPack, {
 function CastingMachineGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
-		remnants = {},
 		required_assets = {
 			[_defines.assets.smelting_graphics] = true,
 		},

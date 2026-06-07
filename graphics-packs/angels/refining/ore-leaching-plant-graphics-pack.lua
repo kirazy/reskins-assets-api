@@ -80,14 +80,12 @@ function OreLeachingPlantGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
-		remnants = {},
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},
 		nominal_width = 5,
 		nominal_height = 5,
 		graphics_set = self.get_graphics_set(params.tint),
-		graphics_set_flipped = {},
 		fluid_boxes = { fluid_box },
 		fluid_boxes_off_when_no_fluid_recipe = false,
 	}) --[[@as Reskins.Angels.OreLeachingPlantGraphicsPack]]
@@ -135,10 +133,45 @@ function OreLeachingPlantGraphicsPack.get_graphics_set(tint)
 		})
 	end
 
+	local shift_offset = util.by_pixel_hr(-63, -191)
+
 	---@type data.CraftingMachineGraphicsSet
 	local graphics_set = {
 		animation = animation,
-		working_visualisations = {},
+		working_visualisations = {
+			{
+				apply_recipe_tint = "primary",
+				fadeout = true,
+				constant_speed = true,
+				render_layer = "wires",
+				animation = {
+					filename = "__base__/graphics/entity/chemical-plant/chemical-plant-smoke-outer.png",
+					frame_count = 47,
+					line_length = 16,
+					width = 90,
+					height = 188,
+					animation_speed = 0.5,
+					shift = util.add_shift(util.by_pixel(-2, -40), shift_offset),
+					scale = 0.5,
+				},
+			},
+			{
+				apply_recipe_tint = "secondary",
+				fadeout = true,
+				constant_speed = true,
+				render_layer = "wires",
+				animation = {
+					filename = "__base__/graphics/entity/chemical-plant/chemical-plant-smoke-inner.png",
+					frame_count = 47,
+					line_length = 16,
+					width = 40,
+					height = 84,
+					animation_speed = 0.5,
+					shift = util.add_shift(util.by_pixel(0, -14), shift_offset),
+					scale = 0.5,
+				},
+			},
+		},
 	}
 
 	return graphics_set

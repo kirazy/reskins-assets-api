@@ -60,14 +60,12 @@ function CrystallizerGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
-		remnants = {},
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},
 		nominal_width = 5,
 		nominal_height = 5,
 		graphics_set = self.get_graphics_set(params.tint),
-		graphics_set_flipped = {},
 		fluid_boxes = { fluid_box },
 		fluid_boxes_off_when_no_fluid_recipe = false,
 	}) --[[@as Reskins.Angels.CrystallizerGraphicsPack]]

@@ -88,7 +88,6 @@ function HydroPlantGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
-		remnants = {},
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

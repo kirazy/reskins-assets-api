@@ -19,14 +19,10 @@ setmetatable(ChemicalPlantGraphicsPack, {
 function ChemicalPlantGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = nil,
-		remnants = {},
 		required_assets = {},
 		nominal_width = 2,
 		nominal_height = 2,
 		graphics_set = {},
-		graphics_set_flipped = {},
-		fluid_boxes = {},
-		fluid_boxes_off_when_no_fluid_recipe = false,
 	}) --[[@as Reskins.Bobs.DistilleryGraphicsPack]]
 
 	-- Set the correct metatable for this class.
