@@ -1,3 +1,4 @@
+local StringValidator = require("prototypes.string-validator")
 local _defines = require("api.defines")
 
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
@@ -13,7 +14,7 @@ setmetatable(CropFarmGraphicsPack, {
 
 ---@class Reskins.Angels.CropFarmGraphicsPackParams
 ---@field tint data.Color?
----@field variant "basic"|"temperate"|"desert"|"water"
+---@field variant "basic"|"temperate"|"desert"|"swamp"
 
 ---@param params Reskins.Angels.CropFarmGraphicsPackParams
 ---@return Reskins.Angels.CropFarmGraphicsPack
@@ -35,10 +36,12 @@ function CropFarmGraphicsPack:configure(params)
 end
 
 ---@param tint data.Color?
----@param variant "basic"|"temperate"|"desert"|"water"
+---@param variant "basic"|"temperate"|"desert"|"swamp"
 ---@return data.CraftingMachineGraphicsSet
 ---@nodiscard
 function CropFarmGraphicsPack.get_graphics_set(tint, variant)
+	StringValidator.validate(variant, "variant"):is_one_of({ "basic", "temperate", "desert", "swamp" })
+
 	local variant_data = {
 		basic = {
 			field_filename = "__angelsbioprocessinggraphics__/graphics/entity/crop-farm/field-basic.png",
@@ -55,7 +58,7 @@ function CropFarmGraphicsPack.get_graphics_set(tint, variant)
 			animation_filename = "__angelsbioprocessinggraphics__/graphics/entity/crop-farm/field-animation-3.png",
 			animation_speed = 0.01,
 		},
-		water = {
+		swamp = {
 			field_filename = "__angelsbioprocessinggraphics__/graphics/entity/crop-farm/field-water.png",
 			animation_filename = "__angelsbioprocessinggraphics__/graphics/entity/crop-farm/field-animation-4.png",
 			animation_speed = 0.01,
