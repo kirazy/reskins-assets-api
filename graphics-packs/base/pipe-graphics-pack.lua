@@ -12,7 +12,7 @@ local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base
 ---@field pictures data.PipePictures
 ---@field fluid_box FluidBoxGraphics
 local PipeGraphicsPack = {}
-PipeGraphicsPack.__index = GraphicsPackBase
+PipeGraphicsPack.__index = PipeGraphicsPack
 
 -- Set up inheritance
 setmetatable(PipeGraphicsPack, {
@@ -88,7 +88,7 @@ function PipeGraphicsPack.get_corpse_animation(pipe_material)
 	local material_asset = is_iron and _defines.assets.base or _pipes.asset_from_material(pipe_material)
 
 	local material_name = _pipes.name_from_material(pipe_material)
-	local assets_base_path = material_asset .. "/graphics/entity/pipe/" .. material_name .. "/"
+	local assets_base_path = material_asset .. "/graphics/entity/pipe/" .. (is_iron and "" or material_name .. "/")
 
 	local animation = _sprites.make_rotated_animation_variations_from_spritesheet(2, {
 		filename = assets_base_path .. "remnants/pipe-remnants.png",

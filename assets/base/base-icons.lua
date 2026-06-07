@@ -1,10 +1,11 @@
 -- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
 -- The require path, function names and signatures are not stable.
 
-local helpers = require("prototypes.icon-helpers")
+local helpers = require("api.icon-helpers")
 local icon_utils = require("__reskins-sprite-utils__.icons")
 
 local folder = "__reskins-assets-base__/graphics/icons"
+
 
 -- stylua: ignore start
 local _icons = {
@@ -63,6 +64,8 @@ local _icons = {
 	turret_gun = helpers.make_tinted_three_layer_icon_creator_fn({ folder = folder, icon_name = "turret-gun" }),
 	turret_laser = helpers.make_tinted_three_layer_icon_creator_fn({ folder = folder, icon_name = "turret-laser" }),
 	underground_belt = helpers.make_tinted_three_layer_icon_creator_fn({ folder = folder, icon_name = "underground-belt" }),
+	pipe = helpers.make_pipe_icon_creator_fn({type = "pipe"}),
+	pipe_to_ground = helpers.make_pipe_icon_creator_fn({type = "pipe-to-ground"})
 }
 -- stylua: ignore end
 

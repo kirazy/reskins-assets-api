@@ -1,6 +1,17 @@
 -- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
 -- The type signatures are not stable.
 
+local assets_api = {
+	defines = require("api.defines"),
+	pipes = require("assets.base.entities.pipe-pictures"),
+}
+local sprite_utils = {
+	icons = require("__reskins-sprite-utils__.icons"),
+}
+
+---@class Internal.PipeCreatableIcon
+---@field type "pipe"|"pipe-to-ground"
+
 ---@class Internal.SimpleCreatableIcon
 ---@field folder string
 ---@field icon_name string
@@ -11,8 +22,6 @@
 ---@field icon_mask string?
 ---@field icon_highlights string?
 ---@field extras data.IconData[]?
-
-local icon_utils = require("__reskins-sprite-utils__.icons")
 
 ---@class Internal.IconHelpers
 local _helpers = {}
@@ -51,12 +60,12 @@ function _helpers.make_tinted_three_layer_icon_creator_fn(creatable_icon)
 
 		if creatable_icon.extras then
 			for _, extra in pairs(creatable_icon.extras) do
-				local icon_datum = icon_utils.transform_icon(extra, scale, shift, tint, "default")
+				local icon_datum = sprite_utils.icons.transform_icon(extra, scale, shift, tint, "default")
 				table.insert(icon_data, icon_datum)
 			end
 		end
 
-		return icon_utils.add_missing_icons_defaults(icon_data, "default")
+		return sprite_utils.icons.add_missing_icons_defaults(icon_data, "default")
 	end
 
 	return creator_fn
@@ -90,7 +99,7 @@ function _helpers.make_tinted_circuit_icon_creator_fn(creatable_icon)
 			},
 		}
 
-		return icon_utils.add_missing_icons_defaults(icon_data, "default")
+		return sprite_utils.icons.add_missing_icons_defaults(icon_data, "default")
 	end
 
 	return creator_fn
@@ -113,7 +122,38 @@ function _helpers.make_flat_icon_creator_fn(creatable_icon)
 			},
 		}
 
-		return icon_utils.add_missing_icons_defaults(icon_data)
+		return sprite_utils.icons.add_missing_icons_defaults(icon_data)
+	end
+
+	return creator_fn
+end
+
+---@param creatable_icon Internal.PipeCreatableIcon
+---@return PipeIconCreator
+function _helpers.make_pipe_icon_creator_fn(creatable_icon)
+	---@type PipeIconCreator
+	local creator_fn = function(pipe_material, shift, scale)
+		-- The iron pipe icon comes from base.
+		local is_iron = pipe_material == assets_api.defines.pipe_material.iron
+		local material_asset = is_iron and assets_api.defines.assets.base
+			or assets_api.pipes.asset_from_material(pipe_material)
+
+		local material_name = assets_api.pipes.name_from_material(pipe_material)
+		local assets_base_path = material_asset .. "/graphics/icons/"
+
+		local icon_name = is_iron and creatable_icon.type
+			or creatable_icon.type .. "/" .. material_name .. "-" .. creatable_icon.type .. "-icon"
+		---@type data.IconData[]
+		local icon_data = {
+			{
+				icon = assets_base_path .. icon_name .. ".png",
+				icon_size = 64,
+				shift = shift,
+				scale = scale,
+			},
+		}
+
+		return sprite_utils.icons.add_missing_icons_defaults(icon_data)
 	end
 
 	return creator_fn

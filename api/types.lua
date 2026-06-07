@@ -19,6 +19,16 @@
 ---
 ---@alias IconCreator fun(shift: data.Vector?, scale: double?): data.IconData[]
 
+---Creates a new icon with the specified `shift`, and `scale`.
+---
+---*@param* `pipe_material` — The pipe material of the created icon.
+---
+---*@param* `shift` — A shift to apply to the created icon; optional.
+---
+---*@param* `scale` — A scaling factor to apply to the created icon; optional.
+---
+---@alias PipeIconCreator fun(pipe_material: Reskins.Defines.PipeMaterial, shift: data.Vector?, scale: double?): data.IconData[]
+
 ---@alias RequiredAssets {[Reskins.Defines.Assets]: true}
 
 ---@class PipeConnectionGraphics
