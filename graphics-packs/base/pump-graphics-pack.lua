@@ -34,7 +34,6 @@ end
 ---@param prototype data.PumpPrototype
 function PumpGraphicsPack:apply_to_entity(prototype)
 	prototype.animations = util.copy(self.animations)
-	self:try_apply_to_named_corpse(prototype.name .. "-remnants")
 end
 
 ---@param tint data.Color?
