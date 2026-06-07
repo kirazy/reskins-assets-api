@@ -42,7 +42,7 @@ function CraftingMachineGraphicsPack:configure(params)
 
 	-- Add specialized fields
 	instance.graphics_set = params.graphics_set
-	instance.graphics_set_flipped = params.graphics_set_flipped
+	instance.graphics_set_flipped = params.graphics_set_flipped or params.graphics_set
 	instance.fluid_boxes = params.fluid_boxes
 	instance.fluid_boxes_off_when_no_fluid_recipe = params.fluid_boxes_off_when_no_fluid_recipe
 
