@@ -1,3 +1,4 @@
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local NumberValidator = require("prototypes.number-validator")
@@ -208,7 +209,36 @@ end
 ---@param tint data.Color?
 ---@return data.RotatedAnimationVariations
 function AssemblingMachineGraphicsPack.get_corpse_animation(tint)
-	return reskins_suppress_errors and {} or error("get_corpse_animation is not implemented")
+	return _sprites.make_rotated_animation_variations_from_spritesheet(3, {
+		layers = {
+			{
+				filename = "__reskins-assets-base__/graphics/entity/assembling-machine/remnants/assembling-machine-remnants-base.png",
+				width = 328,
+				height = 282,
+				direction_count = 1,
+				shift = util.by_pixel(0, 9.5),
+				scale = 0.5,
+			},
+			{
+				filename = "__reskins-assets-base__/graphics/entity/assembling-machine/remnants/assembling-machine-remnants-mask.png",
+				width = 328,
+				height = 282,
+				direction_count = 1,
+				shift = util.by_pixel(0, 9.5),
+				tint = tint,
+				scale = 0.5,
+			},
+			{
+				filename = "__reskins-assets-base__/graphics/entity/assembling-machine/remnants/assembling-machine-remnants-highlights.png",
+				width = 328,
+				height = 282,
+				direction_count = 1,
+				shift = util.by_pixel(0, 9.5),
+				blend_mode = "additive-soft",
+				scale = 0.5,
+			},
+		},
+	})
 end
 
 return AssemblingMachineGraphicsPack
