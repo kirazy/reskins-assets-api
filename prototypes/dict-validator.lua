@@ -1,5 +1,5 @@
 -- Import base Validator
-local Validator = require("prototypes.Validator")
+local Validator = require("validator")
 
 ---A dictionary-specific validator that extends the base Validator with table/object validation methods.
 ---@class DictValidator:Validator

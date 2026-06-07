@@ -1,5 +1,5 @@
 -- Import base Validator
-local Validator = require("prototypes.Validator")
+local Validator = require("validator")
 
 ---A list-specific validator that extends the base Validator with array validation methods.
 ---@class ListValidator:Validator
@@ -198,7 +198,12 @@ function ListValidator:is_sorted(compare_fn, error_message)
 		local prev_key, curr_key = keys[i - 1], keys[i]
 		if not compare_fn(self.value[prev_key], self.value[curr_key]) then
 			self:handle_invalid(
-				string.format("%s (failed between keys '%s' and '%s')", error_message, tostring(prev_key), tostring(curr_key))
+				string.format(
+					"%s (failed between keys '%s' and '%s')",
+					error_message,
+					tostring(prev_key),
+					tostring(curr_key)
+				)
 			)
 		end
 	end

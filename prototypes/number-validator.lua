@@ -1,6 +1,6 @@
 -- Import base Validator
 ---@type Validator
-local Validator = require("prototypes.Validator")
+local Validator = require("validator")
 
 ---A number-specific validator that extends the base Validator with number validation methods.
 ---@class NumberValidator:Validator

@@ -1,8 +1,8 @@
 -- Example usage of the centralized error handling system
 
-local StringValidator = require("prototypes.StringValidator")
-local NumberValidator = require("prototypes.number-validator")
-local Validator = require("prototypes.Validator")
+local StringValidator = require("string-validator")
+local NumberValidator = require("number-validator")
+local Validator = require("validator")
 
 -- Example function that validates parameters
 local function example_function(name, age)

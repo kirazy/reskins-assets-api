@@ -1,5 +1,5 @@
 -- Import base Validator
-local Validator = require("prototypes.Validator")
+local Validator = require("validator")
 
 ---A string-specific validator that extends the base Validator with string validation methods.
 ---@class StringValidator:Validator
