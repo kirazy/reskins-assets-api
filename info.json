@@ -23,5 +23,8 @@
         "? angelsaddons-mobility-graphics-crawler",
         "? angelsaddons-mobility-graphics-petro",
         "? angelsaddons-mobility-graphics-smelting"
-    ]
+    ],
+    "package": {
+        "git_publish_branch": "main"
+    }
 }
