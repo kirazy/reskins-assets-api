@@ -1,4 +1,4 @@
-if not mods["boblogistics"] then
+if not mods["boblibrary"] then
 	return
 end
 
