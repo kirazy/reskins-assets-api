@@ -1,3 +1,4 @@
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
@@ -384,7 +385,7 @@ function InserterGraphicsPack.get_corpse_animation(tint, variant)
 		})
 	end
 
-	return make_rotated_animation_variations_from_sheet(4, { layers = layers })
+	return _sprites.make_rotated_animation_variations_from_spritesheet(4, { layers = layers })
 end
 
 -- Class methods

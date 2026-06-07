@@ -1,3 +1,4 @@
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
@@ -273,10 +274,10 @@ function SolarPanelGraphicsPack.get_corpse_animation(tint, variant)
 
 	if variant == "small" then
 		local animation = get_small_solar_panel_corpse_animation(tint)
-		return make_rotated_animation_variations_from_sheet(2, animation)
+		return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 	else
 		local animation = get_solar_panel_corpse_animation(tint)
-		return make_rotated_animation_variations_from_sheet(2, animation)
+		return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 	end
 end
 

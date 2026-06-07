@@ -1,3 +1,4 @@
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
 
@@ -244,7 +245,7 @@ end
 ---@param preset InserterPreset
 ---@return data.RotatedAnimationVariations
 function InserterPresetGraphicsPack.get_corpse_animation(preset)
-	return make_rotated_animation_variations_from_sheet(4, {
+	return _sprites.make_rotated_animation_variations_from_spritesheet(4, {
 		filename = bobs_path .. preset .. "/remnants/" .. preset .. "-remnants.png",
 		width = 134,
 		height = 94,

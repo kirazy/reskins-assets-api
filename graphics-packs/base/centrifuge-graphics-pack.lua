@@ -1,3 +1,4 @@
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
@@ -275,7 +276,7 @@ function CentrifugeGraphicsPack.get_corpse_animation(tint)
 		})
 	end
 
-	return make_rotated_animation_variations_from_sheet(1, { layers = layers })
+	return _sprites.make_rotated_animation_variations_from_spritesheet(1, { layers = layers })
 end
 
 return CentrifugeGraphicsPack
