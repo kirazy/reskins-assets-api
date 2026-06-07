@@ -1251,21 +1251,19 @@ TreeGeneratorGraphicsPack:configure({
 }):apply_to_entity(create_dummy_entity("ar-bio-tree-generator-swamp", "assembling-machine", "assembling-machine-1"))
 
 -- REFUGIUM TESTS
-local RefugiumGraphicsPack = require("graphics-packs.angels.bioprocessing.refugium-graphics-pack")
-
-RefugiumGraphicsPack:configure({
+local RefugiumFishGraphicsPack = require("graphics-packs.angels.bioprocessing.refugium-fish-graphics-pack")
+RefugiumFishGraphicsPack:configure({
 	tint = tints.blue,
-	variant = "fish",
 }):apply_to_entity(create_dummy_entity("ar-bio-refugium-fish", "assembling-machine", "assembling-machine-1"))
 
-RefugiumGraphicsPack:configure({
+local RefugiumPufferGraphicsPack = require("graphics-packs.angels.bioprocessing.refugium-puffer-graphics-pack")
+RefugiumPufferGraphicsPack:configure({
 	tint = tints.purple,
-	variant = "puffer",
 }):apply_to_entity(create_dummy_entity("ar-bio-refugium-puffer", "assembling-machine", "assembling-machine-1"))
 
-RefugiumGraphicsPack:configure({
+local RefugiumBiterGraphicsPack = require("graphics-packs.angels.bioprocessing.refugium-biter-graphics-pack")
+RefugiumBiterGraphicsPack:configure({
 	tint = tints.red,
-	variant = "biter",
 }):apply_to_entity(create_dummy_entity("ar-bio-refugium-biter", "assembling-machine", "assembling-machine-1"))
 
 -- CROP FARM TESTS
@@ -1288,5 +1286,5 @@ CropFarmGraphicsPack:configure({
 
 CropFarmGraphicsPack:configure({
 	tint = tints.blue,
-	variant = "water",
-}):apply_to_entity(create_dummy_entity("ar-bio-crop-farm-water", "assembling-machine", "assembling-machine-1"))
+	variant = "swamp",
+}):apply_to_entity(create_dummy_entity("ar-bio-crop-farm-swamp", "assembling-machine", "assembling-machine-1"))
