@@ -12,8 +12,7 @@ setmetatable(ChemicalPlantGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Base.ChemicalPlantGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.ChemicalPlantGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.ChemicalPlantGraphicsParams
 ---@return Reskins.Base.ChemicalPlantGraphicsPack
@@ -24,6 +23,8 @@ function ChemicalPlantGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = remnants,
 		nominal_width = 3,
 		nominal_height = 3,

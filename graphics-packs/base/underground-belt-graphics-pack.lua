@@ -13,8 +13,7 @@ setmetatable(UndergroundBeltGraphicsPack, {
 	__index = TransportBeltConnectableGraphicsPack,
 })
 
----@class UndergroundBeltGraphicsParams
----@field tint data.Color?
+---@class UndergroundBeltGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field belt_sprite 1|2
 
 ---@param params UndergroundBeltGraphicsParams
@@ -25,8 +24,12 @@ function UndergroundBeltGraphicsPack:configure(params)
 
 	local instance = TransportBeltConnectableGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		belt_sprite = params.belt_sprite,
 		remnants = remnants,
+		nominal_width = 1,
+		nominal_height = 1,
 	}) --[[@as UndergroundBeltGraphicsPack]]
 
 	instance.structure = self.get_structure(params.tint)

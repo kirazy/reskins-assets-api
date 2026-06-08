@@ -14,8 +14,7 @@ setmetatable(SplitterGraphicsPack, {
 	__index = TransportBeltConnectableGraphicsPack,
 })
 
----@class SplitterGraphicsParams
----@field tint data.Color?
+---@class SplitterGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field belt_sprite 1|2
 
 ---@param params SplitterGraphicsParams
@@ -26,8 +25,12 @@ function SplitterGraphicsPack:configure(params)
 
 	local instance = TransportBeltConnectableGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		belt_sprite = params.belt_sprite,
 		remnants = remnants,
+		nominal_width = 1.8,
+		nominal_height = 1,
 	}) --[[@as SplitterGraphicsPack]]
 
 	instance.structure = self.get_structure(params.tint)

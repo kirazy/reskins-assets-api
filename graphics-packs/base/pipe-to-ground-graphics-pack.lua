@@ -20,13 +20,13 @@ setmetatable(PipeToGroundGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Base.PipeToGroundGraphicsPackParams
+---@class Reskins.Base.PipeToGroundGraphicsParams
 ---Default iron.
 ---@field pipe_material Reskins.Defines.PipeMaterial
 ---When true, includes the frozen sprites in the graphics pack. Default false.
 ---@field include_frozen_pictures boolean?
 
----@param params Reskins.Base.PipeToGroundGraphicsPackParams
+---@param params Reskins.Base.PipeToGroundGraphicsParams
 ---@return Reskins.Base.PipeToGroundGraphicsPack
 ---@nodiscard
 function PipeToGroundGraphicsPack:configure(params)

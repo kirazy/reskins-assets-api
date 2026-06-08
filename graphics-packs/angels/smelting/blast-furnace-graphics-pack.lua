@@ -11,15 +11,16 @@ setmetatable(BlastFurnaceGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.BlastFurnaceGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.BlastFurnaceGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.BlastFurnaceGraphicsPackParams
+---@param params Reskins.Angels.BlastFurnaceGraphicsParams
 ---@return Reskins.Angels.BlastFurnaceGraphicsPack
 ---@nodiscard
 function BlastFurnaceGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.smelting_graphics] = true,
 		},

@@ -11,15 +11,16 @@ setmetatable(OreCrusherGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.OreCrusherGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.OreCrusherGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.OreCrusherGraphicsPackParams
+---@param params Reskins.Angels.OreCrusherGraphicsParams
 ---@return Reskins.Angels.OreCrusherGraphicsPack
 ---@nodiscard
 function OreCrusherGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

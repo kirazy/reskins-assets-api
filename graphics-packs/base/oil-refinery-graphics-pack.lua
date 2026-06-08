@@ -12,8 +12,7 @@ setmetatable(OilRefineryGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Base.OilRefineryGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.OilRefineryGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.OilRefineryGraphicsParams
 ---@return Reskins.Base.OilRefineryGraphicsPack
@@ -24,6 +23,8 @@ function OilRefineryGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = remnants,
 		required_assets = { [_defines.assets.base_assets] = true },
 		nominal_width = 5,

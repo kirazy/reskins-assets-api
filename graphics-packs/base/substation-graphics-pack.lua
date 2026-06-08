@@ -10,8 +10,7 @@ setmetatable(SubstationGraphicsPack, {
 	__index = ElectricPoleGraphicsPack,
 })
 
----@class SubstationGraphicsParams
----@field tint data.Color?
+---@class SubstationGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params SubstationGraphicsParams
 ---@return SubstationGraphicsPack
@@ -19,9 +18,13 @@ setmetatable(SubstationGraphicsPack, {
 function SubstationGraphicsPack:configure(params)
 	local instance = ElectricPoleGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		pictures = self.get_pictures(params.tint),
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 2,
+		nominal_height = 2,
 	}) --[[@as SubstationGraphicsPack]]
 
 	-- Set the correct metatable for this class.

@@ -14,8 +14,7 @@ setmetatable(HeatExchangerGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Base.HeatExchangerGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.HeatExchangerGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 
 ---@param params Reskins.Base.HeatExchangerGraphicsParams
@@ -29,8 +28,12 @@ function HeatExchangerGraphicsPack:configure(params)
 
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint, params.pipe_material),
 		required_assets = required_assets,
+		nominal_width = 3,
+		nominal_height = 2,
 	}) --[[@as Reskins.Base.HeatExchangerGraphicsPack]]
 
 	instance.pictures = self.get_picture_set(params.tint, params.pipe_material)

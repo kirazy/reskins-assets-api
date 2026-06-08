@@ -9,8 +9,7 @@ setmetatable(MiningDrillElectricGraphicsPack, {
 	__index = MiningDrillGraphicsPack,
 })
 
----@class Reskins.Base.MiningDrillElectricGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.MiningDrillElectricGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.MiningDrillElectricGraphicsParams
 ---@return Reskins.Base.MiningDrillElectricGraphicsPack
@@ -18,8 +17,12 @@ setmetatable(MiningDrillElectricGraphicsPack, {
 function MiningDrillElectricGraphicsPack:configure(params)
 	local instance = MiningDrillGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = nil,
 		required_assets = {},
+		nominal_width = 3,
+		nominal_height = 3,
 	}) --[[@as Reskins.Base.MiningDrillElectricGraphicsPack]]
 
 	-- Set the correct metatable for this class.

@@ -11,15 +11,16 @@ setmetatable(AdvancedChemicalPlantGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.AdvancedChemicalPlantGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.AdvancedChemicalPlantGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.AdvancedChemicalPlantGraphicsPackParams
+---@param params Reskins.Angels.AdvancedChemicalPlantGraphicsParams
 ---@return Reskins.Angels.AdvancedChemicalPlantGraphicsPack
 ---@nodiscard
 function AdvancedChemicalPlantGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.petrochem_graphics] = true,
 			[_defines.assets.angels_assets] = true,

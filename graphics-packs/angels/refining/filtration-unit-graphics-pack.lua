@@ -75,10 +75,9 @@ local mirrored_pipe_pictures = {
 	},
 }
 
----@class Reskins.Angels.FiltrationUnitGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.FiltrationUnitGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.FiltrationUnitGraphicsPackParams
+---@param params Reskins.Angels.FiltrationUnitGraphicsParams
 ---@return Reskins.Angels.FiltrationUnitGraphicsPack
 ---@nodiscard
 function FiltrationUnitGraphicsPack:configure(params)
@@ -90,6 +89,8 @@ function FiltrationUnitGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

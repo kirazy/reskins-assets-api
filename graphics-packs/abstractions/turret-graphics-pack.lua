@@ -15,7 +15,7 @@ setmetatable(TurretGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Abstractions.TurretGraphicsParams:Reskins.Abstractions.GraphicsPackParams
+---@class Reskins.Abstractions.TurretGraphicsParams:Reskins.Abstractions.GraphicsParams
 
 ---@param params Reskins.Abstractions.TurretGraphicsParams
 ---@return Reskins.Abstractions.TurretGraphicsPack
@@ -23,8 +23,12 @@ setmetatable(TurretGraphicsPack, {
 function TurretGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = params.remnants,
 		required_assets = params.required_assets,
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
 	}) --[[@as Reskins.Abstractions.TurretGraphicsPack]]
 
 	-- Set the correct metatable for this class.

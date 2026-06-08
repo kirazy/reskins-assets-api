@@ -11,15 +11,16 @@ setmetatable(OreFlotationCellGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.OreFlotationCellGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.OreFlotationCellGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.OreFlotationCellGraphicsPackParams
+---@param params Reskins.Angels.OreFlotationCellGraphicsParams
 ---@return Reskins.Angels.OreFlotationCellGraphicsPack
 ---@nodiscard
 function OreFlotationCellGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

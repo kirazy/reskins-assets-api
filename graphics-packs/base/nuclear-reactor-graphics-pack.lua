@@ -95,8 +95,7 @@ local function get_picture(tint, pipe_path)
 	return picture
 end
 
----@class NuclearReactorGraphicsParams
----@field tint data.Color?
+---@class NuclearReactorGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
 ---@field use_fuel_glow_color boolean?
 
@@ -114,8 +113,12 @@ function NuclearReactorGraphicsPack:configure(params)
 	local graphics_set = self.get_graphics_set(params.tint, pipe_material)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint, pipe_material),
 		required_assets = required_assets,
+		nominal_width = 5,
+		nominal_height = 5,
 	}) --[[@as Reskins.Base.NuclearReactorGraphicsPack]]
 
 	instance.graphics_set = graphics_set

@@ -9,8 +9,7 @@ setmetatable(PumpjackGraphicsPack, {
 	__index = MiningDrillGraphicsPack,
 })
 
----@class Reskins.Base.PumpjackGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.PumpjackGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.PumpjackGraphicsParams
 ---@return Reskins.Base.PumpjackGraphicsPack
@@ -18,8 +17,12 @@ setmetatable(PumpjackGraphicsPack, {
 function PumpjackGraphicsPack:configure(params)
 	local instance = MiningDrillGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = nil,
 		required_assets = {},
+		nominal_width = 3,
+		nominal_height = 3,
 	}) --[[@as Reskins.Base.PumpjackGraphicsPack]]
 
 	-- Set the correct metatable for this class.

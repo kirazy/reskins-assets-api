@@ -12,15 +12,16 @@ setmetatable(StrandCastingMachineGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.StrandCastingMachineGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.StrandCastingMachineGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.StrandCastingMachineGraphicsPackParams
+---@param params Reskins.Angels.StrandCastingMachineGraphicsParams
 ---@return Reskins.Angels.StrandCastingMachineGraphicsPack
 ---@nodiscard
 function StrandCastingMachineGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.angels_assets] = true,
 			[_defines.assets.smelting_graphics] = true,

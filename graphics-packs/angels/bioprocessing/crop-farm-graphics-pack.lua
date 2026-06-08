@@ -12,16 +12,17 @@ setmetatable(CropFarmGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.CropFarmGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.CropFarmGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field variant "basic"|"temperate"|"desert"|"swamp"
 
----@param params Reskins.Angels.CropFarmGraphicsPackParams
+---@param params Reskins.Angels.CropFarmGraphicsParams
 ---@return Reskins.Angels.CropFarmGraphicsPack
 ---@nodiscard
 function CropFarmGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

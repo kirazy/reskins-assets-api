@@ -15,7 +15,7 @@ setmetatable(ElectricPoleGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Abstractions.ElectricPoleGraphicsParams:Reskins.Abstractions.GraphicsPackParams
+---@class Reskins.Abstractions.ElectricPoleGraphicsParams:Reskins.Abstractions.GraphicsParams
 ---@field pictures data.RotatedSprite
 ---@field remnants_overlay data.RotatedAnimationVariations?
 
@@ -25,6 +25,10 @@ setmetatable(ElectricPoleGraphicsPack, {
 function ElectricPoleGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
 		remnants = params.remnants,
 		required_assets = params.required_assets,
 	}) --[[@as Reskins.Abstractions.ElectricPoleGraphicsPack]]
@@ -39,7 +43,13 @@ end
 
 ---@param prototype data.ElectricPolePrototype
 function ElectricPoleGraphicsPack:apply_to_entity(prototype)
-	prototype.pictures = util.copy(self.pictures)
+	local pictures = util.copy(self.pictures)
+
+	-- Scale the graphics to the prototype's footprint, if it differs from the nominal dimensions.
+	local scaler = self:create_scaler(prototype)
+	scaler:rescale(pictures)
+
+	prototype.pictures = pictures
 end
 
 ---@param corpse data.CorpsePrototype

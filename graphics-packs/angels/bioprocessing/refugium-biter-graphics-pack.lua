@@ -11,15 +11,16 @@ setmetatable(RefugiumBiterGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.RefugiumBiterGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.RefugiumBiterGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.RefugiumBiterGraphicsPackParams
+---@param params Reskins.Angels.RefugiumBiterGraphicsParams
 ---@return Reskins.Angels.RefugiumBiterGraphicsPack
 ---@nodiscard
 function RefugiumBiterGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

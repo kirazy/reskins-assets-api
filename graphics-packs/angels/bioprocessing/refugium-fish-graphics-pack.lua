@@ -11,15 +11,16 @@ setmetatable(RefugiumFishGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.RefugiumFishGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.RefugiumFishGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.RefugiumFishGraphicsPackParams
+---@param params Reskins.Angels.RefugiumFishGraphicsParams
 ---@return Reskins.Angels.RefugiumFishGraphicsPack
 ---@nodiscard
 function RefugiumFishGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

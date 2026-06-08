@@ -9,8 +9,7 @@ setmetatable(TurretGunGraphicsPack, {
 	__index = TurretGraphicsPack,
 })
 
----@class TurretGunGraphicsParams
----@field tint data.Color?
+---@class TurretGunGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params TurretGunGraphicsParams
 ---@return TurretGunGraphicsPack
@@ -18,8 +17,12 @@ setmetatable(TurretGunGraphicsPack, {
 function TurretGunGraphicsPack:configure(params)
 	local instance = TurretGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = nil,
 		required_assets = {},
+		nominal_width = 2,
+		nominal_height = 2,
 	}) --[[@as TurretGunGraphicsPack]]
 
 	-- Set the correct metatable for this class.

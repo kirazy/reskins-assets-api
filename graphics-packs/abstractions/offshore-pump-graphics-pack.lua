@@ -9,8 +9,7 @@ setmetatable(OffshorePumpGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Abstractions.OffshorePumpGraphicsParams
----@field tint data.Color?
+---@class Reskins.Abstractions.OffshorePumpGraphicsParams:Reskins.Abstractions.GraphicsParams
 
 ---@param params Reskins.Abstractions.OffshorePumpGraphicsParams
 ---@return Reskins.Abstractions.OffshorePumpGraphicsPack
@@ -18,8 +17,12 @@ setmetatable(OffshorePumpGraphicsPack, {
 function OffshorePumpGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = nil,
 		required_assets = {},
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
 	}) --[[@as Reskins.Abstractions.OffshorePumpGraphicsPack]]
 
 	-- Set the correct metatable for this class.

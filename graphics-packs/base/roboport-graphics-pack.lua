@@ -20,8 +20,7 @@ setmetatable(RoboportGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class RoboportGraphicsParams
----@field tint data.Color?
+---@class RoboportGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field antenna_variant 0|1|2|3|4  -- 0 = base game, 1-4 = Bob's variants
 ---@field door_variant 0|1|2|3|4     -- 0 = base game, 1-4 = Bob's variants
 
@@ -36,8 +35,12 @@ function RoboportGraphicsPack:configure(params)
 
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = required_assets,
+		nominal_width = 4,
+		nominal_height = 4,
 	}) --[[@as RoboportGraphicsPack]]
 
 	instance.graphics_set = self.get_graphics_set(params.tint, params.antenna_variant, params.door_variant)

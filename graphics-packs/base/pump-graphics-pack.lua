@@ -11,8 +11,7 @@ setmetatable(PumpGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Base.PumpGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.PumpGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.PumpGraphicsParams
 ---@return Reskins.Base.PumpGraphicsPack
@@ -20,8 +19,12 @@ setmetatable(PumpGraphicsPack, {
 function PumpGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 1,
+		nominal_height = 2,
 	}) --[[@as Reskins.Base.PumpGraphicsPack]]
 
 	instance.animations = self.get_animations(params.tint)

@@ -76,8 +76,7 @@ local h_mirror = {
 	[defines.direction.west] = defines.direction.east,
 }
 
----@class Reskins.Angels.InductionFurnaceGraphicsParams
----@field tint data.Color?
+---@class Reskins.Angels.InductionFurnaceGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---Creates a new `InductionFurnaceGraphicsPack` instance.
 ---@param params Reskins.Angels.InductionFurnaceGraphicsParams
@@ -89,6 +88,8 @@ function InductionFurnaceGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.smelting_graphics] = true,
 			[_defines.assets.angels_assets] = true,

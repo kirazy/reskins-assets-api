@@ -11,15 +11,16 @@ setmetatable(AlgaeFarmGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.AlgaeFarmGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.AlgaeFarmGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.AlgaeFarmGraphicsPackParams
+---@param params Reskins.Angels.AlgaeFarmGraphicsParams
 ---@return Reskins.Angels.AlgaeFarmGraphicsPack
 ---@nodiscard
 function AlgaeFarmGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

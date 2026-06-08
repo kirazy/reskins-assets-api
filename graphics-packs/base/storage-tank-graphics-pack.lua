@@ -11,8 +11,7 @@ setmetatable(StorageTankGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class StorageTankGraphicsParams
----@field tint data.Color?
+---@class StorageTankGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params StorageTankGraphicsParams
 ---@return StorageTankGraphicsPack
@@ -20,8 +19,12 @@ setmetatable(StorageTankGraphicsPack, {
 function StorageTankGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 3,
+		nominal_height = 3,
 	}) --[[@as StorageTankGraphicsPack]]
 
 	instance.pictures = self.get_pictures(params.tint)

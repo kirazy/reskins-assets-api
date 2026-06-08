@@ -23,15 +23,16 @@ local working_lights = _sprites.make_4way_animation_from_spritesheet({
 	draw_as_glow = true,
 })
 
----@class Reskins.Angels.ElectricBoilerGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.ElectricBoilerGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.ElectricBoilerGraphicsPackParams
+---@param params Reskins.Angels.ElectricBoilerGraphicsParams
 ---@return Reskins.Angels.ElectricBoilerGraphicsPack
 ---@nodiscard
 function ElectricBoilerGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.angels_assets] = true,
 		},

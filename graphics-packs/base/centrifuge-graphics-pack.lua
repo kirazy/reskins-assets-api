@@ -12,8 +12,7 @@ setmetatable(CentrifugeGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Base.CentrifugeGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.CentrifugeGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.CentrifugeGraphicsParams
 ---@return Reskins.Base.CentrifugeGraphicsPack
@@ -24,6 +23,8 @@ function CentrifugeGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = remnants,
 		nominal_width = 3,
 		nominal_height = 3,

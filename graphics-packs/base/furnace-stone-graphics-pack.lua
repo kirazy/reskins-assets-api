@@ -12,8 +12,7 @@ setmetatable(FurnaceStoneGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Base.FurnaceStoneGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.FurnaceStoneGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field variant "standard" | "chemical"
 
 -- Private sprite helpers
@@ -371,6 +370,8 @@ function FurnaceStoneGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = remnants,
 		required_assets = required_assets,
 		nominal_width = 2,

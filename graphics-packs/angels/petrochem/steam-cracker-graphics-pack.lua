@@ -11,15 +11,16 @@ setmetatable(SteamCrackerGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.SteamCrackerGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.SteamCrackerGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.SteamCrackerGraphicsPackParams
+---@param params Reskins.Angels.SteamCrackerGraphicsParams
 ---@return Reskins.Angels.SteamCrackerGraphicsPack
 ---@nodiscard
 function SteamCrackerGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.petrochem_graphics] = true,
 		},

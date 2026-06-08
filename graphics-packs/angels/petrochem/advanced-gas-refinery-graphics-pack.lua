@@ -13,15 +13,16 @@ setmetatable(AdvancedGasRefineryGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.AdvancedGasRefineryGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.AdvancedGasRefineryGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.AdvancedGasRefineryGraphicsPackParams
+---@param params Reskins.Angels.AdvancedGasRefineryGraphicsParams
 ---@return Reskins.Angels.AdvancedGasRefineryGraphicsPack
 ---@nodiscard
 function AdvancedGasRefineryGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.petrochem_graphics] = true,
 		},

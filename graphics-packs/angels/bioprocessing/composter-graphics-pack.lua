@@ -11,15 +11,16 @@ setmetatable(ComposterGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.ComposterGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.ComposterGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.ComposterGraphicsPackParams
+---@param params Reskins.Angels.ComposterGraphicsParams
 ---@return Reskins.Angels.ComposterGraphicsPack
 ---@nodiscard
 function ComposterGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

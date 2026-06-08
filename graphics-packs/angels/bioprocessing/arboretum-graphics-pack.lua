@@ -11,15 +11,16 @@ setmetatable(ArboretumGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.ArboretumGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.ArboretumGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.ArboretumGraphicsPackParams
+---@param params Reskins.Angels.ArboretumGraphicsParams
 ---@return Reskins.Angels.ArboretumGraphicsPack
 ---@nodiscard
 function ArboretumGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

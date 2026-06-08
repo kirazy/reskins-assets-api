@@ -18,8 +18,7 @@ setmetatable(RobotLogisticGraphicsPack, {
 	__index = RobotGraphicsPack,
 })
 
----@class RobotLogisticGraphicsParams
----@field tint data.Color?
+---@class RobotLogisticGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params RobotLogisticGraphicsParams
 ---@return RobotLogisticGraphicsPack
@@ -29,8 +28,12 @@ function RobotLogisticGraphicsPack:configure(params)
 
 	local instance = RobotGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 1,
+		nominal_height = 2,
 	}) --[[@as RobotLogisticGraphicsPack]]
 
 	instance.idle = animations.idle

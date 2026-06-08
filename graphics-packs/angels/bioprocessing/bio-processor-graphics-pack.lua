@@ -11,15 +11,16 @@ setmetatable(BioProcessorGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.BioProcessorGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.BioProcessorGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.BioProcessorGraphicsPackParams
+---@param params Reskins.Angels.BioProcessorGraphicsParams
 ---@return Reskins.Angels.BioProcessorGraphicsPack
 ---@nodiscard
 function BioProcessorGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

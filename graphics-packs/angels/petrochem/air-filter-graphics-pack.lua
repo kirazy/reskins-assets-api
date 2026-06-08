@@ -11,15 +11,16 @@ setmetatable(AirFilterGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.AirFilterGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.AirFilterGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.AirFilterGraphicsPackParams
+---@param params Reskins.Angels.AirFilterGraphicsParams
 ---@return Reskins.Angels.AirFilterGraphicsPack
 ---@nodiscard
 function AirFilterGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.angels_assets] = true,
 		},

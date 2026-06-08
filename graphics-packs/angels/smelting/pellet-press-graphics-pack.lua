@@ -11,15 +11,16 @@ setmetatable(PelletPressGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.PelletPressGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.PelletPressGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.PelletPressGraphicsPackParams
+---@param params Reskins.Angels.PelletPressGraphicsParams
 ---@return Reskins.Angels.PelletPressGraphicsPack
 ---@nodiscard
 function PelletPressGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.smelting_graphics] = true,
 		},

@@ -13,8 +13,7 @@ setmetatable(BoilerGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Base.BoilerGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.BoilerGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.BoilerGraphicsParams
 ---@return Reskins.Base.BoilerGraphicsPack
@@ -22,8 +21,12 @@ setmetatable(BoilerGraphicsPack, {
 function BoilerGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 3,
+		nominal_height = 2,
 	}) --[[@as Reskins.Base.BoilerGraphicsPack]]
 
 	instance.pictures = self.get_picture_set(params.tint)

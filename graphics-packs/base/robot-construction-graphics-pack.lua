@@ -16,8 +16,7 @@ setmetatable(RobotConstructionGraphicsPack, {
 	__index = RobotGraphicsPack,
 })
 
----@class RobotConstructionGraphicsParams
----@field tint data.Color?
+---@class RobotConstructionGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params RobotConstructionGraphicsParams
 ---@return RobotConstructionGraphicsPack
@@ -27,8 +26,12 @@ function RobotConstructionGraphicsPack:configure(params)
 
 	local instance = RobotGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 1,
+		nominal_height = 2,
 	}) --[[@as RobotConstructionGraphicsPack]]
 
 	instance.idle = animations.idle

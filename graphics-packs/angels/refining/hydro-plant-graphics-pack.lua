@@ -73,10 +73,9 @@ local mirrored_pipe_pictures = {
 	},
 }
 
----@class Reskins.Angels.HydroPlantGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.HydroPlantGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.HydroPlantGraphicsPackParams
+---@param params Reskins.Angels.HydroPlantGraphicsParams
 ---@return Reskins.Angels.HydroPlantGraphicsPack
 ---@nodiscard
 function HydroPlantGraphicsPack:configure(params)
@@ -88,6 +87,8 @@ function HydroPlantGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

@@ -11,15 +11,16 @@ setmetatable(WashingPlantGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.WashingPlantGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.WashingPlantGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.WashingPlantGraphicsPackParams
+---@param params Reskins.Angels.WashingPlantGraphicsParams
 ---@return Reskins.Angels.WashingPlantGraphicsPack
 ---@nodiscard
 function WashingPlantGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = {},
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,

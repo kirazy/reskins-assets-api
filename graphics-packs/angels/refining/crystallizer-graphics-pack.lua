@@ -46,10 +46,9 @@ local pipe_picture = {
 	},
 }
 
----@class Reskins.Angels.CrystallizerGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.CrystallizerGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.CrystallizerGraphicsPackParams
+---@param params Reskins.Angels.CrystallizerGraphicsParams
 ---@return Reskins.Angels.CrystallizerGraphicsPack
 ---@nodiscard
 function CrystallizerGraphicsPack:configure(params)
@@ -60,6 +59,8 @@ function CrystallizerGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

@@ -11,15 +11,16 @@ setmetatable(NutrientExtractorGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.NutrientExtractorGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.NutrientExtractorGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.NutrientExtractorGraphicsPackParams
+---@param params Reskins.Angels.NutrientExtractorGraphicsParams
 ---@return Reskins.Angels.NutrientExtractorGraphicsPack
 ---@nodiscard
 function NutrientExtractorGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

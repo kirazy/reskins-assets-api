@@ -11,8 +11,7 @@ setmetatable(SteamEngineGraphicsPack, {
 	__index = GeneratorGraphicsPack,
 })
 
----@class SteamEngineGraphicsParams
----@field tint data.Color?
+---@class SteamEngineGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params SteamEngineGraphicsParams
 ---@return SteamEngineGraphicsPack
@@ -20,8 +19,12 @@ setmetatable(SteamEngineGraphicsPack, {
 function SteamEngineGraphicsPack:configure(params)
 	local instance = GeneratorGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 3,
+		nominal_height = 5,
 		horizontal_animation = self.get_horizontal_animation(params.tint),
 		vertical_animation = self.get_vertical_animation(params.tint),
 	}) --[[@as SteamEngineGraphicsPack]]

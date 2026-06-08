@@ -43,10 +43,9 @@ local pipe_pictures = {
 	},
 }
 
----@class Reskins.Angels.ElectroWinningCellGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.ElectroWinningCellGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.ElectroWinningCellGraphicsPackParams
+---@param params Reskins.Angels.ElectroWinningCellGraphicsParams
 ---@return Reskins.Angels.ElectroWinningCellGraphicsPack
 ---@nodiscard
 function ElectroWinningCellGraphicsPack:configure(params)
@@ -57,6 +56,8 @@ function ElectroWinningCellGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

@@ -2,23 +2,24 @@ local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.craftin
 
 ---@class Reskins.Bobs.DistilleryGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 ---@field field Any
-local ChemicalPlantGraphicsPack = {}
-ChemicalPlantGraphicsPack.__index = CraftingMachineGraphicsPack
+local DistilleryGraphicsPack = {}
+DistilleryGraphicsPack.__index = DistilleryGraphicsPack
 
 -- Set up inheritance
-setmetatable(ChemicalPlantGraphicsPack, {
+setmetatable(DistilleryGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Bobs.DistilleryGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Bobs.DistilleryGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Bobs.DistilleryGraphicsPackParams
+---@param params Reskins.Bobs.DistilleryGraphicsParams
 ---@return Reskins.Bobs.DistilleryGraphicsPack
 ---@nodiscard
-function ChemicalPlantGraphicsPack:configure(params)
+function DistilleryGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = nil,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {},
 		nominal_width = 2,
 		nominal_height = 2,
@@ -26,7 +27,7 @@ function ChemicalPlantGraphicsPack:configure(params)
 	}) --[[@as Reskins.Bobs.DistilleryGraphicsPack]]
 
 	-- Set the correct metatable for this class.
-	setmetatable(instance, ChemicalPlantGraphicsPack)
+	setmetatable(instance, DistilleryGraphicsPack)
 	return instance
 end
 
@@ -40,10 +41,10 @@ end
 ---- This is an abstract method that must be implemented by subclasses.
 ---- Implementations should mutate the prototype in place, and set copies of the graphics.
 ---@param prototype data.PrototypeBase
-function ChemicalPlantGraphicsPack:apply_to_entity(prototype)
+function DistilleryGraphicsPack:apply_to_entity(prototype)
 	if not reskins_suppress_errors then
 		error("apply_to_entity must be implemented by subclass")
 	end
 end
 
-return ChemicalPlantGraphicsPack
+return DistilleryGraphicsPack

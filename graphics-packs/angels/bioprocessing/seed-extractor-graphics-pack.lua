@@ -11,15 +11,16 @@ setmetatable(SeedExtractorGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.SeedExtractorGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.SeedExtractorGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.SeedExtractorGraphicsPackParams
+---@param params Reskins.Angels.SeedExtractorGraphicsParams
 ---@return Reskins.Angels.SeedExtractorGraphicsPack
 ---@nodiscard
 function SeedExtractorGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

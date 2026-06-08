@@ -11,16 +11,17 @@ setmetatable(TreeGeneratorGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.TreeGeneratorGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.TreeGeneratorGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field variant "temperate"|"desert"|"swamp"
 
----@param params Reskins.Angels.TreeGeneratorGraphicsPackParams
+---@param params Reskins.Angels.TreeGeneratorGraphicsParams
 ---@return Reskins.Angels.TreeGeneratorGraphicsPack
 ---@nodiscard
 function TreeGeneratorGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

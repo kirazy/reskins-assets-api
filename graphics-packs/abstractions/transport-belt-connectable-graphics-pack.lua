@@ -12,10 +12,8 @@ setmetatable(TransportBeltConnectableGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Abstractions.TransportBeltConnectableGraphicsParams
----@field tint data.Color?
+---@class Reskins.Abstractions.TransportBeltConnectableGraphicsParams:Reskins.Abstractions.GraphicsParams
 ---@field belt_sprite Reskins.Defines.BeltSprites
----@field remnants data.RotatedAnimationVariations?
 
 ---@param params Reskins.Abstractions.TransportBeltConnectableGraphicsParams
 ---@return Reskins.Abstractions.TransportBeltConnectableGraphicsPack
@@ -25,8 +23,12 @@ function TransportBeltConnectableGraphicsPack:configure(params)
 
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = params.remnants,
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
 	}) --[[@as Reskins.Abstractions.TransportBeltConnectableGraphicsPack]]
 
 	instance.belt_animation_set = belt_animation_set

@@ -11,15 +11,16 @@ setmetatable(HatcheryGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.HatcheryGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.HatcheryGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.HatcheryGraphicsPackParams
+---@param params Reskins.Angels.HatcheryGraphicsParams
 ---@return Reskins.Angels.HatcheryGraphicsPack
 ---@nodiscard
 function HatcheryGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 			[_defines.assets.angels_assets] = true,

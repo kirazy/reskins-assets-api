@@ -14,8 +14,7 @@ setmetatable(AssemblingMachineGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Base.AssemblingMachineGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.AssemblingMachineGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field machine_tier 1|2|3|4|5|6
 ---@field use_electronics_set boolean?
 ---@field use_simple_pipe_pictures boolean?
@@ -34,6 +33,8 @@ function AssemblingMachineGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = remnants,
 		required_assets = { [_defines.assets.base] = true },
 		nominal_width = 3,

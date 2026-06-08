@@ -45,10 +45,9 @@ local pipe_pictures = {
 	west = util.empty_sprite(),
 }
 
----@class Reskins.Angels.ElectrolyserGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.ElectrolyserGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.ElectrolyserGraphicsPackParams
+---@param params Reskins.Angels.ElectrolyserGraphicsParams
 ---@return Reskins.Angels.ElectrolyserGraphicsPack
 ---@nodiscard
 function ElectrolyserGraphicsPack:configure(params)
@@ -59,6 +58,8 @@ function ElectrolyserGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.petrochem_graphics] = true,
 		},

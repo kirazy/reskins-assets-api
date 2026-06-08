@@ -13,7 +13,7 @@ setmetatable(RobotGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class RobotGraphicsParams:Reskins.Abstractions.GraphicsPackParams
+---@class RobotGraphicsParams:Reskins.Abstractions.GraphicsParams
 
 ---@param params RobotGraphicsParams
 ---@return Reskins.Abstractions.RobotGraphicsPack
@@ -21,8 +21,12 @@ setmetatable(RobotGraphicsPack, {
 function RobotGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = params.remnants,
 		required_assets = params.required_assets,
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
 	}) --[[@as Reskins.Abstractions.RobotGraphicsPack]]
 
 	-- Set the correct metatable for this class.

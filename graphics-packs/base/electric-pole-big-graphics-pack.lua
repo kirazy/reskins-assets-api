@@ -10,8 +10,7 @@ setmetatable(ElectricPoleBigGraphicsPack, {
 	__index = ElectricPoleGraphicsPack,
 })
 
----@class Reskins.Base.ElectricPoleBigGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.ElectricPoleBigGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Base.ElectricPoleBigGraphicsParams
 ---@return Reskins.Base.ElectricPoleBigGraphicsPack
@@ -19,10 +18,14 @@ setmetatable(ElectricPoleBigGraphicsPack, {
 function ElectricPoleBigGraphicsPack:configure(params)
 	local instance = ElectricPoleGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		pictures = self.get_pictures(params.tint),
 		remnants = self.get_corpse_animation(params.tint),
 		remnants_overlay = self.get_corpse_animation_overlay(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 2,
+		nominal_height = 2,
 	}) --[[@as Reskins.Base.ElectricPoleBigGraphicsPack]]
 
 	-- Set the correct metatable for this class.

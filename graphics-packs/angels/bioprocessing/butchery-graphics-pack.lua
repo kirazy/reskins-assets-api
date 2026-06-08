@@ -11,15 +11,16 @@ setmetatable(ButcheryGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.ButcheryGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.ButcheryGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.ButcheryGraphicsPackParams
+---@param params Reskins.Angels.ButcheryGraphicsParams
 ---@return Reskins.Angels.ButcheryGraphicsPack
 ---@nodiscard
 function ButcheryGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.bioprocessing_graphics] = true,
 		},

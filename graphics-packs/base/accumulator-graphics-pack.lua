@@ -20,8 +20,7 @@ setmetatable(AccumulatorGraphicsPack, {
 ---| "high-capacity"
 ---| "slow"
 
----@class Reskins.Base.AccumulatorGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.AccumulatorGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field sprite_set Reskins.Base.AccumulatorSpriteSet?
 
 ---@param params Reskins.Base.AccumulatorGraphicsParams
@@ -30,11 +29,15 @@ setmetatable(AccumulatorGraphicsPack, {
 function AccumulatorGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = nil,
 		required_assets = {
 			[_defines.assets.base] = true,
 			[_defines.assets.base_assets] = true,
 		},
+		nominal_height = 2,
+		nominal_width = 2,
 	}) --[[@as Reskins.Base.AccumulatorGraphicsPack]]
 
 	instance.chargable_graphics = self.get_chargable_graphics(params.sprite_set, params.tint)
@@ -50,8 +53,16 @@ end
 
 ---@param prototype data.AccumulatorPrototype
 function AccumulatorGraphicsPack:apply_to_entity(prototype)
-	prototype.chargable_graphics = util.copy(self.chargable_graphics)
-	prototype.water_reflection = util.copy(self.water_reflection)
+	local chargable_graphics = util.copy(self.chargable_graphics)
+	local water_reflection = util.copy(self.water_reflection)
+
+	-- Scale the graphics to the prototype's footprint, if it differs from the nominal dimensions.
+	local scaler = self:create_scaler(prototype)
+	scaler:rescale(chargable_graphics)
+	scaler:rescale(water_reflection)
+
+	prototype.chargable_graphics = chargable_graphics
+	prototype.water_reflection = water_reflection
 end
 
 ---@param sprite_set Reskins.Base.AccumulatorSpriteSet?

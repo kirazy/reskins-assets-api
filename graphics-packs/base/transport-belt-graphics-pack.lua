@@ -15,8 +15,7 @@ setmetatable(TransportBeltGraphicsPack, {
 -- TODO: Lift the hash-based auto-replace logic from Prismatic Belts.
 -- TODO: Strip out the transport-belt-connectable replace from all-things-not-a-transport-belt.
 
----@class TransportBeltGraphicsParams
----@field tint data.Color?
+---@class TransportBeltGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field belt_sprite Reskins.Defines.BeltSprites
 
 ---@param params TransportBeltGraphicsParams
@@ -27,8 +26,12 @@ function TransportBeltGraphicsPack:configure(params)
 
 	local instance = TransportBeltConnectableGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		belt_sprite = params.belt_sprite,
 		remnants = remnants,
+		nominal_width = 1,
+		nominal_height = 1,
 	}) --[[@as TransportBeltGraphicsPack]]
 
 	-- Set the correct metatable for this class.

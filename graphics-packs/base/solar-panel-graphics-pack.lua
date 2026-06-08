@@ -18,8 +18,7 @@ setmetatable(SolarPanelGraphicsPack, {
 ---| "standard"
 ---| "large"
 
----@class SolarPanelGraphicsParams
----@field tint data.Color?
+---@class SolarPanelGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field variant SolarPanelVariant
 
 ---@param params SolarPanelGraphicsParams
@@ -35,8 +34,12 @@ function SolarPanelGraphicsPack:configure(params)
 
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint, params.variant),
 		required_assets = required_assets,
+		nominal_width = 3,
+		nominal_height = 3,
 	}) --[[@as SolarPanelGraphicsPack]]
 
 	instance.picture = self.get_picture(params.tint, params.variant)

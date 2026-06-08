@@ -11,15 +11,16 @@ setmetatable(LiquefierGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.LiquefierGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.LiquefierGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.LiquefierGraphicsPackParams
+---@param params Reskins.Angels.LiquefierGraphicsParams
 ---@return Reskins.Angels.LiquefierGraphicsPack
 ---@nodiscard
 function LiquefierGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

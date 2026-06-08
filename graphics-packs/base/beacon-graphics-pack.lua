@@ -11,8 +11,7 @@ setmetatable(BeaconGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Base.BeaconGraphicsParams
----@field tint data.Color?
+---@class Reskins.Base.BeaconGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 ---@field variant "2-slots"|"4-slots"|"6-slots"
 
 ---@param params Reskins.Base.BeaconGraphicsParams
@@ -21,8 +20,12 @@ setmetatable(BeaconGraphicsPack, {
 function BeaconGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
 		required_assets = { [_defines.assets.base_assets] = true },
+		nominal_width = 3,
+		nominal_height = 3,
 	}) --[[@as Reskins.Base.BeaconGraphicsPack]]
 
 	instance.animation_list = self.get_animation_list(params.tint, params.variant)

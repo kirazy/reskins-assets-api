@@ -65,10 +65,9 @@ local mirrored_pipe_pictures = {
 	},
 }
 
----@class Reskins.Angels.OreLeachingPlantGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.OreLeachingPlantGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.OreLeachingPlantGraphicsPackParams
+---@param params Reskins.Angels.OreLeachingPlantGraphicsParams
 ---@return Reskins.Angels.OreLeachingPlantGraphicsPack
 ---@nodiscard
 function OreLeachingPlantGraphicsPack:configure(params)
@@ -80,6 +79,8 @@ function OreLeachingPlantGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

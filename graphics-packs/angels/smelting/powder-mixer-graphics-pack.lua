@@ -11,15 +11,16 @@ setmetatable(PowderMixerGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.PowderMixerGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.PowderMixerGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.PowderMixerGraphicsPackParams
+---@param params Reskins.Angels.PowderMixerGraphicsParams
 ---@return Reskins.Angels.PowderMixerGraphicsPack
 ---@nodiscard
 function PowderMixerGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.smelting_graphics] = true,
 		},

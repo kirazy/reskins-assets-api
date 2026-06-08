@@ -32,10 +32,9 @@ local mirrored_pipe_pictures = {
 	west = util.empty_sprite(),
 }
 
----@class Reskins.Angels.SalinationPlantGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.SalinationPlantGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.SalinationPlantGraphicsPackParams
+---@param params Reskins.Angels.SalinationPlantGraphicsParams
 ---@return Reskins.Angels.SalinationPlantGraphicsPack
 ---@nodiscard
 function SalinationPlantGraphicsPack:configure(params)
@@ -47,6 +46,8 @@ function SalinationPlantGraphicsPack:configure(params)
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.refining_graphics] = true,
 		},

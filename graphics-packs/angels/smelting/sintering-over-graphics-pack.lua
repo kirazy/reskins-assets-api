@@ -11,15 +11,16 @@ setmetatable(SinteringOvenGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
----@class Reskins.Angels.SinteringOvenGraphicsPackParams
----@field tint data.Color?
+---@class Reskins.Angels.SinteringOvenGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
----@param params Reskins.Angels.SinteringOvenGraphicsPackParams
+---@param params Reskins.Angels.SinteringOvenGraphicsParams
 ---@return Reskins.Angels.SinteringOvenGraphicsPack
 ---@nodiscard
 function SinteringOvenGraphicsPack:configure(params)
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		required_assets = {
 			[_defines.assets.smelting_graphics] = true,
 		},

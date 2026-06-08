@@ -14,7 +14,7 @@ setmetatable(GeneratorGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
----@class Reskins.Abstractions.GeneratorGraphicsParams:Reskins.Abstractions.GraphicsPackParams
+---@class Reskins.Abstractions.GeneratorGraphicsParams:Reskins.Abstractions.GraphicsParams
 ---@field horizontal_animation data.Animation
 ---@field vertical_animation data.Animation
 
@@ -24,8 +24,12 @@ setmetatable(GeneratorGraphicsPack, {
 function GeneratorGraphicsPack:configure(params)
 	local instance = GraphicsPackBase.configure(self, {
 		tint = params.tint,
+		scale = params.scale,
+		scale_factor = params.scale_factor,
 		remnants = params.remnants,
 		required_assets = params.required_assets,
+		nominal_width = params.nominal_width,
+		nominal_height = params.nominal_height,
 	}) --[[@as Reskins.Abstractions.GeneratorGraphicsPack]]
 
 	instance.horizontal_animation = params.horizontal_animation
@@ -38,8 +42,16 @@ end
 
 ---@param prototype data.GeneratorPrototype
 function GeneratorGraphicsPack:apply_to_entity(prototype)
-	prototype.horizontal_animation = util.copy(self.horizontal_animation)
-	prototype.vertical_animation = util.copy(self.vertical_animation)
+	local horizontal_animation = util.copy(self.horizontal_animation)
+	local vertical_animation = util.copy(self.vertical_animation)
+
+	-- Scale the graphics to the prototype's footprint, if it differs from the nominal dimensions.
+	local scaler = self:create_scaler(prototype)
+	scaler:rescale(horizontal_animation)
+	scaler:rescale(vertical_animation)
+
+	prototype.horizontal_animation = horizontal_animation
+	prototype.vertical_animation = vertical_animation
 end
 
 return GeneratorGraphicsPack
