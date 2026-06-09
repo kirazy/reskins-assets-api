@@ -13,6 +13,12 @@ setmetatable(SolarPanelGraphicsPack, {
 	__index = GraphicsPackBase,
 })
 
+local nominal_dimensions = {
+	small = { width = 2, height = 2 },
+	standard = { width = 3, height = 3 },
+	large = { width = 4, height = 4 },
+}
+
 ---@alias SolarPanelVariant
 ---| "small"
 ---| "standard"
@@ -38,8 +44,8 @@ function SolarPanelGraphicsPack:configure(params)
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint, params.variant),
 		required_assets = required_assets,
-		nominal_width = 3,
-		nominal_height = 3,
+		nominal_width = nominal_dimensions[params.variant].width,
+		nominal_height = nominal_dimensions[params.variant].height,
 	}) --[[@as SolarPanelGraphicsPack]]
 
 	instance.picture = self.get_picture(params.tint, params.variant)
