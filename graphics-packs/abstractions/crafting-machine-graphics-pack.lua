@@ -143,10 +143,14 @@ end
 function CraftingMachineGraphicsPack:apply_fluid_box_graphics(prototype)
 	local fluid_boxes = {}
 	if prototype.energy_source and prototype.energy_source.fluid_box then
+		-- Ensure that the prototype's energy source fluid box is decoupled from any other fluid box.
+		prototype.energy_source.fluid_box = util.copy(prototype.energy_source.fluid_box)
 		table.insert(fluid_boxes, prototype.energy_source.fluid_box)
 	end
 
 	if prototype.fluid_boxes then
+		-- Ensure that the prototype's fluid boxes are decoupled from any other fluid boxes.
+		prototype.fluid_boxes = util.copy(prototype.fluid_boxes)
 		for _, fluid_box in pairs(prototype.fluid_boxes) do
 			if fluid_box then
 				table.insert(fluid_boxes, fluid_box)

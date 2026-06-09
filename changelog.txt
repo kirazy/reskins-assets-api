@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.2
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fixed that fluid boxes were not properly isolated from entity to entity when reskinned.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 2026-06-07
