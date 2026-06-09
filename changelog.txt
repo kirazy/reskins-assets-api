@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.2
-Date: ????
+Date: 2026-06-08
   Changes:
     - Electric furnace fluid box sprites are now available if a fluid box requires them, rather than when a particular sprite set is requested.
   Bugfixes:
