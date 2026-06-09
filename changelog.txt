@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.2
 Date: ????
+  Changes:
+    - Electric furnace fluid box sprites are now available if a fluid box requires them, rather than when a particular sprite set is requested.
   Bugfixes:
     - Fixed that fluid boxes were not properly isolated from entity to entity when reskinned.
 ---------------------------------------------------------------------------------------------------

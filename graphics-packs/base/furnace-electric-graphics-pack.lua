@@ -489,6 +489,9 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 	return {
 		pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
 		pipe_picture = pictures,
+		secondary_draw_orders = {
+			north = -1,
+		},
 	}
 end
 
@@ -501,13 +504,14 @@ function FurnaceElectricGraphicsPack:configure(params)
 	local graphics_set = self.get_graphics_set(params.tint, params.variant)
 	local remnants = self.get_corpse_animation(params.tint, params.variant)
 
-	local has_fluid_boxes = params.variant == "chemical" or params.variant == "chemical-mixing"
-	local fluid_boxes = has_fluid_boxes and { get_electric_furnace_fluid_box_graphics(params.tint) } or nil
+	local fluid_boxes = {
+		get_electric_furnace_fluid_box_graphics(params.tint),
+	}
 
-	local required_assets = { [_defines.assets.base_assets] = true }
-	if params.variant ~= "standard" then
-		required_assets[_defines.assets.bobs_assets] = true
-	end
+	local required_assets = {
+		[_defines.assets.base_assets] = true,
+		[_defines.assets.bobs_assets] = true,
+	}
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {
 		tint = params.tint,
@@ -519,8 +523,6 @@ function FurnaceElectricGraphicsPack:configure(params)
 		nominal_height = 3,
 		graphics_set = graphics_set,
 		fluid_boxes = fluid_boxes,
-		-- Chemical variants gate fluid box visibility on the active recipe.
-		fluid_boxes_off_when_no_fluid_recipe = has_fluid_boxes and true or nil,
 	}) --[[@as Reskins.Base.FurnaceElectricGraphicsPack]]
 
 	setmetatable(instance, FurnaceElectricGraphicsPack)
