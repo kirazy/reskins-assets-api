@@ -1,29 +1,29 @@
 {
-    "name": "reskins-assets-api",
-    "version": "0.2.0",
-    "factorio_version": "2.1",
-    "title": "Artisanal Reskins: Assets API",
-    "author": "Kirazy",
-    "contact": "https://discord.gg/qAvSyzZFPr",
-    "homepage": "https://github.com/kirazy/reskins-assets-api",
-    "dependencies": [
-        "base",
-        "reskins-sprite-utils",
-        "? reskins-assets-base",
-        "? reskins-assets-bobs",
-        "? reskins-assets-angels",
-        "? reskins-assets-assorted",
-        "? space-age",
-        "? reskins-assets-space-age",
-        "? angelsrefininggraphics",
-        "? angelssmeltinggraphics",
-        "? angelspetrochemgraphics",
-        "? angelsbioprocessinggraphics",
-        "? angelsaddons-mobility-graphics-crawler",
-        "? angelsaddons-mobility-graphics-petro",
-        "? angelsaddons-mobility-graphics-smelting"
-    ],
-    "package": {
-        "git_publish_branch": "dev2.1"
-    }
+	"name": "reskins-assets-api",
+	"version": "0.2.0",
+	"factorio_version": "2.1",
+	"title": "Artisanal Reskins: Assets API",
+	"author": "Kirazy",
+	"contact": "https://discord.gg/qAvSyzZFPr",
+	"homepage": "https://github.com/kirazy/reskins-assets-api",
+	"dependencies": [
+		"base",
+		"reskins-sprite-utils",
+		"? reskins-assets-base",
+		"? reskins-assets-bobs",
+		"? reskins-assets-angels",
+		"? reskins-assets-assorted",
+		"? space-age",
+		"? reskins-assets-space-age",
+		"? angelsrefininggraphics",
+		"? angelssmeltinggraphics",
+		"? angelspetrochemgraphics",
+		"? angelsbioprocessinggraphics",
+		"? angelsaddons-mobility-graphics-crawler",
+		"? angelsaddons-mobility-graphics-petro",
+		"? angelsaddons-mobility-graphics-smelting"
+	],
+	"package": {
+		"git_publish_branch": "dev2.1"
+	}
 }

@@ -56,9 +56,12 @@ end
 local function resolve_scalar(prototype, params)
 	if params.scale_factor ~= nil then
 		if params.scale ~= nil then
-			log(string.format(
-				"PrototypeScaler: both 'scale' and 'scale_factor' provided for '%s'; using 'scale_factor'.",
-				prototype.name or "<unnamed>"))
+			log(
+				string.format(
+					"PrototypeScaler: both 'scale' and 'scale_factor' provided for '%s'; using 'scale_factor'.",
+					prototype.name or "<unnamed>"
+				)
+			)
 		end
 		return params.scale_factor
 	end
@@ -75,9 +78,16 @@ local function resolve_scalar(prototype, params)
 			return proto_width / params.nominal_width
 		end
 
-		log(string.format(
-			"PrototypeScaler: aspect ratio mismatch for '%s' (selection box %g x %g, nominal %g x %g); skipping scaling.",
-			prototype.name or "<unnamed>", proto_width, proto_height, params.nominal_width, params.nominal_height))
+		log(
+			string.format(
+				"PrototypeScaler: aspect ratio mismatch for '%s' (selection box %g x %g, nominal %g x %g); skipping scaling.",
+				prototype.name or "<unnamed>",
+				proto_width,
+				proto_height,
+				params.nominal_width,
+				params.nominal_height
+			)
+		)
 	end
 
 	return nil
