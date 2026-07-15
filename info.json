@@ -1,7 +1,7 @@
 {
 	"name": "reskins-assets-api",
-	"version": "0.2.0",
-	"factorio_version": "2.1",
+	"version": "0.1.3",
+	"factorio_version": "2.0",
 	"title": "Artisanal Reskins: Assets API",
 	"author": "Kirazy",
 	"contact": "https://discord.gg/qAvSyzZFPr",
@@ -24,6 +24,6 @@
 		"? angelsaddons-mobility-graphics-smelting"
 	],
 	"package": {
-		"git_publish_branch": "dev2.1"
+		"git_publish_branch": "dev2.0"
 	}
 }
