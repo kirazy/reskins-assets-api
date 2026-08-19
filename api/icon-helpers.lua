@@ -60,7 +60,7 @@ function _helpers.make_tinted_three_layer_icon_creator_fn(creatable_icon)
 
 		if creatable_icon.extras then
 			for _, extra in pairs(creatable_icon.extras) do
-				local icon_datum = sprite_utils.icons.transform_icon(extra, scale, shift, tint, "default")
+				local icon_datum = sprite_utils.icons.transform_icons(extra, scale, shift, tint, "default")
 				table.insert(icon_data, icon_datum)
 			end
 		end
