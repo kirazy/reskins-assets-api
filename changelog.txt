@@ -5,6 +5,9 @@ Date: ????
     - Added two new symbols: aperture-closed and aperture-open, denoting an open and closed iris.
   Bugfixes:
     - Fixed that the boiler picture set did not include the structure patch, fire, or fire glow elements.
+  Breaking Changes:
+    - `defines.assets` has changed to `defines.assets_source`.
+    - The defines, icons, and sprites modules no longer automatically include the Artisanal Reskins: Sprite Utils equivalents. They must be required and used separately.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.2
 Date: 2026-06-08

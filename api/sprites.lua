@@ -1,15 +1,16 @@
 -- THIS MODULE IS STABLE
 -- Methods may be added to it, but methods already defined are unlikely to change.
 
----Provides methods for manipulating icons specific to Artisanal Reskins.
----Includes the Artisanal Reskins: Sprite Utils sprite utilities.
+---@namespace Reskins.Assets
+
+---Provides methods for manipulating sprites specific to Artisanal Reskins.
 ---
 ---### Examples
 ---```lua
 ---local sprites_api = require("__reskins-assets-api__.api.sprites")
 ---```
----@class Reskins.Sprites:Reskins.SpriteUtils.Sprites
-local sprites_api = require("__reskins-sprite-utils__.sprites")
+---@class Sprites
+local sprites_api = {}
 
 ---@alias LightSpriteNames
 --- | "atomic-artillery-shell" The name of the sprite for a radioactive atomic artillery shell.

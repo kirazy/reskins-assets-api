@@ -1,5 +1,7 @@
 ---@using data
 
+---@namespace Reskins.Assets
+
 -- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
 -- The type signatures are not stable.
 
@@ -137,7 +139,7 @@ function _helpers.make_pipe_icon_creator_fn(creatable_icon)
 	local creator_fn = function(pipe_material, shift, scale)
 		-- The iron pipe icon comes from base.
 		local is_iron = pipe_material == assets_api.defines.pipe_material.iron
-		local material_asset = is_iron and assets_api.defines.assets.base
+		local material_asset = is_iron and assets_api.defines.assets_source.base
 			or assets_api.pipes.asset_from_material(pipe_material)
 
 		local material_name = assets_api.pipes.name_from_material(pipe_material)

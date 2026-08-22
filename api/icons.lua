@@ -1,18 +1,19 @@
 ---@using data
 ---@using Reskins.SpriteUtils
 
+---@namespace Reskins.Assets
+
 -- THIS MODULE IS STABLE
 -- Methods may be added to it, but methods already defined are unlikely to change.
 
 ---Provides methods for manipulating icons specific to Artisanal Reskins.
----Includes the Artisanal Reskins: Sprite Utils icon utilities.
 ---
 ---### Examples
 ---```lua
----local icons_api = require("__reskins-assets-api__.prototypes.icons")
+---local icons_api = require("__reskins-assets-api__.api.icons")
 ---```
----@class Reskins.Icons:Reskins.SpriteUtils.Icons
-local icons_api = require("__reskins-sprite-utils__.icons")
+---@class Icons
+local icons_api = {}
 
 ---Indicates if the given `icon_datum` is using images from Artisanal Reskins.
 ---
@@ -57,7 +58,7 @@ local supported_symbols = {
 ---Gets an icon representing the given `symbol` and colored with the given `tint`.
 ---
 ---### Parameters
----@param symbol Reskins.Defines.Symbol # The symbol to get an icon for.
+---@param symbol Symbol # The symbol to get an icon for.
 ---@param tint Color # The color to tint the icon.
 ---
 ---### Returns
@@ -169,7 +170,7 @@ local supported_letters = {
 ---The icon is comprised of two layers, an untinted base and a tinted mask over top to create the effect.
 ---
 ---### Parameters
----@param letter Reskins.Defines.Letter # The letter to get an icon for.
+---@param letter Letter # The letter to get an icon for.
 ---@param tint Color # The color to tint the icon.
 ---
 ---### Returns

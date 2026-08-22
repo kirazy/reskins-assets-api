@@ -1,15 +1,16 @@
+---@namespace Reskins.Assets
+
 ---Provides enumerations specific to Artisanal Reskins.
----Includes the Artisanal Reskins: Sprite Utils defines.
 ---
 ---### Examples
 ---```lua
----local _defines = require("__reskins-assets-api__.defines")
+---local _defines = require("__reskins-assets-api__.api.defines")
 ---```
----@class Reskins.Defines:Reskins.SpriteUtils.Defines
-local _defines = require("__reskins-sprite-utils__.defines")
+---@class Defines
+local _defines = {}
 
 ---Represents the different types of animated transport belt sprite sheets.
----@enum Reskins.Defines.BeltSprites
+---@enum BeltSprites
 _defines.belt_sprites = {
 	---Indicates standard belt sprites.
 	---
@@ -28,8 +29,8 @@ _defines.belt_sprites = {
 }
 
 ---Represents the different asset mods used to build the various graphics packs.
----@enum Reskins.Defines.Assets
-_defines.assets = {
+---@enum AssetsSource
+_defines.assets_source = {
 	---Factorio.
 	base = "__base__",
 	---Factorio: Space Age.
@@ -60,7 +61,7 @@ _defines.assets = {
 	mobility_smelting_graphics = "__angelsaddons-mobility-graphics-smelting__",
 }
 
----@enum Reskins.Defines.Symbol
+---@enum Symbol
 _defines.symbol = {
 	area_drill = "area-drill",
 	filter = "filter",
@@ -69,7 +70,7 @@ _defines.symbol = {
 	aperture_closed = "aperture-closed",
 }
 
----@enum Reskins.Defines.Letter
+---@enum Letter
 _defines.letter = {
 	F = "F",
 	H = "H",
@@ -93,7 +94,7 @@ _defines.letter = {
 ---| '"titanium"'
 ---| '"tungsten"'
 
----@enum Reskins.Defines.PipeMaterial
+---@enum PipeMaterial
 _defines.pipe_material = {
 	aluminum = "aluminum",
 	brass = "brass",
