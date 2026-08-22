@@ -1,3 +1,6 @@
+---@using data
+---@using Reskins.SpriteUtils
+
 -- THIS MODULE IS STABLE
 -- Methods may be added to it, but methods already defined are unlikely to change.
 
@@ -11,26 +14,28 @@
 ---@class Reskins.Icons:Reskins.SpriteUtils.Icons
 local icons_api = require("__reskins-sprite-utils__.icons")
 
----Checks if the given `icon_datum` is using images from Artisanal Reskins.
+---Indicates if the given `icon_datum` is using images from Artisanal Reskins.
+---
+---### Parameters
+---@param icon_datum IconData # An `IconData` object.
 ---
 ---### Returns
 ---@return boolean # `true` if the icon is using images from Artisanal Reskins.
----
----### Parameters
----@param icon_datum data.IconData # An `IconData` object.
+---@nodiscard
 local function is_icon_using_reskins_images(icon_datum)
 	return icon_datum and icon_datum.icon:find("__reskins%-") ~= nil
 end
 
----Checks if the given `icon_data` is using images from Artisanal Reskins.
+---Indicates if the given `icon_data` is using images from Artisanal Reskins.
+---
+---### Parameters
+---@param icon_data IconData[] # An icon represented by an array of `IconData` objects.
 ---
 ---### Returns
 ---@return boolean # `true` if any of the icons in `icon_data` are using images from Artisanal Reskins.
----
----### Parameters
----@param icon_data data.IconData[] # An icon represented by an array of `IconData` objects.
+---@nodiscard
 function icons_api.is_icons_using_reskins_images(icon_data)
-	if icon_data then
+	if icon_data ~= nil then
 		for i = #icon_data, 1, -1 do
 			if is_icon_using_reskins_images(icon_data[i]) then
 				return true
@@ -53,10 +58,10 @@ local supported_symbols = {
 ---
 ---### Parameters
 ---@param symbol Reskins.Defines.Symbol # The symbol to get an icon for.
----@param tint data.Color # The color to tint the icon.
+---@param tint Color # The color to tint the icon.
 ---
 ---### Returns
----@return data.IconData[] # An array of `IconData` objects representing the letter icon.
+---@return SafeIconData[] # An array of `IconData` objects representing the letter icon.
 ---
 ---### Examples
 ---Get the "area-drill" symbol icon in red and add it to the steel furnace.
@@ -83,7 +88,7 @@ function icons_api.get_symbol(symbol, tint)
 		"Invalid parameter: 'symbol' must be one of 'area-drill', 'filter', or 'shield'."
 	)
 
-	---@type data.IconData[]
+	---@type SafeIconData[]
 	local icon_data = {
 		{
 			icon = "__reskins-assets-api__/graphics/icons/symbols/" .. safe_symbol:lower() .. "-symbol.png",
@@ -94,7 +99,8 @@ function icons_api.get_symbol(symbol, tint)
 			icon = "__reskins-assets-api__/graphics/icons/symbols/" .. safe_symbol:lower() .. "-symbol.png",
 			icon_size = 64,
 			scale = 0.5,
-			tint = util.get_color_with_alpha(tint, 0.75),
+			---@diagnostic disable-next-line: param-type-mismatch
+			tint = util.get_color_with_alpha(tint, 0.75) --[[@as Color]],
 		},
 	}
 
@@ -106,11 +112,11 @@ end
 ---`icon_data` is not modified.
 ---
 ---### Parameters
----@param icon_data data.IconData[] # An icon represented by an array of `IconData` objects.
+---@param icon_data IconData[] # An icon represented by an array of `IconData` objects.
 ---
 ---### Returns
----@return data.IconData[] icon_data # A copy of `icon_data`, without the symbol icon layer.
----@return data.IconData[]|nil removed_layers  # A copy of the symbol icon layer removed from `icon_data`, if found; otherwise, `nil`.
+---@return IconData[] icon_data # A copy of `icon_data`, without the symbol icon layer.
+---@return IconData[]|nil removed_layers  # A copy of the symbol icon layer removed from `icon_data`, if found; otherwise, `nil`.
 ---
 ---### Examples
 ---Assuming that the inserter icon has a filter symbol applied to it, do the following
@@ -134,10 +140,9 @@ end
 function icons_api.remove_symbols_from_icons(icon_data)
 	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
 
-	---@type data.IconData[]
 	local icon_data_copy = util.copy(icon_data)
 
-	---@type data.IconData[]
+	---@type IconData[]
 	local removed_layers = {}
 
 	if #icon_data >= 2 then
@@ -165,10 +170,10 @@ local supported_letters = {
 ---
 ---### Parameters
 ---@param letter Reskins.Defines.Letter # The letter to get an icon for.
----@param tint data.Color # The color to tint the icon.
+---@param tint Color # The color to tint the icon.
 ---
 ---### Returns
----@return data.IconData[] # An array of `IconData` objects representing the letter icon.
+---@return SafeIconData[] # An array of `IconData` objects representing the letter icon.
 ---
 ---### Examples
 ---Get the "F" letter icon in red and add it to the steel furnace.
@@ -191,7 +196,7 @@ function icons_api.get_letter(letter, tint)
 	local safe_letter = tostring(letter)
 	assert(supported_letters[safe_letter], "Invalid parameter: 'letter' must be one of 'F', 'H', 'L', 'M', or 'S'.")
 
-	---@type data.IconData[]
+	---@type SafeIconData[]
 	local icon_data = {
 		{
 			icon = "__reskins-assets-api__/graphics/icons/letters/letter-" .. safe_letter:lower() .. ".png",
@@ -202,7 +207,8 @@ function icons_api.get_letter(letter, tint)
 			icon = "__reskins-assets-api__/graphics/icons/letters/letter-" .. safe_letter:lower() .. ".png",
 			icon_size = 64,
 			scale = 0.5,
-			tint = util.get_color_with_alpha(tint, 0.75),
+			---@diagnostic disable-next-line: param-type-mismatch
+			tint = util.get_color_with_alpha(tint, 0.75) --[[@as Color]],
 		},
 	}
 
@@ -214,11 +220,11 @@ end
 ---`icon_data` is not modified.
 ---
 ---### Parameters
----@param icon_data data.IconData[] # An icon represented by an array of `IconData` objects.
+---@param icon_data IconData[] # An icon represented by an array of `IconData` objects.
 ---
 ---### Returns
----@return data.IconData[] icon_data # A copy of `icon_data`, without the letter icon layer.
----@return data.IconData[]|nil removed_layers  # A copy of the letter icon layers removed from `icon_data`, if any.
+---@return IconData[] icon_data # A copy of `icon_data`, without the letter icon layer.
+---@return IconData[]|nil removed_layers  # A copy of the letter icon layers removed from `icon_data`, if any.
 ---
 ---### Examples
 ---Remove any letters from the `solar-panel-small` icon.
@@ -241,10 +247,9 @@ end
 function icons_api.remove_letters_from_icons(icon_data)
 	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
 
-	---@type data.IconData[]
 	local icon_data_copy = util.copy(icon_data)
 
-	---@type data.IconData[]
+	---@type IconData[]
 	local removed_layers = {}
 
 	if #icon_data > 2 then
@@ -276,10 +281,10 @@ local equipment_background_tints = {
 ---Gets an icon layer that is a flat, square background with rounded corners in the specified `tint`.
 ---
 ---### Parameters
----@param tint data.Color? The color of the background.
+---@param tint Color? The color of the background.
 ---
 ---### Returns
----@return data.IconData background # An [IconData](lua://data.IconData) layer that serves as a background.
+---@return SafeIconData background # An [IconData](lua://IconData) layer that serves as a background.
 ---
 ---### Examples
 ---Add a red background layer underneath the iron plate icon.
@@ -296,7 +301,7 @@ local equipment_background_tints = {
 ---@see Reskins.Icons.get_icon_from_prototype
 ---@nodiscard
 function icons_api.get_icon_background_layer(tint)
-	---@type data.IconData
+	---@type SafeIconData
 	local icon_data = {
 		icon = "__reskins-assets-api__/graphics/icons/equipment-background.png",
 		icon_size = 64,
@@ -310,7 +315,7 @@ end
 ---Gets an icon layer with a symbol in the top-right corner suitable for indicating a miniature entity.
 ---
 ---### Returns
----@return data.IconData overlay # An [IconData](lua://data.IconData) layer that serves as an overlay.
+---@return SafeIconData overlay # An [IconData](lua://IconData) layer that serves as an overlay.
 ---
 ---### Examples
 ---Add the minified symbol to the steel furnace item.
@@ -325,8 +330,9 @@ end
 ---```
 ---@see Reskins.Icons.compose_icons
 ---@see Reskins.Icons.get_icon_from_prototype
+---@nodiscard
 function icons_api.get_minified_symbol_overlay()
-	---@type data.IconData
+	---@type SafeIconData
 	local icon_data = {
 		icon = "__reskins-assets-api__/graphics/icons/mini-machine-overlay.png",
 		icon_size = 64,

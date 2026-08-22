@@ -1,3 +1,5 @@
+---@using data
+
 -- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
 -- The type signatures are not stable.
 
@@ -15,13 +17,13 @@ local sprite_utils = {
 ---@class Internal.SimpleCreatableIcon
 ---@field folder string
 ---@field icon_name string
----@field icon_size data.SpriteSizeType?
+---@field icon_size SpriteSizeType?
 
 ---@class Internal.LayeredCreatableIcon:Internal.SimpleCreatableIcon
 ---@field icon_base string?
 ---@field icon_mask string?
 ---@field icon_highlights string?
----@field extras data.IconData[]?
+---@field extras IconData[]?
 
 ---@class Internal.IconHelpers
 local _helpers = {}
@@ -37,7 +39,7 @@ function _helpers.make_tinted_three_layer_icon_creator_fn(creatable_icon)
 	---@type TintedIconCreator
 	local creator_fn = function(tint, shift, scale)
 		local folder = creatable_icon.folder .. "/" .. creatable_icon.icon_name
-		---@type data.IconData[]
+		---@type IconData[]
 		local icon_data = {
 			{
 				icon = folder .. "/" .. (creatable_icon.icon_base or creatable_icon.icon_name) .. "-icon-base.png",
@@ -60,7 +62,7 @@ function _helpers.make_tinted_three_layer_icon_creator_fn(creatable_icon)
 
 		if creatable_icon.extras then
 			for _, extra in pairs(creatable_icon.extras) do
-				local icon_datum = sprite_utils.icons.transform_icons(extra, scale, shift, tint, "default")
+				local icon_datum = sprite_utils.icons.transform_icon(extra, scale, shift, tint, "default")
 				table.insert(icon_data, icon_datum)
 			end
 		end
@@ -79,7 +81,7 @@ function _helpers.make_tinted_circuit_icon_creator_fn(creatable_icon)
 	---@type TintedIconCreator
 	local creator_fn = function(tint, shift, scale)
 		local folder = creatable_icon.folder .. "/" .. creatable_icon.icon_name
-		---@type data.IconData[]
+		---@type IconData[]
 		local icon_data = {
 			{
 				icon = folder .. "/" .. creatable_icon.icon_name .. "-icon-base.png",
@@ -112,11 +114,11 @@ end
 function _helpers.make_flat_icon_creator_fn(creatable_icon)
 	---@type IconCreator
 	local creator_fn = function(shift, scale)
-		---@type data.IconData[]
+		---@type IconData[]
 		local icon_data = {
 			{
 				icon = creatable_icon.folder .. "/" .. creatable_icon.icon_name .. ".png",
-				icon_size = creatable_icon.icon_size or defines.default_icon_size,
+				icon_size = creatable_icon.icon_size or defines.default_icon_size --[[@as SpriteSizeType]],
 				shift = shift,
 				scale = scale,
 			},
@@ -143,7 +145,7 @@ function _helpers.make_pipe_icon_creator_fn(creatable_icon)
 
 		local icon_name = is_iron and creatable_icon.type
 			or creatable_icon.type .. "/" .. material_name .. "-" .. creatable_icon.type .. "-icon"
-		---@type data.IconData[]
+		---@type IconData[]
 		local icon_data = {
 			{
 				icon = assets_base_path .. icon_name .. ".png",
