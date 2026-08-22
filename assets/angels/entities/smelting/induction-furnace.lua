@@ -6,11 +6,67 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local _pipes = require("assets.base.entities.pipe-pictures")
 
 local M = {}
 
 local assets_induction_furnace = "__reskins-assets-angels__/graphics/entity/induction-furnace/"
 local smelting_induction_furnace = "__angelssmeltinggraphics__/graphics/entity/induction-furnace/"
+
+local pipe_direction_names = {
+	[defines.direction.north] = "north",
+	[defines.direction.east] = "east",
+	[defines.direction.south] = "south",
+	[defines.direction.west] = "west",
+}
+
+---@param state "connected"|"capped"
+---@param direction defines.direction
+---@param is_flipped boolean
+---@return Animation
+local function get_pipe_picture(state, direction, is_flipped)
+	local flipped = is_flipped == true and "-flipped" or ""
+	local direction_str = pipe_direction_names[direction] or "north"
+
+	local base_path = smelting_induction_furnace .. "induction-furnace-pipe-" .. state .. "-" .. direction_str
+	---@type Animation
+	local animation = {
+		layers = {
+			util.sprite_load(base_path .. flipped, {
+				priority = "high",
+				scale = 0.5,
+			}),
+			util.sprite_load(base_path .. "-shadow" .. flipped, {
+				priority = "high",
+				draw_as_shadow = true,
+				scale = 0.5,
+			}),
+		},
+	}
+
+	return animation
+end
+
+-- Shadow patch positions are fixed screen-space offsets tuned to the geometry of the induction
+-- furnace's pipe connection point at {2, -2} in north-facing design space. The flipped orientation
+-- doesn't mirror cleanly — it only has a shadow on its west side, not north — so this is a direct
+-- lookup rather than a derived one.
+local pipe_shadows = {
+	[false] = {
+		[defines.direction.north] = _pipes.vertical_pipe_shadow({ 2, -2 }),
+		[defines.direction.west] = _pipes.horizontal_pipe_shadow({ -2, -2 }),
+	},
+	[true] = {
+		[defines.direction.west] = _pipes.horizontal_pipe_shadow({ -2, 2 }),
+	},
+}
+
+---@param direction defines.direction
+---@param is_flipped boolean
+---@return Animation?
+local function get_pipe_shadow(direction, is_flipped)
+	return pipe_shadows[is_flipped == true][direction]
+end
 
 ---@param is_flipped boolean?
 ---@return Animation
@@ -253,12 +309,6 @@ end
 ---@field tint Color?
 
 ---Produces the sprite set for Angel's induction furnace.
----
----FIXME: the old pack also built per-rotation pipe corner working visualisations from the
----prototype's own fluid box connection directions, in its `apply_to_entity`. That reads the
----prototype, so it can't live in a producer; it needs to move into the crafting-machine
----applicator before this entity's pipes render again. See
----`graphics-packs/angels/smelting/induction-furnace-graphics-pack.lua` for the original logic.
 ---@param params InductionFurnaceSpriteSetParams
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---@nodiscard
@@ -272,6 +322,12 @@ function M.get(params)
 		set = {
 			graphics_set = graphics_set,
 			graphics_set_flipped = graphics_set_flipped,
+			working_visualisation_pipe_connectors = {
+				get_picture = get_pipe_picture,
+				get_shadow = get_pipe_shadow,
+				behind_directions = { defines.direction.north, defines.direction.west },
+				front_directions = { defines.direction.east, defines.direction.south },
+			},
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
