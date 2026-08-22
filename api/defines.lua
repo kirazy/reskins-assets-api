@@ -115,4 +115,48 @@ _defines.pipe_material = {
 	tungsten_angels = "angels-tungsten",
 }
 
+---Identifies the shape of a `SpriteSetDefinition`'s `set`, so `api.apply` can route it to the
+---applicator that knows how to paint that shape without the caller naming one explicitly.
+---@enum SpriteSetType
+_defines.sprite_set_type = {
+	---Consumed by these prototypes: `AssemblingMachinePrototype`, `FurnacePrototype`
+	crafting_machine_sprite_set = "CraftingMachineSpriteSet",
+
+	---Consumed by these prototypes: `BoilerPrototype`
+	boiler_sprite_set = "BoilerSpriteSet",
+
+	---Consumed by these prototypes: `GeneratorPrototype`
+	generator_sprite_set = "GeneratorSpriteSet",
+
+	---Consumed by these prototypes: `AmmoTurretPrototype`, `ElectricTurretPrototype`, `FluidTurretPrototype`
+	turret_sprite_set = "TurretSpriteSet",
+
+	---Consumed by these prototypes: `MiningDrillPrototype`
+	mining_drill_sprite_set = "MiningDrillSpriteSet",
+
+	---Consumed by these prototypes: `OffshorePumpPrototype`
+	offshore_pump_sprite_set = "OffshorePumpSpriteSet",
+
+	---Consumed by these prototypes: `BeaconPrototype`
+	beacon_sprite_set = "BeaconSpriteSet",
+
+	---Consumed by these prototypes: `TransportBeltPrototype`, `UndergroundBeltPrototype`, `LinkedBeltPrototype`, `SplitterPrototype`
+	transport_belt_sprite_set = "TransportBeltSpriteSet",
+
+	---Consumed by these prototypes: `ElectricPolePrototype`
+	electric_pole_sprite_sprite = "ElectricPoleSpriteSprite",
+
+	---Consumed by these prototypes: `PipePrototype`
+	pipe_sprite_set = "PipeSpriteSet",
+
+	---Consumed by these prototypes: `PipeToGroundPrototype`
+	pipe_to_ground_sprite_set = "PipeToGroundSpriteSet",
+
+	---Consumed by these prototypes: `HeatPipePrototype`
+	heat_pipe_sprite_set = "HeatPipeSpriteSet",
+
+	---Consumed by these prototypes: `ConstructionRobotPrototype`, `LogisticRobotPrototype`, `CombatRobotPrototype`
+	flying_robot_sprite_set = "FlyingRobotSpriteSet",
+}
+
 return _defines

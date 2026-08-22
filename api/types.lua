@@ -5,6 +5,69 @@
 
 ---@namespace Reskins.Assets
 
+---The fields every sprite set shares, regardless of the prototype kind it paints.
+---@class (exact) SpriteSetBase
+---The sprite's design width, in tiles. Used for scaling.
+---@field nominal_width double
+---The sprite's design height, in tiles. Used for scaling.
+---@field nominal_height double
+
+---The fields shared by sprite sets for `EntityWithHealthPrototype`-family entities — fields that
+---don't vary by prototype kind, so every applicator handles them the same way.
+---@class (exact) EntityWithHealthSpriteSet : SpriteSetBase
+---The prototype's `integration_patch`.
+---@field integration_patch Sprite4Way?
+---The prototype's `integration_patch_render_layer`.
+---@field integration_patch_render_layer RenderLayer?
+---The entity's death-explosion art, consumed by `SpriteSetApplicator.apply_to_explosion`.
+---@field dying_explosion any
+---The entity's remnant art, consumed by `SpriteSetApplicator.apply_to_corpse`.
+---@field corpse any
+---The prototype's `water_reflection`.
+---@field water_reflection WaterReflectionDefinition?
+
+---A sprite set tagged with its `SpriteSetType`, so `api.apply` can route it to the applicator that
+---knows how to paint that shape without the caller naming one explicitly.
+---
+---### Examples
+---```lua
+---local _defines = require("__reskins-assets-api__.api.defines")
+---
+------@type SpriteSetDefinition<CraftingMachineSpriteSet>
+---local sprites = {
+---    set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
+---    set = { graphics_set = graphics_set },
+---}
+---```
+---@class (exact) SpriteSetDefinition<TSet : SpriteSetBase>
+---The shape identifying which applicator can consume `set`.
+---@field set_type SpriteSetType
+---The sprite data itself.
+---@field set TSet
+---Conversions to `set` in a specific `SpriteSetType`, keyed by that type, checked before the
+---general registry in `api.converters`. Most sprite sets don't need this.
+---@field converters table<SpriteSetType, SpriteSetTransformer<TSet, any>>?
+
+---A `SpriteSetDefinition` with its sprite-set type erased, for code that only needs to route or
+---convert a sprite set without knowing its exact shape.
+---@class (exact) AnySpriteSetDefinition : SpriteSetDefinition<any>
+
+---Paints one prototype kind with a sprite set of type `U`. Registered with `api.apply` and
+---selected by the target prototype's own type, never by inspecting the sprite set being applied.
+---@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype, U: EntityWithHealthSpriteSet>
+---The `SpriteSetType` this applicator's `apply_to`/`apply_to_corpse`/`apply_to_explosion` expect.
+---@field set_type SpriteSetType
+---Applies `set` to the entity prototype `prototype`.
+---@field apply_to fun(prototype: T, set: U)
+---Applies `set` to the corpse prototype `corpse`.
+---@field apply_to_corpse fun(corpse: CorpsePrototype, set: U)
+---Applies `set` to the explosion prototype `explosion`.
+---@field apply_to_explosion fun(explosion: ExplosionPrototype, set: U)
+
+---A `SpriteSetApplicator` with its prototype and sprite-set types erased, for code that only needs
+---to call it without knowing its exact types.
+---@class (exact) AnySpriteSetApplicator : SpriteSetApplicator<any, any>
+
 ---Creates a new icon with the specified `tint`, `shift`, and `scale`.
 ---
 ---*@param* `tint` — The color of the mask layer of the created icon; optional.

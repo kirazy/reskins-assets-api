@@ -1,38 +1,43 @@
 -- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
 -- The require path, function names and signatures are not stable.
 
+---@using Reskins.Assets
+
+---@namespace Reskins.Assets.Base.Entities
+
 local StringValidator = require("prototypes.string-validator")
 local _defines = require("api.defines")
-local _pipes = {}
+
+local M = {}
 
 ---Gets the asset that provides the sprites for the given `pipe_material`.
----@param pipe_material Reskins.Defines.PipeMaterial
----@return Reskins.Defines.Assets material_asset
-function _pipes.asset_from_material(pipe_material)
-	StringValidator.validate(pipe_material, "pipe_material"):is_one_of(_defines.pipe_material)
+---@param pipe_material PipeMaterial
+---@return AssetsSource material_asset
+function M.asset_from_material(pipe_material)
+	StringValidator.validate(pipe_material, "pipe_material"):is_one_of(_defines.pipe_material--[[@as (string[])]])
 	---@cast pipe_material string
 
 	local assets_base_path
 	if pipe_material == _defines.pipe_material.iron then
-		assets_base_path = _defines.assets.base_assets
+		assets_base_path = _defines.assets_source.base_assets
 	elseif pipe_material:find("angels") then
-		assets_base_path = _defines.assets.angels_assets
+		assets_base_path = _defines.assets_source.angels_assets
 	else
-		assets_base_path = _defines.assets.bobs_assets
+		assets_base_path = _defines.assets_source.bobs_assets
 	end
 
 	return assets_base_path
 end
 
 ---Gets the bare material name absent any discriminators for the given `pipe_material`.
----@param pipe_material Reskins.Defines.PipeMaterial
+---@param pipe_material PipeMaterial
 ---@return PipeMaterialName material_name
-function _pipes.name_from_material(pipe_material)
-	StringValidator.validate(pipe_material, "pipe_material"):is_one_of(_defines.pipe_material)
+function M.name_from_material(pipe_material)
+	StringValidator.validate(pipe_material, "pipe_material"):is_one_of(_defines.pipe_material--[[@as (string[])]])
 	---@cast pipe_material string
 
 	local material, _ = pipe_material:gsub("%-angels", "")
-	return material
+	return material--[[@as PipeMaterialName]]
 end
 
 ---Gets an `Animation` object configured to draw a vertical pipe shadow at the given `shift`, for a single tile.
@@ -62,7 +67,7 @@ end
 ---)}
 ---```
 ---@nodiscard
-function _pipes.vertical_pipe_shadow(shift)
+function M.vertical_pipe_shadow(shift)
 	---@type data.Animation
 	local shadow_animation = {
 		filename = "__reskins-assets-base__/graphics/entity/pipe/vertical-pipe-shadow-patch.png",
@@ -74,7 +79,7 @@ function _pipes.vertical_pipe_shadow(shift)
 		scale = 0.5,
 	}
 
-	return shadow_animation, { [_defines.assets.base_assets] = true }
+	return shadow_animation, { [_defines.assets_source.base_assets] = true }
 end
 
 ---Gets an `Animation` object configured to draw a horizontal pipe shadow at the given `shift`, for a single tile.
@@ -104,7 +109,7 @@ end
 ---)}
 ---```
 ---@nodiscard
-function _pipes.horizontal_pipe_shadow(shift)
+function M.horizontal_pipe_shadow(shift)
 	---@type data.Animation
 	local shadow_animation = {
 		filename = "__reskins-assets-base__/graphics/entity/pipe/horizontal-pipe-shadow-patch.png",
@@ -116,13 +121,13 @@ function _pipes.horizontal_pipe_shadow(shift)
 		scale = 0.5,
 	}
 
-	return shadow_animation, { [_defines.assets.base_assets] = true }
+	return shadow_animation, { [_defines.assets_source.base_assets] = true }
 end
 
 ---Gets a `Sprite4Way` object containing pipe cover sprites in the given `pipe_material`.
 ---
 ---### Parameters
----@param pipe_material Reskins.Defines.PipeMaterial # The material type to get sprites for.
+---@param pipe_material PipeMaterial # The material type to get sprites for.
 ---
 ---### Returns
 ---@return data.Sprite4Way pictures # The complete set of pipe cover sprites in the given `pipe_material`.
@@ -139,9 +144,9 @@ end
 ---pipe_entity.fluid_box.pipe_covers = _pipes.pipe_covers(_defines.pipe_material.bronze)
 ---```
 ---@nodiscard
-function _pipes.pipe_covers(pipe_material)
-	local material_asset = _pipes.asset_from_material(pipe_material)
-	local material_name = _pipes.name_from_material(pipe_material)
+function M.pipe_covers(pipe_material)
+	local material_asset = M.asset_from_material(pipe_material)
+	local material_name = M.name_from_material(pipe_material)
 	local assets_base_path = material_asset .. "/graphics/entity/pipe-covers/" .. material_name .. "/"
 	local shadow_assets_base_path = "__reskins-assets-base__/graphics/entity/pipe-covers/shadows/"
 
@@ -227,10 +232,10 @@ function _pipes.pipe_covers(pipe_material)
 
 	---@type RequiredAssets
 	local required_assets = {
-		[_defines.assets.base_assets] = true,
+		[_defines.assets_source.base_assets] = true,
 	}
 
-	if material_asset ~= _defines.assets.base_assets then
+	if material_asset ~= _defines.assets_source.base_assets then
 		required_assets[material_asset] = true
 	end
 
@@ -253,7 +258,7 @@ end
 ---pipe_entity.fluid_box.pipe_covers_frozen = _pipes.pipe_covers_frozen()
 ---```
 ---@nodiscard
-function _pipes.pipe_covers_frozen()
+function M.pipe_covers_frozen()
 	---@type data.Sprite4Way
 	local pipe_covers_frozen = {
 		north = {
@@ -286,7 +291,7 @@ function _pipes.pipe_covers_frozen()
 		},
 	}
 
-	return pipe_covers_frozen, { [_defines.assets.space_age] = true }
+	return pipe_covers_frozen, { [_defines.assets_source.space_age] = true }
 end
 
 ---Gets the tinted pipe pictures for the assembling machine (and functionally identical entities such as the oil boiler).
@@ -301,7 +306,7 @@ end
 ---@return data.Sprite4Way
 ---@return RequiredAssets
 ---@nodiscard
-function _pipes.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
+function M.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 	local simple = use_simple_pipe_pictures and "-simple" or ""
 	local assets_base_path = "__reskins-assets-base__/graphics/entity/assembling-machine/pipes/"
 
@@ -443,10 +448,10 @@ function _pipes.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 
 	---@type RequiredAssets
 	local required_assets = {
-		[_defines.assets.base_assets] = true,
+		[_defines.assets_source.base_assets] = true,
 	}
 
 	return pictures, required_assets
 end
 
-return _pipes
+return M
