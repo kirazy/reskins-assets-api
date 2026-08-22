@@ -65,6 +65,8 @@ _defines.symbol = {
 	area_drill = "area-drill",
 	filter = "filter",
 	shield = "shield",
+	aperture_open = "aperture-open",
+	aperture_closed = "aperture-closed",
 }
 
 ---@enum Reskins.Defines.Letter

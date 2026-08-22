@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.3
 Date: ????
+  Features:
+    - Added two new symbols: aperture-closed and aperture-open, denoting an open and closed iris.
   Bugfixes:
     - Fixed that the boiler picture set did not include the structure patch, fire, or fire glow elements.
 ---------------------------------------------------------------------------------------------------

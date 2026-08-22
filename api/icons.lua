@@ -45,6 +45,8 @@ local supported_symbols = {
 	["area-drill"] = true,
 	["filter"] = true,
 	["shield"] = true,
+	["aperture-open"] = true,
+	["aperture-closed"] = true,
 }
 
 ---Gets an icon representing the given `symbol` and colored with the given `tint`.
@@ -71,7 +73,7 @@ local supported_symbols = {
 ---### Exceptions
 ---*@throws* `string` — Thrown when `symbol` is not one of `"area-drill"`, `"filter"`, or `"shield"`.
 ---
----@see Reskins.Defines.Symbols
+---@see Reskins.Defines.Symbol
 ---@see Reskins.Icons.get_icon_from_prototype
 ---@nodiscard
 function icons_api.get_symbol(symbol, tint)
