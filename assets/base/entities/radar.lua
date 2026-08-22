@@ -1,0 +1,169 @@
+---@using data
+---@using Reskins.Assets
+---@using Reskins.Assets.Applicators
+
+---@namespace Reskins.Assets.Base.Entities
+
+local _defines = require("api.defines")
+
+local M = {}
+
+---@param tint Color?
+---@return RotatedSprite
+local function get_pictures(tint)
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/radar/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/radar/"
+
+	---@type RotatedSprite
+	local pictures = {
+		layers = {
+			{
+				filename = base_path .. "radar.png",
+				priority = "low",
+				width = 196,
+				height = 254,
+				apply_projection = false,
+				direction_count = 64,
+				line_length = 8,
+				shift = util.by_pixel(1, -16),
+				scale = 0.5,
+			},
+		},
+	}
+
+	if tint then
+		table.insert(pictures.layers--[[@cast -?]], {
+			filename = assets_path .. "radar-mask.png",
+			priority = "low",
+			width = 196,
+			height = 254,
+			apply_projection = false,
+			direction_count = 64,
+			line_length = 8,
+			shift = util.by_pixel(1, -16),
+			tint = tint,
+			scale = 0.5,
+		})
+		table.insert(pictures.layers--[[@cast -?]], {
+			filename = assets_path .. "radar-highlights.png",
+			priority = "low",
+			width = 196,
+			height = 254,
+			apply_projection = false,
+			direction_count = 64,
+			line_length = 8,
+			shift = util.by_pixel(1, -16),
+			blend_mode = "additive-soft",
+			scale = 0.5,
+		})
+	end
+
+	table.insert(pictures.layers--[[@cast -?]], {
+		filename = base_path .. "radar-shadow.png",
+		priority = "low",
+		width = 336,
+		height = 170,
+		apply_projection = false,
+		direction_count = 64,
+		line_length = 8,
+		shift = util.by_pixel(39, 6),
+		draw_as_shadow = true,
+		scale = 0.5,
+	})
+
+	return pictures
+end
+
+---@return Sprite
+local function get_integration_patch()
+	---@type Sprite
+	local patch = {
+		filename = _defines.assets_source.base .. "/graphics/entity/radar/radar-integration.png",
+		priority = "low",
+		width = 238,
+		height = 216,
+		shift = util.by_pixel(1.5, 4),
+		scale = 0.5,
+	}
+	return patch
+end
+
+---@param tint Color?
+---@return RotatedAnimationVariations
+local function get_corpse_animation(tint)
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/radar/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/radar/remnants/"
+
+	---@type RotatedAnimation
+	local animation = {
+		layers = {
+			{
+				filename = base_path .. "radar-remnants.png",
+				width = 282,
+				height = 212,
+				direction_count = 1,
+				shift = util.by_pixel(12, 4.5),
+				scale = 0.5,
+			},
+		},
+	}
+
+	if tint then
+		table.insert(animation.layers--[[@cast -?]], {
+			filename = assets_path .. "radar-remnants-mask.png",
+			width = 282,
+			height = 212,
+			direction_count = 1,
+			shift = util.by_pixel(12, 4.5),
+			tint = tint,
+			scale = 0.5,
+		})
+		table.insert(animation.layers--[[@cast -?]], {
+			filename = assets_path .. "radar-remnants-highlights.png",
+			width = 282,
+			height = 212,
+			direction_count = 1,
+			shift = util.by_pixel(12, 4.5),
+			blend_mode = "additive-soft",
+			scale = 0.5,
+		})
+	end
+
+	return { animation }
+end
+
+---The sprite data a `radar_sprite_set`-tagged `SpriteSetDefinition` carries.
+---
+---Provisional: no applicator consumes this shape yet. When one is written, this
+---declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
+---@class (exact) RadarSpriteSet : EntityWithHealthSpriteSet
+---The prototype's `pictures`.
+---@field pictures RotatedSprite
+
+---@class RadarSpriteSetParams
+---@field tint Color?
+
+---Produces the sprite set for the vanilla radar.
+---@param params RadarSpriteSetParams
+---@return SpriteSetDefinition<RadarSpriteSet>
+---@nodiscard
+function M.get(params)
+	---@type SpriteSetDefinition<RadarSpriteSet>
+	local definition = {
+		set_type = _defines.sprite_set_type.radar_sprite_set,
+		set = {
+			pictures = get_pictures(params.tint),
+			integration_patch = get_integration_patch(),
+			integration_patch_render_layer = nil,
+			dying_explosion = nil,
+			corpse = get_corpse_animation(params.tint),
+			water_reflection = nil,
+			nominal_width = 3,
+			nominal_height = 3,
+		},
+	}
+
+	return definition
+end
+
+return M

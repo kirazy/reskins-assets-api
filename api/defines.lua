@@ -131,6 +131,9 @@ _defines.sprite_set_type = {
 	---Consumed by these prototypes: `AmmoTurretPrototype`, `ElectricTurretPrototype`, `FluidTurretPrototype`
 	turret_sprite_set = "TurretSpriteSet",
 
+	---Consumed by these prototypes: `ArtilleryTurretPrototype`
+	artillery_turret_sprite_set = "ArtilleryTurretSpriteSet",
+
 	---Consumed by these prototypes: `MiningDrillPrototype`
 	mining_drill_sprite_set = "MiningDrillSpriteSet",
 
@@ -144,7 +147,7 @@ _defines.sprite_set_type = {
 	transport_belt_sprite_set = "TransportBeltSpriteSet",
 
 	---Consumed by these prototypes: `ElectricPolePrototype`
-	electric_pole_sprite_sprite = "ElectricPoleSpriteSprite",
+	electric_pole_sprite_set = "ElectricPoleSpriteSet",
 
 	---Consumed by these prototypes: `PipePrototype`
 	pipe_sprite_set = "PipeSpriteSet",
@@ -157,6 +160,36 @@ _defines.sprite_set_type = {
 
 	---Consumed by these prototypes: `ConstructionRobotPrototype`, `LogisticRobotPrototype`, `CombatRobotPrototype`
 	flying_robot_sprite_set = "FlyingRobotSpriteSet",
+
+	---Consumed by these prototypes: `ConstructionRobotPrototype`
+	construction_robot_sprite_set = "ConstructionRobotSpriteSet",
+
+	---Consumed by these prototypes: `LogisticRobotPrototype`
+	logistic_robot_sprite_set = "LogisticRobotSpriteSet",
+
+	---Consumed by these prototypes: `AccumulatorPrototype`
+	accumulator_sprite_set = "AccumulatorSpriteSet",
+
+	---Consumed by these prototypes: `InserterPrototype`
+	inserter_sprite_set = "InserterSpriteSet",
+
+	---Consumed by these prototypes: `ReactorPrototype`
+	reactor_sprite_set = "ReactorSpriteSet",
+
+	---Consumed by these prototypes: `PumpPrototype`
+	pump_sprite_set = "PumpSpriteSet",
+
+	---Consumed by these prototypes: `RadarPrototype`
+	radar_sprite_set = "RadarSpriteSet",
+
+	---Consumed by these prototypes: `RoboportPrototype`
+	roboport_sprite_set = "RoboportSpriteSet",
+
+	---Consumed by these prototypes: `SolarPanelPrototype`
+	solar_panel_sprite_set = "SolarPanelSpriteSet",
+
+	---Consumed by these prototypes: `StorageTankPrototype`
+	storage_tank_sprite_set = "StorageTankSpriteSet",
 }
 
 return _defines

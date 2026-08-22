@@ -1,5 +1,3 @@
-_colors = require("__reskins-sprite-utils__.colors")
-
 local picture = {
 	layers = {
 		-- Base
@@ -26,11 +24,11 @@ local picture = {
 
 -- Used for particle colors.
 local logistic_map = {
-	["active-provider"] = { tint = _colors.from_argb("FF760FD6") },
-	["buffer"] = { tint = _colors.from_argb("FF00BF13") },
-	["passive-provider"] = { tint = _colors.from_argb("FFFF0000") },
-	["requester"] = { tint = _colors.from_argb("FF227DAE") },
-	["storage"] = { tint = _colors.from_argb("FFBA7713") },
+	["active-provider"] = { tint = util.color("760FD6") },
+	["buffer"] = { tint = util.color("00BF13") },
+	["passive-provider"] = { tint = util.color("FF0000") },
+	["requester"] = { tint = util.color("227DAE") },
+	["storage"] = { tint = util.color("BA7713") },
 }
 
 local logistic_picture = {
