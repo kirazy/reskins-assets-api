@@ -4,16 +4,22 @@
 
 ---@namespace Reskins.Assets.Angels.Entities
 
-local StringValidator = require("prototypes.string-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local _defines = require("api.defines")
 
 local M = {}
+
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "variant", V.one_of({ "basic", "temperate", "desert", "swamp" }) },
+})
 
 ---@param tint Color?
 ---@param variant "basic"|"temperate"|"desert"|"swamp"
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint, variant)
-	StringValidator.validate(variant, "variant"):is_one_of({ "basic", "temperate", "desert", "swamp" })
+	check_get_graphics_set(tint, variant)
 
 	local variant_data = {
 		basic = {

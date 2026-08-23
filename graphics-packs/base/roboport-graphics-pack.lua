@@ -1,6 +1,9 @@
 local _defines = require("api.defines")
-local NumberValidator = require("prototypes.number-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
+
+local RoboportVariant = V.integer():in_range(0, 4)
 
 ---@class RoboportGraphicsSet
 ---@field base data.Sprite
@@ -65,14 +68,19 @@ function RoboportGraphicsPack:apply_to_entity(prototype)
 	self:try_apply_to_named_corpse(prototype.name .. "-remnants")
 end
 
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "antenna_variant", RoboportVariant },
+	{ "door_variant", RoboportVariant },
+})
+
 ---@param tint data.Color?
 ---@param antenna_variant 0|1|2|3|4
 ---@param door_variant 0|1|2|3|4
 ---@return RoboportGraphicsSet
 ---@nodiscard
 function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_variant)
-	NumberValidator.validate(antenna_variant, "antenna_variant"):is_integer():in_range(0, 4)
-	NumberValidator.validate(door_variant, "door_variant"):is_integer():in_range(0, 4)
+	check_get_graphics_set(tint, antenna_variant, door_variant)
 
 	local base_path = _defines.assets.base .. "/graphics/entity/roboport/"
 	local base_assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/"

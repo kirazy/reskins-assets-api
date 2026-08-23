@@ -1,4 +1,5 @@
-local StringValidator = require("prototypes.string-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local _defines = require("api.defines")
 
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
@@ -36,12 +37,17 @@ function CropFarmGraphicsPack:configure(params)
 	return instance
 end
 
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "variant", V.one_of({ "basic", "temperate", "desert", "swamp" }) },
+})
+
 ---@param tint data.Color?
 ---@param variant "basic"|"temperate"|"desert"|"swamp"
 ---@return data.CraftingMachineGraphicsSet
 ---@nodiscard
 function CropFarmGraphicsPack.get_graphics_set(tint, variant)
-	StringValidator.validate(variant, "variant"):is_one_of({ "basic", "temperate", "desert", "swamp" })
+	check_get_graphics_set(tint, variant)
 
 	local variant_data = {
 		basic = {

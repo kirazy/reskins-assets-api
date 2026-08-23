@@ -5,17 +5,25 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local NumberValidator = require("prototypes.number-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
+
+local RoboportVariant = V.integer():in_range(0, 4)
+
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "antenna_variant", RoboportVariant },
+	{ "door_variant", RoboportVariant },
+})
 
 ---@param tint Color?
 ---@param antenna_variant 0|1|2|3|4
 ---@param door_variant 0|1|2|3|4
 ---@return RoboportGraphicsSet
 local function get_graphics_set(tint, antenna_variant, door_variant)
-	NumberValidator.validate(antenna_variant, "antenna_variant"):is_integer():in_range(0, 4)
-	NumberValidator.validate(door_variant, "door_variant"):is_integer():in_range(0, 4)
+	check_get_graphics_set(tint, antenna_variant, door_variant)
 
 	local base_path = _defines.assets_source.base .. "/graphics/entity/roboport/"
 	local base_assets_path = _defines.assets_source.base_assets .. "/graphics/entity/roboport/"

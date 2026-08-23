@@ -5,16 +5,22 @@
 
 ---@namespace Reskins.Assets.Base.Entities
 
-local StringValidator = require("prototypes.string-validator")
+local V = require("__reskins-sprite-utils__.validation")
 local _defines = require("api.defines")
 
 local M = {}
+
+local PipeMaterial = V.one_of(_defines.pipe_material--[[@as (string[])]])
+
+local check_asset_from_material = V.signature("asset_from_material", {
+	{ "pipe_material", PipeMaterial },
+})
 
 ---Gets the asset that provides the sprites for the given `pipe_material`.
 ---@param pipe_material PipeMaterial
 ---@return AssetsSource material_asset
 function M.asset_from_material(pipe_material)
-	StringValidator.validate(pipe_material, "pipe_material"):is_one_of(_defines.pipe_material--[[@as (string[])]])
+	check_asset_from_material(pipe_material)
 	---@cast pipe_material string
 
 	local assets_base_path
@@ -29,11 +35,15 @@ function M.asset_from_material(pipe_material)
 	return assets_base_path
 end
 
+local check_name_from_material = V.signature("name_from_material", {
+	{ "pipe_material", PipeMaterial },
+})
+
 ---Gets the bare material name absent any discriminators for the given `pipe_material`.
 ---@param pipe_material PipeMaterial
 ---@return PipeMaterialName material_name
 function M.name_from_material(pipe_material)
-	StringValidator.validate(pipe_material, "pipe_material"):is_one_of(_defines.pipe_material--[[@as (string[])]])
+	check_name_from_material(pipe_material)
 	---@cast pipe_material string
 
 	local material, _ = pipe_material:gsub("%-angels", "")

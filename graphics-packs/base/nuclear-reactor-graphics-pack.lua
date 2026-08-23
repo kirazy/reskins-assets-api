@@ -1,7 +1,16 @@
 local _defines = require("api.defines")
-local StringValidator = require("prototypes.string-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local GraphicsPackBase = require("graphics-packs.abstractions.graphics-pack-base")
+
+local ReactorPipeMaterial = V.one_of({
+	"base",
+	"aluminum-invar",
+	"silver-aluminum",
+	"silver-titanium",
+	"gold-copper",
+})
 
 ---@class Reskins.Base.NuclearReactorGraphicsSet
 ---@field connection_patches_connected data.SpriteVariations
@@ -149,19 +158,19 @@ function NuclearReactorGraphicsPack:apply_to_entity(prototype)
 	end
 end
 
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "pipe_material", ReactorPipeMaterial:optional() },
+})
+
 ---@param tint data.Color?
 ---@param pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
 ---@return Reskins.Base.NuclearReactorGraphicsSet
 ---@nodiscard
 function NuclearReactorGraphicsPack.get_graphics_set(tint, pipe_material)
+	check_get_graphics_set(tint, pipe_material)
+
 	pipe_material = pipe_material or "base"
-	StringValidator.validate(pipe_material, "pipe_material"):is_one_of({
-		"base",
-		"aluminum-invar",
-		"silver-aluminum",
-		"silver-titanium",
-		"gold-copper",
-	})
 
 	local pipe_path = get_pipe_path(pipe_material)
 	---@type Reskins.Base.NuclearReactorGraphicsSet
@@ -243,19 +252,19 @@ function NuclearReactorGraphicsPack.get_graphics_set(tint, pipe_material)
 	return graphics_set
 end
 
+local check_get_corpse_animation = V.signature("get_corpse_animation", {
+	{ "tint", Common.color:optional() },
+	{ "pipe_material", ReactorPipeMaterial:optional() },
+})
+
 ---@param tint data.Color?
 ---@param pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
 ---@return data.RotatedAnimation
 ---@nodiscard
 function NuclearReactorGraphicsPack.get_corpse_animation(tint, pipe_material)
+	check_get_corpse_animation(tint, pipe_material)
+
 	pipe_material = pipe_material or "base"
-	StringValidator.validate(pipe_material, "pipe_material"):is_one_of({
-		"base",
-		"aluminum-invar",
-		"silver-aluminum",
-		"silver-titanium",
-		"gold-copper",
-	})
 
 	local pipe_path = get_pipe_path(pipe_material)
 	local assets_path = "__reskins-assets-base__/graphics/entity/nuclear-reactor/remnants/"

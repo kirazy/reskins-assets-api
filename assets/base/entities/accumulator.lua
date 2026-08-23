@@ -5,8 +5,8 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local StringValidator = require("prototypes.string-validator")
-local NumberValidator = require("prototypes.number-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -16,28 +16,20 @@ local M = {}
 ---| "high-capacity"
 ---| "slow"
 
+local check_get_accumulator_pictures = V.signature("get_accumulator_pictures", {
+	{ "sprite_set", V.one_of({ "base", "fast", "high-capacity", "slow" }):optional() },
+	{ "tint", Common.color:optional() },
+	{ "repeat_count", Common.positive_integer:optional() },
+})
+
 ---@param sprite_set AccumulatorSpriteVariant? # Default "base".
 ---@param tint Color? # Default nil.
 ---@param repeat_count integer? # Default nil.
 ---@return Animation
 local function get_accumulator_pictures(sprite_set, tint, repeat_count)
-	if repeat_count ~= nil then
-		NumberValidator.validate(repeat_count, "repeat_count"):is_integer():is_positive()
-	end
+	check_get_accumulator_pictures(sprite_set, tint, repeat_count)
 
 	sprite_set = sprite_set or "base"
-	StringValidator.validate(sprite_set, "sprite_set")
-
-	-- Validate sprite_set is one of the allowed values
-	local valid_sprite_sets = {
-		["base"] = true,
-		["high-capacity"] = true,
-		["fast"] = true,
-		["slow"] = true,
-	}
-	if not valid_sprite_sets[sprite_set] then
-		error("Invalid sprite_set: " .. tostring(sprite_set) .. ". Must be one of: base, high-capacity, fast, slow")
-	end
 
 	local assets_base_path = sprite_set == "base" and _defines.assets_source.base or _defines.assets_source.bobs_assets
 	local accumulator_type = sprite_set == "base" and "" or ("-" .. sprite_set)

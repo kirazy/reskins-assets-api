@@ -7,18 +7,23 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
-
--- FIXME: replace this with the tools from SpriteUtils.Validation.
-local NumberValidator = require("prototypes.number-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
+
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "assembly_set", V.integer():in_range(1, 6) },
+	{ "use_electronics_set", V.boolean():optional() },
+})
 
 ---@param tint data.Color?
 ---@param assembly_set 1|2|3|4|5|6
 ---@param use_electronics_set boolean?
 ---@return data.CraftingMachineGraphicsSet
 local function get_graphics_set(tint, assembly_set, use_electronics_set)
-	NumberValidator.validate(assembly_set, "assembly_set"):is_integer():in_range(1, 6)
+	check_get_graphics_set(tint, assembly_set, use_electronics_set)
 
 	-- animations/shadows are 0-based.
 	local animation_index = assembly_set - 1
