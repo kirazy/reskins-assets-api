@@ -619,20 +619,6 @@ local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 	return fluid_box_graphics, required_assets
 end
 
----The sprite data a `pipe_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) PipeSpriteSet : EntityWithHealthSpriteSet
----The prototype's `horizontal_window_bounding_box`.
----@field horizontal_window_bounding_box BoundingBox
----The prototype's `vertical_window_bounding_box`.
----@field vertical_window_bounding_box BoundingBox
----The prototype's `pictures`.
----@field pictures PipePictures
----Pipe graphics for the prototype's `fluid_box`.
----@field fluid_box FluidBoxGraphics
-
 ---@class PipeSpriteSetParams
 ---@field pipe_material PipeMaterial # Default iron.
 ---@field include_frozen_pictures boolean? # When true, includes the frozen sprites. Default false.
@@ -655,7 +641,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.pipe_material),
+			corpse = { animation = get_corpse_animation(params.pipe_material) },
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,

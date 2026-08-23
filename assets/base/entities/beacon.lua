@@ -206,14 +206,6 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation) }
 end
 
----The sprite data a `beacon_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) BeaconSpriteSet : EntityWithHealthSpriteSet
----The `animation_list` of the prototype's `graphics_set`.
----@field animation_list AnimationElement[]
-
 ---@class BeaconSpriteSetParams
 ---@field tint Color?
 ---@field variant "2-slots"|"4-slots"|"6-slots"
@@ -235,7 +227,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint),
+			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 3,
 			nominal_height = 3,

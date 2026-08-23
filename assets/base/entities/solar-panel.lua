@@ -244,16 +244,6 @@ local function get_corpse_animation(tint, variant)
 	end
 end
 
----The sprite data a `solar_panel_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) SolarPanelSpriteSet : EntityWithHealthSpriteSet
----The prototype's `picture`.
----@field picture Sprite
----The prototype's `overlay`.
----@field overlay Sprite?
-
 ---@class SolarPanelSpriteSetParams
 ---@field tint Color?
 ---@field variant SolarPanelVariant
@@ -275,7 +265,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint, params.variant),
+			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = nil,
 			nominal_width = nominal_dimensions[params.variant].width,
 			nominal_height = nominal_dimensions[params.variant].height,

@@ -7,17 +7,6 @@
 local _defines = require("api.defines")
 local StringValidator = require("prototypes.string-validator")
 
----@class NuclearReactorGraphicsSet
----@field connection_patches_connected SpriteVariations
----@field connection_patches_disconnected SpriteVariations
----@field heat_connection_patches_connected SpriteVariations
----@field heat_connection_patches_disconnected SpriteVariations
----@field heat_lower_layer_picture Sprite
----@field lower_layer_picture Sprite
----@field picture Sprite
----@field fuel_glow_working_light_picture Animation
----@field working_light_picture Animation
-
 local M = {}
 
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
@@ -244,17 +233,6 @@ local function get_corpse_animation(tint, pipe_material)
 	return animation
 end
 
----The sprite data a `reactor_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) NuclearReactorSpriteSet : EntityWithHealthSpriteSet
----The sprites making up the reactor, spread across the prototype's own fields.
----@field graphics_set NuclearReactorGraphicsSet
----Sets the prototype's `use_fuel_glow_color`, selecting which working light the
----applicator takes from `graphics_set`.
----@field use_fuel_glow_color boolean
-
 ---@class NuclearReactorSpriteSetParams
 ---@field tint Color?
 ---@field pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
@@ -276,7 +254,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint, pipe_material),
+			corpse = { animation = get_corpse_animation(params.tint, pipe_material) },
 			water_reflection = nil,
 			nominal_width = 5,
 			nominal_height = 5,

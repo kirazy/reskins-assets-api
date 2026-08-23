@@ -21,12 +21,6 @@ local function apply_sprite_set_to_boiler(prototype, sprite_set)
 	-- FIXME need to handle explosion application in this step based on the package set explosion definition.
 end
 
----@param corpse CorpsePrototype
----@param sprite_set BoilerSpriteSet
-local function apply_sprite_set_to_corpse(corpse, sprite_set)
-	error("Not implemented")
-end
-
 ---@param explosion ExplosionPrototype
 ---@param sprite_set BoilerSpriteSet
 local function apply_sprite_set_to_explosion(explosion, sprite_set)
@@ -37,7 +31,6 @@ end
 return {
 	set_type = _defines.sprite_set_type.boiler_sprite_set,
 	apply_to = apply_sprite_set_to_boiler,
-	apply_to_corpse = apply_sprite_set_to_corpse,
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 

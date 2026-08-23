@@ -590,7 +590,7 @@ function M.get(params)
 	if params.variant == "chemical" or params.variant == "chemical-fluid" then
 		graphics_set_flipped = get_graphics_set_flipped(params.tint, params.variant)
 	end
-	local remnants = get_corpse_animation(params.tint, params.variant)
+
 	local has_fluid_boxes = params.variant ~= "standard"
 
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
@@ -609,7 +609,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = remnants,
+			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = nil,
 			nominal_width = 2,
 			nominal_height = 2,

@@ -363,12 +363,6 @@ local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
 	end
 end
 
----@param corpse CorpsePrototype
----@param sprite_set CraftingMachineSpriteSet
-local function apply_sprite_set_to_corpse(corpse, sprite_set)
-	error("Not implemented")
-end
-
 ---@param explosion ExplosionPrototype
 ---@param sprite_set CraftingMachineSpriteSet
 local function apply_sprite_set_to_explosion(explosion, sprite_set)
@@ -379,7 +373,6 @@ end
 return {
 	set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 	apply_to = apply_sprite_set_to_crafting_machine,
-	apply_to_corpse = apply_sprite_set_to_corpse,
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 

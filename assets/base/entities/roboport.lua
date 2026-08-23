@@ -7,14 +7,6 @@
 local _defines = require("api.defines")
 local NumberValidator = require("prototypes.number-validator")
 
----@class RoboportGraphicsSet
----@field base Sprite
----@field base_patch Sprite
----@field base_animation Animation
----@field door_animation_up Animation
----@field door_animation_down Animation
----@field recharging_animation Animation
-
 local M = {}
 
 ---@param tint Color?
@@ -204,14 +196,6 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation) }
 end
 
----The sprite data a `roboport_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) RoboportSpriteSet : EntityWithHealthSpriteSet
----The sprites making up the roboport, spread across the prototype's own fields.
----@field graphics_set RoboportGraphicsSet
-
 ---@class RoboportSpriteSetParams
 ---@field tint Color?
 ---@field antenna_variant 0|1|2|3|4 # 0 = base game, 1-4 = Bob's variants
@@ -234,7 +218,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint),
+			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 4,
 			nominal_height = 4,

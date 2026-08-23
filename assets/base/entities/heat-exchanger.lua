@@ -342,7 +342,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint, params.pipe_material),
+			corpse = { animation = get_corpse_animation(params.tint, params.pipe_material) },
 			water_reflection = nil,
 			nominal_width = 3,
 			nominal_height = 2,

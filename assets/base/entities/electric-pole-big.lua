@@ -164,11 +164,13 @@ function M.get(params)
 		set_type = _defines.sprite_set_type.electric_pole_sprite_set,
 		set = {
 			pictures = get_pictures(params.tint),
-			corpse_overlay = get_corpse_animation_overlay(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint),
+			corpse = {
+				animation = get_corpse_animation(params.tint),
+				animation_overlay = get_corpse_animation_overlay(params.tint),
+			},
 			water_reflection = nil,
 			nominal_width = 2,
 			nominal_height = 2,

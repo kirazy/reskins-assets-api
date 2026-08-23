@@ -261,18 +261,15 @@ end
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---@nodiscard
 function M.get(params)
-	local graphics_set = get_graphics_set(params.tint)
-	local remnants = get_corpse_animation(params.tint)
-
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = graphics_set,
+			graphics_set = get_graphics_set(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = remnants,
+			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 3,
 			nominal_height = 3,

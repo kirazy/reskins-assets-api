@@ -18,7 +18,8 @@ local M = {}
 ---@private
 local function get_electric_furnace_shadow()
 	return {
-		filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/shadows/furnace-electric-shadow.png",
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-electric/shadows/furnace-electric-shadow.png",
 		priority = "high",
 		width = 228,
 		height = 172,
@@ -33,7 +34,8 @@ end
 ---@private
 local function get_electric_furnace_heater_animation()
 	return {
-		filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/lights/furnace-electric-heater.png",
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-electric/lights/furnace-electric-heater.png",
 		priority = "high",
 		width = 60,
 		height = 56,
@@ -65,7 +67,8 @@ end
 local function get_electric_furnace_large_propeller()
 	return {
 		animation = {
-			filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/animations/propeller-large.png",
+			filename = _defines.assets_source.base_assets
+				.. "/graphics/entity/furnace-electric/animations/propeller-large.png",
 			priority = "high",
 			width = 38,
 			height = 26,
@@ -84,7 +87,8 @@ local function get_electric_furnace_small_propeller(is_shifted)
 	local shift = is_shifted and util.by_pixel(1, -24) or util.by_pixel(4, -37.5)
 	return {
 		animation = {
-			filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/animations/propeller-small.png",
+			filename = _defines.assets_source.base_assets
+				.. "/graphics/entity/furnace-electric/animations/propeller-small.png",
 			priority = "high",
 			width = 24,
 			height = 16,
@@ -104,7 +108,8 @@ end
 local function get_electric_furnace_working_light(variant, is_obstructed)
 	local filename
 	if variant == "standard" then
-		filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/lights/furnace-electric-light.png"
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-electric/lights/furnace-electric-light.png"
 	elseif variant == "mixing" then
 		filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-electric-mixing/furnace-electric-mixing-light.png"
@@ -360,7 +365,7 @@ end
 ---Both the `"chemical"` and `"chemical-mixing"` variants share the same pipe picture sprites
 ---from the `furnace-electric-chemical/pipes/` asset folder.
 ---@param tint Color?
----@return FluidBoxGraphics
+---@return FluidBoxGraphics[]
 ---@private
 local function get_electric_furnace_fluid_box_graphics(tint)
 	local pipes_path = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-electric-chemical/pipes/"
@@ -480,12 +485,14 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 		}
 	end
 
-	---@type FluidBoxGraphics
+	---@type FluidBoxGraphics[]
 	return {
-		pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
-		pipe_picture = pictures,
-		secondary_draw_orders = {
-			north = -1,
+		{
+			pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
+			pipe_picture = pictures,
+			secondary_draw_orders = {
+				north = -1,
+			},
 		},
 	}
 end
@@ -501,22 +508,16 @@ end
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---@nodiscard
 function M.get(params)
-	local graphics_set = get_graphics_set(params.tint, params.variant)
-	local remnants = get_corpse_animation(params.tint, params.variant)
-	local fluid_boxes = {
-		get_electric_furnace_fluid_box_graphics(params.tint),
-	}
-
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = graphics_set,
-			fluid_boxes = fluid_boxes,
+			graphics_set = get_graphics_set(params.tint, params.variant),
+			fluid_boxes = get_electric_furnace_fluid_box_graphics(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = remnants,
+			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = nil,
 			nominal_width = 3,
 			nominal_height = 3,

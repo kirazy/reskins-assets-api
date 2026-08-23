@@ -191,14 +191,6 @@ local function get_corpse_animation(tint)
 	return reskins_suppress_errors and {} or error("get_corpse_animation is not implemented")
 end
 
----The sprite data a `accumulator_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) AccumulatorSpriteSet : EntityWithHealthSpriteSet
----The prototype's `chargable_graphics`.
----@field chargable_graphics ChargableGraphics
-
 ---@class AccumulatorSpriteSetParams
 ---@field tint Color?
 ---@field sprite_set AccumulatorSpriteVariant?
@@ -219,7 +211,7 @@ function M.get(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint),
+			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_accumulator_reflection(),
 			nominal_width = 2,
 			nominal_height = 2,

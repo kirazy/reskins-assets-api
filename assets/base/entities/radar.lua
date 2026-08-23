@@ -132,14 +132,6 @@ local function get_corpse_animation(tint)
 	return { animation }
 end
 
----The sprite data a `radar_sprite_set`-tagged `SpriteSetDefinition` carries.
----
----Provisional: no applicator consumes this shape yet. When one is written, this
----declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
----@class (exact) RadarSpriteSet : EntityWithHealthSpriteSet
----The prototype's `pictures`.
----@field pictures RotatedSprite
-
 ---@class RadarSpriteSetParams
 ---@field tint Color?
 
@@ -156,7 +148,7 @@ function M.get(params)
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse_animation(params.tint),
+			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 3,
 			nominal_height = 3,
