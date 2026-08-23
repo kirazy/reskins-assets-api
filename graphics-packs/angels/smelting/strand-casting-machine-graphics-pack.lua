@@ -23,8 +23,8 @@ function StrandCastingMachineGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.angels_assets] = true,
-			[_defines.assets.smelting_graphics] = true,
+			[_defines.assets_source.angels_assets] = true,
+			[_defines.assets_source.smelting_graphics] = true,
 		},
 		nominal_width = 5,
 		nominal_height = 5,

@@ -22,7 +22,7 @@ function StorageTankGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 3,
 		nominal_height = 3,
 	}) --[[@as StorageTankGraphicsPack]]
@@ -44,9 +44,9 @@ end
 ---@return data.StorageTankPictures
 ---@nodiscard
 function StorageTankGraphicsPack.get_pictures(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/storage-tank/"
-	local pipe_path = _defines.assets.base .. "/graphics/entity/pipe/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/storage-tank/base/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/storage-tank/"
+	local pipe_path = _defines.assets_source.base .. "/graphics/entity/pipe/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/storage-tank/base/"
 
 	local sheets = {
 		{
@@ -133,8 +133,8 @@ end
 ---@return data.RotatedAnimation
 ---@nodiscard
 function StorageTankGraphicsPack.get_corpse_animation(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/storage-tank/remnants/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/storage-tank/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/storage-tank/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/storage-tank/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

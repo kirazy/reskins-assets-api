@@ -24,7 +24,7 @@ function AdvancedGasRefineryGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.petrochem_graphics] = true,
+			[_defines.assets_source.petrochem_graphics] = true,
 		},
 		nominal_width = 7,
 		nominal_height = 7,

@@ -112,11 +112,11 @@ end
 ---@return Reskins.Base.NuclearReactorGraphicsPack
 ---@nodiscard
 function NuclearReactorGraphicsPack:configure(params)
-	local required_assets = { [_defines.assets.base_assets] = true }
+	local required_assets = { [_defines.assets_source.base_assets] = true }
 
 	local pipe_material = params.pipe_material or "base"
 	if pipe_material ~= "base" then
-		required_assets[_defines.assets.bobs_assets] = true
+		required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	local graphics_set = self.get_graphics_set(params.tint, pipe_material)

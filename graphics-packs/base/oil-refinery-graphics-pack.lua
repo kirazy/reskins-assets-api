@@ -26,7 +26,7 @@ function OilRefineryGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = remnants,
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 5,
 		nominal_height = 5,
 		graphics_set = graphics_set,
@@ -39,7 +39,7 @@ end
 ---@param tint data.Color?
 ---@return data.CraftingMachineGraphicsSet
 function OilRefineryGraphicsPack.get_graphics_set(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/oil-refinery/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/oil-refinery/"
 
 	---@type data.Animation[]
 	local layers = {
@@ -96,7 +96,7 @@ end
 ---@param tint data.Color?
 ---@return data.RotatedAnimationVariations
 function OilRefineryGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/oil-refinery/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/oil-refinery/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

@@ -1,5 +1,5 @@
 local _defines = require("api.defines")
-local StringValidator = require("prototypes.string-validator")
+local V = require("__reskins-sprite-utils__.validation")
 
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
@@ -12,6 +12,9 @@ setmetatable(CastingMachineGraphicsPack, {
 	__index = CraftingMachineGraphicsPack,
 })
 
+---The symmetry a casting machine may be forced into, the sprites being drawn for that one axis.
+local ForcedSymmetry = V.literal("horizontal"):optional()
+
 ---@class Reskins.Angels.CastingMachineGraphicsParams:Reskins.Abstractions.BaseGraphicsParams
 
 ---@param params Reskins.Angels.CastingMachineGraphicsParams
@@ -23,7 +26,7 @@ function CastingMachineGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.smelting_graphics] = true,
+			[_defines.assets_source.smelting_graphics] = true,
 		},
 		nominal_width = 3,
 		nominal_height = 3,
@@ -49,9 +52,7 @@ end
 ---- Implementations should mutate the prototype in place, and set copies of the graphics.
 ---@param prototype data.CraftingMachinePrototype
 function CastingMachineGraphicsPack:apply_to_entity(prototype)
-	if prototype.forced_symmetry ~= nil then
-		StringValidator.validate(prototype.forced_symmetry, "prototype.forced_symmetry"):is_one_of({ "horizontal" })
-	end
+	ForcedSymmetry:assert(prototype.forced_symmetry, "prototype.forced_symmetry", "apply_to_entity")
 
 	CraftingMachineGraphicsPack.apply_to_entity(self, prototype)
 end

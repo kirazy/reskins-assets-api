@@ -1,7 +1,10 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
-local StringValidator = require("prototypes.string-validator")
+local V = require("__reskins-sprite-utils__.validation")
+
+---The symmetry an induction furnace may be forced into, the sprites being drawn for that one axis.
+local ForcedSymmetry = V.literal("horizontal"):optional()
 
 ---@class Reskins.Angels.InductionFurnaceGraphicsPack:Reskins.Abstractions.CraftingMachineGraphicsPack
 local InductionFurnaceGraphicsPack = {}
@@ -91,9 +94,9 @@ function InductionFurnaceGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.smelting_graphics] = true,
-			[_defines.assets.angels_assets] = true,
-			[_defines.assets.base_assets] = true,
+			[_defines.assets_source.smelting_graphics] = true,
+			[_defines.assets_source.angels_assets] = true,
+			[_defines.assets_source.base_assets] = true,
 		},
 		nominal_width = 5,
 		nominal_height = 5,
@@ -524,9 +527,7 @@ end
 ---Validates that `prototype.forced_symmetry` is `nil` or `"horizontal"`.
 ---@param prototype data.CraftingMachinePrototype
 function InductionFurnaceGraphicsPack:apply_to_entity(prototype)
-	if prototype.forced_symmetry ~= nil then
-		StringValidator.validate(prototype.forced_symmetry, "prototype.forced_symmetry"):is_one_of({ "horizontal" })
-	end
+	ForcedSymmetry:assert(prototype.forced_symmetry, "prototype.forced_symmetry", "apply_to_entity")
 
 	CraftingMachineGraphicsPack.apply_to_entity(self, prototype)
 

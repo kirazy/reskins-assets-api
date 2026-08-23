@@ -31,9 +31,9 @@ setmetatable(RoboportGraphicsPack, {
 ---@return RoboportGraphicsPack
 ---@nodiscard
 function RoboportGraphicsPack:configure(params)
-	local required_assets = { [_defines.assets.base_assets] = true }
+	local required_assets = { [_defines.assets_source.base_assets] = true }
 	if params.antenna_variant > 0 or params.door_variant > 0 then
-		required_assets[_defines.assets.bobs_assets] = true
+		required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	local instance = GraphicsPackBase.configure(self, {
@@ -82,9 +82,9 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 function RoboportGraphicsPack.get_graphics_set(tint, antenna_variant, door_variant)
 	check_get_graphics_set(tint, antenna_variant, door_variant)
 
-	local base_path = _defines.assets.base .. "/graphics/entity/roboport/"
-	local base_assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/"
-	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/roboport/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/roboport/"
+	local base_assets_path = _defines.assets_source.base_assets .. "/graphics/entity/roboport/"
+	local bobs_path = _defines.assets_source.bobs_assets .. "/graphics/entity/roboport/"
 
 	local antenna_filename = antenna_variant == 0 and base_path .. "roboport-base-animation.png"
 		or bobs_path .. "antennas/roboport-" .. antenna_variant .. "-base-animation.png"
@@ -222,7 +222,7 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function RoboportGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/roboport/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/roboport/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

@@ -23,7 +23,7 @@ function TreeGeneratorGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.bioprocessing_graphics] = true,
+			[_defines.assets_source.bioprocessing_graphics] = true,
 		},
 		nominal_width = 3,
 		nominal_height = 3,

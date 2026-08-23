@@ -54,10 +54,10 @@ end
 local function get_stone_furnace_working_light(orientation)
 	local filename
 	if orientation then
-		local bobs_lights = _defines.assets.bobs_assets .. "/graphics/entity/furnace-stone-chemical/lights/"
+		local bobs_lights = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-stone-chemical/lights/"
 		filename = bobs_lights .. "furnace-stone-chemical-light-" .. orientation .. "-obscure.png"
 	else
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-stone/lights/furnace-stone-light.png"
+		filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-stone/lights/furnace-stone-light.png"
 	end
 
 	return {
@@ -99,8 +99,8 @@ end
 ---@param variant "standard" | "chemical"
 ---@return data.CraftingMachineGraphicsSet
 function FurnaceStoneGraphicsPack.get_graphics_set(tint, variant)
-	local base_path = _defines.assets.base_assets .. "/graphics/entity/furnace-stone/"
-	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/furnace-stone-chemical/"
+	local base_path = _defines.assets_source.base_assets .. "/graphics/entity/furnace-stone/"
+	local bobs_path = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-stone-chemical/"
 
 	local is_chemical = variant == "chemical"
 	local assets_path = is_chemical and bobs_path or base_path
@@ -219,7 +219,7 @@ end
 ---@return data.CraftingMachineGraphicsSet
 ---@private
 function FurnaceStoneGraphicsPack.get_graphics_set_flipped(tint)
-	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/furnace-stone-chemical/"
+	local bobs_path = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-stone-chemical/"
 
 	---@type data.Animation[]
 	local layers = {
@@ -305,8 +305,8 @@ function FurnaceStoneGraphicsPack.get_corpse_animation(tint, variant)
 	local direction_count = is_chemical and 4 or 1
 	local image_name = is_chemical and "furnace-stone-chemical-remnants" or "furnace-stone-remnants"
 	local assets_path = is_chemical
-			and (_defines.assets.bobs_assets .. "/graphics/entity/furnace-stone-chemical/remnants/")
-		or (_defines.assets.base_assets .. "/graphics/entity/furnace-stone/remnants/")
+			and (_defines.assets_source.bobs_assets .. "/graphics/entity/furnace-stone-chemical/remnants/")
+		or (_defines.assets_source.base_assets .. "/graphics/entity/furnace-stone/remnants/")
 
 	---@type data.RotatedAnimationVariations
 	local animation = {
@@ -363,9 +363,9 @@ function FurnaceStoneGraphicsPack:configure(params)
 
 	local remnants = self.get_corpse_animation(params.tint, params.variant)
 
-	local required_assets = { [_defines.assets.base_assets] = true }
+	local required_assets = { [_defines.assets_source.base_assets] = true }
 	if params.variant == "chemical" then
-		required_assets[_defines.assets.bobs_assets] = true
+		required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {

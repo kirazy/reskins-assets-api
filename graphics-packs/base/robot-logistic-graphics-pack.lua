@@ -31,7 +31,7 @@ function RobotLogisticGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 1,
 		nominal_height = 2,
 	}) --[[@as RobotLogisticGraphicsPack]]
@@ -68,8 +68,8 @@ end
 ---@return { idle: data.RotatedAnimation, idle_with_cargo: data.RotatedAnimation, in_motion: data.RotatedAnimation, in_motion_with_cargo: data.RotatedAnimation, shadow_idle: data.RotatedAnimation, shadow_idle_with_cargo: data.RotatedAnimation, shadow_in_motion: data.RotatedAnimation, shadow_in_motion_with_cargo: data.RotatedAnimation }
 ---@nodiscard
 function RobotLogisticGraphicsPack.get_animations(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/logistic-robot/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/robot-logistic/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/logistic-robot/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/robot-logistic/"
 
 	-- Shared body sprite dimensions.
 	local body_w, body_h = 80, 84
@@ -177,8 +177,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function RobotLogisticGraphicsPack.get_corpse_animation(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/logistic-robot/remnants/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/robot-logistic/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/logistic-robot/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/robot-logistic/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

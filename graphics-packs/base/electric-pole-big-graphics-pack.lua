@@ -23,7 +23,7 @@ function ElectricPoleBigGraphicsPack:configure(params)
 		pictures = self.get_pictures(params.tint),
 		remnants = self.get_corpse_animation(params.tint),
 		remnants_overlay = self.get_corpse_animation_overlay(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 2,
 		nominal_height = 2,
 	}) --[[@as Reskins.Base.ElectricPoleBigGraphicsPack]]
@@ -43,7 +43,7 @@ end
 ---@return data.RotatedSprite
 ---@nodiscard
 function ElectricPoleBigGraphicsPack.get_pictures(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/electric-pole-big/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-big/"
 
 	---@type data.RotatedSprite
 	local pictures = {
@@ -101,7 +101,7 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function ElectricPoleBigGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/electric-pole-big/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-big/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {
@@ -145,7 +145,7 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function ElectricPoleBigGraphicsPack.get_corpse_animation_overlay(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/electric-pole-big/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-big/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

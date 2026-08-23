@@ -22,7 +22,7 @@ function SteamEngineGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 3,
 		nominal_height = 5,
 		horizontal_animation = self.get_horizontal_animation(params.tint),

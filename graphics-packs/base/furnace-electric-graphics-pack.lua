@@ -23,7 +23,8 @@ setmetatable(FurnaceElectricGraphicsPack, {
 ---@private
 local function get_electric_furnace_shadow()
 	return {
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/shadows/furnace-electric-shadow.png",
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-electric/shadows/furnace-electric-shadow.png",
 		priority = "high",
 		width = 228,
 		height = 172,
@@ -38,7 +39,8 @@ end
 ---@private
 local function get_electric_furnace_heater_animation()
 	return {
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/lights/furnace-electric-heater.png",
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-electric/lights/furnace-electric-heater.png",
 		priority = "high",
 		width = 60,
 		height = 56,
@@ -70,7 +72,8 @@ end
 local function get_electric_furnace_large_propeller()
 	return {
 		animation = {
-			filename = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/animations/propeller-large.png",
+			filename = _defines.assets_source.base_assets
+				.. "/graphics/entity/furnace-electric/animations/propeller-large.png",
 			priority = "high",
 			width = 38,
 			height = 26,
@@ -89,7 +92,8 @@ local function get_electric_furnace_small_propeller(is_shifted)
 	local shift = is_shifted and util.by_pixel(1, -24) or util.by_pixel(4, -37.5)
 	return {
 		animation = {
-			filename = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/animations/propeller-small.png",
+			filename = _defines.assets_source.base_assets
+				.. "/graphics/entity/furnace-electric/animations/propeller-small.png",
 			priority = "high",
 			width = 24,
 			height = 16,
@@ -109,19 +113,20 @@ end
 local function get_electric_furnace_working_light(variant, is_obstructed)
 	local filename
 	if variant == "standard" then
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/lights/furnace-electric-light.png"
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-electric/lights/furnace-electric-light.png"
 	elseif variant == "mixing" then
-		filename = _defines.assets.bobs_assets
+		filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-electric-mixing/furnace-electric-mixing-light.png"
 	elseif variant == "chemical" then
-		filename = _defines.assets.bobs_assets
+		filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-electric-chemical/furnace-chemical-electric-light.png"
 	elseif variant == "chemical-mixing" then
 		if is_obstructed then
-			filename = _defines.assets.bobs_assets
+			filename = _defines.assets_source.bobs_assets
 				.. "/graphics/entity/furnace-electric-chemical-mixing/furnace-chemical-electric-mixing-light-obstructed.png"
 		else
-			filename = _defines.assets.bobs_assets
+			filename = _defines.assets_source.bobs_assets
 				.. "/graphics/entity/furnace-electric-chemical-mixing/furnace-chemical-electric-mixing-light.png"
 		end
 	end
@@ -144,8 +149,8 @@ end
 ---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
 ---@return data.CraftingMachineGraphicsSet
 function FurnaceElectricGraphicsPack.get_graphics_set(tint, variant)
-	local base_path = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/"
-	local bobs_path = _defines.assets.bobs_assets .. "/graphics/entity/"
+	local base_path = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/"
+	local bobs_path = _defines.assets_source.bobs_assets .. "/graphics/entity/"
 
 	-- Build the asset path and image name for the main sprite.
 	local assets_path, image_name
@@ -297,7 +302,7 @@ end
 ---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
 ---@return data.RotatedAnimationVariations
 function FurnaceElectricGraphicsPack.get_corpse_animation(tint, variant)
-	local base_remnants = _defines.assets.base_assets .. "/graphics/entity/furnace-electric/remnants/"
+	local base_remnants = _defines.assets_source.base_assets .. "/graphics/entity/furnace-electric/remnants/"
 
 	-- All variants share the base remnant from __base__ plus mask/highlights from base assets.
 	---@type data.RotatedAnimationVariations
@@ -339,10 +344,10 @@ function FurnaceElectricGraphicsPack.get_corpse_animation(tint, variant)
 	-- Chemical and chemical-mixing add a variant-specific overlay layer.
 	local overlay_filename
 	if variant == "chemical" then
-		overlay_filename = _defines.assets.bobs_assets
+		overlay_filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-electric-chemical/remnants/furnace-chemical-electric-remnants-overlay.png"
 	elseif variant == "chemical-mixing" then
-		overlay_filename = _defines.assets.bobs_assets
+		overlay_filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-electric-chemical-mixing/remnants/furnace-chemical-electric-mixing-remnants-overlay.png"
 	end
 
@@ -368,7 +373,7 @@ end
 ---@return FluidBoxGraphics
 ---@private
 local function get_electric_furnace_fluid_box_graphics(tint)
-	local pipes_path = _defines.assets.bobs_assets .. "/graphics/entity/furnace-electric-chemical/pipes/"
+	local pipes_path = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-electric-chemical/pipes/"
 
 	---@type data.Sprite4Way
 	local pictures = {
@@ -509,8 +514,8 @@ function FurnaceElectricGraphicsPack:configure(params)
 	}
 
 	local required_assets = {
-		[_defines.assets.base_assets] = true,
-		[_defines.assets.bobs_assets] = true,
+		[_defines.assets_source.base_assets] = true,
+		[_defines.assets_source.bobs_assets] = true,
 	}
 
 	local instance = CraftingMachineGraphicsPack.configure(self, {

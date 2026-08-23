@@ -23,7 +23,7 @@ function ElectricPoleMediumGraphicsPack:configure(params)
 		pictures = self.get_pictures(params.tint),
 		remnants = self.get_corpse_animation(params.tint),
 		remnants_overlay = self.get_corpse_animation_overlay(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 1,
 		nominal_height = 1,
 	}) --[[@as Reskins.Base.ElectricPoleMediumGraphicsPack]]
@@ -43,8 +43,8 @@ end
 ---@return data.RotatedSprite
 ---@nodiscard
 function ElectricPoleMediumGraphicsPack.get_pictures(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/electric-pole-medium/"
-	local base_path = _defines.assets.base .. "/graphics/entity/medium-electric-pole/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-medium/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/medium-electric-pole/"
 
 	---@type data.RotatedSprite
 	local pictures = {
@@ -102,8 +102,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function ElectricPoleMediumGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/electric-pole-medium/remnants/"
-	local base_path = _defines.assets.base .. "/graphics/entity/medium-electric-pole/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-medium/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/medium-electric-pole/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {
@@ -147,8 +147,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function ElectricPoleMediumGraphicsPack.get_corpse_animation_overlay(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/electric-pole-medium/remnants/"
-	local base_path = _defines.assets.base .. "/graphics/entity/medium-electric-pole/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-medium/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/medium-electric-pole/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

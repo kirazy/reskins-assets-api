@@ -34,7 +34,7 @@ function ElectricBoilerGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.angels_assets] = true,
+			[_defines.assets_source.angels_assets] = true,
 		},
 		nominal_width = 3,
 		nominal_height = 3,

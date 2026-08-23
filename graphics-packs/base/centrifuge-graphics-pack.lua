@@ -28,7 +28,7 @@ function CentrifugeGraphicsPack:configure(params)
 		remnants = remnants,
 		nominal_width = 3,
 		nominal_height = 3,
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		graphics_set = graphics_set,
 	}) --[[@as Reskins.Base.CentrifugeGraphicsPack]]
 

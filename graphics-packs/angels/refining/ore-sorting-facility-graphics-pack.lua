@@ -22,7 +22,7 @@ function OreSortingFacilityGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		required_assets = {
-			[_defines.assets.refining_graphics] = true,
+			[_defines.assets_source.refining_graphics] = true,
 		},
 		nominal_width = 7,
 		nominal_height = 7,

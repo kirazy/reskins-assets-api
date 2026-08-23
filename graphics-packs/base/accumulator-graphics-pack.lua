@@ -33,8 +33,8 @@ function AccumulatorGraphicsPack:configure(params)
 		scale_factor = params.scale_factor,
 		remnants = nil,
 		required_assets = {
-			[_defines.assets.base] = true,
-			[_defines.assets.base_assets] = true,
+			[_defines.assets_source.base] = true,
+			[_defines.assets_source.base_assets] = true,
 		},
 		nominal_height = 2,
 		nominal_width = 2,
@@ -44,7 +44,7 @@ function AccumulatorGraphicsPack:configure(params)
 	instance.water_reflection = self.get_accumulator_reflection()
 
 	if type(params.sprite_set) == "string" and params.sprite_set ~= "base" then
-		instance.required_assets[_defines.assets.bobs_assets] = true
+		instance.required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	setmetatable(instance, AccumulatorGraphicsPack)
@@ -99,7 +99,7 @@ function AccumulatorGraphicsPack.get_accumulator_pictures(sprite_set, tint, repe
 
 	sprite_set = sprite_set or "base"
 
-	local assets_base_path = sprite_set == "base" and _defines.assets.base or _defines.assets.bobs_assets
+	local assets_base_path = sprite_set == "base" and _defines.assets_source.base or _defines.assets_source.bobs_assets
 	local accumulator_type = sprite_set == "base" and "" or ("-" .. sprite_set)
 
 	---@type data.Sprite|data.Animation

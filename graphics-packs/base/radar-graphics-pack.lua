@@ -23,7 +23,7 @@ function RadarGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 3,
 		nominal_height = 3,
 	}) --[[@as RadarGraphicsPack]]
@@ -47,8 +47,8 @@ end
 ---@return data.RotatedSprite
 ---@nodiscard
 function RadarGraphicsPack.get_pictures(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/radar/"
-	local base_path = _defines.assets.base .. "/graphics/entity/radar/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/radar/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/radar/"
 
 	---@type data.RotatedSprite
 	local pictures = {
@@ -115,7 +115,7 @@ end
 function RadarGraphicsPack.get_integration_patch()
 	---@type data.Sprite
 	local patch = {
-		filename = _defines.assets.base .. "/graphics/entity/radar/radar-integration.png",
+		filename = _defines.assets_source.base .. "/graphics/entity/radar/radar-integration.png",
 		priority = "low",
 		width = 238,
 		height = 216,
@@ -129,8 +129,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function RadarGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/radar/remnants/"
-	local base_path = _defines.assets.base .. "/graphics/entity/radar/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/radar/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/radar/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

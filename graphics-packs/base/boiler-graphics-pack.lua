@@ -24,7 +24,7 @@ function BoilerGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 3,
 		nominal_height = 2,
 	}) --[[@as Reskins.Base.BoilerGraphicsPack]]

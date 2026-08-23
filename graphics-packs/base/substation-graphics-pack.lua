@@ -22,7 +22,7 @@ function SubstationGraphicsPack:configure(params)
 		scale_factor = params.scale_factor,
 		pictures = self.get_pictures(params.tint),
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 2,
 		nominal_height = 2,
 	}) --[[@as SubstationGraphicsPack]]
@@ -42,7 +42,7 @@ end
 ---@return data.RotatedSprite
 ---@nodiscard
 function SubstationGraphicsPack.get_pictures(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/substation/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/substation/"
 
 	---@type data.RotatedSprite
 	local pictures = {
@@ -100,7 +100,7 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function SubstationGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/substation/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/substation/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

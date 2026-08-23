@@ -1,11 +1,15 @@
+---@using Reskins.Assets
+
+---@namespace Reskins.Abstractions
+
 local PrototypeScaler = require("graphics-packs.abstractions.prototype-scaler")
 
 ---The abstract base class for prototype graphics packs. Classes that extend from `GraphicsPackBase` must provide the
 ---necessary method implementations to apply the graphics pack to their specific entity type.
----@class Reskins.Abstractions.GraphicsPackBase
+---@class GraphicsPackBase
 ---@field tint data.Color?
 ---@field remnants data.RotatedAnimationVariations?
----@field required_assets RequiredAssets
+---@field required_assets table<AssetsSource, true>
 ---@field nominal_width double? The width, in tiles, of the selection box of an entity bearing the sprites at their nominal scale. Drives automatic scaling.
 ---@field nominal_height double? The height, in tiles, of the selection box of an entity bearing the sprites at their nominal scale. Drives automatic scaling.
 ---@field scale double? The desired resulting sprite scale, relative to the baseline of `0.5`. Overrides automatic scaling.
@@ -15,20 +19,20 @@ GraphicsPackBase.__index = GraphicsPackBase
 
 ---The caller-facing knobs shared by every graphics pack: the customizations a consumer supplies when
 ---configuring a predefined skin.
----@class Reskins.Abstractions.BaseGraphicsParams
+---@class BaseGraphicsParams
 ---@field tint data.Color?
 ---@field scale double? The desired resulting sprite scale, relative to the baseline of `0.5`. Overrides automatic scaling.
 ---@field scale_factor double? An explicit scale multiplier. Overrides both `scale` and automatic scaling.
 
----@class Reskins.Abstractions.GraphicsParams:Reskins.Abstractions.BaseGraphicsParams
+---@class GraphicsParams:BaseGraphicsParams
 ---@field remnants data.RotatedAnimationVariations?
----@field required_assets RequiredAssets?
+---@field required_assets table<AssetsSource, true>?
 ---@field nominal_width double? The width, in tiles, of the selection box of an entity bearing the sprites at their nominal scale. Drives automatic scaling.
 ---@field nominal_height double? The height, in tiles, of the selection box of an entity bearing the sprites at their nominal scale. Drives automatic scaling.
 
----Creates a new `GraphicsPackBase` instance from the provided [`params`](lua://Reskins.Abstractions.GraphicsParams).
----@param params Reskins.Abstractions.GraphicsParams
----@return Reskins.Abstractions.GraphicsPackBase
+---Creates a new `GraphicsPackBase` instance from the provided [`params`](lua://GraphicsParams).
+---@param params GraphicsParams
+---@return GraphicsPackBase
 ---@nodiscard
 function GraphicsPackBase:configure(params)
 	local instance = {
@@ -39,13 +43,13 @@ function GraphicsPackBase:configure(params)
 		required_assets = params.required_assets or {},
 		nominal_width = params.nominal_width,
 		nominal_height = params.nominal_height,
-	} --[[@as Reskins.Abstractions.GraphicsPackBase]]
+	}
 
 	setmetatable(instance, self)
-	return instance
+	return instance --[[@as GraphicsPackBase]]
 end
 
----Creates a [`PrototypeScaler`](lua://Reskins.Abstractions.PrototypeScaler) for the given `prototype`,
+---Creates a [`PrototypeScaler`](lua://PrototypeScaler) for the given `prototype`,
 ---using this graphics pack's nominal dimensions and any explicit `scale` / `scale_factor`.
 ---
 ---When none of those are set, the returned scaler is an identity (a no-op), so implementations may
@@ -53,10 +57,10 @@ end
 ---
 ---#### Implementation Guidance
 ---- Construct the scaler once at the start of `apply_to_entity`, then call
----  [`scaler:rescale(subset)`](lua://Reskins.Abstractions.PrototypeScaler.rescale) on each sprite-bearing
+---  [`scaler:rescale(subset)`](lua://PrototypeScaler.rescale) on each sprite-bearing
 ---  subset.
 ---@param prototype data.EntityPrototype The prototype to derive scaling from.
----@return Reskins.Abstractions.PrototypeScaler
+---@return PrototypeScaler
 ---@nodiscard
 function GraphicsPackBase:create_scaler(prototype)
 	return PrototypeScaler.for_prototype(prototype, {

@@ -415,9 +415,9 @@ function InserterGraphicsPack:configure(params)
 		or variant == "inserter-bulk-filter"
 	)
 
-	local required_assets = { [_defines.assets.base_assets] = true }
+	local required_assets = { [_defines.assets_source.base_assets] = true }
 	if is_filter then
-		required_assets[_defines.assets.bobs_assets] = true
+		required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	local instance = GraphicsPackBase.configure(self, {

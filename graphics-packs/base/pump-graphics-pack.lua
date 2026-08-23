@@ -22,7 +22,7 @@ function PumpGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 1,
 		nominal_height = 2,
 	}) --[[@as Reskins.Base.PumpGraphicsPack]]
@@ -43,8 +43,8 @@ end
 ---@return data.Animation4Way
 ---@nodiscard
 function PumpGraphicsPack.get_animations(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/pump/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/pump/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/pump/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/pump/"
 
 	---@type data.Animation4Way
 	local animations = {
@@ -208,8 +208,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function PumpGraphicsPack.get_corpse_animation(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/pump/remnants/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/pump/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/pump/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/pump/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

@@ -28,7 +28,7 @@ function ChemicalPlantGraphicsPack:configure(params)
 		remnants = remnants,
 		nominal_width = 3,
 		nominal_height = 3,
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		graphics_set = graphics_set,
 	}) --[[@as Reskins.Base.ChemicalPlantGraphicsPack]]
 
@@ -39,7 +39,7 @@ end
 ---@param tint data.Color?
 ---@return data.CraftingMachineGraphicsSet
 function ChemicalPlantGraphicsPack.get_graphics_set(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/chemical-plant/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/chemical-plant/"
 
 	---@type data.Animation[]
 	local layers = {
@@ -232,7 +232,7 @@ end
 ---@param tint data.Color?
 ---@return data.RotatedAnimationVariations
 function ChemicalPlantGraphicsPack.get_corpse_animation(tint)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/chemical-plant/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/chemical-plant/remnants/"
 
 	---@type data.RotatedAnimationVariations
 	local animation = {

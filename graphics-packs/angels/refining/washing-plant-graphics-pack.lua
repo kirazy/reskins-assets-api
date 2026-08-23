@@ -23,8 +23,8 @@ function WashingPlantGraphicsPack:configure(params)
 		scale_factor = params.scale_factor,
 		remnants = {},
 		required_assets = {
-			[_defines.assets.refining_graphics] = true,
-			[_defines.assets.angels_assets] = true,
+			[_defines.assets_source.refining_graphics] = true,
+			[_defines.assets_source.angels_assets] = true,
 		},
 		nominal_width = 5,
 		nominal_height = 5,

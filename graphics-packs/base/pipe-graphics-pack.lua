@@ -85,7 +85,7 @@ end
 function PipeGraphicsPack.get_corpse_animation(pipe_material)
 	-- For remnants only, the iron sprites come from base.
 	local is_iron = pipe_material == _defines.pipe_material.iron
-	local material_asset = is_iron and _defines.assets.base or _pipes.asset_from_material(pipe_material)
+	local material_asset = is_iron and _defines.assets_source.base or _pipes.asset_from_material(pipe_material)
 
 	local material_name = _pipes.name_from_material(pipe_material)
 	local assets_base_path = material_asset .. "/graphics/entity/pipe/" .. (is_iron and "" or material_name .. "/")
@@ -646,15 +646,15 @@ function PipeGraphicsPack.get_pictures(pipe_material, include_frozen_pictures)
 
 	---@type RequiredAssets
 	local required_assets = {
-		[_defines.assets.base] = true,
-		[_defines.assets.base_assets] = true,
+		[_defines.assets_source.base] = true,
+		[_defines.assets_source.base_assets] = true,
 	}
 
 	required_assets[material_asset] = true
 
 	if include_frozen_pictures then
 		pipe_pictures = util.merge({ pipe_pictures, get_frozen_pictures() })
-		required_assets[_defines.assets.space_age] = true
+		required_assets[_defines.assets_source.space_age] = true
 	end
 
 	return pipe_pictures, required_assets
@@ -675,7 +675,7 @@ function PipeGraphicsPack.get_fluid_box_graphics(pipe_material, include_frozen_p
 
 	if include_frozen_pictures then
 		fluid_box_graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
-		required_assets[_defines.assets.space_age] = true
+		required_assets[_defines.assets_source.space_age] = true
 	end
 
 	return fluid_box_graphics, required_assets

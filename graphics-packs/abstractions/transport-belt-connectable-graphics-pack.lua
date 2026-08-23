@@ -26,7 +26,7 @@ function TransportBeltConnectableGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = params.remnants,
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = params.nominal_width,
 		nominal_height = params.nominal_height,
 	}) --[[@as Reskins.Abstractions.TransportBeltConnectableGraphicsPack]]
@@ -44,7 +44,7 @@ end
 ---@return data.TransportBeltAnimationSet
 ---@nodiscard
 function TransportBeltConnectableGraphicsPack.get_belt_animation_set(tint, belt_sprite)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/transport-belt/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/transport-belt/"
 
 	local frame_counts = {
 		[_defines.belt_sprites.standard] = 16,

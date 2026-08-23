@@ -86,8 +86,8 @@ function InserterPresetGraphicsPack:configure(params)
 		tint = nil,
 		remnants = InserterPresetGraphicsPack.get_corpse_animation(preset),
 		required_assets = {
-			[_defines.assets.bobs_assets] = true,
-			[_defines.assets.base_assets] = true,
+			[_defines.assets_source.bobs_assets] = true,
+			[_defines.assets_source.base_assets] = true,
 		},
 	}) --[[@as Reskins.Base.InserterPresetGraphicsPack]]
 

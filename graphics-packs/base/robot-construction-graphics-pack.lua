@@ -29,7 +29,7 @@ function RobotConstructionGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 1,
 		nominal_height = 2,
 	}) --[[@as RobotConstructionGraphicsPack]]
@@ -62,8 +62,8 @@ end
 ---@return { idle: data.RotatedAnimation, in_motion: data.RotatedAnimation, working: data.RotatedAnimation, shadow_idle: data.RotatedAnimation, shadow_in_motion: data.RotatedAnimation, shadow_working: data.RotatedAnimation }
 ---@nodiscard
 function RobotConstructionGraphicsPack.get_animations(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/construction-robot/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/robot-construction/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/construction-robot/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/robot-construction/"
 
 	-- Shared dimensions for the main body sprite.
 	local body_w, body_h = 66, 76
@@ -229,8 +229,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function RobotConstructionGraphicsPack.get_corpse_animation(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/construction-robot/remnants/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/robot-construction/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/construction-robot/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/robot-construction/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {

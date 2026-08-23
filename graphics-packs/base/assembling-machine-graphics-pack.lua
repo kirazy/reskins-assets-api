@@ -1,7 +1,8 @@
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
-local NumberValidator = require("prototypes.number-validator")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local CraftingMachineGraphicsPack = require("graphics-packs.abstractions.crafting-machine-graphics-pack")
 
@@ -26,7 +27,8 @@ function AssemblingMachineGraphicsPack:configure(params)
 	local graphics_set = self.get_graphics_set(params.tint, params.machine_tier, params.use_electronics_set)
 
 	-- Ensure fluid box pipe pictures draw over the mask and highlights.
-	local draw_order = #graphics_set.animation
+	assert(graphics_set.animation and graphics_set.animation.layers)
+	local draw_order = #graphics_set.animation.layers
 	local fluid_box = self.get_fluid_box_graphics(params.tint, draw_order, params.use_simple_pipe_pictures)
 
 	local remnants = self.get_corpse_animation(params.tint)
@@ -36,7 +38,7 @@ function AssemblingMachineGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = remnants,
-		required_assets = { [_defines.assets.base] = true },
+		required_assets = { [_defines.assets_source.base] = true },
 		nominal_width = 3,
 		nominal_height = 3,
 		graphics_set = graphics_set,
@@ -44,7 +46,7 @@ function AssemblingMachineGraphicsPack:configure(params)
 	}) --[[@as Reskins.Base.AssemblingMachineGraphicsPack]]
 
 	if params.use_electronics_set then
-		instance.required_assets[_defines.assets.bobs_assets] = true
+		instance.required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	-- Set the correct metatable for this class.
@@ -52,12 +54,18 @@ function AssemblingMachineGraphicsPack:configure(params)
 	return instance
 end
 
+local check_get_graphics_set = V.signature("get_graphics_set", {
+	{ "tint", Common.color:optional() },
+	{ "assembly_set", V.integer():in_range(1, 6) },
+	{ "use_electronics_set", V.boolean():optional() },
+})
+
 ---@param tint data.Color?
 ---@param assembly_set 1|2|3|4|5|6
 ---@param use_electronics_set boolean?
 ---@return data.CraftingMachineGraphicsSet
 function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_electronics_set)
-	NumberValidator.validate(assembly_set, "assembly_set"):is_integer():in_range(1, 6)
+	check_get_graphics_set(tint, assembly_set, use_electronics_set)
 
 	-- animations/shadows are 0-based.
 	local animation_index = assembly_set - 1
@@ -84,7 +92,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 	local draw_order = 1
 
 	if tint then
-		table.insert(animation.layers, {
+		table.insert(animation.layers--[[@cast-?]], {
 			filename = assets_base_path .. "assembling-machine-base-mask.png",
 			priority = "high",
 			width = 214,
@@ -94,7 +102,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 			tint = tint,
 			scale = 0.5,
 		})
-		table.insert(animation.layers, {
+		table.insert(animation.layers--[[@cast-?]], {
 			filename = assets_base_path .. "assembling-machine-base-highlights.png",
 			priority = "high",
 			width = 214,
@@ -107,7 +115,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 		draw_order = draw_order + 2
 	end
 
-	table.insert(animation.layers, {
+	table.insert(animation.layers--[[@cast-?]], {
 		filename = assets_base_path .. "animations/assembling-machine-animation-" .. animation_index .. ".png",
 		priority = "high",
 		width = 214,
@@ -118,7 +126,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 		scale = 0.5,
 	})
 
-	table.insert(animation.layers, {
+	table.insert(animation.layers--[[@cast-?]], {
 		filename = assets_base_path .. "shadows/assembling-machine-" .. shadow_index .. "-shadow.png",
 		priority = "high",
 		width = 264,
@@ -132,7 +140,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 
 	if use_electronics_set then
 		local assets_bobs_path = "__reskins-assets-bobs__/graphics/entity/assembling-machine-electronics/"
-		table.insert(animation.layers, {
+		table.insert(animation.layers--[[@cast-?]], {
 			filename = assets_bobs_path .. "assembling-machine-electronics-base.png",
 			priority = "high",
 			width = 214,
@@ -143,7 +151,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 		})
 		draw_order = draw_order + 1
 		if tint then
-			table.insert(animation.layers, {
+			table.insert(animation.layers--[[@cast-?]], {
 				filename = assets_bobs_path .. "assembling-machine-electronics-mask.png",
 				priority = "high",
 				width = 214,
@@ -153,7 +161,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 				tint = tint,
 				scale = 0.5,
 			})
-			table.insert(animation.layers, {
+			table.insert(animation.layers--[[@cast-?]], {
 				filename = assets_bobs_path .. "assembling-machine-electronics-highlights.png",
 				priority = "high",
 				width = 214,
@@ -165,7 +173,7 @@ function AssemblingMachineGraphicsPack.get_graphics_set(tint, assembly_set, use_
 			})
 			draw_order = draw_order + 2
 		end
-		table.insert(animation.layers, {
+		table.insert(animation.layers--[[@cast-?]], {
 			filename = assets_bobs_path .. "assembling-machine-electronics-shadow.png",
 			priority = "high",
 			width = 264,

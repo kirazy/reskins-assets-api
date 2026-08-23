@@ -24,12 +24,12 @@ setmetatable(FurnaceSteelGraphicsPack, {
 local function get_steel_furnace_fire_animation(orientation)
 	local filename
 	if orientation then
-		filename = _defines.assets.bobs_assets
+		filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-steel-fluid/lights/furnace-steel-fluid-fire-"
 			.. orientation
 			.. ".png"
 	else
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-steel/lights/furnace-steel-fire.png"
+		filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-steel/lights/furnace-steel-fire.png"
 	end
 
 	return {
@@ -63,12 +63,12 @@ end
 local function get_steel_furnace_working_light(orientation)
 	local filename
 	if orientation then
-		filename = _defines.assets.bobs_assets
+		filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-steel-fluid/lights/furnace-steel-fluid-working-"
 			.. orientation
 			.. ".png"
 	else
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-steel/lights/furnace-steel-working.png"
+		filename = _defines.assets_source.base_assets .. "/graphics/entity/furnace-steel/lights/furnace-steel-working.png"
 	end
 
 	return {
@@ -88,12 +88,13 @@ end
 local function get_steel_furnace_ground_light(orientation)
 	local filename
 	if orientation then
-		filename = _defines.assets.bobs_assets
+		filename = _defines.assets_source.bobs_assets
 			.. "/graphics/entity/furnace-steel-fluid/lights/furnace-steel-fluid-ground-light-"
 			.. orientation
 			.. ".png"
 	else
-		filename = _defines.assets.base_assets .. "/graphics/entity/furnace-steel/lights/furnace-steel-ground-light.png"
+		filename = _defines.assets_source.base_assets
+			.. "/graphics/entity/furnace-steel/lights/furnace-steel-ground-light.png"
 	end
 
 	return {
@@ -384,12 +385,12 @@ end
 ---@param is_mirror boolean?
 ---@return data.Animation
 local function build_steel_furnace_animation(variant, tint, is_mirror)
-	local base_path = _defines.assets.base_assets .. "/graphics/entity/furnace-steel/"
+	local base_path = _defines.assets_source.base_assets .. "/graphics/entity/furnace-steel/"
 	local bobs_folder = ({
 		standard = nil, -- uses base_path
-		fluid = _defines.assets.bobs_assets .. "/graphics/entity/furnace-steel-fluid/",
-		chemical = _defines.assets.bobs_assets .. "/graphics/entity/furnace-steel-chemical/",
-		["chemical-fluid"] = _defines.assets.bobs_assets .. "/graphics/entity/furnace-steel-chemical-fluid/",
+		fluid = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-fluid/",
+		chemical = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-chemical/",
+		["chemical-fluid"] = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-chemical-fluid/",
 	})[variant]
 
 	local assets_path = bobs_folder or base_path
@@ -524,10 +525,11 @@ function FurnaceSteelGraphicsPack.get_corpse_animation(tint, variant)
 	})[variant]
 
 	local assets_path = ({
-		standard = _defines.assets.base_assets .. "/graphics/entity/furnace-steel/remnants/",
-		fluid = _defines.assets.bobs_assets .. "/graphics/entity/furnace-steel-fluid/remnants/",
-		chemical = _defines.assets.bobs_assets .. "/graphics/entity/furnace-steel-chemical/remnants/",
-		["chemical-fluid"] = _defines.assets.bobs_assets .. "/graphics/entity/furnace-steel-chemical-fluid/remnants/",
+		standard = _defines.assets_source.base_assets .. "/graphics/entity/furnace-steel/remnants/",
+		fluid = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-fluid/remnants/",
+		chemical = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-chemical/remnants/",
+		["chemical-fluid"] = _defines.assets_source.bobs_assets
+			.. "/graphics/entity/furnace-steel-chemical-fluid/remnants/",
 	})[variant]
 
 	---@type data.RotatedAnimationVariations
@@ -586,9 +588,9 @@ function FurnaceSteelGraphicsPack:configure(params)
 
 	local remnants = self.get_corpse_animation(params.tint, params.variant)
 
-	local required_assets = { [_defines.assets.base_assets] = true }
+	local required_assets = { [_defines.assets_source.base_assets] = true }
 	if params.variant ~= "standard" then
-		required_assets[_defines.assets.bobs_assets] = true
+		required_assets[_defines.assets_source.bobs_assets] = true
 	end
 
 	local has_fluid_boxes = params.variant ~= "standard"

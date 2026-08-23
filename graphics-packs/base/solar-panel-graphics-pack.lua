@@ -33,9 +33,9 @@ local nominal_dimensions = {
 function SolarPanelGraphicsPack:configure(params)
 	local required_assets
 	if params.variant == "standard" then
-		required_assets = { [_defines.assets.base_assets] = true }
+		required_assets = { [_defines.assets_source.base_assets] = true }
 	else
-		required_assets = { [_defines.assets.bobs_assets] = true }
+		required_assets = { [_defines.assets_source.bobs_assets] = true }
 	end
 
 	local instance = GraphicsPackBase.configure(self, {
@@ -67,7 +67,7 @@ end
 -- Keyed by variant name; contains asset path, filename prefix, and per-field dimensions.
 local variant_configs = {
 	["small"] = {
-		assets_path = _defines.assets.bobs_assets .. "/graphics/entity/solar-panel-small/",
+		assets_path = _defines.assets_source.bobs_assets .. "/graphics/entity/solar-panel-small/",
 		prefix = "solar-panel-small",
 		body_width = 180,
 		body_height = 150,
@@ -80,7 +80,7 @@ local variant_configs = {
 		overlay_shift = util.by_pixel(5, 0.5),
 	},
 	["standard"] = {
-		assets_path = _defines.assets.base_assets .. "/graphics/entity/solar-panel/",
+		assets_path = _defines.assets_source.base_assets .. "/graphics/entity/solar-panel/",
 		prefix = "solar-panel",
 		body_width = 230,
 		body_height = 224,
@@ -93,7 +93,7 @@ local variant_configs = {
 		overlay_shift = util.by_pixel(10.5, 6),
 	},
 	["large"] = {
-		assets_path = _defines.assets.bobs_assets .. "/graphics/entity/solar-panel-large/",
+		assets_path = _defines.assets_source.bobs_assets .. "/graphics/entity/solar-panel-large/",
 		prefix = "solar-panel-large",
 		body_width = 308,
 		body_height = 274,

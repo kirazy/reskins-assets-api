@@ -23,7 +23,7 @@ function BeaconGraphicsPack:configure(params)
 		scale = params.scale,
 		scale_factor = params.scale_factor,
 		remnants = self.get_corpse_animation(params.tint),
-		required_assets = { [_defines.assets.base_assets] = true },
+		required_assets = { [_defines.assets_source.base_assets] = true },
 		nominal_width = 3,
 		nominal_height = 3,
 	}) --[[@as Reskins.Base.BeaconGraphicsPack]]
@@ -48,8 +48,8 @@ end
 ---@return data.AnimationElement[]
 ---@nodiscard
 function BeaconGraphicsPack.get_animation_list(tint, variant)
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/beacon/" .. variant .. "/"
-	local base_path = _defines.assets.base .. "/graphics/entity/beacon/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/beacon/" .. variant .. "/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/beacon/"
 
 	-- 1. Bottom (floor-mechanics) animation with base/mask/highlights/shadow.
 	local bottom_layers = {
@@ -202,8 +202,8 @@ end
 ---@return data.RotatedAnimationVariations
 ---@nodiscard
 function BeaconGraphicsPack.get_corpse_animation(tint)
-	local base_path = _defines.assets.base .. "/graphics/entity/beacon/remnants/"
-	local assets_path = _defines.assets.base_assets .. "/graphics/entity/beacon/remnants/"
+	local base_path = _defines.assets_source.base .. "/graphics/entity/beacon/remnants/"
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/beacon/remnants/"
 
 	---@type data.RotatedAnimation
 	local animation = {
