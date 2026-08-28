@@ -178,10 +178,56 @@ local function get_chargable_graphics(sprite_set, tint)
 	return chargable_graphics
 end
 
----@param tint Color?
+---@param sprite_set AccumulatorSpriteVariant? # Default "base".
+---@param tint Color? # Default nil.
 ---@return RotatedAnimationVariations
-local function get_corpse_animation(tint)
-	return reskins_suppress_errors and {} or error("get_corpse_animation is not implemented")
+local function get_corpse_animation(sprite_set, tint)
+	sprite_set = sprite_set or "base"
+
+	local assets_base_path = sprite_set == "base" and _defines.assets_source.base or _defines.assets_source.bobs_assets
+	local accumulator_type = sprite_set == "base" and "" or ("-" .. sprite_set)
+	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/accumulator/remnants/"
+
+	---@type RotatedAnimation
+	local animation = {
+		layers = {
+			{
+				filename = assets_base_path
+					.. "/graphics/entity/accumulator/remnants/accumulator"
+					.. accumulator_type
+					.. "-remnants.png",
+				width = 172,
+				height = 146,
+				direction_count = 1,
+				shift = util.by_pixel(2.5, 3.5),
+				scale = 0.5,
+			},
+		},
+	}
+
+	if tint then
+		table.insert(animation.layers--[[@cast -?]], {
+			filename = assets_path .. "accumulator-remnants-mask.png",
+			width = 172,
+			height = 146,
+			direction_count = 1,
+			shift = util.by_pixel(2.5, 3.5),
+			tint = tint,
+			scale = 0.5,
+		})
+
+		table.insert(animation.layers--[[@cast -?]], {
+			filename = assets_path .. "accumulator-remnants-highlights.png",
+			width = 172,
+			height = 146,
+			direction_count = 1,
+			shift = util.by_pixel(2.5, 3.5),
+			blend_mode = "additive-soft",
+			scale = 0.5,
+		})
+	end
+
+	return { animation }
 end
 
 ---@class AccumulatorSpriteSetParams
@@ -213,7 +259,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = { animation = get_corpse_animation(params.sprite_set, params.tint) },
 			water_reflection = get_accumulator_reflection(),
 			nominal_width = 2,
 			nominal_height = 2,
