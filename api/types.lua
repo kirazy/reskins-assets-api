@@ -123,9 +123,6 @@
 ---The prototype's `shadow_in_motion`.
 ---@field shadow_in_motion RotatedAnimation
 
----The sprite data a `mining_drill_sprite_set`-tagged `SpriteSetDefinition` carries.
----@class (exact) MiningDrillSpriteSet : EntityWithHealthSpriteSet
-
 ---The sprite data a `turret_sprite_set`-tagged `SpriteSetDefinition` carries.
 ---@class (exact) TurretSpriteSet : EntityWithHealthSpriteSet
 
