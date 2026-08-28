@@ -33,6 +33,7 @@ Date: ????
   Breaking Changes:
     - `defines.assets` has changed to `defines.assets_source`.
     - The defines, icons, and sprites modules no longer automatically include the Artisanal Reskins: Sprite Utils equivalents. They must be required and used separately.
+    - The graphics pack framework and all implementations have been removed.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.2
 Date: 2026-06-08
