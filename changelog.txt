@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.1.3
+Version: 0.2.0
 Date: ????
   Features:
     - Added the applicator framework: `api.applicators` applies a sprite set to a prototype in one call, handling routing, shape conversion, and scaling on the caller's behalf.
