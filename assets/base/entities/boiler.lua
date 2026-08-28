@@ -354,24 +354,16 @@ end
 
 ---Produces the sprite set for a standard boiler.
 ---
----A pure function of `params`. `entity_sprites` is tagged `boiler_picture_set`; applying it to a
----non-boiler target (e.g. an assembling machine) works through `graphics-packs.apply` as long as
----a conversion path to that target's native shape is registered — see
----`graphics-packs.converters.boiler-picture-set-to-crafting-machine-graphics-set` for the one that
----makes the assembling-machine case work.
----
 ---### Examples
 ---```lua
 ---local boiler = require("assets.base.entities.boiler")
----local apply = require("graphics-packs.apply")
+---local applicators = require("api.applicators")
 ---
----local sprites = boiler.get({ tint = tint })
+---local sprite_set = boiler.get({ tint = tint })
+---applicators.apply_sprite_set(boiler_entity, sprite_set)
 ---
------ standard case: applied to an actual boiler
----apply.apply(boiler_entity, sprites.entity_sprites)
----
------ the original motivating unconventional case: boiler sprites on an assembling machine
----apply.apply(assembling_machine_entity, sprites.entity_sprites)
+----- Automatically adapts to prototypes other than boilers:
+---applicators.apply_sprite_set(assembling_machine_entity, sprite_set)
 ---```
 ---@param params BoilerSpriteSetParams
 ---@return SpriteSetDefinition<BoilerSpriteSet>

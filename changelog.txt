@@ -2,9 +2,30 @@
 Version: 0.1.3
 Date: ????
   Features:
+    - Added the applicator framework: `api.applicators` applies a sprite set to a prototype in one call, handling routing, shape conversion, and scaling on the caller's behalf.
+      - `applicators.apply_sprite_set(prototype, definition, params)` routes on `prototype.type` to the applicator that paints it; a `corpse` prototype instead takes the fields of `definition.set.corpse` directly.
+      - A sprite set is a plain `SpriteSetDefinition` table of a `set_type` and a `set`, so producing one needs no class, no metatable, and no mutation of a prototype.
+      - `defines.sprite_set_type` names the sprite set shapes, each recording the prototype types that consume it.
+      - Sprite data is scaled to the target prototype automatically, comparing the set's `nominal_width` and `nominal_height` against the prototype's inferred scale; `params.scale` and `params.scale_factor` override that directly, the latter relative to the nominal dimensions.
+      - `definition` is never modified, so one sprite set may be applied to an entity and to its corpse.
+      - Applicators ship for accumulators, beacons, boilers, crafting machines, electric poles, generators, inserters, pipes, pipes to ground, pumps, radars, reactors, roboports, construction and logistic robots, solar panels, storage tanks, and transport belts.
+    - Added `api.converters`, the registry of conversions between sprite set shapes, so a sprite set need not already be in the shape the applicator painting it consumes.
+      - `converters.resolve(definition, to_sprite_set)` returns the set in the target shape, preferring a conversion carried on `definition.converters` over the registered ones.
+      - Conversions compose: registering `A` to `B` and `B` to `C` is enough to get `A` to `C`, along the shortest chain of conversions connecting them.
+      - Ships a conversion from `BoilerSpriteSet` to `CraftingMachineSpriteSet`.
+    - Added `api.applicator-registry` and `api.converter-registry`, whose `new` mints an empty registry of its kind.
+    - Added `api.validation`, a catalog of ready-made validators for the values this API works with: symbols, letters, pipe materials, prototypes, bounding boxes, sprite set types, sprite sets, and sprite set definitions.
+      - Entries are validator implementations extending the Artisanal Reskins: Sprite Utils `validation` module.
+    - Added `icons.get_tinted_icon`, returning a two-layer icon for a given file: an untinted base, and a copy of it tinted at 75% opacity over the top. Both layers come back with `icon_size` and `scale` filled in, from the optional `icon_size` and `defaults_type` given.
+      - This is the effect `icons.get_symbol` and `icons.get_letter` are built from.
     - Added two new symbols: aperture-closed and aperture-open, denoting an open and closed iris.
+  Changes:
+    - Icon and sprite methods now validate their arguments through the Artisanal Reskins: Sprite Utils `validation` module; a failure names the function, the parameter, and the path within it, and reports every bad argument at once.
+    - `icons.get_symbol` and `icons.get_letter` now throw when `tint` is not a `Color`, rather than building an icon around an invalid tint.
+    - `icons.is_icons_using_reskins_images`, `icons.remove_symbols_from_icons`, and `icons.remove_letters_from_icons` now throw when given something that is not a non-empty array of `IconData` objects; `icons.is_icons_using_reskins_images` previously answered `false` for `nil`.
+    - `sprites.get_sprite_light_layer` now throws when `light_name` is not the name of a light sprite, rather than returning a sprite pointing at a file that does not exist.
   Bugfixes:
-    - Fixed that the boiler picture set did not include the structure patch, fire, or fire glow elements.
+    - Fixed that the boiler sprite set did not include the structure patch, fire, or fire glow elements.
   Breaking Changes:
     - `defines.assets` has changed to `defines.assets_source`.
     - The defines, icons, and sprites modules no longer automatically include the Artisanal Reskins: Sprite Utils equivalents. They must be required and used separately.

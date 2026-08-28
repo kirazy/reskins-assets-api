@@ -1,6 +1,5 @@
 ---@using data
 ---@using Reskins.Assets
----@using Reskins.Assets.Defines
 
 ---@namespace Reskins.Assets.Applicators
 
@@ -16,7 +15,7 @@ local function apply_sprite_set_to_boiler(prototype, sprite_set)
 	-- fluid energy source `fluid_box`.
 
 	-- `integration_patch`/`integration_patch_render_layer`/`water_reflection` are applied centrally
-	-- by `api.apply`'s `apply_common_fields`, not here — see that function's doc comment.
+	-- by `api.applicator-registry`'s `apply_common_fields`, not here — see that function's doc comment.
 
 	-- FIXME need to handle explosion application in this step based on the package set explosion definition.
 end

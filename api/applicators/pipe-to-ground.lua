@@ -1,6 +1,5 @@
 ---@using data
 ---@using Reskins.Assets
----@using Reskins.Assets.Defines
 
 ---@namespace Reskins.Assets.Applicators
 
@@ -14,8 +13,8 @@ local function apply_sprite_set_to_pipe_to_ground(prototype, set)
 	prototype.pictures = util.copy(set.pictures)
 	prototype.frozen_patch = set.frozen_patch
 
-	if prototype.fluid_box then
-		meld(prototype.fluid_box, set.fluid_box or {})
+	if prototype.fluid_box and set.fluid_box then
+		meld(prototype.fluid_box, set.fluid_box--[[@as FluidBox]])
 	end
 end
 

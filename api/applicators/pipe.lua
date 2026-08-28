@@ -1,6 +1,5 @@
 ---@using data
 ---@using Reskins.Assets
----@using Reskins.Assets.Defines
 
 ---@namespace Reskins.Assets.Applicators
 
@@ -13,8 +12,8 @@ local meld = require("__core__.lualib.meld")
 local function apply_sprite_set_to_pipe(prototype, set)
 	prototype.pictures = util.copy(set.pictures)
 
-	if prototype.fluid_box then
-		meld(prototype.fluid_box, set.fluid_box or {})
+	if prototype.fluid_box and set.fluid_box then
+		meld(prototype.fluid_box, set.fluid_box--[[@as FluidBox]])
 	end
 end
 

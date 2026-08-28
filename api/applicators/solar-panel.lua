@@ -1,6 +1,5 @@
 ---@using data
 ---@using Reskins.Assets
----@using Reskins.Assets.Defines
 
 ---@namespace Reskins.Assets.Applicators
 
@@ -30,9 +29,9 @@ return {
 ---The sprite data a `solar_panel_sprite_set`-tagged `SpriteSetDefinition` carries.
 ---@class (exact) SolarPanelSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `picture`.
----@field picture Sprite
+---@field picture SpriteVariations?
 ---The prototype's `overlay`.
----@field overlay Sprite?
+---@field overlay SpriteVariations?
 
 ---The applicator for solar panels.
 ---@class (exact) SolarPanelSpriteSetApplicator : SpriteSetApplicator<SolarPanelPrototype, SolarPanelSpriteSet>

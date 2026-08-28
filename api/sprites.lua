@@ -1,5 +1,4 @@
--- THIS MODULE IS STABLE
--- Methods may be added to it, but methods already defined are unlikely to change.
+---@using data
 
 ---@namespace Reskins.Assets
 
@@ -10,7 +9,10 @@
 ---local sprites_api = require("__reskins-assets-api__.api.sprites")
 ---```
 ---@class Sprites
-local sprites_api = {}
+local _sprites = {}
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 ---@alias LightSpriteNames
 --- | "atomic-artillery-shell" The name of the sprite for a radioactive atomic artillery shell.
@@ -30,6 +32,30 @@ local sprites_api = {}
 --- | "rocket"                 The name of the sprite for a rocket, such as a uranium-tipped rocket.
 --- | "rounds-magazine"        The name of the sprite for a magazine, such as uranium rounds.
 
+local LightSpriteName = V.one_of({
+	"atomic-artillery-shell",
+	"aura-bullet",
+	"aura-projectile",
+	"aura-rocket",
+	"aura-shotgun-shell",
+	"aura-warhead",
+	"electric-bullet",
+	"electric-projectile",
+	"electric-rocket",
+	"electric-shotgun-shell",
+	"electric-warhead",
+	"fuel",
+	"fuel-cell",
+	"laser-rifle-battery",
+	"rocket",
+	"rounds-magazine",
+}):describe_as("a light sprite name")
+
+local check_get_sprite_light_layer = V.signature("get_sprite_light_layer", {
+	{ "light_name", LightSpriteName },
+	{ "tint", Common.color:optional() },
+})
+
 ---
 ---Creates a `Sprite` object configured for use as a light layer for the given `light_type`,
 ---with the given `tint`.
@@ -42,12 +68,18 @@ local sprites_api = {}
 ---
 ---### Parameters
 ---@param light_name LightSpriteNames # The name of the light sprite used to create the light layer.
----@param tint? data.Color # The tint of the light layer. Default `nil`.
+---@param tint? Color # The tint of the light layer. Default `nil`.
 ---### Returns
----@return data.Sprite # A `Sprite` object configured for use as a light layer.
+---@return Sprite # A `Sprite` object configured for use as a light layer.
+---
+---### Exceptions
+---*@throws* `string` — Thrown when `light_name` is not the name of a light sprite.\
+---*@throws* `string` — Thrown when `tint` is not a `Color`.
 ---@nodiscard
-function sprites_api.get_sprite_light_layer(light_name, tint)
-	---@type data.Sprite
+function _sprites.get_sprite_light_layer(light_name, tint)
+	check_get_sprite_light_layer(light_name, tint)
+
+	---@type Sprite
 	local sprite = {
 		flags = { "light", "icon" },
 		draw_as_light = true,
@@ -60,6 +92,14 @@ function sprites_api.get_sprite_light_layer(light_name, tint)
 
 	return sprite
 end
+
+local check_create_sprite_variations = V.signature("create_sprite_variations", {
+	{ "directory", Common.non_empty_string },
+	{ "sprite_name", Common.non_empty_string },
+	{ "num_variations", Common.positive_integer },
+	{ "is_light", V.boolean():optional() },
+	{ "tint", Common.color:optional() },
+})
 
 ---
 ---Creates a `SpriteVariations` object with `num_variations` using the the sprite variations
@@ -75,50 +115,41 @@ end
 ---```
 ---
 ---### Remarks
----Images are expected to be named `{sprite_name}-#.png`, where `#` is the variation number, except the
----first, which is `{sprite_name}.png`.
+---The first image is named `{sprite_name}.png`, and each image after it is named
+---`{sprite_name}-#.png`, where `#` counts the images following the first.
 ---
----For example, `shot.png`, `shot-2.png`, `shot-3.png`, `shot-4.png`, `shot-5.png`.
+---For example, five variations are `shot.png`, `shot-1.png`, `shot-2.png`, `shot-3.png`, `shot-4.png`.
 ---
 ---### Parameters
 ---@param directory string # The path to the directory containing the sprite variations, with-or-without trailing forward slash.
 ---@param sprite_name string # The name of the sprite variations, without number or extensions, e.g. `{sprite_name}.png` or `{sprite_name}-#.png`.
 ---@param num_variations integer # The number of sprite variations; this must match the number of files.
 ---@param is_light? boolean # Whether the sprite variations include a light layer. Defaults to `false`.
----@param tint? data.Color # The tint of the light layer. Defaults to `{ r = 0.3, g = 0.3, b = 0.3, a = 0.3 }`.
+---@param tint? Color # The tint of the light layer. Defaults to `{ r = 0.3, g = 0.3, b = 0.3, a = 0.3 }`.
 ---### Returns
----@return data.SpriteVariations[] # The `SpriteVariations` object for the given parameters.
+---@return SpriteVariations[] # The `SpriteVariations` object for the given parameters.
 ---
 ---### Exceptions
----*@throws* `string` — Thrown when `directory` is not a non-empty string.<br/>
----*@throws* `string` — Thrown when `sprite_name` is not a non-empty string.<br/>
----*@throws* `string` — Thrown when `num_variations` is not a positive integer.
+---*@throws* `string` — Thrown when `directory` is not a non-empty string.\
+---*@throws* `string` — Thrown when `sprite_name` is not a non-empty string.\
+---*@throws* `string` — Thrown when `num_variations` is not a positive integer.\
+---*@throws* `string` — Thrown when `is_light` is not a boolean.\
+---*@throws* `string` — Thrown when `tint` is not a `Color`.
 ---@nodiscard
-function sprites_api.create_sprite_variations(directory, sprite_name, num_variations, is_light, tint)
-	assert(
-		directory and type(directory) == "string" and directory ~= "",
-		"Invalid parameter: `directory` must not be non-empty string."
-	)
-	assert(
-		sprite_name and type(sprite_name) == "string" and sprite_name ~= "",
-		"Invalid parameter: `sprite_name` must not be non-empty string."
-	)
-	assert(
-		num_variations and num_variations > 0 and num_variations % 1 == 0,
-		"Invalid parameter: `num_variations` must be a positive integer."
-	)
+function _sprites.create_sprite_variations(directory, sprite_name, num_variations, is_light, tint)
+	check_create_sprite_variations(directory, sprite_name, num_variations, is_light, tint)
 
 	if not directory:match("/$") then
 		directory = directory .. "/"
 	end
 
-	---@type data.SpriteVariations[]
+	---@type SpriteVariations[]
 	local sprites = {}
 	for n = 1, num_variations do
 		local file_name = sprite_name .. ((n > 1) and ("-" .. (n - 1) .. ".png") or ".png")
 
 		if is_light then
-			---@type data.Sprite
+			---@type Sprite
 			local sprite = {
 				layers = {
 					{
@@ -143,7 +174,7 @@ function sprites_api.create_sprite_variations(directory, sprite_name, num_variat
 
 			table.insert(sprites, sprite)
 		else
-			---@type data.Sprite
+			---@type Sprite
 			local sprite = {
 				filename = directory .. file_name,
 				flags = { "icon" },
@@ -159,4 +190,4 @@ function sprites_api.create_sprite_variations(directory, sprite_name, num_variat
 	return sprites
 end
 
-return sprites_api
+return _sprites

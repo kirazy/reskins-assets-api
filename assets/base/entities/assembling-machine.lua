@@ -210,20 +210,13 @@ end
 
 ---Produces the sprite set for a standard assembling machine.
 ---
----A pure function of `params` — does not read or touch any prototype. `entity_sprites` is
----tagged `crafting_machine_graphics_set` and can be handed to `graphics-packs.apply`, which routes
----to the applicator for whatever `prototype`'s own type actually is (or, to force a specific
----applicator regardless of `prototype.type`, call `graphics-packs.apply.applicators.crafting_machine`
----directly) — this file only knows how to build the sprite data, not how to place it on a
----prototype.
----
 ---### Examples
 ---```lua
----local assembling_machine = require("assets.base.entities.assembling-machine")
----local apply = require("graphics-packs.apply")
+---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
+---local applicators = require("__reskins-assets-api__.api.applicators")
 ---
----local sprites = assembling_machine.get({ tint = tint, machine_tier = 3 })
----apply.apply(entity, sprites.entity_sprites)
+---local sprite_set = assembling_machine.get({ tint = tint, machine_tier = 3 })
+---applicators.apply_sprite_set(entity, sprite_set)
 ---```
 ---@param params AssemblingMachineSpritesParams
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>

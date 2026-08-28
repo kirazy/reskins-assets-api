@@ -80,19 +80,19 @@ _defines.letter = {
 }
 
 ---@alias PipeMaterialName
----| '"aluminum"'
----| '"brass"'
----| '"bronze"'
----| '"ceramic"'
----| '"copper"'
----| '"copper-tungsten"'
----| '"iron"'
----| '"nitinol"'
----| '"plastic"'
----| '"steel"'
----| '"stone"'
----| '"titanium"'
----| '"tungsten"'
+---| "aluminum"
+---| "brass"
+---| "bronze"
+---| "ceramic"
+---| "copper"
+---| "copper-tungsten"
+---| "iron"
+---| "nitinol"
+---| "plastic"
+---| "steel"
+---| "stone"
+---| "titanium"
+---| "tungsten"
 
 ---@enum PipeMaterial
 _defines.pipe_material = {
@@ -115,7 +115,7 @@ _defines.pipe_material = {
 	tungsten_angels = "angels-tungsten",
 }
 
----Identifies the shape of a `SpriteSetDefinition`'s `set`, so `api.apply` can route it to the
+---Identifies the shape of a `SpriteSetDefinition`'s `set`, so `api.applicators` can route it to the
 ---applicator that knows how to paint that shape without the caller naming one explicitly.
 ---@enum SpriteSetType
 _defines.sprite_set_type = {

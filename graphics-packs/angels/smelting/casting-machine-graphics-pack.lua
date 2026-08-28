@@ -44,7 +44,7 @@ end
 ---Applies a copy of the graphics pack to the specified `prototype`.
 ---
 ---#### Exceptions
----*@throws* - `string` - When `prototype` is `nil`.</br>
+---*@throws* - `string` - When `prototype` is `nil`.\
 ---*@throws* - `string` - When `prototype` is is not a `table`.
 ---
 ---#### Implementation Guidance

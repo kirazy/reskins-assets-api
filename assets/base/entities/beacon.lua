@@ -212,9 +212,8 @@ end
 
 ---Produces the sprite set for the vanilla beacon.
 ---
----The old pack merged `animation_list` into whatever `graphics_set` the prototype
----already carried rather than replacing it. An applicator for this shape has to do
----the same — the rest of a beacon's `graphics_set` is not produced here.
+---The set carries an `animation_list` rather than a `graphics_set`: it is applied into the
+---`graphics_set` the prototype already carries, leaving the rest of that set as it is.
 ---@param params BeaconSpriteSetParams
 ---@return SpriteSetDefinition<BeaconSpriteSet>
 ---@nodiscard

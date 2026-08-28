@@ -1,9 +1,22 @@
--- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
--- The type signatures are not stable.
-
 ---@using data
 
 ---@namespace Reskins.Assets
+
+---The type name of an [EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html).
+---@alias PrototypeType string
+
+---@alias SpriteSetTransformer<TIn : SpriteSetBase, TOut : SpriteSetBase> fun(sprite_set: TIn): TOut
+---@alias AnySpriteSetTransformer SpriteSetTransformer<any, any>
+
+---Caller-facing escape hatches for `apply_sprite_set`. Fields are optional; omitting them gets fully automatic behavior.
+---@class (exact) ApplySpriteSetParams
+---The desired resulting sprite scale, relative to the baseline of `0.5`. Overrides automatic
+---scaling. Ignored if `scale_factor` is also set.
+---@field scale double?
+---An explicit scale multiplier multiplied against the nominal scale.
+---
+---Overrides both `scale` and automatic scaling.
+---@field scale_factor double?
 
 ---The fields every sprite set shares, regardless of the prototype kind it paints.
 ---@class (exact) SpriteSetBase
@@ -21,12 +34,13 @@
 ---@field integration_patch_render_layer RenderLayer?
 ---The entity's death-explosion art, consumed by `SpriteSetApplicator.apply_to_explosion`.
 ---@field dying_explosion any
----The entity's remnant art, applied to its corpse prototype by `api.apply`.
+---The entity's remnant art. Applied when this sprite set is applied to a `CorpsePrototype`,
+---and left alone when it is applied to the entity itself.
 ---@field corpse CorpseSpriteSet?
 ---The prototype's `water_reflection`.
 ---@field water_reflection WaterReflectionDefinition?
 
----@class CorpseSpriteSet
+---@class (exact) CorpseSpriteSet
 ---@field animation RotatedAnimationVariations?
 ---@field animation_overlay RotatedAnimationVariations?
 ---@field animation_overlay_render_layer RenderLayer?
@@ -51,7 +65,7 @@
 ---@field underwater_layer_offset? int8
 ---@field underwater_patch? RotatedSprite
 
----A sprite set tagged with its `SpriteSetType`, so `api.apply` can route it to the applicator that
+---A sprite set tagged with its `SpriteSetType`, so `api.applicators` can route it to the applicator that
 ---knows how to paint that shape without the caller naming one explicitly.
 ---
 ---### Examples
@@ -77,15 +91,19 @@
 ---convert a sprite set without knowing its exact shape.
 ---@class (exact) AnySpriteSetDefinition : SpriteSetDefinition<any>
 
----Paints one prototype kind with a sprite set of type `U`. Registered with `api.apply` and
+---Paints one prototype kind with a sprite set of type `U`. Registered with `api.applicators` and
 ---selected by the target prototype's own type, never by inspecting the sprite set being applied.
 ---
----Corpse application isn't part of this interface: `api.apply` applies `U`'s `corpse` field to
----the prototype's remnant corpse itself, the same way for every applicator.
+---Corpse application isn't part of this interface: `apply_sprite_set` copies `U`'s `corpse` field
+---onto a `CorpsePrototype` handed to it directly, the same way for every applicator.
 ---@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype, U: EntityWithHealthSpriteSet>
 ---The `SpriteSetType` this applicator's `apply_to`/`apply_to_explosion` expect.
 ---@field set_type SpriteSetType
 ---Applies `set` to the entity prototype `prototype`.
+---
+---Handles the fields particular to this prototype kind. The fields every `EntityWithHealthSpriteSet`
+---carries are applied by `ApplicatorRegistry.apply_sprite_set` before this is called, leaving this
+---the last word on them.
 ---@field apply_to fun(prototype: T, set: U)
 ---Applies `set` to the explosion prototype `explosion`.
 ---@field apply_to_explosion fun(explosion: ExplosionPrototype, set: U)
@@ -94,17 +112,7 @@
 ---to call it without knowing its exact types.
 ---@class (exact) AnySpriteSetApplicator : SpriteSetApplicator<any, any>
 
----
---- Provisional sprite-set shapes
----
---- A sprite set's shape belongs to the applicator that consumes it — `BoilerSpriteSet` lives in
---- `api/applicators/boiler.lua`. The shapes below have no applicator yet, and more than one
---- producer builds each of them, so they can't be declared in a producer file without two
---- producers declaring the same class. They live here until their applicator exists, then move to
---- it. A shape only one producer builds is declared in that producer instead.
----
-
----Built by the construction, logistic and combat robot producers.
+---The sprite data a `flying_robot_sprite_set`-tagged `SpriteSetDefinition` carries.
 ---@class (exact) FlyingRobotSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `idle`.
 ---@field idle RotatedAnimation
@@ -115,43 +123,11 @@
 ---The prototype's `shadow_in_motion`.
 ---@field shadow_in_motion RotatedAnimation
 
----Built by the electric mining drill and pumpjack producers. Both are placeholders that carry no
----sprites yet, so this shape adds nothing to the common fields.
+---The sprite data a `mining_drill_sprite_set`-tagged `SpriteSetDefinition` carries.
 ---@class (exact) MiningDrillSpriteSet : EntityWithHealthSpriteSet
 
----Built by the gun turret, laser turret, plasma turret, and sniper turret producers. All four are
----placeholders that carry no sprites yet, so this shape adds nothing to the common fields.
+---The sprite data a `turret_sprite_set`-tagged `SpriteSetDefinition` carries.
 ---@class (exact) TurretSpriteSet : EntityWithHealthSpriteSet
-
----Creates a new icon with the specified `tint`, `shift`, and `scale`.
----
----*@param* `tint` — The color of the mask layer of the created icon; optional.
----
----*@param* `shift` — A shift to apply to every layer of the created icon; optional.
----
----*@param* `scale` — A scaling factor to apply to every layer of the created icon; optional.
----
----@alias TintedIconCreator fun(tint: Color?, shift: Vector?, scale: double?): IconData[]
-
----Creates a new icon with the specified `shift`, and `scale`.
----
----*@param* `shift` — A shift to apply to the created icon; optional.
----
----*@param* `scale` — A scaling factor to apply to the created icon; optional.
----
----@alias IconCreator fun(shift: Vector?, scale: double?): IconData[]
-
----Creates a new icon with the specified `shift`, and `scale`.
----
----*@param* `pipe_material` — The pipe material of the created icon.
----
----*@param* `shift` — A shift to apply to the created icon; optional.
----
----*@param* `scale` — A scaling factor to apply to the created icon; optional.
----
----@alias PipeIconCreator fun(pipe_material: PipeMaterial, shift: Vector?, scale: double?): IconData[]
-
----@alias RequiredAssets {[AssetsSource]: true}
 
 ---@class (exact) PipeConnectionGraphics
 ---@field enable_working_visualisations string[]

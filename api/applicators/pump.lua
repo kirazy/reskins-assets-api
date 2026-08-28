@@ -1,6 +1,5 @@
 ---@using data
 ---@using Reskins.Assets
----@using Reskins.Assets.Defines
 
 ---@namespace Reskins.Assets.Applicators
 
