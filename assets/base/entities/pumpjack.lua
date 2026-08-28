@@ -236,6 +236,32 @@ local function get_graphics_set(params, is_flipped)
 	return graphics_set
 end
 
+local function translate_graphics_set_to_legacy(params)
+	local standard = get_graphics_set(params, false)
+	local flipped = get_graphics_set(params, true)
+
+	---@type MiningDrillGraphicsSet
+	local graphics_set = {
+		animation = standard.animation,
+		working_visualisations = {
+			{
+				always_draw = true,
+				secondary_draw_order = -1,
+				---@diagnostic disable-next-line: need-check-nil
+				north_animation = standard.working_visualisations[1].north_animation,
+				---@diagnostic disable-next-line: need-check-nil
+				east_animation = flipped.working_visualisations[1].east_animation,
+				---@diagnostic disable-next-line: need-check-nil
+				south_animation = standard.working_visualisations[1].south_animation,
+				---@diagnostic disable-next-line: need-check-nil
+				west_animation = flipped.working_visualisations[1].west_animation,
+			},
+		},
+	}
+
+	return graphics_set
+end
+
 -- The remnants take one tint where the entity takes three; no artwork is drawn for the body and
 -- accent colors yet.
 ---@param base_layer FileName # The file the remnants' base layer is drawn from.
@@ -312,8 +338,6 @@ local function get_definition(params, corpse_base_layer)
 	local definition = {
 		set_type = _defines.sprite_set_type.mining_drill_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params, false),
-			graphics_set_flipped = get_graphics_set(params, true),
 			wet_mining_graphics_set = nil,
 			wet_mining_graphics_set_flipped = nil,
 			radius_visualisation_picture = {
@@ -330,6 +354,13 @@ local function get_definition(params, corpse_base_layer)
 			nominal_height = 3,
 		},
 	}
+
+	if helpers.compare_versions(mods["base"], "2.1.0") >= 0 then
+		definition.set.graphics_set = get_graphics_set(params, false)
+		definition.set.graphics_set_flipped = get_graphics_set(params, true)
+	else
+		definition.set.graphics_set = translate_graphics_set_to_legacy(params)
+	end
 
 	return definition
 end
