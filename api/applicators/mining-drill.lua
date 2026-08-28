@@ -14,6 +14,7 @@ local FLIPPED_GRAPHICS_VERSION = "2.1.0"
 local function apply_sprite_set_to_mining_drill(prototype, set)
 	prototype.graphics_set = util.copy(set.graphics_set)
 	prototype.wet_mining_graphics_set = util.copy(set.wet_mining_graphics_set)
+	prototype.radius_visualisation_picture = util.copy(set.radius_visualisation_picture)
 
 	-- The flipped sets are drawn only by a base mod that reads them; the fields are absent from
 	-- the prototype entirely before 2.1.0.
@@ -48,6 +49,8 @@ return {
 ---@field wet_mining_graphics_set MiningDrillGraphicsSet?
 ---The prototype's `wet_mining_graphics_set_flipped`. Applies only to Factorio 2.1.
 ---@field wet_mining_graphics_set_flipped MiningDrillGraphicsSet?
+---The prototype's `radius_visualisation_picture`.
+---@field radius_visualisation_picture Sprite?
 
 ---The applicator for mining drills.
 ---@class (exact) MiningDrillSpriteSetApplicator : SpriteSetApplicator<MiningDrillPrototype, MiningDrillSpriteSet>

@@ -316,6 +316,11 @@ local function get_definition(params, corpse_base_layer)
 			graphics_set_flipped = get_graphics_set(params, true),
 			wet_mining_graphics_set = nil,
 			wet_mining_graphics_set_flipped = nil,
+			radius_visualisation_picture = {
+				filename = "__base__/graphics/entity/pumpjack/pumpjack-radius-visualization.png",
+				width = 12,
+				height = 12,
+			},
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
