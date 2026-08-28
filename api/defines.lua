@@ -45,6 +45,8 @@ _defines.assets_source = {
 	assorted_assets = "__reskins-assets-assorted__",
 	---Artisanal Reskins: Space Age Assets.
 	space_age_assets = "__reskins-assets-space-age__",
+	---Artisanal Reskins: Hurricane Assets.
+	hurricane_assets = "__reskins-assets-hurricane__",
 	---Angel's Refining Graphics.
 	refining_graphics = "__angelsrefininggraphics__",
 	---Angel's Smelting Graphics.

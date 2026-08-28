@@ -10,7 +10,7 @@ Date: ????
       - `definition` is never modified, so one sprite set may be applied to an entity and to its corpse.
       - Applicators ship for accumulators, beacons, boilers, crafting machines, electric poles, generators, inserters, mining drills, pipes, pipes to ground, pumps, radars, reactors, roboports, construction and logistic robots, solar panels, storage tanks, and transport belts.
     - Added the entity asset modules under `assets`: one flat module per entity family, each exporting `get_sprite_set` and `get_icon`.
-      - Modules are filed by the asset mod that adds the entity, under `assets.base.entities`, `assets.angels.entities`, and `assets.bobs.entities`.
+      - Modules are filed by the asset mod that adds the entity, under `assets.base.entities`, `assets.angels.entities`, `assets.bobs.entities`, and `assets.hurricane.entities`.
       - `assets.base.entities.assembling-machine` also exports the pieces its icons are composed from, on `icon_layers`.
       - A `nil` tint omits the tintable layers from a sprite set or icon rather than drawing them untinted.
     - Added `api.converters`, the registry of conversions between sprite set shapes, so a sprite set need not already be in the shape the applicator painting it consumes.
