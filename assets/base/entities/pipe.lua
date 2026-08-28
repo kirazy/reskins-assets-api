@@ -1,12 +1,17 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
+local AssetsCommon = require("api.validation")
 
 local M = {}
 
@@ -620,16 +625,29 @@ local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 end
 
 ---@class PipeSpriteSetParams
----@field pipe_material PipeMaterial # Default iron.
----@field include_frozen_pictures boolean? # When true, includes the frozen sprites. Default false.
+---The material the pipes are built from. Defaults to iron.
+---@field pipe_material PipeMaterial
+---Whether to carry the frozen artwork. Defaults to `false`.
+---@field include_frozen_pictures boolean?
 
----Produces the sprite set for the vanilla and Bob's pipes.
+---Gets the sprite set for the vanilla and Bob's pipes.
 ---
----Window bounding boxes are the base game's, unchanged.
----@param params PipeSpriteSetParams
+---### Remarks
+---Window bounding boxes are the base game's.
+---
+---@param params PipeSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<PipeSpriteSet>
+---
+---### Examples
+---```lua
+---local pipe = require("__reskins-assets-api__.assets.base.entities.pipe")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = pipe.get_sprite_set({ pipe_material = pipe_material })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
 	---@type SpriteSetDefinition<PipeSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.pipe_sprite_set,
@@ -649,6 +667,27 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "pipe_material", AssetsCommon.pipe_material },
+})
+
+---Gets the icon for a pipe built from the given `pipe_material`.
+---@param pipe_material PipeMaterial # The material the pipe is built from.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(pipe_material)
+	check_get_icon(pipe_material)
+
+	if pipe_material == _defines.pipe_material.iron then
+		return { { icon = "__base__/graphics/icons/pipe.png", icon_size = 64, scale = 0.5 } }
+	end
+
+	local name = _pipes.name_from_material(pipe_material)
+	local folder = _pipes.asset_from_material(pipe_material) .. "/graphics/icons/pipe/"
+
+	return { { icon = folder .. name .. "-pipe-icon.png", icon_size = 64, scale = 0.5 } }
 end
 
 return M

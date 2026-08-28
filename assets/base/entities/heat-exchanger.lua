@@ -1,11 +1,14 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -317,18 +320,28 @@ local function get_corpse_animation(tint, pipe_material)
 end
 
 ---@class HeatExchangerSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
+---The material the pipes are built from. Defaults to iron.
 ---@field pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 
----Produces the sprite set for the vanilla heat exchanger.
----
----The old pack put its pipe covers straight onto `energy_source.pipe_covers`. They
----ride on `fluid_boxes` here, which the boiler applicator does not consume yet — see
----the fluid box FIXME in `api/applicators/boiler.lua`.
----@param params HeatExchangerSpriteSetParams
+---Gets the sprite set for the vanilla heat exchanger.
+---@param params HeatExchangerSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<BoilerSpriteSet>
+---
+---### Examples
+---```lua
+---local heat_exchanger = require("__reskins-assets-api__.assets.base.entities.heat-exchanger")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = heat_exchanger.get_sprite_set({ tint = tint, pipe_material = pipe_material })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
+	-- FIXME: the pipe covers ride on `fluid_boxes`, which the boiler applicator does not
+	-- consume yet. See the fluid box FIXME in `api/applicators/boiler.lua`.
 	---@type SpriteSetDefinition<BoilerSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.boiler_sprite_set,
@@ -350,6 +363,32 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "pipe_material", V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" }) },
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for a heat exchanger carrying the given `pipe_material`, in the given `tint`.
+---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper" # The heat pipes the exchanger is built with.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(pipe_material, tint)
+	check_get_icon(pipe_material, tint)
+
+	local folder = "__reskins-assets-bobs__/graphics/icons/heat-exchanger/heat-exchanger-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. pipe_material .. "-icon-base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "icon-mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "icon-highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M

@@ -1,11 +1,15 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -188,17 +192,26 @@ local function get_corpse_animation(preset)
 end
 
 ---@class InserterPresetSpriteSetParams
+---The preset to draw.
 ---@field preset InserterPreset
----@field is_long boolean? # When `true`, selects the long-arm hand sprite variants. Only valid for non-bulk presets that are not `"inserter-long-handed"`.
+---Whether the inserter wears its long-arm hands. Only the non-bulk presets other than `"inserter-long-handed"`
+---draw them.
+---@field is_long boolean?
 
----Produces the sprite set for Bob's preset (untinted) inserters.
----
----The old pack declared no nominal dimensions; an inserter's 1x1 footprint is used
----here, so scaling has a baseline to work from.
----@param params InserterPresetSpriteSetParams
+---Gets the sprite set for Bob's preset (untinted) inserters.
+---@param params InserterPresetSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<InserterSpriteSet>
+---
+---### Examples
+---```lua
+---local inserter_preset = require("__reskins-assets-api__.assets.base.entities.inserter-preset")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = inserter_preset.get_sprite_set({ preset = preset })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
 	local preset = params.preset
 	local is_long = params.is_long or false
 
@@ -236,6 +249,45 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{
+		"preset",
+		V.one_of({
+			"inserter",
+			"inserter-burner",
+			"inserter-fast",
+			"inserter-express",
+			"inserter-filter",
+			"inserter-express-filter",
+			"inserter-long-handed",
+			"inserter-bulk",
+			"inserter-express-bulk",
+			"inserter-bulk-filter",
+			"inserter-express-bulk-filter",
+		}),
+	},
+})
+
+---Gets the icon for the given preset inserter.
+---
+---### Remarks
+---The preset inserters are untinted. `inserter.get_icon` is the tinted counterpart.
+---
+---@param preset InserterPreset # The preset the icon is drawn for.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(preset)
+	check_get_icon(preset)
+
+	-- The artwork leads with the qualifier: `inserter-express-bulk` is `express-bulk-inserter-icon`.
+	local qualifier = preset:match("^inserter%-(.+)$")
+	local name = qualifier and qualifier .. "-inserter-icon" or "inserter-icon"
+
+	return {
+		{ icon = "__reskins-assets-bobs__/graphics/icons/inserters/" .. name .. ".png", icon_size = 64, scale = 0.5 },
+	}
 end
 
 return M

@@ -1,10 +1,14 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -138,13 +142,24 @@ local function get_corpse_animation(tint)
 end
 
 ---@class StorageTankSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
 
----Produces the sprite set for the vanilla storage tank.
----@param params StorageTankSpriteSetParams
+---Gets the sprite set for the vanilla storage tank.
+---@param params StorageTankSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<StorageTankSpriteSet>
+---
+---### Examples
+---```lua
+---local storage_tank = require("__reskins-assets-api__.assets.base.entities.storage-tank")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = storage_tank.get_sprite_set({ tint = tint })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
 	---@type SpriteSetDefinition<StorageTankSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.storage_tank_sprite_set,
@@ -161,6 +176,53 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+---Builds the base, mask, and highlights layers filed under `prefix`.
+---@param prefix string # The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
+---@param tint Color? # The color to tint the mask.
+---@return SafeIconData[]
+---@nodiscard
+local function get_tinted_layers(prefix, tint)
+	local layers = { { icon = prefix .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(layers, { icon = prefix .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(layers, { icon = prefix .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return layers
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for the vanilla storage tank, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(tint)
+	check_get_icon(tint)
+
+	return get_tinted_layers("__reskins-assets-base__/graphics/icons/storage-tank/storage-tank-icon-", tint)
+end
+
+local check_get_all_corners_icon = V.signature("get_all_corners_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for a storage tank with a connection on every corner, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_all_corners_icon(tint)
+	check_get_all_corners_icon(tint)
+
+	return get_tinted_layers(
+		"__reskins-assets-bobs__/graphics/icons/storage-tank-all-corners/storage-tank-all-corners-icon-",
+		tint
+	)
 end
 
 return M

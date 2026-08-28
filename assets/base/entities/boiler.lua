@@ -1,16 +1,21 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _defines = require("api.defines")
 
 local M = {}
 
 ---@param tint Color?
+---@param fire_tint Color?
 ---@return BoilerPictureSet
-local function get_picture_set(tint)
+local function get_picture_set(tint, fire_tint)
 	local base_path = "__base__/graphics/entity/boiler/"
 	local assets_base_path = "__reskins-assets-base__/graphics/entity/boiler/"
 
@@ -191,8 +196,10 @@ local function get_picture_set(tint)
 		north = {
 			structure = north,
 			fire = {
-				filename = "__base__/graphics/entity/boiler/boiler-N-fire.png",
+				filename = fire_tint and assets_base_path .. "boiler-north-fire.png" or base_path .. "boiler-N-fire.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				frame_count = 64,
 				line_length = 8,
@@ -203,8 +210,10 @@ local function get_picture_set(tint)
 				scale = 0.5,
 			},
 			fire_glow = {
-				filename = "__base__/graphics/entity/boiler/boiler-N-light.png",
+				filename = fire_tint and assets_base_path .. "boiler-north-light.png" or base_path .. "boiler-N-light.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				width = 200,
 				height = 173,
@@ -223,8 +232,10 @@ local function get_picture_set(tint)
 				scale = 0.5,
 			},
 			fire = {
-				filename = "__base__/graphics/entity/boiler/boiler-E-fire.png",
+				filename = fire_tint and assets_base_path .. "boiler-east-fire.png" or base_path .. "boiler-E-fire.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				frame_count = 64,
 				line_length = 8,
@@ -235,8 +246,10 @@ local function get_picture_set(tint)
 				scale = 0.5,
 			},
 			fire_glow = {
-				filename = "__base__/graphics/entity/boiler/boiler-E-light.png",
+				filename = fire_tint and assets_base_path .. "boiler-east-light.png" or base_path .. "boiler-E-light.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				width = 139,
 				height = 244,
@@ -248,8 +261,10 @@ local function get_picture_set(tint)
 		south = {
 			structure = south,
 			fire = {
-				filename = "__base__/graphics/entity/boiler/boiler-S-fire.png",
+				filename = fire_tint and assets_base_path .. "boiler-south-fire.png" or base_path .. "boiler-S-fire.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				frame_count = 64,
 				line_length = 8,
@@ -260,8 +275,10 @@ local function get_picture_set(tint)
 				scale = 0.5,
 			},
 			fire_glow = {
-				filename = "__base__/graphics/entity/boiler/boiler-S-light.png",
+				filename = fire_tint and assets_base_path .. "boiler-south-light.png" or base_path .. "boiler-S-light.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				width = 200,
 				height = 162,
@@ -273,8 +290,10 @@ local function get_picture_set(tint)
 		west = {
 			structure = west,
 			fire = {
-				filename = "__base__/graphics/entity/boiler/boiler-W-fire.png",
+				filename = fire_tint and assets_base_path .. "boiler-west-fire.png" or base_path .. "boiler-W-fire.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				frame_count = 64,
 				line_length = 8,
@@ -285,8 +304,10 @@ local function get_picture_set(tint)
 				scale = 0.5,
 			},
 			fire_glow = {
-				filename = "__base__/graphics/entity/boiler/boiler-W-light.png",
+				filename = fire_tint and assets_base_path .. "boiler-west-light.png" or base_path .. "boiler-W-light.png",
 				draw_as_glow = true,
+				tint = fire_tint,
+				tint_as_overlay = fire_tint ~= nil,
 				priority = "extra-high",
 				width = 136,
 				height = 217,
@@ -301,7 +322,7 @@ local function get_picture_set(tint)
 end
 
 ---@param tint Color?
----@return RotatedAnimation
+---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/boiler/remnants/"
 
@@ -343,54 +364,144 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
--- FIXME: need to take a param to control the flame type used. COuld package as e.g. "light_style"
--- or something and set both the flicker enabled properties and the corresponding fire animation
--- based on e.g. "fire" or "blue", or w.e
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/boiler/boiler-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 32,
+			shift = util.by_pixel(5, 30),
+			variation_count = 4,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
+end
 
 ---@class BoilerSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
+---The color to tint the fire. When `nil`, the base game's fire artwork is drawn instead.
+---@field fire_tint Color?
+---Whether the fire flickers. Defaults to `true`.
 ---@field fire_flicker_enabled boolean?
+---Whether the fire glow flickers. Defaults to `true`.
 ---@field fire_glow_flicker_enabled boolean?
 
----Produces the sprite set for a standard boiler.
+local check_params = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.shape({
+			tint = Common.color:optional(),
+			fire_tint = Common.color:optional(),
+			fire_flicker_enabled = V.boolean():optional(),
+			fire_glow_flicker_enabled = V.boolean():optional(),
+		}),
+	},
+})
+
+---Gets the sprite set for a standard boiler.
+---@param params BoilerSpriteSetParams # The options the sprite set is drawn with.
+---@return SpriteSetDefinition<BoilerSpriteSet>
 ---
 ---### Examples
 ---```lua
----local boiler = require("assets.base.entities.boiler")
----local applicators = require("api.applicators")
+---local boiler = require("__reskins-assets-api__.assets.base.entities.boiler")
+---local applicators = require("__reskins-assets-api__.api.applicators")
 ---
----local sprite_set = boiler.get({ tint = tint })
+---local sprite_set = boiler.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(boiler_entity, sprite_set)
 ---
 ----- Automatically adapts to prototypes other than boilers:
 ---applicators.apply_sprite_set(assembling_machine_entity, sprite_set)
 ---```
----@param params BoilerSpriteSetParams
----@return SpriteSetDefinition<BoilerSpriteSet>
+---
+---### Exceptions
+---*@throws* `string` — Thrown when `params.tint` or `params.fire_tint` is not a `Color`.\
+---*@throws* `string` — Thrown when `params.fire_flicker_enabled` or `params.fire_glow_flicker_enabled` is not a boolean.
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
+	check_params(params)
+
 	---@type SpriteSetDefinition<BoilerSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.boiler_sprite_set,
 		set = {
 			fire_flicker_enabled = params.fire_flicker_enabled ~= false,
 			fire_glow_flicker_enabled = params.fire_glow_flicker_enabled ~= false,
-			-- FIXME: we need to a) setup the sprites with tintable pipes, and b) take pipe tints
-			pictures = get_picture_set(params.tint),
-			fluid_boxes = {}, -- Fluid boxes on this are strictly the standard pipe covers and nothing else.
+			-- TODO: we need to a) setup the sprites with tintable pipes, and b) take pipe tints
+			pictures = get_picture_set(params.tint, params.fire_tint),
+			fluid_boxes = nil,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil, -- FIXME: type this and then build it out.
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil, -- FIXME: set this.
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 2,
 		},
-
-		-- NOTE: The "oil boiler" version of this is just this + assembling machine pipe pictures in the fluid boxes...
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "tint", Common.color:optional() },
+	{ "fire_tint", Common.color:optional() },
+})
+
+---Gets the icon for a standard boiler, in the given `tint`, burning a fire in the given `fire_tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@param fire_tint Color? # The color to tint the fire. When `nil`, the base layer's own fire shows through.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(tint, fire_tint)
+	check_get_icon(tint, fire_tint)
+
+	local folder = "__reskins-assets-base__/graphics/icons/boiler/boiler-icon-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	if fire_tint then
+		table.insert(icon, { icon = folder .. "fire-mask.png", icon_size = 64, scale = 0.5, tint = fire_tint })
+		table.insert(icon, { icon = folder .. "fire-highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
+end
+
+local check_get_fluid_icon = V.signature("get_fluid_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for a fluid-burning boiler, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_fluid_icon(tint)
+	check_get_fluid_icon(tint)
+
+	local folder = "__reskins-assets-bobs__/graphics/icons/boiler-oil/boiler-oil-icon-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M

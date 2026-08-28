@@ -1,11 +1,15 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -572,19 +576,29 @@ end
 -- Public API
 
 ---@class FurnaceSteelSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
----@field variant "standard" | "fluid" | "chemical" | "chemical-fluid"
+---The variant to draw.
+---@field variant "standard"
 
----Produces the sprite set for the vanilla steel furnace.
----
----FIXME: the old pack's `apply_to_entity` also set `energy_source.light_flicker` on the
----prototype. That's a prototype field rather than sprite data, so it has no home on
----`CraftingMachineSpriteSet` and is not carried here — it needs somewhere to live before
----this furnace's fire stops flickering at full brightness.
----@param params FurnaceSteelSpriteSetParams
+---Gets the sprite set for the vanilla steel furnace.
+---@param params FurnaceSteelSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---
+---### Examples
+---```lua
+---local furnace_steel = require("__reskins-assets-api__.assets.base.entities.furnace-steel")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = furnace_steel.get_sprite_set({ tint = tint, variant = variant })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
+	-- FIXME: `energy_source.light_flicker` belongs on the prototype rather than in sprite data,
+	-- so it has no home on `CraftingMachineSpriteSet`. Until it does, this furnace's fire
+	-- flickers at full brightness.
 	local graphics_set = get_graphics_set(params.tint, params.variant)
 	local graphics_set_flipped = nil
 	if params.variant == "chemical" or params.variant == "chemical-fluid" then
@@ -617,6 +631,35 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "variant", V.one_of({ "standard", "fluid", "chemical", "chemical-fluid" }) },
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for a steel furnace of the given `variant`, in the given `tint`.
+---@param variant "standard"|"fluid"|"chemical"|"chemical-fluid" # The furnace the icon is drawn for.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(variant, tint)
+	check_get_icon(variant, tint)
+
+	-- The standard furnace wears vanilla artwork; the rest are Bob's.
+	local name = variant == "standard" and "furnace-steel" or "furnace-steel-" .. variant
+	local mod = variant == "standard" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
+	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-icon-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M

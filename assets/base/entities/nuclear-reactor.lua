@@ -1,6 +1,7 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
@@ -243,15 +244,28 @@ local function get_corpse_animation(tint, pipe_material)
 end
 
 ---@class NuclearReactorSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
+---The material the pipes are built from. Defaults to iron.
 ---@field pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
+---Whether the fuel's own color lights the glow. Defaults to `false`.
 ---@field use_fuel_glow_color boolean?
 
----Produces the sprite set for the vanilla nuclear reactor.
----@param params NuclearReactorSpriteSetParams
+---Gets the sprite set for the vanilla nuclear reactor.
+---@param params NuclearReactorSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<NuclearReactorSpriteSet>
+---
+---### Examples
+---```lua
+---local nuclear_reactor = require("__reskins-assets-api__.assets.base.entities.nuclear-reactor")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = nuclear_reactor.get_sprite_set({ tint = tint, pipe_material = pipe_material })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
 	local pipe_material = params.pipe_material or "base"
 
 	---@type SpriteSetDefinition<NuclearReactorSpriteSet>
@@ -271,6 +285,126 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+---The fuel a reactor burns, selecting the artwork its core is drawn with.
+---@alias NuclearReactorFuel
+---| "uranium"
+---| "thorium"
+---| "deuterium-blue"
+---| "deuterium-pink"
+
+---The material a reactor is built from.
+---@alias NuclearReactorMaterial
+---| "base"
+---| "aluminum-invar"
+---| "gold-copper"
+---| "silver-aluminum"
+---| "silver-titanium"
+
+---The color a reactor's glow is drawn in.
+---@alias NuclearReactorGlowColor
+---| "blue"
+---| "cyan"
+
+-- The materials each fuel's reactor is drawn in. Not every pairing is drawn.
+local FUEL_MATERIALS = {
+	["uranium"] = {
+		["base"] = true,
+		["aluminum-invar"] = true,
+		["gold-copper"] = true,
+		["silver-aluminum"] = true,
+		["silver-titanium"] = true,
+	},
+	["thorium"] = { ["silver-aluminum"] = true, ["silver-titanium"] = true },
+	["deuterium-blue"] = { ["gold-copper"] = true },
+	["deuterium-pink"] = { ["gold-copper"] = true },
+}
+
+local FUEL = V.one_of({ "uranium", "thorium", "deuterium-blue", "deuterium-pink" })
+local MATERIAL = V.one_of({ "base", "aluminum-invar", "gold-copper", "silver-aluminum", "silver-titanium" })
+
+---Builds a reactor icon around `base_layer`. Every reactor shares one mask and one highlights layer.
+---@param base_layer FileName # The file the base layer is drawn from.
+---@param tint Color? # The color to tint the mask.
+---@return SafeIconData[]
+---@nodiscard
+local function get_layers(base_layer, tint)
+	local shared = "__reskins-assets-base__/graphics/icons/nuclear-reactor/nuclear-reactor-icon-"
+	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(layers, { icon = shared .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(layers, { icon = shared .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return layers
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for the vanilla nuclear reactor, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(tint)
+	check_get_icon(tint)
+
+	return get_layers("__reskins-assets-base__/graphics/icons/nuclear-reactor/nuclear-reactor-icon-base.png", tint)
+end
+
+local check_get_fuel_icon = V.signature("get_fuel_icon", {
+	{ "fuel", FUEL },
+	{ "material", MATERIAL },
+	{ "tint", Common.color:optional() },
+}, {
+	{
+		parameter = "material",
+		arguments = { "fuel", "material" },
+		check = function(fuel, material)
+			return FUEL_MATERIALS[fuel][material] == true
+		end,
+		message = "must be a material the given fuel's reactor is drawn in",
+	},
+})
+
+---Gets the icon for a reactor burning the given `fuel`, built from the given `material`, in the given
+---`tint`.
+---@param fuel NuclearReactorFuel # The fuel the reactor burns.
+---@param material NuclearReactorMaterial # The material the reactor is built from.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_fuel_icon(fuel, material, tint)
+	check_get_fuel_icon(fuel, material, tint)
+
+	local folder = "__reskins-assets-bobs__/graphics/icons/nuclear-reactor/"
+
+	return get_layers(folder .. "nuclear-reactor-" .. fuel .. "-" .. material .. "-icon-base.png", tint)
+end
+
+local check_get_realistic_icon = V.signature("get_realistic_icon", {
+	{ "material", MATERIAL },
+	{ "glow_color", V.one_of({ "blue", "cyan" }) },
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for a reactor built from the given `material`, glowing in the given `glow_color`, in
+---the given `tint`.
+---@param material NuclearReactorMaterial # The material the reactor is built from.
+---@param glow_color NuclearReactorGlowColor # The color the glow is drawn in.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_realistic_icon(material, glow_color, tint)
+	check_get_realistic_icon(material, glow_color, tint)
+
+	local folder = "__reskins-assets-assorted__/graphics/icons/realistic-nuclear-reactor/" .. glow_color .. "/"
+	local suffix = glow_color == "cyan" and "-color_cyan.png" or "-color.png"
+
+	return get_layers(folder .. "nuclear-reactor-" .. material .. suffix, tint)
 end
 
 return M

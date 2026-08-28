@@ -46,7 +46,7 @@ function M.name_from_material(pipe_material)
 	check_name_from_material(pipe_material)
 	---@cast pipe_material string
 
-	local material, _ = pipe_material:gsub("%-angels", "")
+	local material, _ = pipe_material:gsub("^angels%-", "")
 	return material--[[@as PipeMaterialName]]
 end
 

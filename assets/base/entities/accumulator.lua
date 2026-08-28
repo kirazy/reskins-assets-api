@@ -1,6 +1,7 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
@@ -184,17 +185,26 @@ local function get_corpse_animation(tint)
 end
 
 ---@class AccumulatorSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
+---The accumulator to draw. Defaults to `"base"`.
 ---@field sprite_set AccumulatorSpriteVariant?
 
----Produces the sprite set for the vanilla accumulator.
----
----The old pack built a corpse animation but never wired it up; it is carried on
----`corpse` here so the art stays reachable once an applicator consumes that field.
----@param params AccumulatorSpriteSetParams
+---Gets the sprite set for the vanilla accumulator.
+---@param params AccumulatorSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<AccumulatorSpriteSet>
+---
+---### Examples
+---```lua
+---local accumulator = require("__reskins-assets-api__.assets.base.entities.accumulator")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = accumulator.get_sprite_set({ tint = tint, sprite_set = sprite_set })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
 	---@type SpriteSetDefinition<AccumulatorSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.accumulator_sprite_set,
@@ -211,6 +221,36 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "sprite_set", V.one_of({ "base", "fast", "high-capacity", "slow" }):optional() },
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for an accumulator of the given `sprite_set`, in the given `tint`.
+---@param sprite_set "base"|"fast"|"high-capacity"|"slow"? # The accumulator the icon is drawn for. Defaults to `"base"`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(sprite_set, tint)
+	check_get_icon(sprite_set, tint)
+
+	-- The vanilla accumulator wears vanilla artwork; the rest are Bob's.
+	sprite_set = sprite_set or "base"
+	local name = sprite_set == "base" and "accumulator" or "accumulator-" .. sprite_set
+	local mod = sprite_set == "base" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
+	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-icon-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M

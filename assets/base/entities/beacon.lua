@@ -1,17 +1,33 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
+---@param slot_count integer?
+---@return "2-slots"|"4-slots"|"6-slots"
+local function resolve_slot_count_variant(slot_count)
+	if not slot_count or slot_count <= 2 then
+		return "2-slots"
+	elseif slot_count <= 4 then
+		return "4-slots"
+	else
+		return "6-slots"
+	end
+end
+
 ---@param tint Color?
----@param variant "2-slots"|"4-slots"|"6-slots"
+---@param slot_count integer?
 ---@return AnimationElement[]
-local function get_animation_list(tint, variant)
+local function get_animation_list(tint, slot_count)
+	local variant = resolve_slot_count_variant(slot_count)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/beacon/" .. variant .. "/"
 	local base_path = _defines.assets_source.base .. "/graphics/entity/beacon/"
 
@@ -206,34 +222,105 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation) }
 end
 
----@class BeaconSpriteSetParams
----@field tint Color?
----@field variant "2-slots"|"4-slots"|"6-slots"
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/beacon/beacon-reflection.png",
+			priority = "extra-high",
+			width = 18,
+			height = 29,
+			shift = util.by_pixel(0, 55),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
 
----Produces the sprite set for the vanilla beacon.
+---@class BeaconSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
+---@field tint Color?
+---The number of module slots to draw. Buckets to the 2, 4, or 6 slot artwork; defaults to 2.
+---@field slot_count integer?
+
+local check_params = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.shape({
+			tint = Common.color:optional(),
+			slot_count = V.integer():positive():optional(),
+		}),
+	},
+})
+
+---Gets the sprite set for the vanilla beacon.
 ---
+---### Remarks
 ---The set carries an `animation_list` rather than a `graphics_set`: it is applied into the
 ---`graphics_set` the prototype already carries, leaving the rest of that set as it is.
----@param params BeaconSpriteSetParams
+---
+---@param params BeaconSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<BeaconSpriteSet>
+---
+---### Examples
+---```lua
+---local beacon = require("__reskins-assets-api__.assets.base.entities.beacon")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = beacon.get_sprite_set({ tint = tint, slot_count = slot_count })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
+---
+---### Exceptions
+---*@throws* `string` — Thrown when `params.tint` is not a `Color`.\
+---*@throws* `string` — Thrown when `params.slot_count` is not a positive integer.
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
+	check_params(params)
+
 	---@type SpriteSetDefinition<BeaconSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.beacon_sprite_set,
 		set = {
-			animation_list = get_animation_list(params.tint, params.variant),
+			animation_list = get_animation_list(params.tint, params.slot_count),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for the vanilla beacon, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(tint)
+	check_get_icon(tint)
+
+	local folder = "__reskins-assets-base__/graphics/icons/beacon/beacon-icon-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M

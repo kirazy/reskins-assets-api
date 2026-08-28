@@ -1,10 +1,14 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -161,13 +165,24 @@ local function get_corpse_animation(tint)
 end
 
 ---@class RobotLogisticSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
+---untinted.
 ---@field tint Color?
 
----Produces the sprite set for the vanilla logistic robot.
----@param params RobotLogisticSpriteSetParams
+---Gets the sprite set for the vanilla logistic robot.
+---@param params RobotLogisticSpriteSetParams # The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<LogisticRobotSpriteSet>
+---
+---### Examples
+---```lua
+---local robot_logistic = require("__reskins-assets-api__.assets.base.entities.robot-logistic")
+---local applicators = require("__reskins-assets-api__.api.applicators")
+---
+---local sprite_set = robot_logistic.get_sprite_set({ tint = tint })
+---applicators.apply_sprite_set(entity, sprite_set)
+---```
 ---@nodiscard
-function M.get(params)
+function M.get_sprite_set(params)
 	local animations = get_animations(params.tint)
 
 	---@type SpriteSetDefinition<LogisticRobotSpriteSet>
@@ -195,6 +210,30 @@ function M.get(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for the vanilla logistic robot, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(tint)
+	check_get_icon(tint)
+
+	local folder = "__reskins-assets-base__/graphics/icons/robot-logistic/robot-logistic-icon-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M
