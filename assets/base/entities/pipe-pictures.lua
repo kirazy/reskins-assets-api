@@ -1,6 +1,7 @@
 -- THIS MODULE IS EXTREMELY WIP AND SUBJECT TO CHANGE.
 -- The require path, function names and signatures are not stable.
 
+---@using data
 ---@using Reskins.Assets
 
 ---@namespace Reskins.Assets.Base.Entities
@@ -10,7 +11,7 @@ local _defines = require("api.defines")
 
 local M = {}
 
-local PipeMaterial = V.one_of(_defines.pipe_material--[[@as (string[])]])
+local PipeMaterial = V.one_of(_defines.pipe_material)
 
 local check_asset_from_material = V.signature("asset_from_material", {
 	{ "pipe_material", PipeMaterial },
@@ -54,15 +55,11 @@ end
 ---
 ---Conventional use is by non-pipe entities that have pipe connections, and need to dynamically draw a shadow at the
 ---connection point for a given rotation state, rather than bake the shadow into the entity's sprite.
----
----### Parameters
----@param shift data.Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
----
----### Returns
----@return data.Animation # A vertical pipe shadow for a single tile.
+---@param shift Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
+---@return Animation # A vertical pipe shadow for a single tile.
 ---@return RequiredAssets # The required asset mods.
 ---
----### Examples
+---#### Examples
 ---Add a vertical pipe shadow in the north and south directions to the working_visualisations field of an assembly
 ---machine prototype. The shadow will offset up 1 tile for north, and down 1 tile for south, along the centerline of a 3
 ---x 3 entity.
@@ -78,7 +75,7 @@ end
 ---```
 ---@nodiscard
 function M.vertical_pipe_shadow(shift)
-	---@type data.Animation
+	---@type Animation
 	local shadow_animation = {
 		filename = "__reskins-assets-base__/graphics/entity/pipe/vertical-pipe-shadow-patch.png",
 		priority = "high",
@@ -96,15 +93,11 @@ end
 ---
 ---Conventional use is by non-pipe entities that have pipe connections, and need to dynamically draw a shadow at the
 ---connection point for a given rotation state, rather than bake the shadow into the entity's sprite.
----
----### Parameters
----@param shift data.Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
----
----### Returns
----@return data.Animation # A horizontal pipe shadow for a single tile.
+---@param shift Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
+---@return Animation # A horizontal pipe shadow for a single tile.
 ---@return RequiredAssets # The required asset mods.
 ---
----### Examples
+---#### Examples
 ---Add a horizontal pipe shadow in the north and south directions to the `working_visualisations` field of an assembly
 ---machine prototype. The shadow will offset right 1 tile for east, and left 1 tile for west, along the centerline of a
 ---3 x 3 entity.
@@ -120,7 +113,7 @@ end
 ---```
 ---@nodiscard
 function M.horizontal_pipe_shadow(shift)
-	---@type data.Animation
+	---@type Animation
 	local shadow_animation = {
 		filename = "__reskins-assets-base__/graphics/entity/pipe/horizontal-pipe-shadow-patch.png",
 		priority = "high",
@@ -136,14 +129,14 @@ end
 
 ---Gets a `Sprite4Way` object containing pipe cover sprites in the given `pipe_material`.
 ---
----### Parameters
----@param pipe_material PipeMaterial # The material type to get sprites for.
+---#### Parameters
+---@param pipe_material PipeMaterial The material type to get sprites for.
 ---
----### Returns
----@return data.Sprite4Way pictures # The complete set of pipe cover sprites in the given `pipe_material`.
+---#### Returns
+---@return Sprite4Way pictures The complete set of pipe cover sprites in the given `pipe_material`.
 ---@return RequiredAssets required_assets # The required asset mods.
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local _defines = require("__reskins-assets-api__.api.defines")
 ---local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe_pictures")
@@ -160,7 +153,7 @@ function M.pipe_covers(pipe_material)
 	local assets_base_path = material_asset .. "/graphics/entity/pipe-covers/" .. material_name .. "/"
 	local shadow_assets_base_path = "__reskins-assets-base__/graphics/entity/pipe-covers/shadows/"
 
-	---@type data.Sprite4Way
+	---@type Sprite4Way
 	local pipe_cover_pictures = {
 		north = {
 			layers = {
@@ -253,12 +246,10 @@ function M.pipe_covers(pipe_material)
 end
 
 ---Gets a `Sprite4Way` object containing frozen pipe cover sprites.
----
----### Returns
----@return data.Sprite4Way pictures # The complete set of frozen pipe cover sprites.
+---@return Sprite4Way pictures The complete set of frozen pipe cover sprites.
 ---@return RequiredAssets required_assets # The required asset mods.
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe_pictures")
 ---
@@ -269,7 +260,7 @@ end
 ---```
 ---@nodiscard
 function M.pipe_covers_frozen()
-	---@type data.Sprite4Way
+	---@type Sprite4Way
 	local pipe_covers_frozen = {
 		north = {
 			filename = "__space-age__/graphics/entity/frozen/pipe-covers/pipe-cover-north.png",
@@ -307,20 +298,16 @@ end
 ---Gets the tinted pipe pictures for the assembling machine (and functionally identical entities such as the oil boiler).
 ---The `north` direction has no tinted variant when `use_simple_pipe_pictures` is true; the east direction always uses the
 ---simple sprite when that flag is set.
----
----### Parameters
----@param tint data.Color? Tint color for the mask and highlights layers. When `nil`, only the base layer is returned.
+---@param tint Color? Tint color for the mask and highlights layers. When `nil`, only the base layer is returned.
 ---@param use_simple_pipe_pictures boolean? When true, omits the `north` mask/highlights and uses the `-simple` east variant.
----
----### Returns
----@return data.Sprite4Way
+---@return Sprite4Way
 ---@return RequiredAssets
 ---@nodiscard
 function M.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 	local simple = use_simple_pipe_pictures and "-simple" or ""
 	local assets_base_path = "__reskins-assets-base__/graphics/entity/assembling-machine/pipes/"
 
-	---@type data.Sprite4Way
+	---@type Sprite4Way
 	local pictures = {
 		north = {
 			filename = assets_base_path .. "assembling-machine-pipe-north-base.png",

@@ -7,7 +7,7 @@
 ---Transforms a `BoilerSpriteSet` into a `CraftingMachineSpriteSet`.
 ---
 ---Objects are assigned directly and are not copied.
----@param sprite_set BoilerSpriteSet # The sprite set to convert.
+---@param sprite_set BoilerSpriteSet The sprite set to convert.
 ---@return CraftingMachineSpriteSet # `sprite_set` as a crafting machine sprite set.
 local function boiler_to_crafting_machine_sprite_set_transformer(sprite_set)
 	---@type CraftingMachineGraphicsSet

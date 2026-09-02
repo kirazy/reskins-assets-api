@@ -580,15 +580,14 @@ local function get_graphics_set_flipped(tint)
 end
 
 ---@class HydroPlantSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's hydro plant.
----@param params HydroPlantSpriteSetParams # The options the sprite set is drawn with.
+---@param params HydroPlantSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local hydro_plant = require("__reskins-assets-api__.assets.angels.entities.refining.hydro-plant")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

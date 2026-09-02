@@ -25,7 +25,7 @@ local M = {}
 ---| "blue" # The blue housing the semi-classic area drills are built into.
 
 ---@param frame MiningDrillElectricTallFrame
----@param part string # The part, named for its direction and role, as `"north-wet"`.
+---@param part string The part, named for its direction and role, as `"north-wet"`.
 ---@return FileName
 ---@nodiscard
 local function get_frame_file(frame, part)
@@ -146,7 +146,7 @@ end
 
 ---@param tint Color?
 ---@param speed double
----@param is_front boolean # When `true`, draws the half of the head that stands in front of the housing.
+---@param is_front boolean When `true`, draws the half of the head that stands in front of the housing.
 ---@return Animation
 ---@nodiscard
 local function get_horizontal_drill_animation(tint, speed, is_front)
@@ -220,7 +220,7 @@ local function get_horizontal_drill_animation(tint, speed, is_front)
 	return animation
 end
 
----@param name string # The file the smoke is drawn from, less the folder and the extension.
+---@param name string The file the smoke is drawn from, less the folder and the extension.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -245,7 +245,7 @@ local function get_directional_smoke(name, width, height, shift, speed)
 	}
 end
 
----@param name string # The file the light is drawn from, less the folder and the extension.
+---@param name string The file the light is drawn from, less the folder and the extension.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -292,7 +292,7 @@ local function get_secondary_light()
 	}
 end
 
----@param name string # The file the fluid layer is drawn from, less the folder and the extension.
+---@param name string The file the fluid layer is drawn from, less the folder and the extension.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -316,7 +316,7 @@ local function get_fluid_layer(name, width, height, shift, speed)
 end
 
 ---@param frame MiningDrillElectricTallFrame
----@param part string # The part, named for its direction and role.
+---@param part string The part, named for its direction and role.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -338,7 +338,7 @@ end
 
 ---The halves of the housing that stand in front of the head, which do not repeat with its stroke.
 ---@param frame MiningDrillElectricTallFrame
----@param part string # The part, named for its direction and role.
+---@param part string The part, named for its direction and role.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -357,7 +357,7 @@ local function get_frame_front_layer(frame, part, width, height, shift, speed)
 	}
 end
 
----@param name string # The file the output is drawn from, less the folder and the extension.
+---@param name string The file the output is drawn from, less the folder and the extension.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -379,7 +379,7 @@ local function get_output_layer(name, width, height, shift, speed)
 end
 
 ---@param frame MiningDrillElectricTallFrame
----@param part string # The part, named for its direction and role.
+---@param part string The part, named for its direction and role.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -400,7 +400,7 @@ local function get_frame_output_layer(frame, part, width, height, shift, speed)
 	}
 end
 
----@param name string # The file the shadow is drawn from, less the folder and the extension.
+---@param name string The file the shadow is drawn from, less the folder and the extension.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -709,7 +709,7 @@ local function get_wet_working_visualisations(params, speed)
 	return visualisations
 end
 
----@param name string # The file the patch is drawn from, less the folder and the extension.
+---@param name string The file the patch is drawn from, less the folder and the extension.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -784,8 +784,7 @@ local function get_corpse_animation(tint)
 end
 
 ---@class MiningDrillElectricTallSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The housing the drill is built into. Defaults to `"yellow"`.
 ---@field frame MiningDrillElectricTallFrame?
@@ -804,10 +803,10 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the semi-classic electric mining drill.
----@param params MiningDrillElectricTallSpriteSetParams # The options the sprite set is drawn with.
+---@param params MiningDrillElectricTallSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<MiningDrillSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local drill = require("__reskins-assets-api__.assets.assorted.entities.mining-drill-electric-tall")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

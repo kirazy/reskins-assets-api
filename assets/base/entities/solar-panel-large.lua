@@ -86,8 +86,7 @@ local function get_overlay()
 end
 
 ---@class SolarPanelLargeSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 local check_params = V.signature("get_sprite_set", {
@@ -95,10 +94,10 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for Bob's large solar panel.
----@param params SolarPanelLargeSpriteSetParams # The options the sprite set is drawn with.
+---@param params SolarPanelLargeSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<SolarPanelSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local solar_panel_large = require("__reskins-assets-api__.assets.base.entities.solar-panel-large")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -106,9 +105,7 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = solar_panel_large.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
----
----### Exceptions
----*@throws* `string` — Thrown when `params.tint` is not a `Color`.
+---@throws Thrown when `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)

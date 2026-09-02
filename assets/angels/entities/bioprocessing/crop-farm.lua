@@ -119,17 +119,16 @@ local function get_graphics_set(tint, variant)
 end
 
 ---@class CropFarmSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The variant to draw.
 ---@field variant "basic"|"temperate"|"desert"|"swamp"
 
 ---Gets the sprite set for Angel's crop farm.
----@param params CropFarmSpriteSetParams # The options the sprite set is drawn with.
+---@param params CropFarmSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local crop_farm = require("__reskins-assets-api__.assets.angels.entities.bioprocessing.crop-farm")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

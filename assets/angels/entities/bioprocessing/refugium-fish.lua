@@ -84,15 +84,14 @@ local function get_graphics_set(tint, variant)
 end
 
 ---@class RefugiumFishSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's fish refugium.
----@param params RefugiumFishSpriteSetParams # The options the sprite set is drawn with.
+---@param params RefugiumFishSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local refugium_fish = require("__reskins-assets-api__.assets.angels.entities.bioprocessing.refugium-fish")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

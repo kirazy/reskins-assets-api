@@ -126,15 +126,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class OreProcessingMachineSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's ore processing machine.
----@param params OreProcessingMachineSpriteSetParams # The options the sprite set is drawn with.
+---@param params OreProcessingMachineSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local ore_processing_machine = require("__reskins-assets-api__.assets.angels.entities.smelting.ore-processing-machine")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

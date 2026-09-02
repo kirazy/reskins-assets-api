@@ -33,7 +33,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `logistic_robot_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `logistic_robot_sprite_set`.
 ---@class (exact) LogisticRobotSpriteSet : FlyingRobotSpriteSet
 ---The prototype's `in_motion_with_cargo`.
 ---@field in_motion_with_cargo RotatedAnimation?

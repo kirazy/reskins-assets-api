@@ -258,15 +258,14 @@ local function get_corpse_animation(tint)
 end
 
 ---@class CentrifugeSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla centrifuge.
----@param params CentrifugeSpriteSetParams # The options the sprite set is drawn with.
+---@param params CentrifugeSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local centrifuge = require("__reskins-assets-api__.assets.base.entities.centrifuge")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

@@ -244,8 +244,7 @@ local function get_corpse_animation(tint, pipe_material)
 end
 
 ---@class NuclearReactorSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The material the pipes are built from. Defaults to iron.
 ---@field pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
@@ -253,10 +252,10 @@ end
 ---@field use_fuel_glow_color boolean?
 
 ---Gets the sprite set for the vanilla nuclear reactor.
----@param params NuclearReactorSpriteSetParams # The options the sprite set is drawn with.
+---@param params NuclearReactorSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<NuclearReactorSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local nuclear_reactor = require("__reskins-assets-api__.assets.base.entities.nuclear-reactor")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

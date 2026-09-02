@@ -194,15 +194,15 @@ end
 ---@class InserterPresetSpriteSetParams
 ---The preset to draw.
 ---@field preset InserterPreset
----Whether the inserter wears its long-arm hands. Only the non-bulk presets other than `"inserter-long-handed"`
+---Whether the inserter has long-arm hands. Only the non-bulk presets other than `"inserter-long-handed"`
 ---draw them.
 ---@field is_long boolean?
 
 ---Gets the sprite set for Bob's preset (untinted) inserters.
----@param params InserterPresetSpriteSetParams # The options the sprite set is drawn with.
+---@param params InserterPresetSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<InserterSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local inserter_preset = require("__reskins-assets-api__.assets.base.entities.inserter-preset")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -272,10 +272,8 @@ local check_get_icon = V.signature("get_icon", {
 
 ---Gets the icon for the given preset inserter.
 ---
----### Remarks
 ---The preset inserters are untinted. `inserter.get_icon` is the tinted counterpart.
----
----@param preset InserterPreset # The preset the icon is drawn for.
+---@param preset InserterPreset The preset the icon is drawn for.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_icon(preset)

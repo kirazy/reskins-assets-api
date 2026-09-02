@@ -8,7 +8,7 @@
 ---@alias SpriteSetTransformer<TIn : SpriteSetBase, TOut : SpriteSetBase> fun(sprite_set: TIn): TOut
 ---@alias AnySpriteSetTransformer SpriteSetTransformer<any, any>
 
----Caller-facing escape hatches for `apply_sprite_set`. Fields are optional; omitting them gets fully automatic behavior.
+---Options for `apply_sprite_set`. Every field is optional.
 ---@class (exact) ApplySpriteSetParams
 ---The desired resulting sprite scale, relative to the baseline of `0.5`. Overrides automatic
 ---scaling. Ignored if `scale_factor` is also set.
@@ -25,17 +25,17 @@
 ---The sprite's design height, in tiles. Used for scaling.
 ---@field nominal_height double
 
----The fields shared by sprite sets for `EntityWithHealthPrototype`-family entities — fields that
----don't vary by prototype kind, so every applicator handles them the same way.
+---The fields shared by sprite sets for `EntityWithHealthPrototype` entities, applied the same way
+---by every applicator.
 ---@class (exact) EntityWithHealthSpriteSet : SpriteSetBase
 ---The prototype's `integration_patch`.
 ---@field integration_patch Sprite4Way?
 ---The prototype's `integration_patch_render_layer`.
 ---@field integration_patch_render_layer RenderLayer?
----The entity's death-explosion art, consumed by `SpriteSetApplicator.apply_to_explosion`.
+---The death explosion art of the entity, applied by `SpriteSetApplicator.apply_to_explosion`.
 ---@field dying_explosion any
----The entity's remnant art. Applied when this sprite set is applied to a `CorpsePrototype`,
----and left alone when it is applied to the entity itself.
+---The remnant art of the entity. Applied when the sprite set is applied to a `CorpsePrototype`;
+---not applied to the entity itself.
 ---@field corpse CorpseSpriteSet?
 ---The prototype's `water_reflection`.
 ---@field water_reflection WaterReflectionDefinition?
@@ -65,10 +65,9 @@
 ---@field underwater_layer_offset? int8
 ---@field underwater_patch? RotatedSprite
 
----A sprite set tagged with its `SpriteSetType`, so `api.applicators` can route it to the applicator that
----knows how to paint that shape without the caller naming one explicitly.
+---A sprite set with its `SpriteSetType`, which selects the applicator that applies it.
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local _defines = require("__reskins-assets-api__.api.defines")
 ---
@@ -79,40 +78,37 @@
 ---}
 ---```
 ---@class (exact) SpriteSetDefinition<TSet : SpriteSetBase>
----The shape identifying which applicator can consume `set`.
+---The `SpriteSetType` of `set`.
 ---@field set_type SpriteSetType
 ---The sprite data itself.
 ---@field set TSet
----Conversions to `set` in a specific `SpriteSetType`, keyed by that type, checked before the
----general registry in `api.converters`. Most sprite sets don't need this.
+---Conversions of `set` to other `SpriteSetType`s, keyed by type. Checked before the conversions
+---registered in `api.converters`.
 ---@field converters table<SpriteSetType, SpriteSetTransformer<TSet, any>>?
 
----A `SpriteSetDefinition` with its sprite-set type erased, for code that only needs to route or
----convert a sprite set without knowing its exact shape.
+---A `SpriteSetDefinition` of any `SpriteSetType`.
 ---@class (exact) AnySpriteSetDefinition : SpriteSetDefinition<any>
 
----Paints one prototype kind with a sprite set of type `U`. Registered with `api.applicators` and
----selected by the target prototype's own type, never by inspecting the sprite set being applied.
+---Applies a sprite set of type `U` to one kind of prototype. Registered with `api.applicators` and
+---selected by the type of the target prototype.
 ---
----Corpse application isn't part of this interface: `apply_sprite_set` copies `U`'s `corpse` field
----onto a `CorpsePrototype` handed to it directly, the same way for every applicator.
+---Corpses are not handled by applicators; `apply_sprite_set` copies the `corpse` field of the sprite
+---set onto a `CorpsePrototype` directly.
 ---@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype, U: EntityWithHealthSpriteSet>
----The `SpriteSetType` this applicator's `apply_to`/`apply_to_explosion` expect.
+---The `SpriteSetType` accepted by `apply_to` and `apply_to_explosion`.
 ---@field set_type SpriteSetType
----Applies `set` to the entity prototype `prototype`.
+---Applies the given `set` to the given entity `prototype`.
 ---
----Handles the fields particular to this prototype kind. The fields every `EntityWithHealthSpriteSet`
----carries are applied by `ApplicatorRegistry.apply_sprite_set` before this is called, leaving this
----the last word on them.
+---Applies the fields specific to this kind of prototype. The fields of `EntityWithHealthSpriteSet`
+---are applied by `ApplicatorRegistry.apply_sprite_set` before this is called.
 ---@field apply_to fun(prototype: T, set: U)
 ---Applies `set` to the explosion prototype `explosion`.
 ---@field apply_to_explosion fun(explosion: ExplosionPrototype, set: U)
 
----A `SpriteSetApplicator` with its prototype and sprite-set types erased, for code that only needs
----to call it without knowing its exact types.
+---A `SpriteSetApplicator` of any prototype and sprite set type.
 ---@class (exact) AnySpriteSetApplicator : SpriteSetApplicator<any, any>
 
----The sprite data a `flying_robot_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `flying_robot_sprite_set`.
 ---@class (exact) FlyingRobotSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `idle`.
 ---@field idle RotatedAnimation
@@ -123,7 +119,7 @@
 ---The prototype's `shadow_in_motion`.
 ---@field shadow_in_motion RotatedAnimation
 
----The sprite data a `turret_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `turret_sprite_set`.
 ---@class (exact) TurretSpriteSet : EntityWithHealthSpriteSet
 
 ---@class (exact) PipeConnectionGraphics

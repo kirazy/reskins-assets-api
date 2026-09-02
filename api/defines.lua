@@ -2,7 +2,7 @@
 
 ---Provides enumerations specific to Artisanal Reskins.
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local _defines = require("__reskins-assets-api__.api.defines")
 ---```
@@ -117,8 +117,8 @@ _defines.pipe_material = {
 	tungsten_angels = "angels-tungsten",
 }
 
----Identifies the shape of a `SpriteSetDefinition`'s `set`, so `api.applicators` can route it to the
----applicator that knows how to paint that shape without the caller naming one explicitly.
+---Identifies the shape of the `set` of a `SpriteSetDefinition`, and selects the applicator that
+---applies it.
 ---@enum SpriteSetType
 _defines.sprite_set_type = {
 	---Consumed by these prototypes: `AssemblingMachinePrototype`, `FurnacePrototype`

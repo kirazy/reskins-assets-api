@@ -40,7 +40,7 @@ return {
 ---@field door_animation_down Animation
 ---@field recharging_animation Animation
 
----The sprite data a `roboport_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `roboport_sprite_set`.
 ---@class (exact) RoboportSpriteSet : EntityWithHealthSpriteSet
 ---The sprites making up the roboport, spread across the prototype's own fields.
 ---@field graphics_set RoboportGraphicsSet

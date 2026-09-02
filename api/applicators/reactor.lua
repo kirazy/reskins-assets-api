@@ -52,7 +52,7 @@ return {
 ---@field fuel_glow_working_light_picture Animation
 ---@field working_light_picture Animation
 
----The sprite data a `reactor_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `reactor_sprite_set`.
 ---@class (exact) NuclearReactorSpriteSet : EntityWithHealthSpriteSet
 ---The sprites making up the reactor, spread across the prototype's own fields.
 ---@field graphics_set NuclearReactorGraphicsSet

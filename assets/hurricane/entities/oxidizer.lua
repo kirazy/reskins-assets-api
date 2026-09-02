@@ -99,8 +99,7 @@ local function get_graphics_set(tint)
 end
 
 ---@class OxidizerSpritesParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 local check_params = V.signature("get_sprite_set", {
@@ -113,10 +112,10 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the Hurricane oxidizer.
----@param params OxidizerSpritesParams # The options the sprite set is drawn with.
+---@param params OxidizerSpritesParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local oxidizer = require("__reskins-assets-api__.assets.hurricane.entities.oxidizer")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -124,9 +123,7 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = oxidizer.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
----
----### Exceptions
----*@throws* `string` — Thrown when `params.tint` is not a `Color`.
+---@throws Thrown when `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)

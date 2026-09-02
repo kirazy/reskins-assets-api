@@ -26,7 +26,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `solar_panel_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `solar_panel_sprite_set`.
 ---@class (exact) SolarPanelSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `picture`.
 ---@field picture SpriteVariations?

@@ -219,15 +219,14 @@ local function get_corpse_animation(tint)
 end
 
 ---@class LabSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla lab.
----@param params LabSpriteSetParams # The options the sprite set is drawn with.
+---@param params LabSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<LabSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local lab = require("__reskins-assets-api__.assets.base.entities.lab")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

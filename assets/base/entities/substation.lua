@@ -113,15 +113,14 @@ local function get_corpse_animation(tint)
 end
 
 ---@class SubstationSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla substation.
----@param params SubstationSpriteSetParams # The options the sprite set is drawn with.
+---@param params SubstationSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<ElectricPoleSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local substation = require("__reskins-assets-api__.assets.base.entities.substation")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

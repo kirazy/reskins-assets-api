@@ -33,7 +33,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `boiler_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `boiler_sprite_set`.
 ---@class (exact) BoilerSpriteSet : EntityWithHealthSpriteSet
 ---If this is set to false, `fire` alpha is always 1 instead of being controlled by the light intensity of the energy source.
 ---@field fire_flicker_enabled? boolean

@@ -206,8 +206,7 @@ local function get_corpse_animation(tint)
 end
 
 ---@class RoboportSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The antenna to draw: `0` is the base game's, `1`-`4` are Bob's.
 ---@field antenna_variant 0|1|2|3|4
@@ -215,10 +214,10 @@ end
 ---@field door_variant 0|1|2|3|4
 
 ---Gets the sprite set for the vanilla roboport.
----@param params RoboportSpriteSetParams # The options the sprite set is drawn with.
+---@param params RoboportSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<RoboportSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local roboport = require("__reskins-assets-api__.assets.base.entities.roboport")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

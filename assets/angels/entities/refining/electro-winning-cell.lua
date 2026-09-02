@@ -97,15 +97,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class ElectroWinningCellSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's electro-winning cell.
----@param params ElectroWinningCellSpriteSetParams # The options the sprite set is drawn with.
+---@param params ElectroWinningCellSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local electro_winning_cell = require("__reskins-assets-api__.assets.angels.entities.refining.electro-winning-cell")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

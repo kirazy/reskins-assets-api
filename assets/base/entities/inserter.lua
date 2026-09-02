@@ -399,17 +399,16 @@ end
 ---@field variant InserterVariants
 
 ---@class InserterSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The variant to draw.
 ---@field variant InserterVariants
 
 ---Gets the sprite set for the vanilla and Bob's tinted inserters.
----@param params InserterSpriteSetParams # The options the sprite set is drawn with.
+---@param params InserterSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<InserterSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local inserter = require("__reskins-assets-api__.assets.base.entities.inserter")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

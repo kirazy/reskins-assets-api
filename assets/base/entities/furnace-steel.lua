@@ -576,17 +576,16 @@ end
 -- Public API
 
 ---@class FurnaceSteelSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The variant to draw.
 ---@field variant "standard"
 
 ---Gets the sprite set for the vanilla steel furnace.
----@param params FurnaceSteelSpriteSetParams # The options the sprite set is drawn with.
+---@param params FurnaceSteelSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local furnace_steel = require("__reskins-assets-api__.assets.base.entities.furnace-steel")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -646,7 +645,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(variant, tint)
 	check_get_icon(variant, tint)
 
-	-- The standard furnace wears vanilla artwork; the rest are Bob's.
+	-- The standard furnace uses vanilla artwork; the rest are Bob's.
 	local name = variant == "standard" and "furnace-steel" or "furnace-steel-" .. variant
 	local mod = variant == "standard" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
 	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-icon-"

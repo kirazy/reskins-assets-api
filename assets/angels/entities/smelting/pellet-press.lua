@@ -84,15 +84,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class PelletPressSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's pellet press.
----@param params PelletPressSpriteSetParams # The options the sprite set is drawn with.
+---@param params PelletPressSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local pellet_press = require("__reskins-assets-api__.assets.angels.entities.smelting.pellet-press")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

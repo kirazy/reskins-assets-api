@@ -26,7 +26,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `generator_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `generator_sprite_set`.
 ---
 ---Note: this shape is Factorio 2.0 specific and changes significantly with Factorio 2.1.
 ---@class (exact) GeneratorSpriteSet : EntityWithHealthSpriteSet

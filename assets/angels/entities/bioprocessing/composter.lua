@@ -62,15 +62,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class ComposterSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's composter.
----@param params ComposterSpriteSetParams # The options the sprite set is drawn with.
+---@param params ComposterSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local composter = require("__reskins-assets-api__.assets.angels.entities.bioprocessing.composter")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

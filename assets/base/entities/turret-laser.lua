@@ -13,19 +13,16 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local M = {}
 
 ---@class TurretLaserSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla laser turret.
 ---
----### Remarks
 ---The set carries its nominal dimensions only; no artwork is drawn for this family yet.
----
----@param params TurretLaserSpriteSetParams # The options the sprite set is drawn with.
+---@param params TurretLaserSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<TurretSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local turret_laser = require("__reskins-assets-api__.assets.base.entities.turret-laser")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

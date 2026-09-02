@@ -229,8 +229,7 @@ end
 ---@alias AssemblingMachineTier 1|2|3|4|5|6
 
 ---@class AssemblingMachineSpritesParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint data.Color?
 ---The tier of the machine, selecting the gear it is drawn with.
 ---@field machine_tier AssemblingMachineTier
@@ -252,10 +251,10 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for a standard assembling machine.
----@param params AssemblingMachineSpritesParams # The options the sprite set is drawn with.
+---@param params AssemblingMachineSpritesParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -263,11 +262,9 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = assembling_machine.get_sprite_set({ tint = tint, machine_tier = 3 })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
----
----### Exceptions
----*@throws* `string` — Thrown when `params.machine_tier` is not between 1 and 6.\
----*@throws* `string` — Thrown when `params.tint` is not a `Color`.\
----*@throws* `string` — Thrown when `params.use_electronics_set` or `params.use_simple_pipe_pictures` is not a boolean.
+---@throws Thrown when `params.machine_tier` is not between 1 and 6.
+---@throws Thrown when `params.tint` is not a `Color`.
+---@throws Thrown when `params.use_electronics_set` or `params.use_simple_pipe_pictures` is not a boolean.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -306,8 +303,8 @@ local BOBS_ICON_FOLDER = "__reskins-assets-bobs__/graphics/icons/"
 ---@alias AssemblingMachineElectronicsTier 1|2|3
 
 ---Builds one icon layer from `icon`, at the size the artwork is drawn at.
----@param icon FileName # The file the layer is drawn from.
----@param tint Color? # The color to tint the layer.
+---@param icon FileName The file the layer is drawn from.
+---@param tint Color? The color to tint the layer.
 ---@return SafeIconData
 ---@nodiscard
 local function get_layer(icon, tint)
@@ -320,8 +317,8 @@ local function get_layer(icon, tint)
 end
 
 ---Builds the base, mask, and highlights layers filed under `prefix`.
----@param prefix string # The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
----@param tint Color? # The color to tint the mask.
+---@param prefix string The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
+---@param tint Color? The color to tint the mask.
 ---@return SafeIconData[]
 ---@nodiscard
 local function get_tinted_layers(prefix, tint)
@@ -339,12 +336,12 @@ end
 ---doesn't already provide. Each comes back sized and scaled, ready for
 ---`icons.compose_icons` or `icons.transform_icon`.
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
 ---local sprite_utils_icons = require("__reskins-sprite-utils__.icons")
 ---
------- The burner machine wearing a tier gear instead of its smoke stack.
+------ The burner machine with a tier gear instead of its smoke stack.
 ---local layers = assembling_machine.icon_layers.burner_base(tint)
 ---table.insert(layers, assembling_machine.icon_layers.gear(3))
 ---```
@@ -357,10 +354,15 @@ local check_base = V.signature("icon_layers.base", {
 ---Gets the base, mask, and highlights layers of the standard assembling machine body, in the given
 ---`tint`.
 ---
----### Remarks
----The standard machine wears nothing of its own, so these layers are also a finished icon.
+---The standard machine has no additional layers, so these layers are also a complete icon.
 ---
----### Examples
+---#### Parameters
+---@param tint Color? The color to tint the mask. When `nil`, the tintable layers are omitted
+---
+---#### Returns
+---@return SafeIconData[] # The layers of the standard machine body, sized and scaled.
+---
+---#### Examples
 ---```lua
 ---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
 ---local sprite_utils_icons = require("__reskins-sprite-utils__.icons")
@@ -368,16 +370,7 @@ local check_base = V.signature("icon_layers.base", {
 ---local icon = assembling_machine.icon_layers.base(tint)
 ---sprite_utils_icons.assign_icons_to_prototype_and_related_prototypes(entity.name, entity.type, icon)
 ---```
----
----### Parameters
----@param tint Color? # The color to tint the mask. When `nil`, the tintable layers are omitted
----rather than drawn untinted.
----
----### Returns
----@return SafeIconData[] # The layers of the standard machine body, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `tint` is not a `Color`.
+---@throws Thrown when `tint` is not a `Color`.
 ---@nodiscard
 function M.icon_layers.base(tint)
 	check_base(tint)
@@ -392,28 +385,24 @@ local check_electronics_base = V.signature("icon_layers.electronics_base", {
 ---Gets the base, mask, and highlights layers of the electronics assembling machine body, in the
 ---given `tint`.
 ---
----### Remarks
----The electronics machine's body ships in no icon of its own; it is drawn wearing its indicator
+---The body of the electronics machine is not a complete icon; it is drawn with its indicator
 ---lights.
 ---
----### Examples
----Draw the electronics machine body wearing something of your own.
+---#### Parameters
+---@param tint Color? The color to tint the mask. When `nil`, the tintable layers are omitted
+---
+---#### Returns
+---@return SafeIconData[] # The layers of the electronics machine body, sized and scaled.
+---
+---#### Examples
+---Draw the electronics machine body with a custom layer.
 ---```lua
 ---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
 ---local sprite_utils_icons = require("__reskins-sprite-utils__.icons")
 ---
 ---local icon = sprite_utils_icons.compose_icons("default", assembling_machine.icon_layers.electronics_base(tint), my_layer)
 ---```
----
----### Parameters
----@param tint Color? # The color to tint the mask. When `nil`, the tintable layers are omitted
----rather than drawn untinted.
----
----### Returns
----@return SafeIconData[] # The layers of the electronics machine body, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `tint` is not a `Color`.
+---@throws Thrown when `tint` is not a `Color`.
 ---@nodiscard
 function M.icon_layers.electronics_base(tint)
 	check_electronics_base(tint)
@@ -431,15 +420,12 @@ local check_burner_base = V.signature("icon_layers.burner_base", {
 ---Gets the base, mask, and highlights layers of the burner assembling machine body, in the given
 ---`tint`.
 ---
----### Parameters
----@param tint Color? # The color to tint the mask. When `nil`, the tintable layers are omitted
----rather than drawn untinted.
+---#### Parameters
+---@param tint Color? The color to tint the mask. When `nil`, the tintable layers are omitted
 ---
----### Returns
+---#### Returns
 ---@return SafeIconData[] # The layers of the burner machine body, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `tint` is not a `Color`.
+---@throws Thrown when `tint` is not a `Color`.
 ---@nodiscard
 function M.icon_layers.burner_base(tint)
 	check_burner_base(tint)
@@ -454,15 +440,12 @@ local check_steam_base = V.signature("icon_layers.steam_base", {
 ---Gets the base, mask, and highlights layers of the steam assembling machine body, in the given
 ---`tint`.
 ---
----### Parameters
----@param tint Color? # The color to tint the mask. When `nil`, the tintable layers are omitted
----rather than drawn untinted.
+---#### Parameters
+---@param tint Color? The color to tint the mask. When `nil`, the tintable layers are omitted
 ---
----### Returns
+---#### Returns
 ---@return SafeIconData[] # The layers of the steam machine body, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `tint` is not a `Color`.
+---@throws Thrown when `tint` is not a `Color`.
 ---@nodiscard
 function M.icon_layers.steam_base(tint)
 	check_steam_base(tint)
@@ -474,26 +457,20 @@ local check_gear = V.signature("icon_layers.gear", {
 	{ "machine_tier", V.integer():in_range(1, 6) },
 })
 
----Gets the gear layer a standard assembling machine of the given `machine_tier` wears.
+---Gets the gear layer of a standard assembling machine of the given `machine_tier`.
+---@param machine_tier AssemblingMachineTier The tier of the machine, selecting the gear layer.
+---@return SafeIconData # The gear layer, sized and scaled.
 ---
----### Examples
+---#### Examples
 ---Put the gear in the corner of an icon of your own.
 ---```lua
 ---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
 ---local sprite_utils_icons = require("__reskins-sprite-utils__.icons")
 ---
----local gear = sprite_utils_icons.transform_icon(assembling_machine.icon_layers.gear(3), 0.5, { 8, 8 })
+---local gear = sprite_utils_icons.transform_icon(assembling_machine.icon_layers.gear(3), { scale = 0.5, shift = { 8, 8 } })
 ---local icon = sprite_utils_icons.compose_icons("default", my_icon, { gear })
 ---```
----
----### Parameters
----@param machine_tier AssemblingMachineTier # The tier of the machine, selecting the gear it wears.
----
----### Returns
----@return SafeIconData # The gear layer, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `machine_tier` is not between 1 and 6.
+---@throws Thrown when `machine_tier` is not between 1 and 6.
 ---@nodiscard
 function M.icon_layers.gear(machine_tier)
 	check_gear(machine_tier)
@@ -505,17 +482,11 @@ local check_electronics = V.signature("icon_layers.electronics", {
 	{ "electronics_tier", V.integer():in_range(1, 3) },
 })
 
----Gets the indicator lights layer an electronics assembling machine of the given `electronics_tier`
----wears.
----
----### Parameters
----@param electronics_tier AssemblingMachineElectronicsTier # The tier of the machine, selecting the lights it wears.
----
----### Returns
+---Gets the indicator lights layer of an electronics assembling machine of the given
+---`electronics_tier`.
+---@param electronics_tier AssemblingMachineElectronicsTier The tier of the machine, selecting the lights layer.
 ---@return SafeIconData # The indicator lights layer, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `electronics_tier` is not between 1 and 3.
+---@throws Thrown when `electronics_tier` is not between 1 and 3.
 ---@nodiscard
 function M.icon_layers.electronics(electronics_tier)
 	check_electronics(electronics_tier)
@@ -523,9 +494,7 @@ function M.icon_layers.electronics(electronics_tier)
 	return get_layer(BOBS_ICON_FOLDER .. "assembling-machine-electronics/electronics-" .. electronics_tier .. ".png")
 end
 
----Gets the smoke stack layer a burner assembling machine wears.
----
----### Returns
+---Gets the smoke stack layer of a burner assembling machine.
 ---@return SafeIconData # The smoke stack layer, sized and scaled.
 ---@nodiscard
 function M.icon_layers.smoke_stack()
@@ -536,22 +505,18 @@ local check_steam_smoke_stack = V.signature("icon_layers.steam_smoke_stack", {
 	{ "tint", Common.color:optional() },
 })
 
----Gets the base, mask, and highlights layers of the smoke stack a steam assembling machine wears, in
+---Gets the base, mask, and highlights layers of the smoke stack of a steam assembling machine, in
 ---the given `tint`.
 ---
----### Remarks
----The steam machine's smoke stack carries a pipe connection, and is tinted the way a machine body is,
----so it is a tinted body of its own where the burner machine's stack is a single layer.
+---The smoke stack of the steam machine includes a pipe connection, and is tinted as a machine body
+---is. The smoke stack of the burner machine is a single layer.
 ---
----### Parameters
----@param tint Color? # The color to tint the mask. When `nil`, the tintable layers are omitted
----rather than drawn untinted.
+---#### Parameters
+---@param tint Color? The color to tint the mask. When `nil`, the tintable layers are omitted
 ---
----### Returns
+---#### Returns
 ---@return SafeIconData[] # The layers of the smoke stack, sized and scaled.
----
----### Exceptions
----*@throws* `string` — Thrown when `tint` is not a `Color`.
+---@throws Thrown when `tint` is not a `Color`.
 ---@nodiscard
 function M.icon_layers.steam_smoke_stack(tint)
 	check_steam_smoke_stack(tint)
@@ -564,9 +529,11 @@ local check_get_icon = V.signature("get_icon", {
 	{ "tint", Common.color:optional() },
 })
 
----Gets the icon for a standard assembling machine wearing the gear that goes with the given
----@param machine_tier AssemblingMachineTier # The tier of the machine, selecting the gear it is drawn with.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---Gets the icon for a standard assembling machine with the gear for the given
+---
+---#### Parameters
+---@param machine_tier AssemblingMachineTier The tier of the machine, selecting the gear it is drawn with.
+---@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_icon(machine_tier, tint)
@@ -580,14 +547,14 @@ local check_get_electronics_icon = V.signature("get_electronics_icon", {
 	{ "tint", Common.color:optional() },
 })
 
----Gets the icon for an electronics assembling machine wearing the indicator lights that go with
+---Gets the icon for an electronics assembling machine with the indicator lights for
 ---
----### Remarks
 ---The artwork is scaled down (4/5th scale) from the reference assembling machine icon, as the electronics machine it
 ---was intended for is a mini machine by definition, and so the icon is drawn at that size.
 ---
----@param electronics_tier AssemblingMachineElectronicsTier # The tier of the machine, selecting the indicator lights it is drawn with.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---#### Parameters
+---@param electronics_tier AssemblingMachineElectronicsTier The tier of the machine, selecting the indicator lights it is drawn with.
+---@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_electronics_icon(electronics_tier, tint)
@@ -603,8 +570,10 @@ local check_get_burner_icon = V.signature("get_burner_icon", {
 	{ "tint", Common.color:optional() },
 })
 
----Gets the icon for a burner assembling machine, wearing its smoke stack, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---Gets the icon for a burner assembling machine, with its smoke stack, in the given `tint`.
+---
+---#### Parameters
+---@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_burner_icon(tint)
@@ -617,8 +586,10 @@ local check_get_steam_icon = V.signature("get_steam_icon", {
 	{ "tint", Common.color:optional() },
 })
 
----Gets the icon for a steam assembling machine, wearing its smoke stack, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---Gets the icon for a steam assembling machine, with its smoke stack, in the given `tint`.
+---
+---#### Parameters
+---@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_steam_icon(tint)

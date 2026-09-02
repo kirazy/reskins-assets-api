@@ -79,7 +79,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `beacon_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `beacon_sprite_set`.
 ---@class (exact) BeaconSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set BeaconGraphicsSet?

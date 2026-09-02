@@ -102,15 +102,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class SalinationPlantSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's salination plant.
----@param params SalinationPlantSpriteSetParams # The options the sprite set is drawn with.
+---@param params SalinationPlantSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local salination_plant = require("__reskins-assets-api__.assets.angels.entities.refining.salination-plant")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

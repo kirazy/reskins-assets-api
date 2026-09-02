@@ -37,7 +37,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `mining_drill_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `mining_drill_sprite_set`.
 ---@class (exact) MiningDrillSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set MiningDrillGraphicsSet?

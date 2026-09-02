@@ -23,9 +23,9 @@ local check_get_accumulator_pictures = V.signature("get_accumulator_pictures", {
 	{ "repeat_count", Common.positive_integer:optional() },
 })
 
----@param sprite_set AccumulatorSpriteVariant? # Default "base".
----@param tint Color? # Default nil.
----@param repeat_count integer? # Default nil.
+---@param sprite_set AccumulatorSpriteVariant? Default "base".
+---@param tint Color? Default nil.
+---@param repeat_count integer? Default nil.
 ---@return Animation
 local function get_accumulator_pictures(sprite_set, tint, repeat_count)
 	check_get_accumulator_pictures(sprite_set, tint, repeat_count)
@@ -178,8 +178,8 @@ local function get_chargable_graphics(sprite_set, tint)
 	return chargable_graphics
 end
 
----@param sprite_set AccumulatorSpriteVariant? # Default "base".
----@param tint Color? # Default nil.
+---@param sprite_set AccumulatorSpriteVariant? Default "base".
+---@param tint Color? Default nil.
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(sprite_set, tint)
 	sprite_set = sprite_set or "base"
@@ -231,17 +231,16 @@ local function get_corpse_animation(sprite_set, tint)
 end
 
 ---@class AccumulatorSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The accumulator to draw. Defaults to `"base"`.
 ---@field sprite_set AccumulatorSpriteVariant?
 
 ---Gets the sprite set for the vanilla accumulator.
----@param params AccumulatorSpriteSetParams # The options the sprite set is drawn with.
+---@param params AccumulatorSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<AccumulatorSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local accumulator = require("__reskins-assets-api__.assets.base.entities.accumulator")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -275,18 +274,20 @@ local check_get_icon = V.signature("get_icon", {
 })
 
 ---Gets the icon for an accumulator of the given `sprite_set`, in the given `tint`.
----@param sprite_set "base"|"fast"|"high-capacity"|"slow"? # The accumulator the icon is drawn for. Defaults to `"base"`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---
+---#### Parameters
+---@param sprite_set "base"|"fast"|"high-capacity"|"slow"? The accumulator the icon is drawn for. Defaults to `"base"`.
+---@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_icon(sprite_set, tint)
 	check_get_icon(sprite_set, tint)
 
-	-- The vanilla accumulator wears vanilla artwork; the rest are Bob's.
+	-- The vanilla accumulator uses vanilla artwork; the rest are Bob's.
 	sprite_set = sprite_set or "base"
 	local name = sprite_set == "base" and "accumulator" or "accumulator-" .. sprite_set
 	local mod = sprite_set == "base" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
-	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-icon-"
+	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-"
 
 	---@type SafeIconData[]
 	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }

@@ -41,8 +41,8 @@ local BLUE_PARTS = {
 
 local BASE_DIRECTION = { north = "N", east = "E", south = "S", west = "W" }
 
----@param frame MiningDrillElectricFrame # The housing the part is drawn for.
----@param part string # The part, named for its direction and role, as `"north-wet-front"`.
+---@param frame MiningDrillElectricFrame The housing the part is drawn for.
+---@param part string The part, named for its direction and role, as `"north-wet-front"`.
 ---@return FileName
 ---@nodiscard
 local function get_frame_file(frame, part)
@@ -171,7 +171,7 @@ end
 
 ---@param tint Color?
 ---@param speed double
----@param is_front boolean # When `true`, draws the half of the head that stands in front of the housing.
+---@param is_front boolean When `true`, draws the half of the head that stands in front of the housing.
 ---@return Animation
 ---@nodiscard
 local function get_horizontal_drill_animation(tint, speed, is_front)
@@ -277,7 +277,7 @@ local function get_smoke_front()
 	}
 end
 
----@param direction string # The direction letter naming the artwork, as `"N"`.
+---@param direction string The direction letter naming the artwork, as `"N"`.
 ---@param width SpriteSizeType
 ---@param height SpriteSizeType
 ---@param shift Vector
@@ -1247,8 +1247,7 @@ local function get_corpse_animation(tint)
 end
 
 ---@class MiningDrillElectricSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The housing the drill is built into. Defaults to `"base"`.
 ---@field frame MiningDrillElectricFrame?
@@ -1267,10 +1266,10 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the vanilla electric mining drill.
----@param params MiningDrillElectricSpriteSetParams # The options the sprite set is drawn with.
+---@param params MiningDrillElectricSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<MiningDrillSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local mining_drill_electric = require("__reskins-assets-api__.assets.base.entities.mining-drill-electric")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -1289,6 +1288,7 @@ function M.get_sprite_set(params)
 	local definition = {
 		set_type = _defines.sprite_set_type.mining_drill_sprite_set,
 		set = {
+			---@diagnostic disable-next-line: assign-type-mismatch
 			graphics_set = {
 				animation = get_dry_animation(frame, speed),
 				working_visualisations = get_dry_working_visualisations(params, speed),
@@ -1297,6 +1297,7 @@ function M.get_sprite_set(params)
 				shift_animation_transition_duration = 30 / speed,
 			},
 			graphics_set_flipped = nil,
+			---@diagnostic disable-next-line: assign-type-mismatch
 			wet_mining_graphics_set = {
 				animation = get_wet_animation(frame, speed),
 				working_visualisations = get_wet_working_visualisations(params, speed),

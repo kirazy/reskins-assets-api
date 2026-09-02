@@ -159,15 +159,14 @@ local function get_corpse_animation_overlay(tint)
 end
 
 ---@class ElectricPoleMediumSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla medium electric pole.
----@param params ElectricPoleMediumSpriteSetParams # The options the sprite set is drawn with.
+---@param params ElectricPoleMediumSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<ElectricPoleSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local electric_pole_medium = require("__reskins-assets-api__.assets.base.entities.electric-pole-medium")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

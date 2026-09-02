@@ -19,7 +19,7 @@ local M = {}
 
 ---Builds the belt animation set for the given `tint` and `belt_sprite`.
 ---
----Every transport-belt-connectable entity wears the same belt, so the splitter and underground
+---Every transport-belt-connectable entity uses the same belt, so the splitter and underground
 ---belt producers take theirs from here rather than each building their own.
 ---@param tint Color?
 ---@param belt_sprite BeltSprites
@@ -117,17 +117,16 @@ local function get_corpse_animation(tint)
 end
 
 ---@class TransportBeltSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The belt artwork to draw.
 ---@field belt_sprite BeltSprites
 
 ---Gets the sprite set for the vanilla transport belt.
----@param params TransportBeltSpriteSetParams # The options the sprite set is drawn with.
+---@param params TransportBeltSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<TransportBeltSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local transport_belt = require("__reskins-assets-api__.assets.base.entities.transport-belt")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

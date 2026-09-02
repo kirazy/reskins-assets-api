@@ -123,15 +123,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class FiltrationUnitSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's filtration unit.
----@param params FiltrationUnitSpriteSetParams # The options the sprite set is drawn with.
+---@param params FiltrationUnitSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local filtration_unit = require("__reskins-assets-api__.assets.angels.entities.refining.filtration-unit")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

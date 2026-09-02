@@ -165,15 +165,14 @@ local function get_corpse_animation(tint)
 end
 
 ---@class RobotLogisticSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla logistic robot.
----@param params RobotLogisticSpriteSetParams # The options the sprite set is drawn with.
+---@param params RobotLogisticSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<LogisticRobotSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local robot_logistic = require("__reskins-assets-api__.assets.base.entities.robot-logistic")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

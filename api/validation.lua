@@ -7,11 +7,10 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
----A catalog of ready-made validators for the values this API works with.
+---Provides validators for the values used by this API.
 ---
----These are ordinary validators built from `__reskins-sprite-utils__.validation`, defined once and
----shared. Builder methods never mutate, so an entry may be narrowed for a specific use without
----disturbing the shared original:
+---Builder methods return a new validator, so an entry may be narrowed for a specific use without
+---modifying the shared validator:
 ---
 ---```lua
 ---local CraftingMachineSet = AssetsCommon.sprite_set_definition:where(function(value)
@@ -19,10 +18,10 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 ---end, "must be a crafting machine sprite set")
 ---```
 ---
----For the Factorio structures `__reskins-sprite-utils__` already describes — icons, colors,
----vectors, file paths — see `__reskins-sprite-utils__.validation.common`.
+---Validators for Factorio structures, such as icons, colors, vectors, and file paths, are provided
+---by `__reskins-sprite-utils__.validation.common`.
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local AssetsCommon = require("__reskins-assets-api__.api.validation")
 ---
@@ -36,28 +35,27 @@ local _common = {}
 
 -- Icon vocabulary
 
----A symbol an icon may be drawn for.
+---A validator that checks that a value is a symbol name.
 _common.symbol = V.one_of(_defines.symbol):describe_as("a symbol name")
 
----A letter an icon may be drawn for.
+---A validator that checks that a value is a letter.
 _common.letter = V.one_of(_defines.letter):describe_as("a letter")
 
----A material a pipe may be built from.
+---A validator that checks that a value is a pipe material.
 _common.pipe_material = V.one_of(_defines.pipe_material):describe_as("a pipe material")
 
 -- Prototypes
 
----A prototype, carrying the `type` and `name` every prototype has.
----
----Left open to unrecognized fields, since a prototype carries far more than this.
+---A validator that checks that a value is a prototype with `type` and `name` fields. Unknown fields
+---are permitted.
 ---@type ShapeValidator<PrototypeBase>
 _common.prototype = V.shape({
 	type = Common.prototype_type_name,
 	name = Common.prototype_name,
 }):describe_as("a prototype")
 
----A [BoundingBox](https://lua-api.factorio.com/latest/types/BoundingBox.html), in either the named
----(`left_top` and `right_bottom`) or the array form.
+---A validator that checks that a value is a [BoundingBox](https://lua-api.factorio.com/latest/types/BoundingBox.html),
+---in either the named or the array form.
 ---@type Validator<BoundingBox>
 _common.bounding_box = V.table()
 	:satisfies(function(value)
@@ -78,7 +76,7 @@ _common.bounding_box = V.table()
 	end, "a BoundingBox with an x and y coordinate for each of its two corners")
 	:describe_as("a BoundingBox")
 
----An entity prototype, carrying the `selection_box` automatic scaling is measured against.
+---A validator that checks that a value is an entity prototype with a `selection_box`.
 ---@type ShapeValidator<EntityPrototype>
 _common.entity_prototype = V.shape({
 	type = Common.prototype_type_name,
@@ -88,21 +86,16 @@ _common.entity_prototype = V.shape({
 
 -- Sprite sets
 
----The shape a sprite set takes.
+---A validator that checks that a value is a `SpriteSetType`.
 _common.sprite_set_type = V.one_of(_defines.sprite_set_type):describe_as("a SpriteSetType")
 
----A transformer converting a sprite set from one `SpriteSetType` to another.
+---A validator that checks that a value is a sprite set transformer function.
 ---@type Validator<AnySpriteSetTransformer>
 _common.sprite_set_transformer = V.func():describe_as("a sprite set transformer")
 
----The remnant art applied to a corpse prototype: rescaled along with the rest of the sprite set,
----then copied onto the prototype field by field.
----
----Closed to unrecognized fields, because that copy is unconditional and follows the rescaling. A
----field a `CorpsePrototype` genuinely has but the art does not — `collision_box`, `selection_box`,
----`tile_width`, `tile_height` — is resized on the way through and then written over the prototype's
----own, corrupting it rather than being ignored. A misspelling is reported here instead of reaching
----the game as a log warning.
+---A validator that checks that a value is a `CorpseSpriteSet`: remnant art that is rescaled with
+---the sprite set and copied onto the corpse prototype field by field. Unknown fields are not
+---permitted.
 ---@type ShapeValidator<CorpseSpriteSet>
 _common.corpse_sprite_set = V.shape({
 	animation = V.any():optional(),
@@ -132,14 +125,12 @@ _common.corpse_sprite_set = V.shape({
 	:strict()
 	:describe_as("a CorpseSpriteSet")
 
----The function an applicator paints a prototype with.
+---A validator that checks that a value is an applicator function.
 ---@type Validator<fun(prototype: table, set: table)>
 _common.applicator_function = V.func():describe_as("an applicator function")
 
----The sprite data itself, carrying the nominal dimensions scaling is resolved from.
----
----Left open to unrecognized fields, since the fields beyond these vary by `SpriteSetType`. The
----`corpse` it may carry is checked, being copied onto a prototype rather than read field by field.
+---A validator that checks that a value is a sprite set with nominal dimensions. Unknown fields are
+---permitted; a `corpse` field is validated.
 ---@type ShapeValidator<SpriteSetBase>
 _common.sprite_set = V.shape({
 	nominal_width = Common.positive_number,
@@ -147,7 +138,7 @@ _common.sprite_set = V.shape({
 	corpse = _common.corpse_sprite_set:optional(),
 }):describe_as("a sprite set")
 
----A sprite set tagged with its `SpriteSetType`.
+---A validator that checks that a value is a `SpriteSetDefinition`.
 ---@type ShapeValidator<AnySpriteSetDefinition>
 _common.sprite_set_definition = V.shape({
 	set_type = _common.sprite_set_type,

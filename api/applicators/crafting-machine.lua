@@ -186,12 +186,9 @@ end
 
 ---Builds a 2D connection matrix: `matrix[entity_facing_dir][sprite_dir]` = `"connected"` | `"capped"`.
 ---
----Constructed by rotating the canonical pipe connection set (defined in north-facing orientation)
----clockwise for each entity-facing direction. A sprite direction is connected when rotating it CCW
----back to the north-facing frame maps to a direction in the base connection set.
----
----When `is_flipped` is true, the canonical directions are first mirrored east<->west to account
----for the horizontal symmetry of the flipped variant's design space.
+---The north-facing connection set is rotated clockwise for each entity facing. A sprite direction is
+---connected if rotating it counterclockwise to north maps to a direction in the connection set. If
+---`is_flipped` is `true`, the connection set is mirrored east-west first.
 ---@param directions defines.direction[]
 ---@param is_flipped boolean
 ---@return table<defines.direction, table<defines.direction, "connected"|"capped">>
@@ -229,11 +226,9 @@ local function mirror_directions(directions)
 	return mirrored
 end
 
----Resolves `connectors`' behind/front direction sets for the flipped orientation: the explicit
----`flipped_behind_directions`/`flipped_front_directions` overrides if given, otherwise a
----horizontal mirror of `behind_directions`/`front_directions`. Most entities don't need the
----overrides — the flipped variant's geometry is usually just the unflipped one mirrored — but nothing
----guarantees that in general, so producers can supply it explicitly when it isn't.
+---Gets the behind and front direction sets of the given `connectors` for the flipped orientation:
+---`flipped_behind_directions` and `flipped_front_directions` if defined; otherwise, the horizontal
+---mirror of `behind_directions` and `front_directions`.
 ---@param connectors WorkingVisualisationPipeConnectors
 ---@return defines.direction[] behind_directions, defines.direction[] front_directions
 local function resolve_flipped_directions(connectors)
@@ -336,10 +331,8 @@ local function apply_working_visualisation_pipe_connectors(prototype, connectors
 	end
 end
 
----Applies a `crafting_machine_graphics_set`-shaped `value` to `prototype`. `value` is always
----already in this applicator's native shape by the time it arrives here — getting an arbitrary
----source shape to this one is `graphics-packs.apply`'s and `graphics-packs.converters`' job, not
----this applicator's; it only needs to know how to consume its own shape.
+---Applies the given crafting machine sprite set `value` to the given `prototype`. `value` must be
+---in the shape this applicator accepts.
 ---@param prototype CraftingMachinePrototype
 ---@param sprite_set CraftingMachineSpriteSet
 local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
@@ -382,9 +375,9 @@ return {
 ---An optional shadow patch drawn when `direction` is connected. Returns `nil` for no shadow there.
 ---@alias PipeConnectorShadow fun(direction: defines.direction, is_flipped: boolean): Animation?
 
----Dynamic, connection-state-driven pipe corner art, built at apply time from the prototype's own
----fluid box connection directions — the alternative to `fluid_boxes` for a crafting machine whose
----pipe art is expressed as rotated working_visualisations rather than direct FluidBox pictures.
+---Pipe corner art built when applied, from the fluid box connection directions of the prototype,
+---for a crafting machine whose pipe art is defined as rotated working visualisations instead of
+---fluid box pictures.
 ---@class (exact) WorkingVisualisationPipeConnectors
 ---The connected/capped pipe corner art for a sprite direction and flip orientation.
 ---@field get_picture PipeConnectorPicture
@@ -401,7 +394,7 @@ return {
 ---`front_directions` when omitted; set explicitly if the flipped geometry doesn't mirror cleanly.
 ---@field flipped_front_directions defines.direction[]?
 
----The sprite data a `crafting_machine_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
 ---@class (exact) CraftingMachineSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set CraftingMachineGraphicsSet
@@ -409,9 +402,8 @@ return {
 ---@field graphics_set_flipped CraftingMachineGraphicsSet?
 ---Fluid box pipe graphics, matched to the prototype's fluid boxes by direction.
 ---@field fluid_boxes FluidBoxGraphics[]?
----Dynamic pipe corner art built from the prototype's own fluid box connection directions. Used
----instead of (or alongside) `fluid_boxes` by crafting machines whose pipe art is expressed as
----working_visualisations rather than direct FluidBox pictures.
+---Pipe corner art built from the fluid box connection directions of the prototype, used instead of
+---or alongside `fluid_boxes`.
 ---@field working_visualisation_pipe_connectors WorkingVisualisationPipeConnectors?
 ---Sets the prototype's `fluid_boxes_off_when_no_fluid_recipe` (`AssemblingMachinePrototype` only;
 ---ignored for furnaces).

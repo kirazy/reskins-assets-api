@@ -13,20 +13,17 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local M = {}
 
 ---@class DistillerySpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Bob's distillery.
 ---
----### Remarks
 ---The set carries its nominal dimensions only; its `graphics_set` is empty and no artwork is
 ---drawn for this family yet.
----
----@param params DistillerySpriteSetParams # The options the sprite set is drawn with.
+---@param params DistillerySpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local distillery = require("__reskins-assets-api__.assets.bobs.entities.distillery")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

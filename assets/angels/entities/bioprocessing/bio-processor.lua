@@ -108,15 +108,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class BioProcessorSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's bio processor.
----@param params BioProcessorSpriteSetParams # The options the sprite set is drawn with.
+---@param params BioProcessorSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local bio_processor = require("__reskins-assets-api__.assets.angels.entities.bioprocessing.bio-processor")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

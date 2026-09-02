@@ -382,8 +382,7 @@ local function get_water_reflection()
 end
 
 ---@class BoilerSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The color to tint the fire. When `nil`, the base game's fire artwork is drawn instead.
 ---@field fire_tint Color?
@@ -405,10 +404,10 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for a standard boiler.
----@param params BoilerSpriteSetParams # The options the sprite set is drawn with.
+---@param params BoilerSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<BoilerSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local boiler = require("__reskins-assets-api__.assets.base.entities.boiler")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
@@ -419,10 +418,8 @@ local check_params = V.signature("get_sprite_set", {
 ----- Automatically adapts to prototypes other than boilers:
 ---applicators.apply_sprite_set(assembling_machine_entity, sprite_set)
 ---```
----
----### Exceptions
----*@throws* `string` — Thrown when `params.tint` or `params.fire_tint` is not a `Color`.\
----*@throws* `string` — Thrown when `params.fire_flicker_enabled` or `params.fire_glow_flicker_enabled` is not a boolean.
+---@throws Thrown when `params.tint` or `params.fire_tint` is not a `Color`.
+---@throws Thrown when `params.fire_flicker_enabled` or `params.fire_glow_flicker_enabled` is not a boolean.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -455,8 +452,10 @@ local check_get_icon = V.signature("get_icon", {
 })
 
 ---Gets the icon for a standard boiler, in the given `tint`, burning a fire in the given `fire_tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@param fire_tint Color? # The color to tint the fire. When `nil`, the base layer's own fire shows through.
+---
+---#### Parameters
+---@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@param fire_tint Color? The color to tint the fire. When `nil`, the base layer's own fire shows through.
 ---@return SafeIconData[]
 ---@nodiscard
 function M.get_icon(tint, fire_tint)

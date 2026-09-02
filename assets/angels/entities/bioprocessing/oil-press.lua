@@ -64,15 +64,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class OilPressSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's oil press.
----@param params OilPressSpriteSetParams # The options the sprite set is drawn with.
+---@param params OilPressSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local oil_press = require("__reskins-assets-api__.assets.angels.entities.bioprocessing.oil-press")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

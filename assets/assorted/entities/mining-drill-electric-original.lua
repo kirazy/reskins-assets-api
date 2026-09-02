@@ -66,8 +66,8 @@ local PARTS = {
 }
 
 ---@param direction string
----@param name string # The file the layer is drawn from, less the direction and the extension.
----@param part table # The size and shift the direction cuts this part at.
+---@param name string The file the layer is drawn from, less the direction and the extension.
+---@param part table The size and shift the direction cuts this part at.
 ---@param speed double
 ---@return Animation
 ---@nodiscard
@@ -143,8 +143,8 @@ local function get_animation(params, speed)
 	return animation
 end
 
----@param name string # The file the sprite is drawn from, less the direction and the extension.
----@param part_name string # The key naming the size and shift in `PARTS`.
+---@param name string The file the sprite is drawn from, less the direction and the extension.
+---@param part_name string The key naming the size and shift in `PARTS`.
 ---@param speed double?
 ---@return Animation4Way
 ---@nodiscard
@@ -229,8 +229,7 @@ local function get_wet_working_visualisations(speed)
 end
 
 ---@class MiningDrillElectricOriginalSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The belt the drill unloads onto. When `nil`, the drill unloads onto no belt of its own.
 ---@field belt_output MiningDrillElectricOriginalBeltOutput?
@@ -249,10 +248,10 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the classic electric mining drill.
----@param params MiningDrillElectricOriginalSpriteSetParams # The options the sprite set is drawn with.
+---@param params MiningDrillElectricOriginalSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<MiningDrillSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local drill = require("__reskins-assets-api__.assets.assorted.entities.mining-drill-electric-original")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

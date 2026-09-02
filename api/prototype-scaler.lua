@@ -7,24 +7,19 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
 
----The sprite scale graphics in this asset collection are authored at. An explicit `scale` is
----expressed relative to this value, so a `scale` equal to the baseline resolves to a factor of `1`
----(no change).
+---The scale the graphics in this asset collection are authored at. An explicit `scale` is relative
+---to this value; a `scale` equal to the baseline is a factor of `1`.
 local BASELINE_SCALE = 0.5
 
----Resolves a single uniform scale factor for a prototype, then applies that factor to arbitrary
----sprite-bearing subsets on demand.
+---Resolves a uniform scale factor for a prototype, and applies it to sprite-bearing tables with
+---`rescale`.
 ---
----The factor is resolved once, at construction, from one of three sources (in order of precedence):
----1. An explicit `scale_factor` multiplier.
----2. An explicit `scale`, the desired resulting scale
----   relative to the baseline of `0.5`.
----3. Automatic resolution by comparing the prototype's `selection_box` to its nominal dimensions.
+---The factor is resolved when the scaler is created, from the first of these sources that applies:
+---1. An explicit `scale_factor`.
+---2. An explicit `scale`, relative to the baseline of `0.5`.
+---3. The ratio of the `selection_box` of the prototype to its nominal dimensions.
 ---
----`rescale` may then be called any number of times to scale
----individual subsets in place.
----
----### Examples
+---#### Examples
 ---```lua
 ---local PrototypeScaler = require("__reskins-assets-api__.api.prototype-scaler")
 ---
@@ -37,8 +32,7 @@ local BASELINE_SCALE = 0.5
 local PrototypeScaler = {}
 PrototypeScaler.__index = PrototypeScaler
 
----Extracts the width and height of a bounding box, tolerating both the named
----(`left_top` / `right_bottom`) and array (`[1]` / `[2]`) forms.
+---Gets the width and height of the given bounding box, in either the named or the array form.
 ---@param bounding_box BoundingBox
 ---@return double width, double height
 local function get_bounding_box_dimensions(bounding_box)
@@ -57,8 +51,8 @@ end
 ---@field scale double? The desired resulting scale, relative to the baseline of `0.5`. Overrides automatic scaling.
 ---@field scale_factor double? An explicit multiplier to apply. Overrides both `scale` and automatic scaling.
 
----Resolves the scale factor implied by an explicit `scale` / `scale_factor`, or by comparing the
----prototype's `selection_box` to its nominal dimensions. Returns `nil` (identity) when no source applies.
+---Gets the scale factor from an explicit `scale` or `scale_factor`, or from the ratio of the
+---`selection_box` of the prototype to its nominal dimensions. Returns `nil` if no source applies.
 ---@param prototype EntityPrototype
 ---@param params PrototypeScalerParams
 ---@return double?
@@ -119,17 +113,15 @@ local check_for_prototype = V.signature("for_prototype", {
 
 ---Creates a `PrototypeScaler` for the given `prototype`.
 ---
----The scale factor is resolved from `params` (see `PrototypeScalerParams`
----for precedence). The resulting scaler is an identity (a no-op) when no source applies — i.e. no explicit
----`scale` / `scale_factor`, and either the nominal dimensions are unset, the prototype has no `selection_box`,
----or its aspect ratio does not match the nominal aspect ratio (in which case a warning is logged).
+---The scale factor is resolved from `params`. The scaler does nothing if no source applies: no
+---explicit `scale` or `scale_factor`, and either the nominal dimensions are not set, the prototype
+---has no `selection_box`, or its aspect ratio does not match the nominal aspect ratio, in which case
+---a warning is logged.
 ---@param prototype EntityPrototype The prototype to derive scaling from.
 ---@param params PrototypeScalerParams? The scaling configuration. Defaults to automatic resolution.
 ---@return PrototypeScaler
----
----### Exceptions
----*@throws* `string` — Thrown when `prototype` is not an entity prototype.\
----*@throws* `string` — Thrown when `params` carries a `nominal_width`, `nominal_height`, `scale`, or `scale_factor` that is not a positive number.
+---@throws Thrown when `prototype` is not an entity prototype.
+---@throws Thrown when `params` carries a `nominal_width`, `nominal_height`, `scale`, or `scale_factor` that is not a positive number.
 ---@nodiscard
 function PrototypeScaler.for_prototype(prototype, params)
 	check_for_prototype(prototype, params)
@@ -141,14 +133,9 @@ local check_rescale = V.signature("rescale", {
 	{ "subset", V.table():optional() },
 })
 
----Rescales the given sprite-bearing `subset` in place.
----
----Does nothing when the scaler is an identity (no applicable scale factor, or a factor of 1), or
----when `subset` is `nil` — so callers may invoke this unconditionally on optional subsets.
+---Rescales the given `subset` in place. Does nothing if the scale factor is `1` or `subset` is `nil`.
 ---@param subset table? A sprite-bearing table to rescale in place.
----
----### Exceptions
----*@throws* `string` — Thrown when `subset` is not a table.
+---@throws Thrown when `subset` is not a table.
 function PrototypeScaler:rescale(subset)
 	check_rescale(subset)
 

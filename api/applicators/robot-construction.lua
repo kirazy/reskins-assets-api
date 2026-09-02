@@ -31,7 +31,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `construction_robot_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `construction_robot_sprite_set`.
 ---@class (exact) ConstructionRobotSpriteSet : FlyingRobotSpriteSet
 ---The prototype's `working`.
 ---@field working RotatedAnimation

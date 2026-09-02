@@ -124,15 +124,14 @@ local function get_graphics_set(tint)
 end
 
 ---@class StrandCastingMachineSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for Angel's strand casting machine.
----@param params StrandCastingMachineSpriteSetParams # The options the sprite set is drawn with.
+---@param params StrandCastingMachineSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local strand_casting_machine = require("__reskins-assets-api__.assets.angels.entities.smelting.strand-casting-machine")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

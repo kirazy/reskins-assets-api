@@ -7,9 +7,8 @@ local _defines = require("api.defines")
 
 ---Applies a `transport_belt_sprite_set`-shaped `set` to `prototype`.
 ---
----Does not apply `set.belt_animation_set` — belt animation sets are assigned by a separate
----mechanism, not by this applicator. Only applies the shape-specific pieces beyond it:
----`structure`/`structure_patch` for a splitter, `structure` for an underground belt.
+---`set.belt_animation_set` is not applied by this applicator. Applies `structure` and
+---`structure_patch` for a splitter, and `structure` for an underground belt.
 ---@param prototype TransportBeltConnectablePrototype
 ---@param set TransportBeltSpriteSet
 local function apply_sprite_set_to_transport_belt_connectable(prototype, set)
@@ -36,7 +35,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data a `transport_belt_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `transport_belt_sprite_set`.
 ---@class (exact) TransportBeltSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `belt_animation_set`.
 ---@field belt_animation_set TransportBeltAnimationSet

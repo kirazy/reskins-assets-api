@@ -24,7 +24,6 @@ local M = {}
 ---
 ---Gets a `RotatedAnimationVariations` object containing pipe remnant sprites of the given
 ---`pipe_material`.
----
 ---@param pipe_material PipeMaterial
 ---@return RotatedAnimationVariations animation
 ---@return RequiredAssets
@@ -632,13 +631,11 @@ end
 
 ---Gets the sprite set for the vanilla and Bob's pipes.
 ---
----### Remarks
 ---Window bounding boxes are the base game's.
----
----@param params PipeSpriteSetParams # The options the sprite set is drawn with.
+---@param params PipeSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<PipeSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local pipe = require("__reskins-assets-api__.assets.base.entities.pipe")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

@@ -12,26 +12,23 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
----The sprite data a `artillery_turret_sprite_set`-tagged `SpriteSetDefinition` carries.
+---The sprite data of a `SpriteSetDefinition` of type `artillery_turret_sprite_set`.
 ---
 ---Provisional: no applicator consumes this shape yet. When one is written, this
 ---declaration moves to it, the way `BoilerSpriteSet` lives in `api/applicators/boiler.lua`.
 ---@class (exact) TurretArtillerySpriteSet : EntityWithHealthSpriteSet
 
 ---@class TurretArtillerySpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 
 ---Gets the sprite set for the vanilla artillery turret.
 ---
----### Remarks
 ---The set carries its nominal dimensions only; no artwork is drawn for this family yet.
----
----@param params TurretArtillerySpriteSetParams # The options the sprite set is drawn with.
+---@param params TurretArtillerySpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<TurretArtillerySpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local turret_artillery = require("__reskins-assets-api__.assets.base.entities.turret-artillery")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

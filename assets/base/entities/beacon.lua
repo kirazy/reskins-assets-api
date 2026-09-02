@@ -355,7 +355,7 @@ local check_get_tiered_creators = V.signature("get_tiered_creators", {
 })
 
 ---Gets the creators drawing module slots lit by `light_count` lights.
----@param light_count 5|8 # The number of lights the slot is drawn with.
+---@param light_count 5|8 The number of lights the slot is drawn with.
 ---@return BeaconModuleSlotCreators
 ---@nodiscard
 function M.module_slots.get_tiered_creators(light_count)
@@ -497,7 +497,7 @@ local check_get_god_module_creators = V.signature("get_god_module_creators", {
 })
 
 ---Gets the creators drawing module slots holding one of Bob's god modules.
----@param variant "base"|"productivity"|"quality" # The god module the slot holds.
+---@param variant "base"|"productivity"|"quality" The god module the slot holds.
 ---@return BeaconModuleSlotCreators
 ---@nodiscard
 function M.module_slots.get_god_module_creators(variant)
@@ -772,8 +772,7 @@ end
 ---@field creators BeaconModuleSlotCreators
 
 ---@class BeaconSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The number of module slots to draw. Buckets to the 2, 4, or 6 slot artwork; defaults to 2.
 ---@field slot_count integer?
@@ -797,10 +796,10 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the vanilla beacon.
----@param params BeaconSpriteSetParams # The options the sprite set is drawn with.
+---@param params BeaconSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<BeaconSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local beacon = require("__reskins-assets-api__.assets.base.entities.beacon")
 ---local applicators = require("__reskins-assets-api__.api.applicators")

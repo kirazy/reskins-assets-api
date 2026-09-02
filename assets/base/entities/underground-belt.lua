@@ -127,17 +127,16 @@ local function get_corpse_animation(tint)
 end
 
 ---@class UndergroundBeltSpriteSetParams
----The color to tint the artwork. When `nil`, the tintable layers are omitted from the set rather than drawn
----untinted.
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint Color?
 ---The belt artwork to draw.
 ---@field belt_sprite BeltSprites
 
 ---Gets the sprite set for the vanilla underground belt.
----@param params UndergroundBeltSpriteSetParams # The options the sprite set is drawn with.
+---@param params UndergroundBeltSpriteSetParams The options the sprite set is drawn with.
 ---@return SpriteSetDefinition<TransportBeltSpriteSet>
 ---
----### Examples
+---#### Examples
 ---```lua
 ---local underground_belt = require("__reskins-assets-api__.assets.base.entities.underground-belt")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
