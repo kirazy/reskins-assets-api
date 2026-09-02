@@ -37,13 +37,13 @@ local _common = {}
 -- Icon vocabulary
 
 ---A symbol an icon may be drawn for.
-_common.symbol = V.one_of(_defines.symbol--[[@as (string[])]]):describe_as("a symbol name")
+_common.symbol = V.one_of(_defines.symbol):describe_as("a symbol name")
 
 ---A letter an icon may be drawn for.
-_common.letter = V.one_of(_defines.letter--[[@as (string[])]]):describe_as("a letter")
+_common.letter = V.one_of(_defines.letter):describe_as("a letter")
 
 ---A material a pipe may be built from.
-_common.pipe_material = V.one_of(_defines.pipe_material--[[@as (string[])]]):describe_as("a pipe material")
+_common.pipe_material = V.one_of(_defines.pipe_material):describe_as("a pipe material")
 
 -- Prototypes
 
@@ -89,13 +89,11 @@ _common.entity_prototype = V.shape({
 -- Sprite sets
 
 ---The shape a sprite set takes.
-_common.sprite_set_type = V.one_of(_defines.sprite_set_type--[[@as (string[])]]):describe_as("a SpriteSetType")
+_common.sprite_set_type = V.one_of(_defines.sprite_set_type):describe_as("a SpriteSetType")
 
 ---A transformer converting a sprite set from one `SpriteSetType` to another.
 ---@type Validator<AnySpriteSetTransformer>
-_common.sprite_set_transformer = V.custom(function(value)
-	return type(value) == "function"
-end, "a function taking a sprite set and returning a sprite set"):describe_as("a sprite set transformer")
+_common.sprite_set_transformer = V.func():describe_as("a sprite set transformer")
 
 ---The remnant art applied to a corpse prototype: rescaled along with the rest of the sprite set,
 ---then copied onto the prototype field by field.
@@ -136,9 +134,7 @@ _common.corpse_sprite_set = V.shape({
 
 ---The function an applicator paints a prototype with.
 ---@type Validator<fun(prototype: table, set: table)>
-_common.applicator_function = V.custom(function(value)
-	return type(value) == "function"
-end, "a function taking a prototype and a sprite set"):describe_as("an applicator function")
+_common.applicator_function = V.func():describe_as("an applicator function")
 
 ---The sprite data itself, carrying the nominal dimensions scaling is resolved from.
 ---
