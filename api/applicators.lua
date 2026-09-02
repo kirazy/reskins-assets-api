@@ -31,5 +31,6 @@ registry.register(require("applicators.generator"))
 registry.register(require("applicators.transport-belt"))
 registry.register(require("applicators.solar-panel"))
 registry.register(require("applicators.storage-tank"))
+registry.register(require("applicators.lab"))
 
 return registry

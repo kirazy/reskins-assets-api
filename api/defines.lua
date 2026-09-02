@@ -192,6 +192,9 @@ _defines.sprite_set_type = {
 
 	---Consumed by these prototypes: `StorageTankPrototype`
 	storage_tank_sprite_set = "StorageTankSpriteSet",
+
+	---Consumed by these prototypes: `LabPrototype`
+	lab_sprite_set = "LabSpriteSet",
 }
 
 return _defines

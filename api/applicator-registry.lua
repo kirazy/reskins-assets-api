@@ -44,6 +44,7 @@ local set_type_by_prototype_type = {
 	["roboport"] = _defines.sprite_set_type.roboport_sprite_set,
 	["solar-panel"] = _defines.sprite_set_type.solar_panel_sprite_set,
 	["storage-tank"] = _defines.sprite_set_type.storage_tank_sprite_set,
+	["lab"] = _defines.sprite_set_type.lab_sprite_set,
 }
 
 ---Creates applicator registries: registries of the applicator that paints each `SpriteSetType`,
