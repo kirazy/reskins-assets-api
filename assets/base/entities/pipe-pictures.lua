@@ -57,7 +57,6 @@ end
 ---connection point for a given rotation state, rather than bake the shadow into the entity's sprite.
 ---@param shift Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
 ---@return Animation # A vertical pipe shadow for a single tile.
----@return RequiredAssets # The required asset mods.
 ---
 ---#### Examples
 ---Add a vertical pipe shadow in the north and south directions to the working_visualisations field of an assembly
@@ -86,7 +85,7 @@ function M.vertical_pipe_shadow(shift)
 		scale = 0.5,
 	}
 
-	return shadow_animation, { [_defines.assets_source.base_assets] = true }
+	return shadow_animation
 end
 
 ---Gets an `Animation` object configured to draw a horizontal pipe shadow at the given `shift`, for a single tile.
@@ -95,7 +94,6 @@ end
 ---connection point for a given rotation state, rather than bake the shadow into the entity's sprite.
 ---@param shift Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
 ---@return Animation # A horizontal pipe shadow for a single tile.
----@return RequiredAssets # The required asset mods.
 ---
 ---#### Examples
 ---Add a horizontal pipe shadow in the north and south directions to the `working_visualisations` field of an assembly
@@ -124,7 +122,7 @@ function M.horizontal_pipe_shadow(shift)
 		scale = 0.5,
 	}
 
-	return shadow_animation, { [_defines.assets_source.base_assets] = true }
+	return shadow_animation
 end
 
 ---Gets a `Sprite4Way` object containing pipe cover sprites in the given `pipe_material`.
@@ -134,7 +132,6 @@ end
 ---
 ---#### Returns
 ---@return Sprite4Way pictures The complete set of pipe cover sprites in the given `pipe_material`.
----@return RequiredAssets required_assets # The required asset mods.
 ---
 ---#### Examples
 ---```lua
@@ -233,21 +230,11 @@ function M.pipe_covers(pipe_material)
 		},
 	}
 
-	---@type RequiredAssets
-	local required_assets = {
-		[_defines.assets_source.base_assets] = true,
-	}
-
-	if material_asset ~= _defines.assets_source.base_assets then
-		required_assets[material_asset] = true
-	end
-
-	return pipe_cover_pictures, required_assets
+	return pipe_cover_pictures
 end
 
 ---Gets a `Sprite4Way` object containing frozen pipe cover sprites.
 ---@return Sprite4Way pictures The complete set of frozen pipe cover sprites.
----@return RequiredAssets required_assets # The required asset mods.
 ---
 ---#### Examples
 ---```lua
@@ -292,7 +279,7 @@ function M.pipe_covers_frozen()
 		},
 	}
 
-	return pipe_covers_frozen, { [_defines.assets_source.space_age] = true }
+	return pipe_covers_frozen
 end
 
 ---Gets the tinted pipe pictures for the assembling machine (and functionally identical entities such as the oil boiler).
@@ -301,7 +288,6 @@ end
 ---@param tint Color? Tint color for the mask and highlights layers. When `nil`, only the base layer is returned.
 ---@param use_simple_pipe_pictures boolean? When true, omits the `north` mask/highlights and uses the `-simple` east variant.
 ---@return Sprite4Way
----@return RequiredAssets
 ---@nodiscard
 function M.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 	local simple = use_simple_pipe_pictures and "-simple" or ""
@@ -443,12 +429,7 @@ function M.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 		}
 	end
 
-	---@type RequiredAssets
-	local required_assets = {
-		[_defines.assets_source.base_assets] = true,
-	}
-
-	return pictures, required_assets
+	return pictures
 end
 
 return M

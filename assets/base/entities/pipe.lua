@@ -26,7 +26,6 @@ local M = {}
 ---`pipe_material`.
 ---@param pipe_material PipeMaterial
 ---@return RotatedAnimationVariations animation
----@return RequiredAssets
 local function get_corpse_animation(pipe_material)
 	-- For remnants only, the iron sprites come from base.
 	local is_iron = pipe_material == _defines.pipe_material.iron
@@ -44,7 +43,7 @@ local function get_corpse_animation(pipe_material)
 		scale = 0.5,
 	})
 
-	return animation, { [material_asset] = true }
+	return animation
 end
 
 ---@return PipePictures
@@ -187,7 +186,6 @@ end
 ---@param pipe_material PipeMaterial
 ---@param include_frozen_pictures boolean?
 ---@return PipePictures
----@return RequiredAssets
 local function get_pictures(pipe_material, include_frozen_pictures)
 	local material_asset = _pipes.asset_from_material(pipe_material)
 	local material_name = _pipes.name_from_material(pipe_material)
@@ -587,28 +585,18 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 		},
 	}
 
-	---@type RequiredAssets
-	local required_assets = {
-		[_defines.assets_source.base] = true,
-		[_defines.assets_source.base_assets] = true,
-	}
-
-	required_assets[material_asset] = true
-
 	if include_frozen_pictures then
 		pipe_pictures = util.merge({ pipe_pictures, get_frozen_pictures() })
-		required_assets[_defines.assets_source.space_age] = true
 	end
 
-	return pipe_pictures, required_assets
+	return pipe_pictures
 end
 
 ---@param pipe_material PipeMaterial
 ---@param include_frozen_pictures boolean?
 ---@return FluidBoxGraphics
----@return RequiredAssets
 local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
-	local pipe_covers, required_assets = _pipes.pipe_covers(pipe_material)
+	local pipe_covers = _pipes.pipe_covers(pipe_material)
 
 	---@type FluidBoxGraphics
 	local fluid_box_graphics = {
@@ -617,10 +605,9 @@ local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 
 	if include_frozen_pictures then
 		fluid_box_graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
-		required_assets[_defines.assets_source.space_age] = true
 	end
 
-	return fluid_box_graphics, required_assets
+	return fluid_box_graphics
 end
 
 ---@class PipeSpriteSetParams
