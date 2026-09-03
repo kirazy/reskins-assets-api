@@ -7,8 +7,8 @@
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
+local IconCatalog = require("api.icon-catalog")
 local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
@@ -364,30 +364,14 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "pipe_material", V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" }) },
-	{ "tint", Common.color:optional() },
-})
+local icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a heat exchanger carrying the given `pipe_material`, in the given `tint`.
----@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper" # The heat pipes the exchanger is built with.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(pipe_material, tint)
-	check_get_icon(pipe_material, tint)
+local heat_pipe_material = V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" })
 
-	local folder = "__reskins-assets-bobs__/graphics/icons/heat-exchanger/heat-exchanger-"
-
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. pipe_material .. "-base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
+---Gets the icon for a heat exchanger carrying the `pipe_material` and in the tints given by `params`.
+---
+---Every exchanger shares one mask and one highlights layer, only the base layer differs by material.
+M.get_icon =
+	icons:tinted("heat-exchanger"):keyed("pipe_material", heat_pipe_material, { IconCatalog.role.base }):build("get_icon")
 
 return M

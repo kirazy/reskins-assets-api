@@ -11,6 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
+local IconCatalog = require("api.icon-catalog")
 
 local ENTITY_FOLDER = "__reskins-assets-assorted__/graphics/entity/mining-drill-electric-tall/"
 local FOLDER = ENTITY_FOLDER .. "mining-drill-electric-tall-"
@@ -859,53 +860,17 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----@param base_layer FileName
----@param tint Color?
----@return SafeIconData[]
----@nodiscard
-local function get_layers(base_layer, tint)
-	---@type SafeIconData[]
-	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
+local icons = IconCatalog:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
-	if tint then
-		table.insert(layers, { icon = ICON_FOLDER .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(layers, {
-			icon = ICON_FOLDER .. "highlights.png",
-			icon_size = 64,
-			scale = 0.5,
-			tint = { 1, 1, 1, 0 },
-		})
-	end
+---Gets the icon for the semi-classic electric mining drill, in the tints given by `params`.
+M.get_icon = icons:tinted("mining-drill-electric-tall"):build("get_icon")
 
-	return layers
-end
-
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for the semi-classic electric mining drill, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint)
-	check_get_icon(tint)
-
-	return get_layers(ICON_FOLDER .. "base.png", tint)
-end
-
-local check_get_area_icon = V.signature("get_area_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for the semi-classic area mining drill, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_area_icon(tint)
-	check_get_area_icon(tint)
-
-	return get_layers(ICON_FOLDER .. "area-base.png", tint)
-end
+---Gets the icon for the semi-classic area mining drill, in the tints given by `params`.
+M.get_area_icon = icons
+	:layers("mining-drill-electric-tall")
+	:base({ part = "area" })
+	:mask()
+	:highlights({ requires = "tint" })
+	:build("get_area_icon")
 
 return M

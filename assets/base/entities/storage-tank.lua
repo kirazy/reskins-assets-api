@@ -7,8 +7,7 @@
 
 local _defines = require("api.defines")
 
-local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -177,51 +176,13 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----Builds the base, mask, and highlights layers filed under `prefix`.
----@param prefix string # The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
----@param tint Color? # The color to tint the mask.
----@return SafeIconData[]
----@nodiscard
-local function get_tinted_layers(prefix, tint)
-	local layers = { { icon = prefix .. "base.png", icon_size = 64, scale = 0.5 } }
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
-	if tint then
-		table.insert(layers, { icon = prefix .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(layers, { icon = prefix .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
+---Gets the icon for the vanilla storage tank, in the tints given by `params`.
+M.get_icon = base_icons:tinted("storage-tank"):build("get_icon")
 
-	return layers
-end
-
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for the vanilla storage tank, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint)
-	check_get_icon(tint)
-
-	return get_tinted_layers("__reskins-assets-base__/graphics/icons/storage-tank/storage-tank-", tint)
-end
-
-local check_get_all_corners_icon = V.signature("get_all_corners_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a storage tank with a connection on every corner, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_all_corners_icon(tint)
-	check_get_all_corners_icon(tint)
-
-	return get_tinted_layers(
-		"__reskins-assets-bobs__/graphics/icons/storage-tank-all-corners/storage-tank-all-corners-",
-		tint
-	)
-end
+---Gets the icon for a storage tank with a connection on every corner, in the tints given by `params`.
+M.get_all_corners_icon = bobs_icons:tinted("storage-tank-all-corners"):build("get_all_corners_icon")
 
 return M

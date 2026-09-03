@@ -11,7 +11,6 @@ Date: ????
       - Applicators ship for accumulators, beacons, boilers, crafting machines, electric poles, generators, inserters, mining drills, pipes, pipes to ground, pumps, radars, reactors, roboports, construction and logistic robots, solar panels, storage tanks, and transport belts.
     - Added the entity asset modules under `assets`: one flat module per entity family, each exporting `get_sprite_set` and `get_icon`.
       - Modules are filed by the asset mod that adds the entity, under `assets.base.entities`, `assets.angels.entities`, `assets.bobs.entities`, and `assets.hurricane.entities`.
-      - `assets.base.entities.assembling-machine` also exports the pieces its icons are composed from, on `icon_layers`.
       - A `nil` tint omits the tintable layers from a sprite set or icon rather than drawing them untinted.
     - Added `api.converters`, the registry of conversions between sprite set shapes, so a sprite set need not already be in the shape the applicator painting it consumes.
       - `converters.resolve(definition, to_sprite_set)` returns the set in the target shape, preferring a conversion carried on `definition.converters` over the registered ones.
@@ -23,6 +22,10 @@ Date: ????
     - Added `icons.get_tinted_icon`, returning a two-layer icon for a given file: an untinted base, and a copy of it tinted at 75% opacity over the top. Both layers come back with `icon_size` and `scale` filled in, from the optional `icon_size` and `defaults_type` given.
       - This is the effect `icons.get_symbol` and `icons.get_letter` are built from.
     - Added two new symbols: aperture-closed and aperture-open, denoting an open and closed iris.
+    - Added `api.icon-catalog`, the `IconCatalog` class, for building the functions that draw icons from a folder of artwork.
+      - `IconCatalog:create` creates a catalog with a folder, icon defaults type, and icon size; `:flat`, `:layers`, and `:tinted` create a builder for an icon.
+      - `IconBuilder` methods `base`, `mask`, `highlights`, `layer`, `tinted_layer`, `tinted_part`, and `keyed` add layers and parameters; `build` returns a function that draws the icon for a table of parameters.
+      - `IconCatalog.dispatch` creates a function that selects an icon by one parameter.
   Changes:
     - Icon and sprite methods now validate their arguments through the Artisanal Reskins: Sprite Utils `validation` module; a failure names the function, the parameter, and the path within it, and reports every bad argument at once.
     - `icons.get_symbol` and `icons.get_letter` now throw when `tint` is not a `Color`, rather than building an icon around an invalid tint.

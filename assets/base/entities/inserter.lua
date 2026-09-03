@@ -8,8 +8,7 @@
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 
-local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -445,106 +444,25 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----Builds the base, mask, and highlights layers filed under `prefix`.
----@param prefix string # The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
----@param tint Color? # The color to tint the mask.
----@return SafeIconData[]
----@nodiscard
-local function get_tinted_layers(prefix, tint)
-	local layers = { { icon = prefix .. "base.png", icon_size = 64, scale = 0.5 } }
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons/inserters" })
 
-	if tint then
-		table.insert(layers, { icon = prefix .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(layers, { icon = prefix .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
+---Gets the icon for a standard inserter, in the tints given by `params`.
+M.get_icon = base_icons:tinted("inserter"):build("get_icon")
 
-	return layers
-end
+---Gets the icon for a filter inserter, in the tints given by `params`.
+M.get_filter_icon = bobs_icons:tinted("inserter-filter"):build("get_filter_icon")
 
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-})
+---Gets the icon for a bulk inserter, in the tints given by `params`.
+M.get_bulk_icon = bobs_icons:tinted("inserter-bulk"):build("get_bulk_icon")
 
-local bobs_icon_assets = "__reskins-assets-bobs__/graphics/icons/inserters/"
+---Gets the icon for a bulk inserter, mirrored, in the tints given by `params`.
+M.get_flipped_bulk_icon = bobs_icons:tinted("inserter-bulk-flipped"):build("get_flipped_bulk_icon")
 
----Gets the icon for a standard inserter, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint)
-	check_get_icon(tint)
+---Gets the icon for a bulk filter inserter, in the tints given by `params`.
+M.get_bulk_filter_icon = bobs_icons:tinted("inserter-bulk-filter"):build("get_bulk_filter_icon")
 
-	return get_tinted_layers("__reskins-assets-base__/graphics/icons/inserter/inserter-", tint)
-end
-
-local check_get_filter_icon = V.signature("get_filter_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a filter inserter, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_filter_icon(tint)
-	check_get_filter_icon(tint)
-
-	return get_tinted_layers(bobs_icon_assets .. "inserter-filter/inserter-filter-", tint)
-end
-
-local check_get_bulk_icon = V.signature("get_bulk_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a bulk inserter, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_bulk_icon(tint)
-	check_get_bulk_icon(tint)
-
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk/inserter-bulk-", tint)
-end
-
-local check_get_flipped_bulk_icon = V.signature("get_flipped_bulk_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a bulk inserter, mirrored, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_flipped_bulk_icon(tint)
-	check_get_flipped_bulk_icon(tint)
-
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-flipped/inserter-bulk-flipped-", tint)
-end
-
-local check_get_bulk_filter_icon = V.signature("get_bulk_filter_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a bulk filter inserter, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_bulk_filter_icon(tint)
-	check_get_bulk_filter_icon(tint)
-
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-filter/inserter-bulk-filter-", tint)
-end
-
-local check_get_flipped_bulk_filter_icon = V.signature("get_flipped_bulk_filter_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a bulk filter inserter, mirrored, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_flipped_bulk_filter_icon(tint)
-	check_get_flipped_bulk_filter_icon(tint)
-
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-filter-flipped/inserter-bulk-filter-flipped-", tint)
-end
+---Gets the icon for a bulk filter inserter, mirrored, in the tints given by `params`.
+M.get_flipped_bulk_filter_icon = bobs_icons:tinted("inserter-bulk-filter-flipped"):build("get_flipped_bulk_filter_icon")
 
 return M

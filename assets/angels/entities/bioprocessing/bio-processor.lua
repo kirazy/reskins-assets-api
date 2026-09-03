@@ -6,9 +6,7 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-
-local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -143,28 +141,9 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-})
+local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
----Gets the icon for Angel's bio processor, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint)
-	check_get_icon(tint)
-
-	local folder = "__reskins-assets-angels__/graphics/icons/bio-processor/bio-processor-"
-
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
+---Gets the icon for Angel's bio processor, in the tints given by `params`.
+M.get_icon = icons:tinted("bio-processor"):build("get_icon")
 
 return M

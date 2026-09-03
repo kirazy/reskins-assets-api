@@ -9,6 +9,8 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
+local IconCatalog = require("api.icon-catalog")
+
 local M = {}
 
 ---@alias AccumulatorSpriteVariant
@@ -268,36 +270,19 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "sprite_set", V.one_of({ "base", "fast", "high-capacity", "slow" }):optional() },
-	{ "tint", Common.color:optional() },
-})
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for an accumulator of the given `sprite_set`, in the given `tint`.
----
----#### Parameters
----@param sprite_set "base"|"fast"|"high-capacity"|"slow"? The accumulator the icon is drawn for. Defaults to `"base"`.
----@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(sprite_set, tint)
-	check_get_icon(sprite_set, tint)
+---Gets the icon for the vanilla accumulator, in the tints given by `params`.
+M.get_icon = base_icons:tinted("accumulator"):build("get_icon")
 
-	-- The vanilla accumulator uses vanilla artwork; the rest are Bob's.
-	sprite_set = sprite_set or "base"
-	local name = sprite_set == "base" and "accumulator" or "accumulator-" .. sprite_set
-	local mod = sprite_set == "base" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
-	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-"
+---Gets the icon for Bob's fast accumulator, in the tints given by `params`.
+M.get_fast_icon = bobs_icons:tinted("accumulator-fast"):build("get_fast_icon")
 
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+---Gets the icon for Bob's high-capacity accumulator, in the tints given by `params`.
+M.get_high_capacity_icon = bobs_icons:tinted("accumulator-high-capacity"):build("get_high_capacity_icon")
 
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
+---Gets the icon for Bob's slow accumulator, in the tints given by `params`.
+M.get_slow_icon = bobs_icons:tinted("accumulator-slow"):build("get_slow_icon")
 
 return M

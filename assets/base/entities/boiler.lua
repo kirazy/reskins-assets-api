@@ -9,6 +9,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _defines = require("api.defines")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -446,61 +447,15 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-	{ "fire_tint", Common.color:optional() },
-})
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a standard boiler, in the given `tint`, burning a fire in the given `fire_tint`.
----
----#### Parameters
----@param tint Color? The color to tint the icon. When `nil`, the tintable layers are omitted.
----@param fire_tint Color? The color to tint the fire. When `nil`, the base layer's own fire shows through.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint, fire_tint)
-	check_get_icon(tint, fire_tint)
+---Gets the icon for a standard boiler, in the tints given by `params`. Without `fire_tint`, the
+---fire of the base layer shows through.
+M.get_icon = base_icons:tinted("boiler"):tinted_part("fire", "fire_tint"):build("get_icon")
 
-	local folder = "__reskins-assets-base__/graphics/icons/boiler/boiler-"
-
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	if fire_tint then
-		table.insert(icon, { icon = folder .. "fire-mask.png", icon_size = 64, scale = 0.5, tint = fire_tint })
-		table.insert(icon, { icon = folder .. "fire-highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
-
-local check_get_fluid_icon = V.signature("get_fluid_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a fluid-burning boiler, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_fluid_icon(tint)
-	check_get_fluid_icon(tint)
-
-	local folder = "__reskins-assets-bobs__/graphics/icons/boiler-oil/boiler-oil-"
-
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
+---Gets the icon for a fluid-burning boiler, in the tints given by `params`. Without `fire_tint`,
+---the fire of the base layer shows through.
+M.get_fluid_icon = bobs_icons:tinted("boiler-oil"):tinted_part("fire", "fire_tint"):build("get_fluid_icon")
 
 return M

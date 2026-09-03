@@ -11,6 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -429,32 +430,13 @@ local function get_tinted_layers(prefix, tint)
 	return layers
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-})
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for the vanilla pumpjack, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint)
-	check_get_icon(tint)
+---Gets the icon for the vanilla pumpjack, in the tints given by `params`.
+M.get_icon = base_icons:tinted("pumpjack"):build("get_icon")
 
-	return get_tinted_layers("__reskins-assets-base__/graphics/icons/pumpjack/pumpjack-", tint)
-end
-
-local check_get_water_icon = V.signature("get_water_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a water pumpjack, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_water_icon(tint)
-	check_get_water_icon(tint)
-
-	return get_tinted_layers("__reskins-assets-bobs__/graphics/icons/pumpjack-water/pumpjack-water-", tint)
-end
+---Gets the icon for a water pumpjack, in the tints given by `params`.
+M.get_water_icon = bobs_icons:tinted("pumpjack-water"):build("get_water_icon")
 
 return M

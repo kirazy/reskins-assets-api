@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -250,60 +251,18 @@ end
 ---The tier of a roboport, selecting the artwork it is drawn with.
 ---@alias RoboportTier 1|2|3|4
 
----Builds a roboport icon from `base_layer`, masked and highlighted from `folder`.
----@param base_layer FileName # The file the base layer is drawn from.
----@param folder string # The folder the mask and highlights are filed under.
----@param tint Color? # The color to tint the mask.
----@return SafeIconData[]
----@nodiscard
-local function get_layers(base_layer, folder, tint)
-	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
-	if tint then
-		table.insert(layers, { icon = folder .. "roboport-mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(layers, {
-			icon = folder .. "roboport-highlights.png",
-			icon_size = 64,
-			scale = 0.5,
-			tint = { 1, 1, 1, 0 },
-		})
-	end
+---Gets the icon for the vanilla roboport, in the tints given by `params`.
+M.get_icon = base_icons:tinted("roboport"):build("get_icon")
 
-	return layers
-end
-
-local check_get_icon = V.signature("get_icon", {
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for the vanilla roboport, in the given `tint`.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(tint)
-	check_get_icon(tint)
-
-	local folder = "__reskins-assets-base__/graphics/icons/roboport/"
-
-	return get_layers(folder .. "roboport-base.png", folder, tint)
-end
-
-local check_get_tier_icon = V.signature("get_tier_icon", {
-	{ "tier", V.integer():in_range(1, 4) },
-	{ "tint", Common.color:optional() },
-})
-
----Gets the icon for a roboport of the given `tier`, in the given `tint`.
----@param tier RoboportTier # The tier of the roboport, selecting the artwork it is drawn with.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_tier_icon(tier, tint)
-	check_get_tier_icon(tier, tint)
-
-	local folder = "__reskins-assets-bobs__/graphics/icons/roboport/"
-
-	return get_layers(folder .. "roboport-" .. tier .. "-base.png", folder, tint)
-end
+---Gets the icon for a roboport of the `tier` and in the tints given by `params`.
+---
+---Every tier shares one mask and one highlights layer, only the base layer differs by tier.
+M.get_tier_icon = bobs_icons
+	:tinted("roboport")
+	:keyed("tier", V.integer():in_range(1, 4), { IconCatalog.role.base })
+	:build("get_tier_icon")
 
 return M

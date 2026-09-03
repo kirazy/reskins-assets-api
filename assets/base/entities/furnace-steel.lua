@@ -8,8 +8,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -632,33 +631,16 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "variant", V.one_of({ "standard", "fluid", "chemical", "chemical-fluid" }) },
-	{ "tint", Common.color:optional() },
-})
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a steel furnace of the given `variant`, in the given `tint`.
----@param variant "standard"|"fluid"|"chemical"|"chemical-fluid" # The furnace the icon is drawn for.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(variant, tint)
-	check_get_icon(variant, tint)
-
+---Gets the icon for a steel furnace of the `variant` and in the tints given by `params`.
+M.get_icon = IconCatalog.dispatch("variant", { "standard", "fluid", "chemical", "chemical-fluid" }, "get_icon", function(variant)
 	-- The standard furnace uses vanilla artwork; the rest are Bob's.
 	local name = variant == "standard" and "furnace-steel" or "furnace-steel-" .. variant
-	local mod = variant == "standard" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
-	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-"
+	local catalog = variant == "standard" and base_icons or bobs_icons
 
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
+	return catalog:tinted(name)
+end)
 
 return M

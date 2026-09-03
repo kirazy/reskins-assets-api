@@ -217,14 +217,11 @@ function M.get_sprite_set(params)
 
 	-- Validate: bulk presets and inserter-long-handed do not support is_long.
 	if is_long and not long_capable_presets[preset] then
-		if not reskins_suppress_errors then
-			error(
-				"InserterPresetSpriteSet: 'is_long' is not valid for preset '"
-					.. tostring(preset)
-					.. "'. Only non-bulk presets (excluding 'inserter-long-handed') support long-arm variants."
-			)
-		end
-		is_long = false
+		error(
+			"InserterPresetSpriteSet: 'is_long' is not valid for preset '"
+				.. tostring(preset)
+				.. "'. Only non-bulk presets (excluding 'inserter-long-handed') support long-arm variants."
+		)
 	end
 
 	---@type SpriteSetDefinition<InserterSpriteSet>

@@ -8,9 +8,7 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 
-local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
-local AssetsCommon = require("api.validation")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -234,25 +232,17 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "pipe_material", AssetsCommon.pipe_material },
-})
-
----Gets the icon for a pipe to ground built from the given `pipe_material`.
----@param pipe_material PipeMaterial # The material the pipe is built from.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(pipe_material)
-	check_get_icon(pipe_material)
-
+---Gets the icon for a pipe to ground built from the `material` given by `params`.
+M.get_icon = IconCatalog.dispatch("material", _defines.pipe_material, "get_icon", function(pipe_material)
+	-- The iron pipe-to-ground icon comes from the base game rather than an assets mod.
 	if pipe_material == _defines.pipe_material.iron then
-		return { { icon = "__base__/graphics/icons/pipe-to-ground.png", icon_size = 64, scale = 0.5 } }
+		return IconCatalog:create({ folder = "__base__/graphics/icons" }):flat("pipe-to-ground")
 	end
 
+	local folder = _pipes.asset_from_material(pipe_material) .. "/graphics/icons/pipe-to-ground"
 	local name = _pipes.name_from_material(pipe_material)
-	local folder = _pipes.asset_from_material(pipe_material) .. "/graphics/icons/pipe-to-ground/"
 
-	return { { icon = folder .. name .. "-pipe-to-ground.png", icon_size = 64, scale = 0.5 } }
-end
+	return IconCatalog:create({ folder = folder }):flat(name .. "-pipe-to-ground")
+end)
 
 return M

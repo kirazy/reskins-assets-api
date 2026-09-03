@@ -8,8 +8,7 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 
-local V = require("__reskins-sprite-utils__.validation")
-local Common = require("__reskins-sprite-utils__.validation.common")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -542,33 +541,21 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "variant", V.one_of({ "standard", "mixing", "chemical", "chemical-mixing" }) },
-	{ "tint", Common.color:optional() },
-})
+local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a electric furnace of the given `variant`, in the given `tint`.
----@param variant "standard"|"mixing"|"chemical"|"chemical-mixing" # The furnace the icon is drawn for.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(variant, tint)
-	check_get_icon(variant, tint)
+---Gets the icon for an electric furnace of the `variant` and in the tints given by `params`.
+M.get_icon = IconCatalog.dispatch(
+	"variant",
+	{ "standard", "mixing", "chemical", "chemical-mixing" },
+	"get_icon",
+	function(variant)
+		-- The standard furnace uses vanilla artwork; the rest are Bob's.
+		local name = variant == "standard" and "furnace-electric" or "furnace-electric-" .. variant
+		local catalog = variant == "standard" and base_icons or bobs_icons
 
-	-- The standard furnace uses vanilla artwork; the rest are Bob's.
-	local name = variant == "standard" and "furnace-electric" or "furnace-electric-" .. variant
-	local mod = variant == "standard" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
-	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-"
-
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+		return catalog:tinted(name)
 	end
-
-	return icon
-end
+)
 
 return M

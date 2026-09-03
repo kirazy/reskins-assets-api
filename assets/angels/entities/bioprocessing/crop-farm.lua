@@ -8,6 +8,7 @@
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local _defines = require("api.defines")
+local IconCatalog = require("api.icon-catalog")
 
 local M = {}
 
@@ -156,32 +157,12 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local check_get_icon = V.signature("get_icon", {
-	{ "variant", V.one_of({ "basic", "temperate", "desert", "swamp" }) },
-	{ "tint", Common.color:optional() },
-})
+local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
----Gets the icon for Angel's crop farm of the given `variant`, in the given `tint`.
----@param variant "basic"|"temperate"|"desert"|"swamp" # The field the icon is drawn for.
----@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
----@return SafeIconData[]
----@nodiscard
-function M.get_icon(variant, tint)
-	check_get_icon(variant, tint)
-
+---Gets the icon for Angel's crop farm of the `variant` and in the tints given by `params`.
+M.get_icon = IconCatalog.dispatch("variant", { "basic", "temperate", "desert", "swamp" }, "get_icon", function(key)
 	-- The basic farm's artwork is filed under the bare field name.
-	local name = variant == "basic" and "field" or "field-" .. variant
-	local folder = "__reskins-assets-angels__/graphics/icons/" .. name .. "/" .. name .. "-"
-
-	---@type SafeIconData[]
-	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return icon
-end
+	return icons:tinted(key == "basic" and "field" or "field-" .. key)
+end)
 
 return M
