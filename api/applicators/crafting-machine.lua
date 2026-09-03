@@ -38,6 +38,8 @@ local h_mirror = {
 	[defines.direction.west] = defines.direction.east,
 }
 
+---@alias FluidBoxDirections {[defines.direction]: boolean}
+
 ---Collects the set of directions declared by a fluid box's pipe connections.
 ---@param fluid_box FluidBox
 ---@return FluidBoxDirections
