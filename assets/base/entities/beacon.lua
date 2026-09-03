@@ -342,12 +342,8 @@ function M.module_slots.get_vanilla_creators()
 end
 
 local module_slot_creators = V.shape({
-	slot_1 = V.custom(function(value)
-		return type(value) == "function"
-	end, "a function drawing a module slot"),
-	slot_2 = V.custom(function(value)
-		return type(value) == "function"
-	end, "a function drawing a module slot"),
+	slot_1 = V.func():describe_as("a function drawing a module slot"),
+	slot_2 = V.func():describe_as("a function drawing a module slot"),
 }):describe_as("a pair of module slot creators")
 
 local check_get_tiered_creators = V.signature("get_tiered_creators", {
