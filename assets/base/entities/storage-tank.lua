@@ -204,7 +204,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	return get_tinted_layers("__reskins-assets-base__/graphics/icons/storage-tank/storage-tank-icon-", tint)
+	return get_tinted_layers("__reskins-assets-base__/graphics/icons/storage-tank/storage-tank-", tint)
 end
 
 local check_get_all_corners_icon = V.signature("get_all_corners_icon", {
@@ -219,7 +219,7 @@ function M.get_all_corners_icon(tint)
 	check_get_all_corners_icon(tint)
 
 	return get_tinted_layers(
-		"__reskins-assets-bobs__/graphics/icons/storage-tank-all-corners/storage-tank-all-corners-icon-",
+		"__reskins-assets-bobs__/graphics/icons/storage-tank-all-corners/storage-tank-all-corners-",
 		tint
 	)
 end

@@ -305,7 +305,7 @@ end
 ---@nodiscard
 local function get_layers(base_layer, tint)
 	local folder = "__reskins-assets-assorted__/graphics/icons/mining-drill-electric-original/"
-		.. "mining-drill-electric-original-icon-"
+		.. "mining-drill-electric-original-"
 
 	---@type SafeIconData[]
 	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
@@ -331,7 +331,7 @@ function M.get_icon(tint)
 
 	local folder = "__reskins-assets-assorted__/graphics/icons/mining-drill-electric-original/"
 
-	return get_layers(folder .. "mining-drill-electric-original-icon-base.png", tint)
+	return get_layers(folder .. "mining-drill-electric-original-base.png", tint)
 end
 
 local check_get_area_icon = V.signature("get_area_icon", {
@@ -347,7 +347,7 @@ function M.get_area_icon(tint)
 
 	local folder = "__reskins-assets-assorted__/graphics/icons/mining-drill-electric-original/"
 
-	return get_layers(folder .. "mining-drill-electric-original-area-icon-base.png", tint)
+	return get_layers(folder .. "mining-drill-electric-original-area-base.png", tint)
 end
 
 return M

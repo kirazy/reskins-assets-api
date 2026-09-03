@@ -868,9 +868,9 @@ local function get_layers(base_layer, tint)
 	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
 
 	if tint then
-		table.insert(layers, { icon = ICON_FOLDER .. "icon-mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(layers, { icon = ICON_FOLDER .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
 		table.insert(layers, {
-			icon = ICON_FOLDER .. "icon-highlights.png",
+			icon = ICON_FOLDER .. "highlights.png",
 			icon_size = 64,
 			scale = 0.5,
 			tint = { 1, 1, 1, 0 },
@@ -891,7 +891,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	return get_layers(ICON_FOLDER .. "icon-base.png", tint)
+	return get_layers(ICON_FOLDER .. "base.png", tint)
 end
 
 local check_get_area_icon = V.signature("get_area_icon", {
@@ -905,7 +905,7 @@ local check_get_area_icon = V.signature("get_area_icon", {
 function M.get_area_icon(tint)
 	check_get_area_icon(tint)
 
-	return get_layers(ICON_FOLDER .. "area-icon-base.png", tint)
+	return get_layers(ICON_FOLDER .. "area-base.png", tint)
 end
 
 return M

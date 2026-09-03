@@ -671,7 +671,7 @@ function M.get_icon(pipe_material)
 	local name = _pipes.name_from_material(pipe_material)
 	local folder = _pipes.asset_from_material(pipe_material) .. "/graphics/icons/pipe/"
 
-	return { { icon = folder .. name .. "-pipe-icon.png", icon_size = 64, scale = 0.5 } }
+	return { { icon = folder .. name .. "-pipe.png", icon_size = 64, scale = 0.5 } }
 end
 
 return M

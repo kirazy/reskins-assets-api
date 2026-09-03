@@ -474,7 +474,7 @@ local bobs_icon_assets = "__reskins-assets-bobs__/graphics/icons/inserters/"
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	return get_tinted_layers("__reskins-assets-base__/graphics/icons/inserter/inserter-icon-", tint)
+	return get_tinted_layers("__reskins-assets-base__/graphics/icons/inserter/inserter-", tint)
 end
 
 local check_get_filter_icon = V.signature("get_filter_icon", {
@@ -488,7 +488,7 @@ local check_get_filter_icon = V.signature("get_filter_icon", {
 function M.get_filter_icon(tint)
 	check_get_filter_icon(tint)
 
-	return get_tinted_layers(bobs_icon_assets .. "inserter-filter/inserter-filter-icon-", tint)
+	return get_tinted_layers(bobs_icon_assets .. "inserter-filter/inserter-filter-", tint)
 end
 
 local check_get_bulk_icon = V.signature("get_bulk_icon", {
@@ -502,7 +502,7 @@ local check_get_bulk_icon = V.signature("get_bulk_icon", {
 function M.get_bulk_icon(tint)
 	check_get_bulk_icon(tint)
 
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk/inserter-bulk-icon-", tint)
+	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk/inserter-bulk-", tint)
 end
 
 local check_get_flipped_bulk_icon = V.signature("get_flipped_bulk_icon", {
@@ -516,7 +516,7 @@ local check_get_flipped_bulk_icon = V.signature("get_flipped_bulk_icon", {
 function M.get_flipped_bulk_icon(tint)
 	check_get_flipped_bulk_icon(tint)
 
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-flipped/inserter-bulk-flipped-icon-", tint)
+	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-flipped/inserter-bulk-flipped-", tint)
 end
 
 local check_get_bulk_filter_icon = V.signature("get_bulk_filter_icon", {
@@ -530,7 +530,7 @@ local check_get_bulk_filter_icon = V.signature("get_bulk_filter_icon", {
 function M.get_bulk_filter_icon(tint)
 	check_get_bulk_filter_icon(tint)
 
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-filter/inserter-bulk-filter-icon-", tint)
+	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-filter/inserter-bulk-filter-", tint)
 end
 
 local check_get_flipped_bulk_filter_icon = V.signature("get_flipped_bulk_filter_icon", {
@@ -544,7 +544,7 @@ local check_get_flipped_bulk_filter_icon = V.signature("get_flipped_bulk_filter_
 function M.get_flipped_bulk_filter_icon(tint)
 	check_get_flipped_bulk_filter_icon(tint)
 
-	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-filter-flipped/inserter-bulk-filter-flipped-icon-", tint)
+	return get_tinted_layers(bobs_icon_assets .. "inserter-bulk-filter-flipped/inserter-bulk-filter-flipped-", tint)
 end
 
 return M

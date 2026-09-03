@@ -375,7 +375,7 @@ local check_base = V.signature("icon_layers.base", {
 function M.icon_layers.base(tint)
 	check_base(tint)
 
-	return get_tinted_layers(BASE_ICON_FOLDER .. "assembling-machine-icon", tint)
+	return get_tinted_layers(BASE_ICON_FOLDER .. "assembling-machine", tint)
 end
 
 local check_electronics_base = V.signature("icon_layers.electronics_base", {
@@ -407,10 +407,7 @@ local check_electronics_base = V.signature("icon_layers.electronics_base", {
 function M.icon_layers.electronics_base(tint)
 	check_electronics_base(tint)
 
-	return get_tinted_layers(
-		BOBS_ICON_FOLDER .. "assembling-machine-electronics/assembling-machine-electronics-icon",
-		tint
-	)
+	return get_tinted_layers(BOBS_ICON_FOLDER .. "assembling-machine-electronics/assembling-machine-electronics", tint)
 end
 
 local check_burner_base = V.signature("icon_layers.burner_base", {
@@ -430,7 +427,7 @@ local check_burner_base = V.signature("icon_layers.burner_base", {
 function M.icon_layers.burner_base(tint)
 	check_burner_base(tint)
 
-	return get_tinted_layers(BOBS_ICON_FOLDER .. "assembling-machine-burner/assembling-machine-burner-icon", tint)
+	return get_tinted_layers(BOBS_ICON_FOLDER .. "assembling-machine-burner/assembling-machine-burner", tint)
 end
 
 local check_steam_base = V.signature("icon_layers.steam_base", {
@@ -450,7 +447,7 @@ local check_steam_base = V.signature("icon_layers.steam_base", {
 function M.icon_layers.steam_base(tint)
 	check_steam_base(tint)
 
-	return get_tinted_layers(BOBS_ICON_FOLDER .. "assembling-machine-steam/assembling-machine-steam-icon", tint)
+	return get_tinted_layers(BOBS_ICON_FOLDER .. "assembling-machine-steam/assembling-machine-steam", tint)
 end
 
 local check_gear = V.signature("icon_layers.gear", {

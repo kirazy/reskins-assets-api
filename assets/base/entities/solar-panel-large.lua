@@ -141,7 +141,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	local folder = "__reskins-assets-bobs__/graphics/icons/solar-panel-large/solar-panel-large-icon-"
+	local folder = "__reskins-assets-bobs__/graphics/icons/solar-panel-large/solar-panel-large-"
 
 	---@type SafeIconData[]
 	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }

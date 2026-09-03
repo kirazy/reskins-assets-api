@@ -174,7 +174,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	local folder = "__reskins-assets-angels__/graphics/icons/blast-furnace/blast-furnace-icon-"
+	local folder = "__reskins-assets-angels__/graphics/icons/blast-furnace/blast-furnace-"
 
 	---@type SafeIconData[]
 	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }

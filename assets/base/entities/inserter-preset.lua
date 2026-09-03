@@ -279,9 +279,9 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(preset)
 	check_get_icon(preset)
 
-	-- The artwork leads with the qualifier: `inserter-express-bulk` is `express-bulk-inserter-icon`.
+	-- The artwork leads with the qualifier: `inserter-express-bulk` is `express-bulk-inserter`.
 	local qualifier = preset:match("^inserter%-(.+)$")
-	local name = qualifier and qualifier .. "-inserter-icon" or "inserter-icon"
+	local name = qualifier and qualifier .. "-inserter" or "inserter"
 
 	return {
 		{ icon = "__reskins-assets-bobs__/graphics/icons/inserters/" .. name .. ".png", icon_size = 64, scale = 0.5 },

@@ -440,7 +440,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	return get_tinted_layers("__reskins-assets-base__/graphics/icons/pumpjack/pumpjack-icon-", tint)
+	return get_tinted_layers("__reskins-assets-base__/graphics/icons/pumpjack/pumpjack-", tint)
 end
 
 local check_get_water_icon = V.signature("get_water_icon", {
@@ -454,7 +454,7 @@ local check_get_water_icon = V.signature("get_water_icon", {
 function M.get_water_icon(tint)
 	check_get_water_icon(tint)
 
-	return get_tinted_layers("__reskins-assets-bobs__/graphics/icons/pumpjack-water/pumpjack-water-icon-", tint)
+	return get_tinted_layers("__reskins-assets-bobs__/graphics/icons/pumpjack-water/pumpjack-water-", tint)
 end
 
 return M

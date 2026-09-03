@@ -648,7 +648,7 @@ function M.get_icon(variant, tint)
 	-- The standard furnace uses vanilla artwork; the rest are Bob's.
 	local name = variant == "standard" and "furnace-steel" or "furnace-steel-" .. variant
 	local mod = variant == "standard" and "__reskins-assets-base__" or "__reskins-assets-bobs__"
-	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-icon-"
+	local folder = mod .. "/graphics/icons/" .. name .. "/" .. name .. "-"
 
 	---@type SafeIconData[]
 	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }

@@ -380,11 +380,11 @@ function M.get_icon(pipe_material, tint)
 	local folder = "__reskins-assets-bobs__/graphics/icons/heat-exchanger/heat-exchanger-"
 
 	---@type SafeIconData[]
-	local icon = { { icon = folder .. pipe_material .. "-icon-base.png", icon_size = 64, scale = 0.5 } }
+	local icon = { { icon = folder .. pipe_material .. "-base.png", icon_size = 64, scale = 0.5 } }
 
 	if tint then
-		table.insert(icon, { icon = folder .. "icon-mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(icon, { icon = folder .. "icon-highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
 	end
 
 	return icon

@@ -160,7 +160,7 @@ function M.get_icon(variant, tint)
 	check_get_icon(variant, tint)
 
 	local name = "tree-generator-" .. variant
-	local folder = "__reskins-assets-angels__/graphics/icons/" .. name .. "/" .. name .. "-icon-"
+	local folder = "__reskins-assets-angels__/graphics/icons/" .. name .. "/" .. name .. "-"
 
 	---@type SafeIconData[]
 	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }

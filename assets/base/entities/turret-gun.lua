@@ -60,7 +60,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	local folder = "__reskins-assets-base__/graphics/icons/turret-gun/turret-gun-icon-"
+	local folder = "__reskins-assets-base__/graphics/icons/turret-gun/turret-gun-"
 
 	---@type SafeIconData[]
 	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }

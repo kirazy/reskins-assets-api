@@ -216,18 +216,18 @@ function _helpers.make_tinted_three_layer_icon_creator_fn(creatable_icon)
 		---@type IconData[]
 		local icon_data = {
 			{
-				icon = folder .. "/" .. (creatable_icon.icon_base or creatable_icon.icon_name) .. "-icon-base.png",
+				icon = folder .. "/" .. (creatable_icon.icon_base or creatable_icon.icon_name) .. "-base.png",
 				shift = shift,
 				scale = scale,
 			},
 			{
-				icon = folder .. "/" .. (creatable_icon.icon_mask or creatable_icon.icon_name) .. "-icon-mask.png",
+				icon = folder .. "/" .. (creatable_icon.icon_mask or creatable_icon.icon_name) .. "-mask.png",
 				tint = tint,
 				shift = shift,
 				scale = scale,
 			},
 			{
-				icon = folder .. "/" .. (creatable_icon.icon_highlights or creatable_icon.icon_name) .. "-icon-highlights.png",
+				icon = folder .. "/" .. (creatable_icon.icon_highlights or creatable_icon.icon_name) .. "-highlights.png",
 				tint = { 1, 1, 1, 0 },
 				shift = shift,
 				scale = scale,
@@ -269,13 +269,13 @@ function _helpers.make_tinted_circuit_icon_creator_fn(creatable_icon)
 		---@type IconData[]
 		local icon_data = {
 			{
-				icon = folder .. "/" .. creatable_icon.icon_name .. "-icon-base.png",
+				icon = folder .. "/" .. creatable_icon.icon_name .. "-base.png",
 				tint = tint,
 				shift = shift,
 				scale = scale,
 			},
 			{
-				icon = folder .. "/" .. creatable_icon.icon_name .. "-icon-highlights.png",
+				icon = folder .. "/" .. creatable_icon.icon_name .. "-highlights.png",
 				shift = shift,
 				scale = scale,
 			},
@@ -351,7 +351,7 @@ function _helpers.make_pipe_icon_creator_fn(creatable_icon)
 		local assets_base_path = material_asset .. "/graphics/icons/"
 
 		local icon_name = is_iron and creatable_icon.type
-			or creatable_icon.type .. "/" .. material_name .. "-" .. creatable_icon.type .. "-icon"
+			or creatable_icon.type .. "/" .. material_name .. "-" .. creatable_icon.type .. ""
 		---@type IconData[]
 		local icon_data = {
 			{

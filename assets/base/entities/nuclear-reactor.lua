@@ -329,7 +329,7 @@ local MATERIAL = V.one_of({ "base", "aluminum-invar", "gold-copper", "silver-alu
 ---@return SafeIconData[]
 ---@nodiscard
 local function get_layers(base_layer, tint)
-	local shared = "__reskins-assets-base__/graphics/icons/nuclear-reactor/nuclear-reactor-icon-"
+	local shared = "__reskins-assets-base__/graphics/icons/nuclear-reactor/nuclear-reactor-"
 	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
 
 	if tint then
@@ -351,7 +351,7 @@ local check_get_icon = V.signature("get_icon", {
 function M.get_icon(tint)
 	check_get_icon(tint)
 
-	return get_layers("__reskins-assets-base__/graphics/icons/nuclear-reactor/nuclear-reactor-icon-base.png", tint)
+	return get_layers("__reskins-assets-base__/graphics/icons/nuclear-reactor/nuclear-reactor-base.png", tint)
 end
 
 local check_get_fuel_icon = V.signature("get_fuel_icon", {
@@ -381,7 +381,7 @@ function M.get_fuel_icon(fuel, material, tint)
 
 	local folder = "__reskins-assets-bobs__/graphics/icons/nuclear-reactor/"
 
-	return get_layers(folder .. "nuclear-reactor-" .. fuel .. "-" .. material .. "-icon-base.png", tint)
+	return get_layers(folder .. "nuclear-reactor-" .. fuel .. "-" .. material .. "-base.png", tint)
 end
 
 local check_get_realistic_icon = V.signature("get_realistic_icon", {

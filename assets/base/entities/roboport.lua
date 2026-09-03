@@ -260,9 +260,9 @@ local function get_layers(base_layer, folder, tint)
 	local layers = { { icon = base_layer, icon_size = 64, scale = 0.5 } }
 
 	if tint then
-		table.insert(layers, { icon = folder .. "roboport-icon-mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(layers, { icon = folder .. "roboport-mask.png", icon_size = 64, scale = 0.5, tint = tint })
 		table.insert(layers, {
-			icon = folder .. "roboport-icon-highlights.png",
+			icon = folder .. "roboport-highlights.png",
 			icon_size = 64,
 			scale = 0.5,
 			tint = { 1, 1, 1, 0 },
@@ -285,7 +285,7 @@ function M.get_icon(tint)
 
 	local folder = "__reskins-assets-base__/graphics/icons/roboport/"
 
-	return get_layers(folder .. "roboport-icon-base.png", folder, tint)
+	return get_layers(folder .. "roboport-base.png", folder, tint)
 end
 
 local check_get_tier_icon = V.signature("get_tier_icon", {
@@ -303,7 +303,7 @@ function M.get_tier_icon(tier, tint)
 
 	local folder = "__reskins-assets-bobs__/graphics/icons/roboport/"
 
-	return get_layers(folder .. "roboport-" .. tier .. "-icon-base.png", folder, tint)
+	return get_layers(folder .. "roboport-" .. tier .. "-base.png", folder, tint)
 end
 
 return M
