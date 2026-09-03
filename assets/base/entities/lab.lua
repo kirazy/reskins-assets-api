@@ -8,6 +8,9 @@
 local _defines = require("api.defines")
 local _sprite_utils = { sprites = require("__reskins-sprite-utils__.sprites") }
 
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
+
 local M = {}
 
 ---@param tint Color?
@@ -254,6 +257,30 @@ function M.get_sprite_set(params)
 	}
 
 	return definition
+end
+
+local check_get_icon = V.signature("get_icon", {
+	{ "tint", Common.color:optional() },
+})
+
+---Gets the icon for the vanilla lab, in the given `tint`.
+---@param tint Color? # The color to tint the icon. When `nil`, the tintable layers are omitted.
+---@return SafeIconData[]
+---@nodiscard
+function M.get_icon(tint)
+	check_get_icon(tint)
+
+	local folder = "__reskins-assets-base__/graphics/icons/lab/lab-"
+
+	---@type SafeIconData[]
+	local icon = { { icon = folder .. "base.png", icon_size = 64, scale = 0.5 } }
+
+	if tint then
+		table.insert(icon, { icon = folder .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
+		table.insert(icon, { icon = folder .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
+	end
+
+	return icon
 end
 
 return M
