@@ -8,65 +8,59 @@ local _assembly = require("api.icon-builder.assembly")
 local IconBuilderBase = require("api.icon-builder.icon-builder-base")
 local IconBuilder1 = require("api.icon-builder.icon-builder-1")
 
----A builder for an icon drawn as a stack of layers over a folder of artwork.
+---Represents a builder for an icon with several layers, each taken from its own file.
 ---
----The files of the layers are named `{folder}/{name}/{stem}[-{key}][-{part}]-{role}.png`, where a
----key selects the artwork and a part selects a group of layers within it. Every method returns a
----new builder; the builder it was called on is not modified.
+---The file of each layer is `{folder}/{name}/{stem}[-{value}...][-{part}]-{role}.png`. The name of the icon is used as
+---the stem when no stem is set. Each `{value}` is the value of a parameter added by `keyed`, `{part}` selects a group
+---of layers within the icon, and `{role}` is the role of the layer. Each layer is drawn on top of the layers added
+---before it.
 ---
----The creator function returned by `build` takes one table of parameters. A layer added by `base`
----is tinted by `base_tint`, and a layer added by `mask` by `tint`; both are optional. `keyed`,
----`tinted_layer`, and `tinted_part` add a parameter named by the caller, and return an
----`IconBuilder1`.
----
----#### Examples
----```lua
----local IconCatalog = require("__reskins-assets-api__.api.icon-catalog")
----
----local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
----
----local get_circuit = icons:layers("circuit"):mask():highlights():layer("traces"):build()
----local icon_data = get_circuit({ tint = util.color("#e88b2f") })
----```
+---`build` creates a function that takes one table of parameters and returns the icon. A layer added by `base` is tinted
+---by the `base_tint` parameter, and a layer added by `mask` is tinted by the `tint` parameter. Up to two further
+---parameters can be added with `keyed`, `tinted_layer`, and `tinted_part`.
 ---@class IconBuilder<P> : IconBuilderBase
 local IconBuilder = {}
 IconBuilder.__index = IconBuilder
 setmetatable(IconBuilder, IconBuilderBase)
 
----Adds the body of the icon, tinted by the `base_tint` parameter when one is given.
----@param options IconLayerOptions? Controls how the layer is drawn.
----@return IconBuilder<P & { base_tint?: Color }> # A builder drawing the added layer.
----@throws Thrown when `options` is not an `IconLayerOptions`.
+---Adds a `base` layer, tinted by the `base_tint` parameter when one is given.
+---
+---The file name of the layer is `{stem}[-{value}...][-{part}]-base.png`, such as `accumulator-base.png`. The layer is
+---always included, unless `options.requires` names a parameter.
+---@param options? IconLayerOptions The options for the layer.
+---@return IconBuilder<P & { base_tint?: Color }> # A copy of the builder with the layer added.
+---@throws When `options` is not a valid `IconLayerOptions`.
 ---@nodiscard
 function IconBuilder:base(options)
-	_assembly.check_layer_options(options)
+	_assembly.check_base(options)
 
 	return _assembly.with_layers(self, { _assembly.base_layer(options) }, IconBuilder)
 end
 
----Adds the tintable body of the icon, tinted by the `tint` parameter.
+---Adds a `mask` layer, tinted by the `tint` parameter.
 ---
----The layer is omitted when the creator is called without `tint`, unless it is the first layer
----of the icon, which is then drawn untinted.
----@param options IconLayerOptions? Controls how the layer is drawn.
----@return IconBuilder<P & { tint?: Color }> # A builder drawing the added layer.
----@throws Thrown when `options` is not an `IconLayerOptions`.
+---The file name of the layer is `{stem}[-{value}...][-{part}]-mask.png`, such as `accumulator-mask.png`. Unless
+---`options.requires` is set, the layer is omitted when `tint` is not given and it is not the first layer of the icon.
+---@param options? IconLayerOptions The options for the layer.
+---@return IconBuilder<P & { tint?: Color }> # A copy of the builder with the layer added.
+---@throws When `options` is not a valid `IconLayerOptions`.
 ---@nodiscard
 function IconBuilder:mask(options)
-	_assembly.check_layer_options(options)
+	_assembly.check_mask(options)
 
 	return _assembly.with_layers(self, { _assembly.new_layer(_assembly.role.mask, "tint", nil, options) }, IconBuilder)
 end
 
----Adds the highlights of the icon, rendered additively over the body.
+---Adds a `highlights` layer, which the game renders additively.
 ---
----The layer is always drawn unless `options.requires` names a parameter.
----@param options IconLayerOptions? Controls how the layer is drawn.
----@return IconBuilder<P> # A builder drawing the added layer.
----@throws Thrown when `options` is not an `IconLayerOptions`.
+---The file name of the layer is `{stem}[-{value}...][-{part}]-highlights.png`, such as `accumulator-highlights.png`.
+---The layer is always included, unless `options.requires` names a parameter. `options.tint` is ignored.
+---@param options? IconLayerOptions The options for the layer.
+---@return IconBuilder<P> # A copy of the builder with the layer added.
+---@throws When `options` is not a valid `IconLayerOptions`.
 ---@nodiscard
 function IconBuilder:highlights(options)
-	_assembly.check_layer_options(options)
+	_assembly.check_highlights(options)
 
 	return _assembly.with_layers(
 		self,
@@ -75,12 +69,15 @@ function IconBuilder:highlights(options)
 	)
 end
 
----Adds the base, mask, and highlights of the given `part`, tinted like the body of the icon: the
----base by `base_tint` when one is given, the mask by `tint`, and the mask and highlights omitted
----without it.
----@param part string The filename segment selecting the layers, such as the `stack` in `boiler-stack-mask.png`.
----@return IconBuilder<P & { base_tint?: Color, tint?: Color }> # A builder drawing the added layers.
----@throws Thrown when `part` is not a non-empty string.
+---Adds the `base`, `mask`, and `highlights` layers of the given `part`.
+---
+---The file names of the layers are `{stem}[-{value}...]-{part}-{role}.png`, such as
+---`assembling-machine-steam-smoke-stack-mask.png`. The base layer is tinted by the `base_tint` parameter when one is
+---given. The mask layer is tinted by the `tint` parameter. The mask and highlights layers are omitted when `tint` is
+---not given.
+---@param part string The segment of the file names that selects the layers.
+---@return IconBuilder<P & { base_tint?: Color, tint?: Color }> # A copy of the builder with the layers added.
+---@throws When `part` is `nil` or an empty string.
 ---@nodiscard
 function IconBuilder:tinted(part)
 	_assembly.check_tinted(part)
@@ -88,17 +85,23 @@ function IconBuilder:tinted(part)
 	return _assembly.with_layers(self, _assembly.tinted_layers(part), IconBuilder)
 end
 
----Adds a layer in the given `role`, drawn untinted or in the color given by `options`.
----@param role IconRole|string The trailing segment of the file name of the layer.
----@param options IconLayerOptions? Controls how the layer is drawn.
----@return IconBuilder<P> # A builder drawing the added layer.
+---Adds a layer with the given `role`, tinted by `options.tint` when one is given.
+---
+---The file name of the layer is `{stem}[-{value}...][-{part}]-{role}.png`, such as `circuit-traces.png`. The layer is
+---always included, unless `options.requires` names a parameter.
+---@param role IconRole|string The role of the layer, which is the last segment of its file name.
+---@param options? IconLayerOptions The options for the layer.
+---@return IconBuilder<P> # A copy of the builder with the layer added.
 ---
 ---#### Examples
 ---```lua
----local get_circuit = icons:layers("circuit"):mask():highlights():layer("traces"):build()
+----- Create the circuit icon from circuit-mask.png, circuit-highlights.png, and circuit-traces.png.
+---local get_icon = icons:layers("circuit"):mask():highlights():layer("traces"):build("get_icon")
+---local icon_data = get_icon({ tint = util.color("#e88b2f") })
+----- The traces are drawn on top of the tinted mask and the highlights.
 ---```
----@throws Thrown when `role` is not an icon role.
----@throws Thrown when `options` is not an `IconLayerOptions`.
+---@throws When `role` is `nil` or an empty string.
+---@throws When `options` is not a valid `IconLayerOptions`.
 ---@nodiscard
 function IconBuilder:layer(role, options)
 	_assembly.check_layer(role, options)
@@ -106,52 +109,59 @@ function IconBuilder:layer(role, options)
 	return _assembly.with_layers(self, { _assembly.new_layer(role, nil, nil, options) }, IconBuilder)
 end
 
----Adds a parameter selecting the artwork the icon is drawn from.
+---Adds a required parameter with the given `name` that selects the artwork of the icon.
 ---
----The key is written into the file name stem of each layer it applies to; for example, `roboport`
----keyed by `tier` draws `roboport-1-base.png`. Keys are written in the order they are added.
+---The value of the parameter is converted with `tostring` and appended to the stem of the file name of each of the
+---given `layers`, as `{stem}-{value}[-{part}]-{role}.png`. Values are appended in the order in which their parameters
+---are added. For example, the base layer of `roboport` keyed by `tier` for the `base` role is `roboport-2-base.png`
+---when `tier` is 2.
+---
+---A role in `layers` selects the layer of that role with no part. An `IconLayerSelector` selects every layer of a part,
+---or the layer of one role within a part.
 ---
 ---#### Parameters
 ---@generic const N : string, const V
 ---@param name N The name of the parameter.
----@param validator Validator<V> A validator accepting the values the parameter may take.
----@param roles (IconRole|string)[]? The roles the key is written into. Defaults to every role.
+---@param validator Validator<V> The validator for the values of the parameter.
+---@param layers? (IconRole|string|IconLayerSelector)[] The layers for which the value of the parameter is appended to the file name. If `nil`, the value is appended for every layer.
 ---
 ---#### Returns
----@return IconBuilder1<P, N, V> # A builder whose creator takes the parameter.
+---@return IconBuilder1<P, N, V> # A copy of the builder with the parameter added.
 ---
 ---#### Examples
 ---```lua
------ Draws roboport-1-base.png over a shared roboport-mask.png.
----local get_icon = icons:tinted("roboport"):keyed("tier", V.integer():in_range(1, 4), { "base" }):build()
----local icon_data = get_icon({ tier = 1, tint = util.color("#e88b2f") })
+----- Create the roboport icon from roboport-{tier}-base.png, roboport-mask.png, and roboport-highlights.png.
+---local get_icon = icons:tinted("roboport"):keyed("tier", V.one_of({ 1, 2, 3, 4 }), { "base" }):build("get_icon")
+---local icon_data = get_icon({ tier = 2, tint = util.color("#e88b2f") })
+----- The base layer of icon_data is roboport-2-base.png.
 ---```
----@throws Thrown when `name` is not a non-empty string.
----@throws Thrown when `validator` is not a validator.
----@throws Thrown when `roles` is not a non-empty array of icon roles.
+---@throws When `name` is `nil` or an empty string.
+---@throws When `validator` is not a validator.
+---@throws When `layers` is empty, or is not an array of roles and `IconLayerSelector` objects.
 ---@nodiscard
-function IconBuilder:keyed(name, validator, roles)
-	_assembly.check_keyed(name, validator, roles)
+function IconBuilder:keyed(name, validator, layers)
+	_assembly.check_keyed(name, validator, layers)
 
-	return _assembly.with_key(self, name, validator, roles, IconBuilder1)
+	return _assembly.with_key(self, name, validator, layers, IconBuilder1)
 end
 
----Adds a layer in the given `role`, tinted by the parameter of the given `name`.
+---Adds a layer with the given `role`, tinted by the parameter with the given `name`.
 ---
----The layer is omitted when the creator is called without that parameter, unless it is the first
----layer of the icon, which is then drawn untinted.
+---The file name of the layer is `{stem}[-{value}...][-{part}]-{role}.png`, such as `circuit-traces.png`. Unless
+---`options.requires` is set, the layer is omitted when that parameter is not given and it is not the first layer of the
+---icon.
 ---
 ---#### Parameters
 ---@generic const N : string
----@param role IconRole|string The trailing segment of the file name of the layer.
----@param name N The name of the parameter supplying the color.
----@param options IconLayerOptions? Controls how the layer is drawn.
+---@param role IconRole|string The role of the layer, which is the last segment of its file name.
+---@param name N The name of the parameter that tints the layer.
+---@param options? IconLayerOptions The options for the layer.
 ---
 ---#### Returns
----@return IconBuilder1<P, N, Color?> # A builder whose creator takes the parameter.
----@throws Thrown when `role` is not an icon role.
----@throws Thrown when `name` is not a non-empty string.
----@throws Thrown when `options` is not an `IconLayerOptions`.
+---@return IconBuilder1<P, N, Color?> # A copy of the builder with the layer and the parameter added.
+---@throws When `role` is `nil` or an empty string.
+---@throws When `name` is `nil` or an empty string.
+---@throws When `options` is not a valid `IconLayerOptions`.
 ---@nodiscard
 function IconBuilder:tinted_layer(role, name, options)
 	_assembly.check_tinted_layer(role, name, options)
@@ -159,24 +169,26 @@ function IconBuilder:tinted_layer(role, name, options)
 	return _assembly.with_layers(self, { _assembly.new_layer(role, name, nil, options) }, IconBuilder1)
 end
 
----Adds a mask and its highlights for the given `part`, the mask tinted by the parameter of the
----given `name`. Both layers are omitted when the creator is called without that parameter.
+---Adds the `mask` and `highlights` layers of the given `part`, with the mask layer tinted by the parameter with the
+---given `name`.
 ---
----#### Parameters
+---The file names of the layers are `{stem}[-{value}...]-{part}-mask.png` and
+---`{stem}[-{value}...]-{part}-highlights.png`, such as `boiler-fire-mask.png`. Both layers are omitted when that
+---parameter is not given, except for a mask layer that is the first layer of the icon.
 ---@generic const N : string
----@param part string The file name segment selecting the layers, such as the `fire` in `boiler-fire-mask.png`.
----@param name N The name of the parameter supplying the color.
----
----#### Returns
----@return IconBuilder1<P, N, Color?> # A builder whose creator takes the parameter.
+---@param part string The segment of the file names that selects the layers.
+---@param name N The name of the parameter that tints the mask layer.
+---@return IconBuilder1<P, N, Color?> # A copy of the builder with the layers and the parameter added.
 ---
 ---#### Examples
 ---```lua
----local get_icon = icons:tinted("boiler"):tinted_part("fire", "fire_tint"):build()
+----- Create the boiler icon with the fire tinted by its own parameter.
+---local get_icon = icons:tinted("boiler"):tinted_part("fire", "fire_tint"):build("get_icon")
 ---local icon_data = get_icon({ tint = util.color("#e88b2f"), fire_tint = util.color("#ff9f22") })
+----- The fire mask and fire highlights are drawn on top of the boiler.
 ---```
----@throws Thrown when `part` is not a non-empty string.
----@throws Thrown when `name` is not a non-empty string.
+---@throws When `part` is `nil` or an empty string.
+---@throws When `name` is `nil` or an empty string.
 ---@nodiscard
 function IconBuilder:tinted_part(part, name)
 	_assembly.check_tinted_part(part, name)
@@ -184,20 +196,18 @@ function IconBuilder:tinted_part(part, name)
 	return _assembly.with_layers(self, _assembly.tinted_part_layers(part, name), IconBuilder1)
 end
 
----Builds the function that draws the described icon.
+---Builds a function that returns the icon for the given parameters.
 ---
----The creator takes one table of parameters, or none: the tints of the icon, each optional.
----Unrecognized parameters are rejected.
----
----#### Parameters
----@param creator_name string? The name used in error messages when the creator is called with invalid parameters. Defaults to the name of the icon.
----@param rules IconParamsRule[]? Rules that check several parameters together.
----
----#### Returns
----@return fun(params?: P): SafeIconData[] # A function that draws the icon for the given parameters.
----@throws Thrown when `creator_name` is not a non-empty string.
----@throws Thrown when `rules` is not an array of `IconParamsRule` objects, or a rule names a parameter the icon does not take.
----@throws Thrown when the icon draws no layers.
+---The function takes one table of parameters, or none. Each parameter is a tint, and is optional. An error is raised
+---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
+---the function is assigned.
+---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
+---@param rules? IconParamsRule[] The rules that check several parameters together.
+---@return fun(params?: P): SafeIconData[] # A function that returns the icon for the given parameters.
+---@throws When `creator_name` is an empty string.
+---@throws When `rules` is not an array of valid `IconParamsRule` objects.
+---@throws When a rule has a `field` or `fields` entry that is not the name of a parameter.
+---@throws When the icon has no layers.
 ---@nodiscard
 function IconBuilder:build(creator_name, rules)
 	_assembly.check_build(creator_name, rules)
@@ -205,29 +215,33 @@ function IconBuilder:build(creator_name, rules)
 	return _assembly.make_creator(self.state, creator_name, rules, true)
 end
 
----Builds the function that draws the described icon as a composition.
+---Builds a function that returns the icon as an `IconComposition`.
 ---
----The creator takes the parameters `build` describes, and returns an `IconComposition` from
----Artisanal Reskins: Sprite Utils holding the icon in the canvas group, with the icon defaults
----type of the catalog.
----
----#### Parameters
----@param creator_name string? The name used in error messages when the creator is called with invalid parameters. Defaults to the name of the icon.
----@param rules IconParamsRule[]? Rules that check several parameters together.
----
----#### Returns
----@return fun(params?: P): IconComposition # A function that draws the icon for the given parameters as a composition.
+---The function takes one table of parameters, or none. Each parameter is a tint, and is optional. An error is raised
+---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
+---the function is assigned. The icon is added to the canvas group of a composition with the icon defaults type of the
+---factory.
+---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
+---@param rules? IconParamsRule[] The rules that check several parameters together.
+---@return fun(params?: P): IconComposition # A function that returns a composition with the icon for the given parameters.
 ---
 ---#### Examples
 ---```lua
+----- Create the steam turbine icon with an open aperture symbol.
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local _defines = require("__reskins-assets-api__.api.defines")
+---local tint = util.color("#e88b2f")
+---
 ---local get_icon_composition = icons:tinted("steam-turbine"):build_composition("get_icon_composition")
 ---local icon_data = get_icon_composition({ tint = tint })
 ---    :add_symbol(icons_api.get_symbol(_defines.symbol.aperture_open, tint))
 ---    :build()
+----- The symbol is drawn on top of the turbine.
 ---```
----@throws Thrown when `creator_name` is not a non-empty string.
----@throws Thrown when `rules` is not an array of `IconParamsRule` objects, or a rule names a parameter the icon does not take.
----@throws Thrown when the icon draws no layers.
+---@throws When `creator_name` is an empty string.
+---@throws When `rules` is not an array of valid `IconParamsRule` objects.
+---@throws When a rule has a `field` or `fields` entry that is not the name of a parameter.
+---@throws When the icon has no layers.
 ---@see IconBuilder.build
 ---@nodiscard
 function IconBuilder:build_composition(creator_name, rules)

@@ -17,7 +17,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set LabSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type LabSpriteSetApplicator
@@ -27,11 +27,11 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `lab_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `lab_sprite_set`.
 ---@class (exact) LabSpriteSet : EntityWithHealthSpriteSet
----@field frozen_patch Sprite?
----@field on_animation Animation?
----@field off_animation Animation?
+---@field frozen_patch? Sprite
+---@field on_animation? Animation
+---@field off_animation? Animation
 
----The applicator for labs.
+---Applies the `LabSpriteSet` to `LabPrototype` instances.
 ---@class (exact) LabSpriteSetApplicator : SpriteSetApplicator<LabPrototype, LabSpriteSet>

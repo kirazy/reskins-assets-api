@@ -7,11 +7,11 @@
 
 local _defines = require("api.defines")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return StorageTankPictures
 local function get_pictures(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/storage-tank/"
@@ -99,7 +99,7 @@ local function get_pictures(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimation
 local function get_corpse_animation(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/storage-tank/remnants/"
@@ -140,13 +140,14 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
+---Defines the options for the vanilla storage tank sprite set.
 ---@class StorageTankSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla storage tank.
----@param params StorageTankSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<StorageTankSpriteSet>
+---@param params StorageTankSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<StorageTankSpriteSet> # The sprite set definition for the vanilla storage tank.
 ---
 ---#### Examples
 ---```lua
@@ -176,8 +177,8 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for the vanilla storage tank, in the tints given by `params`.
 M.get_icon = base_icons:tinted("storage-tank"):build("get_icon")

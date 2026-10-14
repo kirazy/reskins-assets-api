@@ -8,21 +8,19 @@
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 local base_path = "__reskins-assets-base__/graphics/entity/"
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/"
 
--- Static sprite builder functions
-
----Builds the arm (`hand_base_picture`) sprite layers.
+---Gets the arm sprite layers, `hand_base_picture`, for the given `variant`.
 ---
----All inserter variants share the same base arm artwork. Filter variants append an
----additional tint-colored mask + highlights overlay from `inserter-filter/arm/`.
----Bulk-filter has no arm overlay (no arm subfolder in `inserter-bulk-filter/`).
----@param tint Color?
+---All inserter variants share the same base arm artwork. Filter variants append an additional tint-colored mask +
+---highlights overlay from `inserter-filter/arm/`. Bulk-filter has no arm overlay (no arm subfolder in
+---`inserter-bulk-filter/`).
+---@param tint? Color
 ---@param variant "inserter"|"inserter-long"|"inserter-filter"|"inserter-filter-long"|"inserter-bulk"|"inserter-bulk-filter"
 ---@return table
 local function get_arm_picture(tint, variant)
@@ -59,7 +57,7 @@ local function get_arm_picture(tint, variant)
 			scale = 0.25,
 		})
 
-		-- Filter arm overlay — only for non-bulk filter variants.
+		-- The filter arm overlay is used only for the non-bulk filter variants.
 		if variant == "inserter-filter" or variant == "inserter-filter-long" then
 			local filter_path = bobs_path .. "inserter-filter/arm/"
 			table.insert(layers, {
@@ -86,9 +84,9 @@ local function get_arm_picture(tint, variant)
 	return { layers = layers }
 end
 
----Builds the arm shadow (`hand_base_shadow`).
+---Gets the arm shadow, `hand_base_shadow`.
 ---
----Shared by all inserter variants.
+---All inserter variants share the arm shadow.
 ---@return table
 local function get_arm_shadow()
 	return {
@@ -102,14 +100,12 @@ local function get_arm_shadow()
 	}
 end
 
----Builds an open or closed hand sprite (`hand_open_picture` / `hand_closed_picture`).
+---Gets the open or closed hand sprite, `hand_open_picture` or `hand_closed_picture`.
 ---
----Base hand is sourced from `inserter/hand/` for standard/long/filter variants, and
----from `inserter-bulk/hand/` for bulk variants. Filter variants append a state-agnostic
----mask + highlights overlay (the same pair of files is applied to both open and closed
----states, as the filter overlay is not state-dependent). Bulk-filter appends overlays from
----`inserter-bulk-filter/hand/`.
----@param tint Color?
+---Base hand is sourced from `inserter/hand/` for standard/long/filter variants, and from `inserter-bulk/hand/` for bulk
+---variants. Filter variants append a mask + highlights overlay, which uses the same pair of files for the open and
+---closed states. Bulk-filter appends overlays from `inserter-bulk-filter/hand/`.
+---@param tint? Color
 ---@param variant "inserter"|"inserter-long"|"inserter-filter"|"inserter-filter-long"|"inserter-bulk"|"inserter-bulk-filter"
 ---@param hand_state "open"|"closed"
 ---@return table
@@ -182,7 +178,7 @@ local function get_hand_picture(tint, variant, hand_state)
 			})
 		end
 
-		-- Filter hand overlay — state-agnostic: same overlay file for both open and closed.
+		-- The filter hand overlay uses the same file for the open and closed states.
 		if is_filter then
 			local filter_path = bobs_path .. "inserter-filter/hand/"
 			local filter_long_suffix = is_long and "-long" or ""
@@ -206,7 +202,7 @@ local function get_hand_picture(tint, variant, hand_state)
 			})
 		end
 
-		-- Bulk-filter hand overlay (prefix is intentionally "inserter-filter-bulk-", not "inserter-bulk-filter-").
+		-- Bulk-filter hand overlay. The file prefix is "inserter-filter-bulk-", in a different order from the folder name.
 		if is_bulk_filter then
 			local bulk_filter_path = bobs_path .. "inserter-bulk-filter/hand/"
 			table.insert(layers, {
@@ -233,10 +229,10 @@ local function get_hand_picture(tint, variant, hand_state)
 	return { layers = layers }
 end
 
----Builds an open or closed hand shadow (`hand_open_shadow` / `hand_closed_shadow`).
+---Gets the open or closed hand shadow, `hand_open_shadow` or `hand_closed_shadow`.
 ---
----Non-bulk variants share shadows from `inserter/shadows/`. Bulk variants use
----`inserter-bulk/shadows/`. Both are in `reskins-assets-base`.
+---Non-bulk variants share shadows from `inserter/shadows/`. Bulk variants use `inserter-bulk/shadows/`. Both are in
+---`reskins-assets-base`.
 ---@param variant "inserter"|"inserter-long"|"inserter-filter"|"inserter-filter-long"|"inserter-bulk"|"inserter-bulk-filter"
 ---@param hand_state "open"|"closed"
 ---@return table
@@ -266,11 +262,11 @@ local function get_hand_shadow(variant, hand_state)
 	end
 end
 
----Builds the platform sprite sheets (`platform_picture`).
+---Gets the platform sprite sheets, `platform_picture`.
 ---
----All variants share the same platform base sprites. The result uses `sheets` (plural)
----to accommodate base, optional mask/highlights, and shadow layers.
----@param tint Color?
+---All variants share the same platform base sprites. The `sheets` of the result are the base layer, the mask and
+---highlights layers when `tint` is given, and the shadow layer.
+---@param tint? Color
 ---@return table
 local function get_platform_picture(tint)
 	local platform_base = base_path .. "inserter/platform/"
@@ -320,7 +316,7 @@ local function get_platform_picture(tint)
 	return { sheets = sheets }
 end
 
----Builds the corpse remnant animation.
+---Gets the corpse remnant animation.
 ---
 ---Remnant artwork is sourced per variant:
 ---  - `"inserter"` / `"inserter-long"` → `inserter/remnants/` in `reskins-assets-base`
@@ -328,7 +324,7 @@ end
 ---  - `"inserter-bulk"` → `inserter-bulk/remnants/` in `reskins-assets-base`
 ---  - `"inserter-bulk-filter"` → `inserter-bulk-filter/remnants/` in `reskins-assets-bobs`
 ---    (the file prefix is `inserter-filter-bulk-`)
----@param tint Color?
+---@param tint? Color
 ---@param variant "inserter"|"inserter-long"|"inserter-filter"|"inserter-filter-long"|"inserter-bulk"|"inserter-bulk-filter"
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint, variant)
@@ -383,29 +379,32 @@ local function get_corpse_animation(tint, variant)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(4, { layers = layers })
 end
 
--- Class methods
-
+---The variant of the inserter artwork.
 ---@alias InserterVariants
---- | "inserter"
---- | "inserter-long"
---- | "inserter-filter"
---- | "inserter-filter-long"
---- | "inserter-bulk"
---- | "inserter-bulk-filter"
+---| "inserter"
+---| "inserter-long"
+---| "inserter-filter"
+---| "inserter-filter-long"
+---| "inserter-bulk"
+---| "inserter-bulk-filter"
 
+---Defines the options for the inserter sprites.
 ---@class InserterGraphicsParams
----@field tint Color?
+---The color to tint the artwork.
+---@field tint? Color
+---The inserter variant.
 ---@field variant InserterVariants
 
+---Defines the options for the vanilla and Bob's tinted inserters sprite set.
 ---@class InserterSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The variant to draw.
+---@field tint? Color
+---The variant to use.
 ---@field variant InserterVariants
 
 ---Gets the sprite set for the vanilla and Bob's tinted inserters.
----@param params InserterSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<InserterSpriteSet>
+---@param params InserterSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<InserterSpriteSet> # The sprite set definition for the vanilla and Bob's tinted inserters.
 ---
 ---#### Examples
 ---```lua
@@ -436,16 +435,16 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(tint, variant) },
 			water_reflection = nil,
-			nominal_width = 1,
-			nominal_height = 1,
+			nominal_width = 0.8,
+			nominal_height = 0.8,
 		},
 	}
 
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons/inserters" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons/inserters" })
 
 ---Gets the icon for a standard inserter, in the tints given by `params`.
 M.get_icon = base_icons:tinted("inserter"):build("get_icon")

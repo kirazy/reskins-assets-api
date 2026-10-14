@@ -7,8 +7,8 @@ local _defines = require("api.defines")
 
 ---Applies a `set` of type `transport_belt_sprite_set` to `prototype`.
 ---
----`set.belt_animation_set` is not applied by this applicator. Applies `structure` and
----`structure_patch` for a splitter, and `structure` for an underground belt.
+---`set.belt_animation_set` is not applied by this applicator. Applies `structure` and `structure_patch` for a splitter,
+---and `structure` for an underground belt.
 ---@param prototype TransportBeltConnectablePrototype
 ---@param set TransportBeltSpriteSet
 local function apply_sprite_set_to_transport_belt_connectable(prototype, set)
@@ -25,7 +25,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set TransportBeltSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type TransportBeltSpriteSetApplicator
@@ -35,14 +35,14 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `transport_belt_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `transport_belt_sprite_set`.
 ---@class (exact) TransportBeltSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `belt_animation_set`.
 ---@field belt_animation_set TransportBeltAnimationSet
 ---The prototype's `structure`, for a splitter or an underground belt.
----@field structure Animation4Way?
+---@field structure? Animation4Way
 ---The prototype's `structure_patch`, for a splitter.
----@field structure_patch Animation4Way?
+---@field structure_patch? Animation4Way
 
----The applicator for transport-belt-connectable entities.
+---Applies the `TransportBeltSpriteSet` to `TransportBeltConnectablePrototype` instances.
 ---@class (exact) TransportBeltSpriteSetApplicator : SpriteSetApplicator<TransportBeltConnectablePrototype, TransportBeltSpriteSet>

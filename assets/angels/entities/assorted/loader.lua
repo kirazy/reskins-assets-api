@@ -10,7 +10,6 @@ loader.structure.front_patch = {
 }
 loader.structure.direction_in = {
 	sheets = {
-		-- Base
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-base.png",
 			priority = "extra-high",
@@ -19,7 +18,6 @@ loader.structure.direction_in = {
 			shift = util.by_pixel(9.5, 1.5),
 			scale = 0.5,
 		},
-		-- Mask
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-mask.png",
 			priority = "extra-high",
@@ -29,7 +27,6 @@ loader.structure.direction_in = {
 			tint = tint,
 			scale = 0.5,
 		},
-		-- Shadow
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-shadow.png",
 			priority = "extra-high",
@@ -39,7 +36,6 @@ loader.structure.direction_in = {
 			draw_as_shadow = true,
 			scale = 0.5,
 		},
-		-- Lights
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-lights.png",
 			priority = "extra-high",
@@ -53,7 +49,6 @@ loader.structure.direction_in = {
 }
 loader.structure.direction_out = {
 	sheets = {
-		-- Base
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-base.png",
 			priority = "extra-high",
@@ -63,7 +58,6 @@ loader.structure.direction_out = {
 			shift = util.by_pixel(9.5, 1.5),
 			scale = 0.5,
 		},
-		-- Mask
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-mask.png",
 			priority = "extra-high",
@@ -73,7 +67,6 @@ loader.structure.direction_out = {
 			tint = tint,
 			scale = 0.5,
 		},
-		-- Shadow
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-shadow.png",
 			priority = "extra-high",
@@ -83,7 +76,6 @@ loader.structure.direction_out = {
 			draw_as_shadow = true,
 			scale = 0.5,
 		},
-		-- Lights
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-lights.png",
 			priority = "extra-high",

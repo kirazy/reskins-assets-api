@@ -5,10 +5,10 @@
 
 local _defines = require("api.defines")
 
----Retains the module art styles on `prototype` that `produced` does not replace, and logs them. A
----retained style is copied as-is: it is not retinted or repositioned for the beacon's module slots.
+---Retains the module art styles on `prototype` that `produced` does not replace, and logs them. A retained style is not
+---retinted or repositioned for the module slots of the beacon.
 ---@param prototype BeaconPrototype
----@param produced BeaconModuleVisualizations[]?
+---@param produced? BeaconModuleVisualizations[]
 ---@return BeaconModuleVisualizations[]?
 ---@nodiscard
 local function retain_unhandled_art_styles(prototype, produced)
@@ -69,7 +69,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set BeaconSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type BeaconSpriteSetApplicator
@@ -79,10 +79,10 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `beacon_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `beacon_sprite_set`.
 ---@class (exact) BeaconSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
----@field graphics_set BeaconGraphicsSet?
+---@field graphics_set? BeaconGraphicsSet
 
----The applicator for beacons.
+---Applies the `BeaconSpriteSet` to `BeaconPrototype` instances.
 ---@class (exact) BeaconSpriteSetApplicator : SpriteSetApplicator<BeaconPrototype, BeaconSpriteSet>

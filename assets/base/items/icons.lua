@@ -5,28 +5,29 @@
 
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
-local icons = IconCatalog:create({ folder = _defines.assets_source.base_assets .. "/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = _defines.assets_source.base_assets .. "/graphics/icons" })
 
 ---@param pipe_type "pipe"|"pipe-to-ground"
 local function get_pipe_icon_fn(pipe_type)
-	return IconCatalog.dispatch("material", _defines.pipe_material, "get_pipe_icon", function(pipe_material)
-		-- The iron pipe icons come from the base game rather than an assets mod.
+	return IconBuilderFactory.dispatch("material", _defines.pipe_material, "get_pipe_icon", function(pipe_material)
+		-- The iron pipe icons come from the base game.
 		if pipe_material == _defines.pipe_material.iron then
-			return IconCatalog:create({ folder = _defines.assets_source.base .. "/graphics/icons" }):flat(pipe_type)
+			return IconBuilderFactory:create({ folder = _defines.assets_source.base .. "/graphics/icons" }):flat(pipe_type)
 		end
 
 		local material_asset = _pipes.asset_from_material(pipe_material)
 		local material_name = _pipes.name_from_material(pipe_material)
 
-		return IconCatalog:create({ folder = material_asset .. "/graphics/icons/" .. pipe_type })
+		return IconBuilderFactory:create({ folder = material_asset .. "/graphics/icons/" .. pipe_type })
 			:flat(material_name .. "-" .. pipe_type)
 	end)
 end
 
 -- stylua: ignore start
----The icons Artisanal Reskins draws for the base game.
+
+---Provides the reskinned icons from the base game.
 ---@class Icons
 local _icons = {
 	accumulator                   = icons:tinted("accumulator"):build(),

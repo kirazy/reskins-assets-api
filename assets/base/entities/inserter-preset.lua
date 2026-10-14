@@ -35,12 +35,8 @@ local long_capable_presets = {
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/inserters/"
 local base_path = "__reskins-assets-base__/graphics/entity/"
 
--- ---------------------------------------------------------------------------
--- Class methods
--- ---------------------------------------------------------------------------
 
----Preset inserter type — each value corresponds to one subfolder in
----`reskins-assets-bobs/graphics/entity/inserters/`.
+---A preset inserter type. Each value names one subfolder in `reskins-assets-bobs/graphics/entity/inserters/`.
 ---@alias InserterPreset
 ---| "inserter"
 ---| "inserter-burner"
@@ -54,15 +50,16 @@ local base_path = "__reskins-assets-base__/graphics/entity/"
 ---| "inserter-bulk-filter"
 ---| "inserter-express-bulk-filter"
 
+---Defines the options for the preset inserter sprites.
 ---@class InserterPresetGraphicsParams
+---The preset.
 ---@field preset InserterPreset
----@field is_long boolean? When `true`, selects the long-arm hand sprite variants. Only valid for non-bulk presets that are not `"inserter-long-handed"`.
+---When `true`, indicates that the long-arm hand sprite variants are selected. Valid for non-bulk presets other than
+---`"inserter-long-handed"`.
+---@field is_long? boolean
 
--- ---------------------------------------------------------------------------
--- Static sprite builder functions
--- ---------------------------------------------------------------------------
 
----Builds the arm (`hand_base_picture`) sprite.
+---Gets the arm sprite, `hand_base_picture`, for the given `preset`.
 ---@param preset InserterPreset
 ---@return table
 local function get_arm_picture(preset)
@@ -76,9 +73,9 @@ local function get_arm_picture(preset)
 	}
 end
 
----Builds the arm shadow (`hand_base_shadow`).
+---Gets the arm shadow, `hand_base_shadow`.
 ---
----Shared by all preset inserter variants; always sourced from `reskins-assets-base`.
+---All preset inserters share the arm shadow, which is from `reskins-assets-base`.
 ---@return table
 local function get_arm_shadow()
 	return {
@@ -92,10 +89,10 @@ local function get_arm_shadow()
 	}
 end
 
----Builds an open or closed hand sprite (`hand_open_picture` / `hand_closed_picture`).
+---Gets the open or closed hand sprite, `hand_open_picture` or `hand_closed_picture`.
 ---
----When `is_long` is `true`, selects the `-long` variant of the hand sprite (only valid
----for presets listed in `long_capable_presets`).
+---When `is_long` is `true`, the `-long` variant of the hand sprite is selected. Only the presets in
+---`long_capable_presets` have it.
 ---@param preset InserterPreset
 ---@param hand_state "open"|"closed"
 ---@param is_long boolean
@@ -112,10 +109,10 @@ local function get_hand_picture(preset, hand_state, is_long)
 	}
 end
 
----Builds an open or closed hand shadow (`hand_open_shadow` / `hand_closed_shadow`).
+---Gets the open or closed hand shadow, `hand_open_shadow` or `hand_closed_shadow`.
 ---
----Non-bulk presets use `inserter/shadows/`; bulk presets use `inserter-bulk/shadows/`.
----Both are in `reskins-assets-base`.
+---Non-bulk presets use `inserter/shadows/`; bulk presets use `inserter-bulk/shadows/`. Both are in
+---`reskins-assets-base`.
 ---@param preset InserterPreset
 ---@param hand_state "open"|"closed"
 ---@return table
@@ -145,7 +142,7 @@ local function get_hand_shadow(preset, hand_state)
 	end
 end
 
----Builds the platform sprite sheets (`platform_picture`).
+---Gets the platform sprite sheets, `platform_picture`.
 ---
 ---All presets share the same platform shadow from `reskins-assets-base`.
 ---@param preset InserterPreset
@@ -174,7 +171,7 @@ local function get_platform_picture(preset)
 	}
 end
 
----Builds the corpse remnant animation.
+---Gets the corpse remnant animation.
 ---
 ---Each preset has its own remnant artwork, a single sheet, located at
 ---`inserters/<preset>/remnants/<preset>-remnants.png` in `reskins-assets-bobs`.
@@ -191,16 +188,17 @@ local function get_corpse_animation(preset)
 	})
 end
 
+---Defines the options for the Bob's preset (untinted) inserters sprite set.
 ---@class InserterPresetSpriteSetParams
----The preset to draw.
+---The preset to use.
 ---@field preset InserterPreset
----Whether the inserter has long-arm hands. Only the non-bulk presets other than `"inserter-long-handed"`
----draw them.
----@field is_long boolean?
+---When `true`, indicates that the inserter has long-arm hands. Only the non-bulk presets other than
+---`"inserter-long-handed"` have them.
+---@field is_long? boolean
 
 ---Gets the sprite set for Bob's preset (untinted) inserters.
----@param params InserterPresetSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<InserterSpriteSet>
+---@param params InserterPresetSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<InserterSpriteSet> # The sprite set definition for Bob's preset (untinted) inserters.
 ---
 ---#### Examples
 ---```lua
@@ -218,9 +216,9 @@ function M.get_sprite_set(params)
 	-- Validate: bulk presets and inserter-long-handed do not support is_long.
 	if is_long and not long_capable_presets[preset] then
 		error(
-			"InserterPresetSpriteSet: 'is_long' is not valid for preset '"
+			"InserterPresetSpriteSet: 'is_long' is given for the preset '"
 				.. tostring(preset)
-				.. "'. Only non-bulk presets (excluding 'inserter-long-handed') support long-arm variants."
+				.. "', which has no long-handed variant."
 		)
 	end
 
@@ -240,8 +238,8 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(preset) },
 			water_reflection = nil,
-			nominal_width = 1,
-			nominal_height = 1,
+			nominal_width = 0.8,
+			nominal_height = 0.8,
 		},
 	}
 
@@ -269,9 +267,9 @@ local check_get_icon = V.signature("get_icon", {
 
 ---Gets the icon for the given preset inserter.
 ---
----The preset inserters are untinted. `inserter.get_icon` is the tinted counterpart.
----@param preset InserterPreset The preset the icon is drawn for.
----@return SafeIconData[]
+---The preset inserters are untinted.
+---@param preset InserterPreset The preset of the icon.
+---@return SafeIconData[] # The icon.
 ---@nodiscard
 function M.get_icon(preset)
 	check_get_icon(preset)

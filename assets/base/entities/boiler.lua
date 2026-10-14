@@ -9,12 +9,12 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
----@param fire_tint Color?
+---@param tint? Color
+---@param fire_tint? Color
 ---@return BoilerPictureSet
 local function get_picture_set(tint, fire_tint)
 	local base_path = "__base__/graphics/entity/boiler/"
@@ -322,7 +322,7 @@ local function get_picture_set(tint, fire_tint)
 	return picture_set
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/boiler/remnants/"
@@ -382,20 +382,21 @@ local function get_water_reflection()
 	}
 end
 
+---Defines the options for a standard boiler sprite set.
 ---@class BoilerSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The color to tint the fire. When `nil`, the base game's fire artwork is drawn instead.
----@field fire_tint Color?
----Whether the fire flickers. Defaults to `true`.
----@field fire_flicker_enabled boolean?
----Whether the fire glow flickers. Defaults to `true`.
----@field fire_glow_flicker_enabled boolean?
+---@field tint? Color
+---The color to tint the fire. When `nil`, the base game's fire artwork is drawn.
+---@field fire_tint? Color
+---When `true`, indicates that the fire flickers. Default `true`.
+---@field fire_flicker_enabled? boolean
+---When `true`, indicates that the fire glow flickers. Default `true`.
+---@field fire_glow_flicker_enabled? boolean
 
 local check_params = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
 			fire_tint = Common.color:optional(),
 			fire_flicker_enabled = V.boolean():optional(),
@@ -405,8 +406,8 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for a standard boiler.
----@param params BoilerSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<BoilerSpriteSet>
+---@param params BoilerSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<BoilerSpriteSet> # The sprite set definition for a standard boiler.
 ---
 ---#### Examples
 ---```lua
@@ -416,11 +417,11 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = boiler.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(boiler_entity, sprite_set)
 ---
------ Automatically adapts to prototypes other than boilers:
+----- The sprite set is converted for prototypes other than boilers.
 ---applicators.apply_sprite_set(assembling_machine_entity, sprite_set)
 ---```
----@throws Thrown when `params.tint` or `params.fire_tint` is not a `Color`.
----@throws Thrown when `params.fire_flicker_enabled` or `params.fire_glow_flicker_enabled` is not a boolean.
+---@throws When `params.tint` or `params.fire_tint` is not a `Color`.
+---@throws When `params.fire_flicker_enabled` or `params.fire_glow_flicker_enabled` is not a boolean.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -447,15 +448,15 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a standard boiler, in the tints given by `params`. Without `fire_tint`, the
----fire of the base layer shows through.
+---Gets the icon for a standard boiler, in the tints given by `params`. Without `fire_tint`, the fire of the base layer
+---shows through.
 M.get_icon = base_icons:tinted("boiler"):tinted_part("fire", "fire_tint"):build("get_icon")
 
----Gets the icon for a fluid-burning boiler, in the tints given by `params`. Without `fire_tint`,
----the fire of the base layer shows through.
+---Gets the icon for a fluid-burning boiler, in the tints given by `params`. Without `fire_tint`, the fire of the base
+---layer shows through.
 M.get_fluid_icon = bobs_icons:tinted("boiler-oil"):tinted_part("fire", "fire_tint"):build("get_fluid_icon")
 
 return M

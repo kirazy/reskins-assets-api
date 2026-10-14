@@ -6,19 +6,20 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
+---Defines the options for the vanilla gun turret sprite set.
 ---@class TurretGunSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla gun turret.
 ---
 ---The set defines its nominal dimensions only. No artwork is drawn for this turret yet.
----@param params TurretGunSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<TurretSpriteSet>
+---@param params TurretGunSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<TurretSpriteSet> # The sprite set definition for the vanilla gun turret.
 ---
 ---#### Examples
 ---```lua
@@ -47,7 +48,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla gun turret, in the tints given by `params`.
 M.get_icon = icons:tinted("turret-gun"):build("get_icon")

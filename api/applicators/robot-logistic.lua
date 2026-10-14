@@ -23,7 +23,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set LogisticRobotSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type LogisticRobotSpriteSetApplicator
@@ -33,16 +33,16 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `logistic_robot_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `logistic_robot_sprite_set`.
 ---@class (exact) LogisticRobotSpriteSet : FlyingRobotSpriteSet
 ---The prototype's `in_motion_with_cargo`.
----@field in_motion_with_cargo RotatedAnimation?
+---@field in_motion_with_cargo? RotatedAnimation
 ---The prototype's `shadow_in_motion_with_cargo`.
----@field shadow_in_motion_with_cargo RotatedAnimation?
+---@field shadow_in_motion_with_cargo? RotatedAnimation
 ---The prototype's `idle_with_cargo`.
----@field idle_with_cargo RotatedAnimation?
+---@field idle_with_cargo? RotatedAnimation
 ---The prototype's `shadow_idle_with_cargo`.
----@field shadow_idle_with_cargo RotatedAnimation?
+---@field shadow_idle_with_cargo? RotatedAnimation
 
----The applicator for logistic robots.
+---Applies the `LogisticRobotSpriteSet` to `LogisticRobotPrototype` instances.
 ---@class (exact) LogisticRobotSpriteSetApplicator : SpriteSetApplicator<LogisticRobotPrototype, LogisticRobotSpriteSet>

@@ -14,8 +14,8 @@ local function apply_sprite_set_to_boiler(prototype, sprite_set)
 	-- FIXME: Need to handle application of fluid boxes to the `fluid_box`, `output_fluid_box` and
 	-- fluid energy source `fluid_box`.
 
-	-- `integration_patch`/`integration_patch_render_layer`/`water_reflection` are applied centrally
-	-- by `api.applicator-registry`'s `apply_common_fields`, not here — see that function's doc comment.
+	-- `integration_patch`, `integration_patch_render_layer`, and `water_reflection` are applied by
+	-- `apply_common_fields` in `api.applicator-registry`.
 
 	-- FIXME need to handle explosion application in this step based on the package set explosion definition.
 end
@@ -23,7 +23,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param sprite_set BoilerSpriteSet
 local function apply_sprite_set_to_explosion(explosion, sprite_set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type BoilerSpriteSetApplicator
@@ -33,16 +33,18 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `boiler_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `boiler_sprite_set`.
 ---@class (exact) BoilerSpriteSet : EntityWithHealthSpriteSet
----If this is set to false, `fire` alpha is always 1 instead of being controlled by the light intensity of the energy source.
+---When `true`, indicates that the light intensity of the energy source controls the alpha of `fire`. When `false`, the
+---alpha is always 1.
 ---@field fire_flicker_enabled? boolean
----If this is set to false, `fire_glow` alpha is always 1 instead of being controlled by the light intensity of the energy source.
+---When `true`, indicates that the light intensity of the energy source controls the alpha of `fire_glow`. When `false`,
+---the alpha is always 1.
 ---@field fire_glow_flicker_enabled? boolean
 ---Fluid box pipe graphics, matched to the prototype's fluid boxes by direction.
----@field fluid_boxes FluidBoxGraphics[]?
+---@field fluid_boxes? FluidBoxGraphics[]
 ---The boiler's directional sprites.
 ---@field pictures BoilerPictureSet
 
----The applicator for boilers.
+---Applies the `BoilerSpriteSet` to `BoilerPrototype` instances.
 ---@class (exact) BoilerSpriteSetApplicator : SpriteSetApplicator<BoilerPrototype, BoilerSpriteSet>

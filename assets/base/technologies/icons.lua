@@ -1,13 +1,13 @@
 ---@namespace Reskins.Assets.Base.Technologies
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
-local technologies = IconCatalog:create({
+local technologies = IconBuilderFactory:create({
 	folder = "__reskins-assets-base__/graphics/technology",
 	defaults_type = "technology",
 })
 
----The technology icons Artisanal Reskins draws for the base game.
+---Provides the reskinned technology icons from the base game.
 ---@class Icons
 local _icons = {
 	research_speed = technologies:tinted("research-speed"):build(),

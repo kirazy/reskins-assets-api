@@ -9,14 +9,14 @@ local _defines = require("api.defines")
 
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 local FOLDER = "__reskins-assets-assorted__/graphics/entity/mining-drill-electric-original/"
 	.. "mining-drill-electric-original-"
 
----The belt the drill unloads onto.
+---The belt onto which the drill unloads.
 ---@alias MiningDrillElectricOriginalBeltOutput
 ---| "blue" # The blue belt Bob's area drills unload onto.
 
@@ -66,10 +66,10 @@ local PARTS = {
 	},
 }
 
----@param direction string
----@param name string The file the layer is drawn from, less the direction and the extension.
----@param part table The size and shift the direction cuts this part at.
----@param speed double
+---@param direction string The direction segment of the file name.
+---@param name string The file of the layer, less the direction and the extension.
+---@param part table The size and shift at which the direction cuts this part.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_drill_layer(direction, name, part, speed)
@@ -144,9 +144,9 @@ local function get_animation(params, speed)
 	return animation
 end
 
----@param name string The file the sprite is drawn from, less the direction and the extension.
+---@param name string The file of the sprite, less the direction and the extension.
 ---@param part_name string The key naming the size and shift in `PARTS`.
----@param speed double?
+---@param speed? double The animation speed.
 ---@return Animation4Way
 ---@nodiscard
 local function get_sprites(name, part_name, speed)
@@ -229,18 +229,19 @@ local function get_wet_working_visualisations(speed)
 	}
 end
 
+---Defines the options for the classic electric mining drill sprite set.
 ---@class MiningDrillElectricOriginalSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The belt the drill unloads onto. When `nil`, the drill unloads onto no belt of its own.
----@field belt_output MiningDrillElectricOriginalBeltOutput?
----The speed the drill's head strokes at. Defaults to `0.5`.
----@field animation_speed double?
+---@field tint? Color
+---The belt onto which the drill unloads. When `nil`, the drill unloads onto no belt of its own.
+---@field belt_output? MiningDrillElectricOriginalBeltOutput
+---The speed at which the head of the drill strokes. Default `0.5`.
+---@field animation_speed? double
 
 local check_get_sprite_set = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
 			belt_output = V.one_of({ "blue" }):optional(),
 			animation_speed = Common.positive_number:optional(),
@@ -249,8 +250,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the classic electric mining drill.
----@param params MiningDrillElectricOriginalSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<MiningDrillSpriteSet>
+---@param params MiningDrillElectricOriginalSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for the classic electric mining drill.
 ---
 ---#### Examples
 ---```lua
@@ -286,7 +287,7 @@ function M.get_sprite_set(params)
 				width = 10,
 				height = 10,
 			},
-			-- The drill draws the frame the fluid runs through itself, so the engine draws none.
+			-- The drill draws its own frame through which the fluid runs, so the engine draws none.
 			integration_patch = util.empty_sprite(),
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
@@ -300,7 +301,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
 ---Gets the icon for the classic electric mining drill, in the tints given by `params`.
 M.get_icon = icons:tinted("mining-drill-electric-original"):build("get_icon")

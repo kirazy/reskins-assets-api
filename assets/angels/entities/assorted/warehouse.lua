@@ -2,7 +2,6 @@ _colors = require("__reskins-sprite-utils__.colors")
 
 local picture = {
 	layers = {
-		-- Base
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/warehouse/warehouse.png",
 			priority = "extra-high",
@@ -11,7 +10,6 @@ local picture = {
 			shift = util.by_pixel(-0.5, -15),
 			scale = 0.5,
 		},
-		-- Shadow
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/warehouse/warehouse-shadow.png",
 			priority = "extra-high",
@@ -35,7 +33,6 @@ local logistic_map = {
 
 local logistic_picture = {
 	layers = {
-		-- Base
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/warehouse/logistic-warehouse-" .. chest .. ".png",
 			priority = "extra-high",
@@ -44,7 +41,6 @@ local logistic_picture = {
 			shift = util.by_pixel(-0.5, -15),
 			scale = 0.5,
 		},
-		-- Shadow
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/warehouse/logistic-warehouse-shadow.png",
 			priority = "extra-high",
@@ -54,7 +50,6 @@ local logistic_picture = {
 			draw_as_shadow = true,
 			scale = 0.5,
 		},
-		-- Light
 		{
 			filename = "__reskins-assets-angels__/graphics/entity/warehouse/logistic-warehouse-light.png",
 			priority = "extra-high",

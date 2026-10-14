@@ -16,7 +16,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set GeneratorSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type GeneratorSpriteSetApplicator
@@ -26,7 +26,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `generator_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `generator_sprite_set`.
 ---
 ---The structure is specific to Factorio 2.0 and changes with Factorio 2.1.
 ---@class (exact) GeneratorSpriteSet : EntityWithHealthSpriteSet
@@ -35,5 +35,5 @@ return {
 ---The prototype's `vertical_animation`.
 ---@field vertical_animation Animation
 
----The applicator for generators.
+---Applies the `GeneratorSpriteSet` to `GeneratorPrototype` instances.
 ---@class (exact) GeneratorSpriteSetApplicator : SpriteSetApplicator<GeneratorPrototype, GeneratorSpriteSet>

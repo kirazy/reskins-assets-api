@@ -21,7 +21,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set ConstructionRobotSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type ConstructionRobotSpriteSetApplicator
@@ -31,12 +31,12 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `construction_robot_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `construction_robot_sprite_set`.
 ---@class (exact) ConstructionRobotSpriteSet : FlyingRobotSpriteSet
 ---The prototype's `working`.
 ---@field working RotatedAnimation
 ---The prototype's `shadow_working`.
 ---@field shadow_working RotatedAnimation
 
----The applicator for construction robots.
+---Applies the `ConstructionRobotSpriteSet` to `ConstructionRobotPrototype` instances.
 ---@class (exact) ConstructionRobotSpriteSetApplicator : SpriteSetApplicator<ConstructionRobotPrototype, ConstructionRobotSpriteSet>

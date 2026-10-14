@@ -18,8 +18,8 @@ local check_asset_from_material = V.signature("asset_from_material", {
 })
 
 ---Gets the asset that provides the sprites for the given `pipe_material`.
----@param pipe_material PipeMaterial
----@return AssetsSource material_asset
+---@param pipe_material PipeMaterial The pipe material.
+---@return AssetsSource # The asset.
 function M.asset_from_material(pipe_material)
 	check_asset_from_material(pipe_material)
 	---@cast pipe_material string
@@ -41,8 +41,8 @@ local check_name_from_material = V.signature("name_from_material", {
 })
 
 ---Gets the bare material name absent any discriminators for the given `pipe_material`.
----@param pipe_material PipeMaterial
----@return PipeMaterialName material_name
+---@param pipe_material PipeMaterial The pipe material.
+---@return PipeMaterialName # The material name.
 function M.name_from_material(pipe_material)
 	check_name_from_material(pipe_material)
 	---@cast pipe_material string
@@ -51,26 +51,25 @@ function M.name_from_material(pipe_material)
 	return material--[[@as PipeMaterialName]]
 end
 
----Gets an `Animation` object configured to draw a vertical pipe shadow at the given `shift`, for a single tile.
+---Gets an `Animation` of a vertical pipe shadow at the given `shift`, for a single tile.
 ---
----Used by non-pipe entities with pipe connections to draw a shadow at the connection point for a given
----rotation state. The shadow is not part of the entity artwork.
+---The shadow covers one connected pipe, so the entity artwork does not need to include one.
 ---@param shift Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
 ---@return Animation # A vertical pipe shadow for a single tile.
 ---
 ---#### Examples
----Add a vertical pipe shadow in the north and south directions to the working_visualisations field of an assembly
----machine prototype. The shadow will offset up 1 tile for north, and down 1 tile for south, along the centerline of a 3
----x 3 entity.
 ---```lua
+----- Add a vertical pipe shadow in the north and south directions to the `working_visualisations` of an assembling
+----- machine. The shadow is offset up 1 tile for north and down 1 tile for south, along the centerline of a 3 x 3
+----- entity.
 ---local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe-pictures")
 ---
 ---local greenhouse = data.raw["assembling-machine"]["bob-greenhouse"]
 ---table.insert(greenhouse.working_visualisations, {
 ---    always_draw = true,
----    north_animation = _pipes.get_vertical_pipe_shadow({0, -1}),
----    south_animation = _pipes.get_vertical_pipe_shadow({0, 1}),
----)}
+---    north_animation = _pipes.vertical_pipe_shadow({0, -1}),
+---    south_animation = _pipes.vertical_pipe_shadow({0, 1}),
+---})
 ---```
 ---@nodiscard
 function M.vertical_pipe_shadow(shift)
@@ -88,26 +87,25 @@ function M.vertical_pipe_shadow(shift)
 	return shadow_animation
 end
 
----Gets an `Animation` object configured to draw a horizontal pipe shadow at the given `shift`, for a single tile.
+---Gets an `Animation` of a horizontal pipe shadow at the given `shift`, for a single tile.
 ---
----Used by non-pipe entities with pipe connections to draw a shadow at the connection point for a given
----rotation state. The shadow is not part of the entity artwork.
+---The shadow covers one connected pipe, so the entity artwork does not need to include one.
 ---@param shift Vector The shift to apply to the shadow. Typically whole-tile or half-tile increments.
 ---@return Animation # A horizontal pipe shadow for a single tile.
 ---
 ---#### Examples
----Add a horizontal pipe shadow in the north and south directions to the `working_visualisations` field of an assembly
----machine prototype. The shadow will offset right 1 tile for east, and left 1 tile for west, along the centerline of a
----3 x 3 entity.
 ---```lua
+----- Add a horizontal pipe shadow in the east and west directions to the `working_visualisations` of an assembling
+----- machine. The shadow is offset right 1 tile for east and left 1 tile for west, along the centerline of a 3 x 3
+----- entity.
 ---local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe-pictures")
 ---
 ---local greenhouse = data.raw["assembling-machine"]["bob-greenhouse"]
 ---table.insert(greenhouse.working_visualisations, {
 ---    always_draw = true,
----    east_animation = _pipes.get_horizontal_pipe_shadow({1, 0}),
----    west_animation = _pipes.get_horizontal_pipe_shadow({-1, 0}),
----)}
+---    east_animation = _pipes.horizontal_pipe_shadow({1, 0}),
+---    west_animation = _pipes.horizontal_pipe_shadow({-1, 0}),
+---})
 ---```
 ---@nodiscard
 function M.horizontal_pipe_shadow(shift)
@@ -128,7 +126,7 @@ end
 ---Gets a `Sprite4Way` object containing pipe cover sprites in the given `pipe_material`.
 ---
 ---#### Parameters
----@param pipe_material PipeMaterial The material type to get sprites for.
+---@param pipe_material PipeMaterial The material for which the sprites are created.
 ---
 ---#### Returns
 ---@return Sprite4Way pictures The complete set of pipe cover sprites in the given `pipe_material`.
@@ -136,7 +134,7 @@ end
 ---#### Examples
 ---```lua
 ---local _defines = require("__reskins-assets-api__.api.defines")
----local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe_pictures")
+---local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe-pictures")
 ---
 ----- Update the pipe cover sprites on the bronze pipe fluid box.
 ---local pipe_entity = data.raw["pipe"]["bronze-pipe"]
@@ -238,7 +236,7 @@ end
 ---
 ---#### Examples
 ---```lua
----local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe_pictures")
+---local _pipes = require("__reskins-assets-api__.assets.base.entities.pipe-pictures")
 ---
 ----- Add the frozen pipe cover sprites to the iron pipe.
 ---local pipe_entity = data.raw["pipe"]["pipe"]
@@ -282,12 +280,13 @@ function M.pipe_covers_frozen()
 	return pipe_covers_frozen
 end
 
----Gets the tinted pipe pictures for the assembling machine (and functionally identical entities such as the oil boiler).
----The `north` direction has no tinted variant when `use_simple_pipe_pictures` is true; the east direction always uses the
----simple sprite when that flag is set.
----@param tint Color? Tint color for the mask and highlights layers. When `nil`, only the base layer is returned.
----@param use_simple_pipe_pictures boolean? When true, omits the `north` mask/highlights and uses the `-simple` east variant.
----@return Sprite4Way
+---Gets the tinted pipe pictures for the assembling machine and entities with the same layout, such as the oil boiler.
+---
+---The `north` direction has no tinted variant when `use_simple_pipe_pictures` is `true`, and the east direction uses
+---the simple sprite when that flag is set.
+---@param tint? Color Tint color for the mask and highlights layers. When `nil`, only the base layer is returned.
+---@param use_simple_pipe_pictures? boolean When `true`, omits the `north` mask and highlights and uses the `-simple` east variant.
+---@return Sprite4Way # The pipe pictures.
 ---@nodiscard
 function M.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 	local simple = use_simple_pipe_pictures and "-simple" or ""

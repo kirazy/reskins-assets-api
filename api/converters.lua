@@ -1,7 +1,4 @@
--- The converter registry every caller shares: one built from api.converter-registry, populated with
--- every known sprite-set conversion, and returned. api.applicator-registry requires this file rather
--- than api.converter-registry directly, so the registry is always fully populated for anyone applying
--- a sprite set.
+-- Provides the shared converter registry with all conversions pre-registered.
 --
 -- Register a converter here when adding a corresponding converter definition under api/converters/.
 

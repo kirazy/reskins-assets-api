@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local working_visualisations = {
@@ -32,7 +32,6 @@ local function get_graphics_set(tint)
 			always_draw = true,
 			animation = {
 				layers = {
-					-- Mask
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/refugium-biter/refugium-biter-mask.png",
 						priority = "extra-high",
@@ -41,7 +40,6 @@ local function get_graphics_set(tint)
 						shift = { 0, 0 },
 						tint = tint,
 					},
-					-- Highlights
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/refugium-biter/refugium-biter-highlights.png",
 						priority = "extra-high",
@@ -69,13 +67,14 @@ local function get_graphics_set(tint)
 	}
 end
 
+---Defines the options for the Angel's biter refugium sprite set.
 ---@class RefugiumBiterSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's biter refugium.
----@param params RefugiumBiterSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params RefugiumBiterSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's biter refugium.
 ---
 ---#### Examples
 ---```lua
@@ -105,7 +104,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's biter refugium, in the tints given by `params`.
 M.get_icon = icons:tinted("refugium-biter"):build("get_icon")

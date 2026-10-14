@@ -10,25 +10,25 @@ local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
 local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "tint", Common.color:optional() },
-	{ "assembly_set", V.integer():in_range(1, 6) },
+	{ "assembly_set", V.one_of({ 1, 2, 3, 4, 5, 6 }) },
 	{ "use_electronics_set", V.boolean():optional() },
 })
 
----@param tint data.Color?
+---@param tint? data.Color
 ---@param assembly_set 1|2|3|4|5|6
----@param use_electronics_set boolean?
+---@param use_electronics_set? boolean
 ---@return data.CraftingMachineGraphicsSet
 local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	check_get_graphics_set(tint, assembly_set, use_electronics_set)
 
-	-- animations/shadows are 0-based.
+	-- Animations and shadows are 0-based.
 	local animation_index = assembly_set - 1
 	local shadow_index = math.min(4, animation_index)
 
@@ -49,7 +49,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 		},
 	}
 
-	-- Increment the draw_order for use with fluid-boxes for every additional base-layer
+	-- Increment `draw_order` for every additional base layer, for use with fluid boxes.
 	local draw_order = 1
 
 	if tint then
@@ -150,9 +150,9 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	return { animation = animation }
 end
 
----@param tint data.Color?
----@param draw_order int8?
----@param use_simple_pipe_pictures boolean?
+---@param tint? data.Color
+---@param draw_order? int8
+---@param use_simple_pipe_pictures? boolean
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics(tint, draw_order, use_simple_pipe_pictures)
 	local pipe_pictures = _pipes.assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
@@ -170,7 +170,7 @@ local function get_fluid_box_graphics(tint, draw_order, use_simple_pipe_pictures
 	}
 end
 
----@param tint data.Color?
+---@param tint? data.Color
 ---@return data.RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local sheet = {
@@ -227,24 +227,26 @@ local function get_water_reflection()
 	}
 end
 
+---The tier of an assembling machine, which selects its gear.
 ---@alias AssemblingMachineTier 1|2|3|4|5|6
 
+---Defines the options for the assembling machine sprites.
 ---@class AssemblingMachineSpritesParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint data.Color?
----The tier of the machine, selecting the gear it is drawn with.
+---@field tint? data.Color
+---The tier of the machine, which selects its gear.
 ---@field machine_tier AssemblingMachineTier
----Whether to draw the electronics machine artwork. Defaults to `false`.
----@field use_electronics_set boolean?
----Whether to draw the simple pipe connections. Defaults to `false`.
----@field use_simple_pipe_pictures boolean?
+---When `true`, indicates that the electronics machine artwork is included. Default `false`.
+---@field use_electronics_set? boolean
+---When `true`, indicates that the simple pipe connections are included. Default `false`.
+---@field use_simple_pipe_pictures? boolean
 
 local check_params = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
-			machine_tier = V.integer():in_range(1, 6),
+			machine_tier = V.one_of({ 1, 2, 3, 4, 5, 6 }),
 			use_electronics_set = V.boolean():optional(),
 			use_simple_pipe_pictures = V.boolean():optional(),
 		}),
@@ -252,8 +254,8 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for a standard assembling machine.
----@param params AssemblingMachineSpritesParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params AssemblingMachineSpritesParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for a standard assembling machine.
 ---
 ---#### Examples
 ---```lua
@@ -263,9 +265,9 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = assembling_machine.get_sprite_set({ tint = tint, machine_tier = 3 })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
----@throws Thrown when `params.machine_tier` is not between 1 and 6.
----@throws Thrown when `params.tint` is not a `Color`.
----@throws Thrown when `params.use_electronics_set` or `params.use_simple_pipe_pictures` is not a boolean.
+---@throws When `params.machine_tier` is not between 1 and 6.
+---@throws When `params.tint` is not a `Color`.
+---@throws When `params.use_electronics_set` or `params.use_simple_pipe_pictures` is not a boolean.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -297,31 +299,29 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for an assembling machine wearing the gear of the `machine_tier`, in the tints
----given by `params`.
+---Gets the icon for an assembling machine with the gear of the `machine_tier`, in the tints given by `params`.
 M.get_icon = base_icons
 	:tinted("assembling-machine")
 	:keyed("machine_tier", V.one_of({ 1, 2, 3, 4, 5, 6 }), { "gear" })
 	:layer("gear")
 	:build("get_icon")
 
----Gets the icon for an electronics assembling machine wearing the indicator lights of the
----`electronics_tier`, in the tints given by `params`.
+---Gets the icon for an electronics assembling machine with the indicator lights of the `electronics_tier`, in the
+---tints given by `params`.
 M.get_electronics_icon = bobs_icons
 	:tinted("assembling-machine-electronics")
 	:keyed("electronics_tier", V.one_of({ 1, 2, 3 }), { "lights" })
 	:layer("lights")
 	:build("get_electronics_icon")
 
----Gets the icon for a burner assembling machine, with its smoke stack, in the tints given by
----`params`.
+---Gets the icon for a burner assembling machine, with its smoke stack, in the tints given by `params`.
 M.get_burner_icon = bobs_icons:tinted("assembling-machine-burner"):layer("smoke-stack"):build("get_burner_icon")
 
----Gets the icon for a steam assembling machine, with its smoke stack, in the tints given by
----`params`. The smoke stack is tinted with the body.
+---Gets the icon for a steam assembling machine, with its smoke stack, in the tints given by `params`. The smoke stack
+---is tinted with the body.
 M.get_steam_icon = bobs_icons:tinted("assembling-machine-steam"):tinted("smoke-stack"):build("get_steam_icon")
 
 return M

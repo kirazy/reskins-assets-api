@@ -3,7 +3,6 @@ local function cardinal_pictures(x, tint)
 
 	return {
 		layers = {
-			-- Base
 			{
 				filename = "__reskins-assets-angels__/graphics/entity/valve/valve-base.png",
 				priority = "extra-high",
@@ -12,7 +11,6 @@ local function cardinal_pictures(x, tint)
 				height = 128,
 				scale = 0.5,
 			},
-			-- Mask
 			{
 				filename = "__reskins-assets-angels__/graphics/entity/valve/valve-mask.png",
 				priority = "extra-high",

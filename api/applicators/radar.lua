@@ -15,7 +15,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set RadarSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type RadarSpriteSetApplicator
@@ -25,10 +25,10 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `radar_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `radar_sprite_set`.
 ---@class (exact) RadarSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `pictures`.
 ---@field pictures RotatedSprite
 
----The applicator for radars.
+---Applies the `RadarSpriteSet` to `RadarPrototype` instances.
 ---@class (exact) RadarSpriteSetApplicator : SpriteSetApplicator<RadarPrototype, RadarSpriteSet>

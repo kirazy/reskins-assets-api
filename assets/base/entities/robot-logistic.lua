@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return { idle: RotatedAnimation, idle_with_cargo: RotatedAnimation, in_motion: RotatedAnimation, in_motion_with_cargo: RotatedAnimation, shadow_idle: RotatedAnimation, shadow_idle_with_cargo: RotatedAnimation, shadow_in_motion: RotatedAnimation, shadow_in_motion_with_cargo: RotatedAnimation }
 local function get_animations(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/logistic-robot/"
@@ -105,12 +105,12 @@ local function get_animations(tint)
 	end
 
 	return {
-		-- y=84: with cargo row (no cargo row is y=0, in_motion_with_cargo is y=168, in_motion is y=252)
+		-- Row y=84 is the with-cargo row. The no-cargo row is y=0, in_motion_with_cargo is y=168, and in_motion is y=252.
 		idle = make_body_animation(84),
 		idle_with_cargo = make_body_animation(0),
 		in_motion = make_body_animation(252),
 		in_motion_with_cargo = make_body_animation(168),
-		-- Shadow y layout: idle_with_cargo=0, idle=57, in_motion_with_cargo=114, in_motion=171
+		-- The shadow rows are idle_with_cargo=0, idle=57, in_motion_with_cargo=114, and in_motion=171.
 		shadow_idle = shadow_layer(57),
 		shadow_idle_with_cargo = shadow_layer(0),
 		shadow_in_motion = shadow_layer(171),
@@ -118,7 +118,7 @@ local function get_animations(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/logistic-robot/remnants/"
@@ -162,13 +162,14 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation), util.copy(animation) }
 end
 
+---Defines the options for the vanilla logistic robot sprite set.
 ---@class RobotLogisticSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla logistic robot.
----@param params RobotLogisticSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<LogisticRobotSpriteSet>
+---@param params RobotLogisticSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<LogisticRobotSpriteSet> # The sprite set definition for the vanilla logistic robot.
 ---
 ---#### Examples
 ---```lua
@@ -202,14 +203,14 @@ function M.get_sprite_set(params)
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 1,
-			nominal_height = 2,
+			nominal_height = 1,
 		},
 	}
 
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla logistic robot, in the tints given by `params`.
 M.get_icon = icons:tinted("robot-logistic"):build("get_icon")

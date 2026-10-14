@@ -8,7 +8,7 @@
 
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -51,8 +51,7 @@ end
 
 -- Shadow patch positions are fixed screen-space offsets tuned to the geometry of the induction
 -- furnace's pipe connection point at {2, -2} in north-facing design space. The flipped orientation
--- doesn't mirror cleanly — it only has a shadow on its west side, not north — so this is a direct
--- lookup rather than a derived one.
+-- has a shadow on its west side only, so the positions are looked up directly.
 local pipe_shadows = {
 	[false] = {
 		[defines.direction.north] = _pipes.vertical_pipe_shadow({ 2, -2 }),
@@ -70,7 +69,7 @@ local function get_pipe_shadow(direction, is_flipped)
 	return pipe_shadows[is_flipped == true][direction]
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return Animation
 local function get_base_animation(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -93,7 +92,7 @@ local function get_base_animation(is_flipped)
 	return animation
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return WorkingVisualisation
 local function get_integration_patch_working_vis(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -110,7 +109,7 @@ local function get_integration_patch_working_vis(is_flipped)
 	return working_vis
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return WorkingVisualisation
 local function get_idle_animation_working_vis(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -140,7 +139,7 @@ local function get_idle_animation_working_vis(is_flipped)
 	return working_vis
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return WorkingVisualisation
 local function get_animation_working_vis(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -163,7 +162,7 @@ local function get_animation_working_vis(is_flipped)
 	return working_vis
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return WorkingVisualisation
 local function get_recipe_mask_working_vis(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -193,7 +192,7 @@ local function get_recipe_mask_working_vis(is_flipped)
 	return working_vis
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return WorkingVisualisation
 local function get_lights_working_vis(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -217,7 +216,7 @@ local function get_lights_working_vis(is_flipped)
 	return working_vis
 end
 
----@param is_flipped boolean?
+---@param is_flipped? boolean
 ---@return WorkingVisualisation
 local function get_working_lights_working_vis(is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -241,8 +240,8 @@ local function get_working_lights_working_vis(is_flipped)
 	return working_vis
 end
 
----@param tint Color?
----@param is_flipped boolean?
+---@param tint? Color
+---@param is_flipped? boolean
 ---@return WorkingVisualisation?
 local function get_color_mask_working_vis(tint, is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -272,6 +271,9 @@ local function get_color_mask_working_vis(tint, is_flipped)
 	return working_vis
 end
 
+---@param tint? Color
+---@param is_flipped boolean
+---@return CraftingMachineGraphicsSet
 local function get_graphics_set_internal(tint, is_flipped)
 	local working_visualisations = {
 		get_integration_patch_working_vis(is_flipped),
@@ -295,25 +297,26 @@ local function get_graphics_set_internal(tint, is_flipped)
 	return graphics_set
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	return get_graphics_set_internal(tint, false)
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set_flipped(tint)
 	return get_graphics_set_internal(tint, true)
 end
 
+---Defines the options for the Angel's induction furnace sprite set.
 ---@class InductionFurnaceSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's induction furnace.
----@param params InductionFurnaceSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params InductionFurnaceSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's induction furnace.
 ---
 ---#### Examples
 ---```lua
@@ -353,7 +356,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's induction furnace, in the tints given by `params`.
 M.get_icon = icons:tinted("induction-furnace"):build("get_icon")

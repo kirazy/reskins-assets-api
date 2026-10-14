@@ -9,10 +9,11 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
+---The variant of the accumulator artwork.
 ---@alias AccumulatorSpriteVariant
 ---| "base"
 ---| "fast"
@@ -25,9 +26,9 @@ local check_get_accumulator_pictures = V.signature("get_accumulator_pictures", {
 	{ "repeat_count", Common.positive_integer:optional() },
 })
 
----@param sprite_set AccumulatorSpriteVariant? Default "base".
----@param tint Color? Default nil.
----@param repeat_count integer? Default nil.
+---@param sprite_set? AccumulatorSpriteVariant The variant. Default `"base"`.
+---@param tint? Color The tint. Default `nil`.
+---@param repeat_count? integer The repeat count. Default `nil`.
 ---@return Animation
 local function get_accumulator_pictures(sprite_set, tint, repeat_count)
 	check_get_accumulator_pictures(sprite_set, tint, repeat_count)
@@ -89,8 +90,8 @@ local function get_accumulator_pictures(sprite_set, tint, repeat_count)
 	return sprite
 end
 
----@param sprite_set AccumulatorSpriteVariant?
----@param tint Color?
+---@param sprite_set? AccumulatorSpriteVariant
+---@param tint? Color
 ---@return Animation
 local function get_accumulator_charge_animation(sprite_set, tint)
 	local repeat_count = 24
@@ -116,8 +117,8 @@ local function get_accumulator_charge_animation(sprite_set, tint)
 	return animation
 end
 
----@param sprite_set AccumulatorSpriteVariant?
----@param tint Color?
+---@param sprite_set? AccumulatorSpriteVariant
+---@param tint? Color
 ---@return Animation
 local function get_accumulator_discharge_animation(sprite_set, tint)
 	local repeat_count = 24
@@ -163,8 +164,8 @@ local function get_accumulator_reflection()
 	return reflection
 end
 
----@param sprite_set AccumulatorSpriteVariant?
----@param tint Color?
+---@param sprite_set? AccumulatorSpriteVariant
+---@param tint? Color
 ---@return ChargableGraphics
 local function get_chargable_graphics(sprite_set, tint)
 	---@type ChargableGraphics
@@ -172,16 +173,16 @@ local function get_chargable_graphics(sprite_set, tint)
 		picture = get_accumulator_pictures(sprite_set, tint) --[[@as Sprite]],
 		charge_animation = get_accumulator_charge_animation(sprite_set, tint),
 		charge_animation_is_looped = true,
-		charge_cooldown = 30, -- same as base
+		charge_cooldown = 30, -- Same as the base.
 		discharge_animation = get_accumulator_discharge_animation(sprite_set, tint),
-		discharge_cooldown = 60, -- same as base
+		discharge_cooldown = 60, -- Same as the base.
 	}
 
 	return chargable_graphics
 end
 
----@param sprite_set AccumulatorSpriteVariant? Default "base".
----@param tint Color? Default nil.
+---@param sprite_set? AccumulatorSpriteVariant The variant. Default `"base"`.
+---@param tint? Color The tint. Default `nil`.
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(sprite_set, tint)
 	sprite_set = sprite_set or "base"
@@ -232,15 +233,16 @@ local function get_corpse_animation(sprite_set, tint)
 	return { animation }
 end
 
+---Defines the options for the vanilla accumulator sprite set.
 ---@class AccumulatorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The accumulator to draw. Defaults to `"base"`.
----@field sprite_set AccumulatorSpriteVariant?
+---@field tint? Color
+---The accumulator to use. Default `"base"`.
+---@field sprite_set? AccumulatorSpriteVariant
 
 ---Gets the sprite set for the vanilla accumulator.
----@param params AccumulatorSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<AccumulatorSpriteSet>
+---@param params AccumulatorSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<AccumulatorSpriteSet> # The sprite set definition for the vanilla accumulator.
 ---
 ---#### Examples
 ---```lua
@@ -270,8 +272,8 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for the vanilla accumulator, in the tints given by `params`.
 M.get_icon = base_icons:tinted("accumulator"):build("get_icon")

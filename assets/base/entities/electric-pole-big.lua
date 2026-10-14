@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedSprite
 local function get_pictures(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-big/"
@@ -67,7 +67,7 @@ local function get_pictures(tint)
 	return pictures
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-big/remnants/"
@@ -110,7 +110,7 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation), util.copy(animation), util.copy(animation) }
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation_overlay(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/electric-pole-big/remnants/"
@@ -153,13 +153,14 @@ local function get_corpse_animation_overlay(tint)
 	return { animation, util.copy(animation), util.copy(animation), util.copy(animation) }
 end
 
+---Defines the options for the vanilla big electric pole sprite set.
 ---@class ElectricPoleBigSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla big electric pole.
----@param params ElectricPoleBigSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<ElectricPoleSpriteSet>
+---@param params ElectricPoleBigSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<ElectricPoleSpriteSet> # The sprite set definition for the vanilla big electric pole.
 ---
 ---#### Examples
 ---```lua
@@ -192,7 +193,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla big electric pole, in the tints given by `params`.
 M.get_icon = icons:tinted("electric-pole-big"):build("get_icon")

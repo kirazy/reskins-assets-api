@@ -12,16 +12,18 @@ local _defines = {}
 ---Represents the different types of animated transport belt sprite sheets.
 ---@enum BeltSprites
 _defines.belt_sprites = {
-	---Indicates standard belt sprites.
+	---The standard belt sprites.
 	---
 	---Used for slower belt speeds, typically less than 30 items/s.
 	standard = 1,
-	---Indicates fast belt sprites.
+
+	---The fast belt sprites.
 	---
 	---Used for faster belt speeds, typically between 30 items/s and 60 items/s.
 	---Has twice as many frames as `defines.belt_sprites.standard` and larger spacing between arrows.
 	fast = 2,
-	---Indicates turbo belt sprites.
+
+	---The turbo belt sprites.
 	---
 	---Used for faster belt speeds, typically more than 60 items/s.
 	---Has twice as many frames as `defines.belt_sprites.fast` and larger spacing between arrows. Used for fastest belt speeds.
@@ -63,6 +65,7 @@ _defines.assets_source = {
 	mobility_smelting_graphics = "__angelsaddons-mobility-graphics-smelting__",
 }
 
+---Represents the symbols for which `Icons.get_symbol` creates an icon.
 ---@enum Symbol
 _defines.symbol = {
 	area_drill = "area-drill",
@@ -72,6 +75,7 @@ _defines.symbol = {
 	aperture_closed = "aperture-closed",
 }
 
+---Represents the letters for which `Icons.get_letter` creates an icon.
 ---@enum Letter
 _defines.letter = {
 	F = "F",
@@ -81,8 +85,7 @@ _defines.letter = {
 	S = "S",
 }
 
----The names of the light artwork under `graphics/icons/lights`. The artwork is drawn as light
----over an item in the world.
+---Represents the light sprites available for composition with icons.
 ---@enum Light
 _defines.light = {
 	---A radioactive atomic artillery shell.
@@ -119,6 +122,7 @@ _defines.light = {
 	rounds_magazine = "rounds-magazine",
 }
 
+---Defines the name of a pipe material.
 ---@alias PipeMaterialName
 ---| "aluminum"
 ---| "brass"
@@ -134,6 +138,7 @@ _defines.light = {
 ---| "titanium"
 ---| "tungsten"
 
+---Represents the materials for which pipe artwork exists.
 ---@enum PipeMaterial
 _defines.pipe_material = {
 	aluminum = "aluminum",
@@ -155,83 +160,84 @@ _defines.pipe_material = {
 	tungsten_angels = "angels-tungsten",
 }
 
----Identifies the type of the `set` of a `SpriteSetDefinition`, and selects the applicator that
----applies it.
+---Represents the name of each sprite set class, as a key for the mappings of prototype types, applicators, and
+---conversions to sprite sets.
 ---@enum SpriteSetType
 _defines.sprite_set_type = {
-	---Consumed by these prototypes: `AssemblingMachinePrototype`, `FurnacePrototype`
+	---The sprite set for `AssemblingMachinePrototype` and `FurnacePrototype`.
 	crafting_machine_sprite_set = "CraftingMachineSpriteSet",
 
-	---Consumed by these prototypes: `BoilerPrototype`
+	---The sprite set for `BoilerPrototype`.
 	boiler_sprite_set = "BoilerSpriteSet",
 
-	---Consumed by these prototypes: `GeneratorPrototype`
+	---The sprite set for `GeneratorPrototype`.
 	generator_sprite_set = "GeneratorSpriteSet",
 
-	---Consumed by these prototypes: `AmmoTurretPrototype`, `ElectricTurretPrototype`, `FluidTurretPrototype`
+	---The sprite set for `AmmoTurretPrototype`, `ElectricTurretPrototype`, and `FluidTurretPrototype`.
 	turret_sprite_set = "TurretSpriteSet",
 
-	---Consumed by these prototypes: `ArtilleryTurretPrototype`
+	---The sprite set for `ArtilleryTurretPrototype`.
 	artillery_turret_sprite_set = "ArtilleryTurretSpriteSet",
 
-	---Consumed by these prototypes: `MiningDrillPrototype`
+	---The sprite set for `MiningDrillPrototype`.
 	mining_drill_sprite_set = "MiningDrillSpriteSet",
 
-	---Consumed by these prototypes: `OffshorePumpPrototype`
+	---The sprite set for `OffshorePumpPrototype`.
 	offshore_pump_sprite_set = "OffshorePumpSpriteSet",
 
-	---Consumed by these prototypes: `BeaconPrototype`
+	---The sprite set for `BeaconPrototype`.
 	beacon_sprite_set = "BeaconSpriteSet",
 
-	---Consumed by these prototypes: `TransportBeltPrototype`, `UndergroundBeltPrototype`, `LinkedBeltPrototype`, `SplitterPrototype`
+	---The sprite set for `TransportBeltPrototype`, `UndergroundBeltPrototype`, `LinkedBeltPrototype`, and
+	---`SplitterPrototype`.
 	transport_belt_sprite_set = "TransportBeltSpriteSet",
 
-	---Consumed by these prototypes: `ElectricPolePrototype`
+	---The sprite set for `ElectricPolePrototype`.
 	electric_pole_sprite_set = "ElectricPoleSpriteSet",
 
-	---Consumed by these prototypes: `PipePrototype`
+	---The sprite set for `PipePrototype`.
 	pipe_sprite_set = "PipeSpriteSet",
 
-	---Consumed by these prototypes: `PipeToGroundPrototype`
+	---The sprite set for `PipeToGroundPrototype`.
 	pipe_to_ground_sprite_set = "PipeToGroundSpriteSet",
 
-	---Consumed by these prototypes: `HeatPipePrototype`
+	---The sprite set for `HeatPipePrototype`.
 	heat_pipe_sprite_set = "HeatPipeSpriteSet",
 
-	---Consumed by these prototypes: `ConstructionRobotPrototype`, `LogisticRobotPrototype`, `CombatRobotPrototype`
+	---The sprite set for `CombatRobotPrototype`.
 	flying_robot_sprite_set = "FlyingRobotSpriteSet",
 
-	---Consumed by these prototypes: `ConstructionRobotPrototype`
+	---The sprite set for `ConstructionRobotPrototype`.
 	construction_robot_sprite_set = "ConstructionRobotSpriteSet",
 
-	---Consumed by these prototypes: `LogisticRobotPrototype`
+	---The sprite set for `LogisticRobotPrototype`.
 	logistic_robot_sprite_set = "LogisticRobotSpriteSet",
 
-	---Consumed by these prototypes: `AccumulatorPrototype`
+	---The sprite set for `AccumulatorPrototype`.
 	accumulator_sprite_set = "AccumulatorSpriteSet",
 
-	---Consumed by these prototypes: `InserterPrototype`
+	---The sprite set for `InserterPrototype`.
 	inserter_sprite_set = "InserterSpriteSet",
 
-	---Consumed by these prototypes: `ReactorPrototype`
+	---The sprite set for `ReactorPrototype`.
 	reactor_sprite_set = "ReactorSpriteSet",
 
-	---Consumed by these prototypes: `PumpPrototype`
+	---The sprite set for `PumpPrototype`.
 	pump_sprite_set = "PumpSpriteSet",
 
-	---Consumed by these prototypes: `RadarPrototype`
+	---The sprite set for `RadarPrototype`.
 	radar_sprite_set = "RadarSpriteSet",
 
-	---Consumed by these prototypes: `RoboportPrototype`
+	---The sprite set for `RoboportPrototype`.
 	roboport_sprite_set = "RoboportSpriteSet",
 
-	---Consumed by these prototypes: `SolarPanelPrototype`
+	---The sprite set for `SolarPanelPrototype`.
 	solar_panel_sprite_set = "SolarPanelSpriteSet",
 
-	---Consumed by these prototypes: `StorageTankPrototype`
+	---The sprite set for `StorageTankPrototype`.
 	storage_tank_sprite_set = "StorageTankSpriteSet",
 
-	---Consumed by these prototypes: `LabPrototype`
+	---The sprite set for `LabPrototype`.
 	lab_sprite_set = "LabSpriteSet",
 }
 

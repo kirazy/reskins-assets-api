@@ -8,7 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -16,13 +16,13 @@ local BASE_FOLDER = "__base__/graphics/entity/beacon/"
 local ASSETS_FOLDER = "__reskins-assets-base__/graphics/entity/beacon/"
 local GOD_MODULE_FOLDER = "__reskins-assets-bobs__/graphics/entity/beacon/module-slots/5-lights/"
 
----The number of module slots the beacon's artwork is drawn for.
+---The number of module slots the beacon artwork supports.
 ---@alias BeaconSlotCount
 ---| 2
 ---| 4
 ---| 6
 
----@param slot_count integer?
+---@param slot_count? integer
 ---@return BeaconSlotCount
 local function resolve_slot_count(slot_count)
 	if not slot_count or slot_count <= 2 then
@@ -35,7 +35,7 @@ local function resolve_slot_count(slot_count)
 end
 
 ---@param slot_count BeaconSlotCount
----@param tint Color?
+---@param tint? Color
 ---@return AnimationElement
 ---@nodiscard
 local function get_base_animation_element(slot_count, tint)
@@ -152,7 +152,7 @@ local function get_4_slot_module_overlay()
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return AnimationElement
 ---@nodiscard
 local function get_6_slot_module_overlay(tint)
@@ -195,22 +195,21 @@ local function get_6_slot_module_overlay(tint)
 	}
 end
 
----Draws the visualizations for one of the beacon's two module slots, offset by `shift`.
+---Creates the visualizations for one of the beacon's two module slots, offset by `shift`.
 ---@alias BeaconModuleSlotCreator fun(shift: Vector, secondary_draw_order: int8): BeaconModuleVisualization[]
 
----The creators drawing an art style's two module slots.
+---Defines the creators for the two module slots of an art style.
 ---@class (exact) BeaconModuleSlotCreators
----Draws the slot to the lower left.
+---Creates the slot to the lower left.
 ---@field slot_1 BeaconModuleSlotCreator
----Draws the slot to the upper right.
+---Creates the slot to the upper right.
 ---@field slot_2 BeaconModuleSlotCreator
 
----The creators for each art style a beacon's module slots can be drawn in, keyed by the name of the
----art style.
+---The creators for each art style of the module slots of a beacon, by the name of the art style.
 M.module_slots = {}
 
----Gets the creators drawing the base game's own module slots.
----@return BeaconModuleSlotCreators
+---Gets the creators for the base game's own module slots.
+---@return BeaconModuleSlotCreators # The creators.
 ---@nodiscard
 function M.module_slots.get_vanilla_creators()
 	---@type BeaconModuleSlotCreators
@@ -342,18 +341,18 @@ function M.module_slots.get_vanilla_creators()
 	}
 end
 
-local module_slot_creators = V.shape({
-	slot_1 = V.func():describe_as("a function drawing a module slot"),
-	slot_2 = V.func():describe_as("a function drawing a module slot"),
-}):describe_as("a pair of module slot creators")
+local module_slot_creators = V.struct({
+	slot_1 = V.func():describe_as("a function that creates a module slot"),
+	slot_2 = V.func():describe_as("a function that creates a module slot"),
+}):describe_as("a pair of module slot functions")
 
 local check_get_tiered_creators = V.signature("get_tiered_creators", {
 	{ "light_count", V.one_of({ 5, 8 }) },
 })
 
----Gets the creators drawing module slots lit by `light_count` lights.
----@param light_count 5|8 The number of lights the slot is drawn with.
----@return BeaconModuleSlotCreators
+---Gets the creators for module slots lit by `light_count` lights.
+---@param light_count 5|8 The number of lights in the slot.
+---@return BeaconModuleSlotCreators # The creators.
 ---@nodiscard
 function M.module_slots.get_tiered_creators(light_count)
 	check_get_tiered_creators(light_count)
@@ -493,16 +492,16 @@ local check_get_god_module_creators = V.signature("get_god_module_creators", {
 	{ "variant", V.one_of({ "base", "productivity", "quality" }) },
 })
 
----Gets the creators drawing module slots holding one of Bob's god modules.
----@param variant "base"|"productivity"|"quality" The god module the slot holds.
----@return BeaconModuleSlotCreators
+---Gets the creators for module slots that contain one of Bob's god modules.
+---@param variant "base"|"productivity"|"quality" The god module in the slot.
+---@return BeaconModuleSlotCreators # The creators.
 ---@nodiscard
 function M.module_slots.get_god_module_creators(variant)
 	check_get_god_module_creators(variant)
 
 	local folder = GOD_MODULE_FOLDER .. "god-module-" .. variant .. "-module-"
 
-	-- Every god module shares the one box, drawn for the base variant.
+	-- Every god module shares the one box, created for the base variant.
 	local box_folder = GOD_MODULE_FOLDER .. "god-module-base-module-"
 
 	---@type BeaconModuleSlotCreators
@@ -628,7 +627,7 @@ function M.module_slots.get_god_module_creators(variant)
 	}
 end
 
--- Where each pair of module slots sits, by the number of slots the beacon draws.
+-- Where each pair of module slots sits, by the number of slots of the beacon.
 local SLOT_SHIFTS = {
 	[2] = {
 		{},
@@ -666,7 +665,7 @@ local function get_module_slots(slot_count, creators)
 end
 
 ---@param slot_count BeaconSlotCount
----@param art_styles BeaconModuleArtStyle[]?
+---@param art_styles? BeaconModuleArtStyle[]
 ---@return BeaconModuleVisualizations[]
 ---@nodiscard
 local function get_module_visualisations(slot_count, art_styles)
@@ -697,7 +696,7 @@ local function get_module_visualisations(slot_count, art_styles)
 	return visualisations
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 ---@nodiscard
 local function get_corpse_animation(tint)
@@ -759,31 +758,32 @@ local function get_water_reflection()
 	}
 end
 
----One art style the beacon draws its module slots in, and the creators drawing it.
+---Defines one art style for the module slots of the beacon, and the creators for it.
 ---@class (exact) BeaconModuleArtStyle
----The name the beacon selects this art style by. Any name will do; the base game's own is `"vanilla"`.
+---The name by which the beacon selects this art style. Any name is accepted; the base game uses `"vanilla"`.
 ---@field art_style string
----Whether this art style is drawn for slots holding no module.
----@field use_for_empty_slots boolean?
----The creators drawing the two module slots, from `beacon.module_slots`.
+---When `true`, indicates that this art style is used for empty module slots.
+---@field use_for_empty_slots? boolean
+---The creators for the two module slots, from `beacon.module_slots`.
 ---@field creators BeaconModuleSlotCreators
 
+---Defines the options for the vanilla beacon sprite set.
 ---@class BeaconSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The number of module slots to draw. Rounded up to 2, 4, or 6. Defaults to `2`.
----@field slot_count integer?
----Additional art styles to draw the module slots in. The `"vanilla"` style is always drawn; naming one
----`"vanilla"` replaces it.
----@field module_art_styles BeaconModuleArtStyle[]?
+---@field tint? Color
+---The number of module slots, which is rounded up to 2, 4, or 6. Default `2`.
+---@field slot_count? integer
+---Additional art styles for the module slots. The `"vanilla"` style is always included; naming one `"vanilla"` replaces
+---it.
+---@field module_art_styles? BeaconModuleArtStyle[]
 
 local check_params = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
 			slot_count = V.integer():positive():optional(),
-			module_art_styles = V.array(V.shape({
+			module_art_styles = V.array(V.struct({
 				art_style = Common.non_empty_string,
 				use_for_empty_slots = V.boolean():optional(),
 				creators = module_slot_creators,
@@ -793,8 +793,8 @@ local check_params = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the vanilla beacon.
----@param params BeaconSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<BeaconSpriteSet>
+---@param params BeaconSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<BeaconSpriteSet> # The sprite set definition for the vanilla beacon.
 ---
 ---#### Examples
 ---```lua
@@ -821,7 +821,7 @@ function M.get_sprite_set(params)
 		get_base_animation_element(slot_count, params.tint),
 		get_antenna_top_animation_element(slot_count),
 		get_light_animation_element(true),
-		-- The base game draws the light twice, the second copy brightening the first.
+		-- The base game draws the light twice, and the second copy brightens the first.
 		get_light_animation_element(false),
 	}
 
@@ -858,7 +858,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla beacon, in the tints given by `params`.
 M.get_icon = icons:tinted("beacon"):build("get_icon")

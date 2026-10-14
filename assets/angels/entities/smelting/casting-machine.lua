@@ -7,12 +7,12 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
----@param is_flipped boolean?
+---@param tint? Color
+---@param is_flipped? boolean
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set_internal(tint, is_flipped)
 	local flipped = is_flipped == true and "-flipped" or ""
@@ -103,25 +103,26 @@ local function get_graphics_set_internal(tint, is_flipped)
 	return graphics_set
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	return get_graphics_set_internal(tint, false)
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set_flipped(tint)
 	return get_graphics_set_internal(tint, true)
 end
 
+---Defines the options for the Angel's casting machine sprite set.
 ---@class CastingMachineSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's casting machine.
----@param params CastingMachineSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params CastingMachineSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's casting machine.
 ---
 ---#### Examples
 ---```lua
@@ -154,7 +155,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's casting machine, in the tints given by `params`.
 M.get_icon = icons:tinted("casting-machine"):build("get_icon")

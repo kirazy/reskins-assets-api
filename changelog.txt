@@ -3,12 +3,11 @@ Version: 0.2.0
 Date: ????
   Features:
     - Added the applicator framework: `api.applicators` applies a sprite set to a prototype in one call, handling routing, sprite set type conversion, and scaling on the caller's behalf.
-      - `applicators.apply_sprite_set(prototype, definition, params)` routes on `prototype.type` to the applicator that applies it; a `corpse` prototype instead takes the fields of `definition.set.corpse` directly.
-      - A sprite set is a plain `SpriteSetDefinition` table of a `set_type` and a `set`, so producing one needs no class, no metatable, and no mutation of a prototype.
+      - `applicators.apply_sprite_set(prototype, definition, params)` routes on `prototype.type` to the applicator that applies it; a `corpse` prototype instead applies the fields of `definition.set.corpse` directly.
       - `defines.sprite_set_type` names the sprite set types, each recording the prototype types that consume it.
       - Sprite data is scaled to the target prototype automatically, comparing the set's `nominal_width` and `nominal_height` against the prototype's inferred scale; `params.scale` and `params.scale_factor` override that directly, the latter relative to the nominal dimensions.
       - `definition` is never modified, so one sprite set may be applied to an entity and to its corpse.
-      - Applicators ship for accumulators, beacons, boilers, crafting machines, electric poles, generators, inserters, mining drills, pipes, pipes to ground, pumps, radars, reactors, roboports, construction and logistic robots, solar panels, storage tanks, and transport belts.
+      - Applicators ship for accumulators, beacons, boilers, crafting machines, electric poles, generators, inserters, and many others.
     - Added the entity asset modules under `assets`: one flat module per entity family, each exporting `get_sprite_set` and `get_icon`.
       - Modules are filed by the asset mod that adds the entity, under `assets.base.entities`, `assets.angels.entities`, `assets.bobs.entities`, and `assets.hurricane.entities`.
       - A `nil` tint omits the tintable layers from a sprite set or icon rather than drawing them untinted.
@@ -31,7 +30,7 @@ Date: ????
   Changes:
     - Icon and sprite methods now validate their arguments through the Artisanal Reskins: Sprite Utils `validation` module; a failure names the function, the parameter, and the path within it, and reports every bad argument at once.
     - `icons.get_symbol` and `icons.get_letter` now throw when `tint` is not a `Color`, rather than building an icon around an invalid tint.
-    - `icons.is_icons_using_reskins_images`, `icons.remove_symbols_from_icons`, and `icons.remove_letters_from_icons` now throw when given something that is not a non-empty array of `IconData` objects; `icons.is_icons_using_reskins_images` previously answered `false` for `nil`.
+    - `icons.is_icons_using_reskins_images`, `icons.remove_symbols_from_icons`, and `icons.remove_letters_from_icons` now throw when given something that is not a layered icon; `icons.is_icons_using_reskins_images` previously answered `false` for `nil`.
     - `sprites.get_sprite_light_layer` now throws when `light_name` is not the name of a light sprite, rather than returning a sprite pointing at a file that does not exist.
   Bugfixes:
     - Fixed that the boiler sprite set did not include the structure patch, fire, or fire glow elements.

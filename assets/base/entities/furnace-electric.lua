@@ -8,15 +8,13 @@
 local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 -- Setup inheritance.
 
--- Private sprite helpers
-
----Shared shadow layer used by all electric furnace variants.
+---Gets the shadow layer shared by all electric furnace variants.
 ---@return Animation
 ---@private
 local function get_electric_furnace_shadow()
@@ -32,7 +30,7 @@ local function get_electric_furnace_shadow()
 	}
 end
 
----Shared heater working visualisation animation used by all electric furnace variants.
+---Gets the heater working visualisation animation shared by all electric furnace variants.
 ---@return Animation
 ---@private
 local function get_electric_furnace_heater_animation()
@@ -50,7 +48,7 @@ local function get_electric_furnace_heater_animation()
 	}
 end
 
----Shared ground light working visualisation animation (from base game).
+---Gets the ground light working visualisation animation of the base game.
 ---@return Animation
 ---@private
 local function get_electric_furnace_ground_light()
@@ -65,7 +63,8 @@ local function get_electric_furnace_ground_light()
 	}
 end
 
----@return WorkingVisualisation  -- large propeller
+---Gets the large propeller working visualisation.
+---@return WorkingVisualisation
 ---@private
 local function get_electric_furnace_large_propeller()
 	return {
@@ -83,8 +82,9 @@ local function get_electric_furnace_large_propeller()
 	}
 end
 
----@param is_shifted boolean?
----@return WorkingVisualisation  -- small propeller
+---Gets the small propeller working visualisation.
+---@param is_shifted? boolean
+---@return WorkingVisualisation
 ---@private
 local function get_electric_furnace_small_propeller(is_shifted)
 	local shift = is_shifted and util.by_pixel(1, -24) or util.by_pixel(4, -37.5)
@@ -103,9 +103,9 @@ local function get_electric_furnace_small_propeller(is_shifted)
 	}
 end
 
----Returns the working light animation for the given variant and optional obstructed flag.
+---Gets the working light animation for the given `variant`.
 ---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
----@param is_obstructed boolean?
+---@param is_obstructed? boolean
 ---@return Animation
 ---@private
 local function get_electric_furnace_working_light(variant, is_obstructed)
@@ -141,9 +141,7 @@ local function get_electric_furnace_working_light(variant, is_obstructed)
 	}
 end
 
--- Graphics set builders
-
----@param tint Color?
+---@param tint? Color
 ---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint, variant)
@@ -200,7 +198,7 @@ local function get_graphics_set(tint, variant)
 		})
 	end
 
-	-- Shared shadow (all variants use the same shadow from base assets).
+	-- All variants use the same shadow from base assets.
 	table.insert(layers, get_electric_furnace_shadow())
 
 	local animation = { layers = layers }
@@ -211,45 +209,35 @@ local function get_graphics_set(tint, variant)
 
 	if variant == "standard" then
 		working_visualisations = {
-			-- Furnace heater
 			{ fadeout = true, animation = get_electric_furnace_heater_animation() },
-			-- Furnace light
 			{ fadeout = true, animation = get_electric_furnace_working_light("standard") },
-			-- Ground light
 			{ fadeout = true, animation = get_electric_furnace_ground_light() },
-			-- Propellers
 			get_electric_furnace_large_propeller(),
 			get_electric_furnace_small_propeller(),
 		}
 	elseif variant == "mixing" then
 		working_visualisations = {
-			-- Furnace heater
 			{ fadeout = true, animation = get_electric_furnace_heater_animation() },
-			-- Furnace light
 			{ fadeout = true, animation = get_electric_furnace_working_light("mixing") },
-			-- Ground light
 			{ fadeout = true, animation = get_electric_furnace_ground_light() },
-			-- Propellers
 			get_electric_furnace_large_propeller(),
 			get_electric_furnace_small_propeller(true),
 		}
 	elseif variant == "chemical" then
 		working_visualisations = {
-			-- Furnace heater (north/east/west — south is walled)
+			-- The furnace heater is drawn for north, east, and west. The south side is obstructed.
 			{
 				fadeout = true,
 				north_animation = get_electric_furnace_heater_animation(),
 				east_animation = get_electric_furnace_heater_animation(),
 				west_animation = get_electric_furnace_heater_animation(),
 			},
-			-- Furnace light
 			{
 				fadeout = true,
 				north_animation = get_electric_furnace_working_light("chemical"),
 				east_animation = get_electric_furnace_working_light("chemical"),
 				west_animation = get_electric_furnace_working_light("chemical"),
 			},
-			-- Ground light
 			{
 				fadeout = true,
 				north_animation = get_electric_furnace_ground_light(),
@@ -259,14 +247,13 @@ local function get_graphics_set(tint, variant)
 		}
 	elseif variant == "chemical-mixing" then
 		working_visualisations = {
-			-- Furnace heater (north/east/west)
 			{
 				fadeout = true,
 				north_animation = get_electric_furnace_heater_animation(),
 				east_animation = get_electric_furnace_heater_animation(),
 				west_animation = get_electric_furnace_heater_animation(),
 			},
-			-- Furnace light (south uses obstructed variant)
+			-- The south side uses the obstructed light variant.
 			{
 				fadeout = true,
 				north_animation = get_electric_furnace_working_light("chemical-mixing"),
@@ -274,14 +261,12 @@ local function get_graphics_set(tint, variant)
 				south_animation = get_electric_furnace_working_light("chemical-mixing", true),
 				west_animation = get_electric_furnace_working_light("chemical-mixing"),
 			},
-			-- Ground light
 			{
 				fadeout = true,
 				north_animation = get_electric_furnace_ground_light(),
 				east_animation = get_electric_furnace_ground_light(),
 				west_animation = get_electric_furnace_ground_light(),
 			},
-			-- Small propeller (shifted)
 			get_electric_furnace_small_propeller(true),
 		}
 	end
@@ -293,10 +278,10 @@ local function get_graphics_set(tint, variant)
 	}
 end
 
----Builds the shared remnant base+mask+highlights layer stack.
+---Gets the shared remnant base+mask+highlights layer stack.
 ---
 ---Chemical and chemical-mixing variants add an overlay layer on top.
----@param tint Color?
+---@param tint? Color
 ---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint, variant)
@@ -306,7 +291,6 @@ local function get_corpse_animation(tint, variant)
 	---@type RotatedAnimationVariations
 	local animation = {
 		layers = {
-			-- Vanilla base remnant
 			{
 				filename = "__base__/graphics/entity/electric-furnace/remnants/electric-furnace-remnants.png",
 				width = 454,
@@ -363,11 +347,11 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
----Builds the pipe picture `Sprite4Way` for the chemical electric furnace fluid boxes.
+---Gets the pipe picture `Sprite4Way` for the chemical electric furnace fluid boxes.
 ---
----Both the `"chemical"` and `"chemical-mixing"` variants share the same pipe picture sprites
----from the `furnace-electric-chemical/pipes/` asset folder.
----@param tint Color?
+---Both the `"chemical"` and `"chemical-mixing"` variants share the same pipe picture sprites from the
+---`furnace-electric-chemical/pipes/` asset folder.
+---@param tint? Color
 ---@return FluidBoxGraphics[]
 ---@private
 local function get_electric_furnace_fluid_box_graphics(tint)
@@ -375,7 +359,7 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 
 	---@type Sprite4Way
 	local pictures = {
-		-- North: base layer only (no mask/highlights — wall-side pipe connection)
+		-- North uses the base layer only. The wall-side pipe connection has no mask or highlights.
 		north = {
 			filename = pipes_path .. "furnace-chemical-electric-pipe-north-base.png",
 			priority = "extra-high",
@@ -384,7 +368,6 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 			shift = util.by_pixel(2.5, 10),
 			scale = 0.5,
 		},
-		-- East
 		east = {
 			filename = pipes_path .. "furnace-chemical-electric-pipe-east-base.png",
 			priority = "extra-high",
@@ -393,7 +376,6 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 			shift = util.by_pixel(-20.5, 3),
 			scale = 0.5,
 		},
-		-- South
 		south = {
 			filename = pipes_path .. "furnace-chemical-electric-pipe-south-base.png",
 			priority = "extra-high",
@@ -402,7 +384,6 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 			shift = util.by_pixel(0.5, -30.5),
 			scale = 0.5,
 		},
-		-- West
 		west = {
 			filename = pipes_path .. "furnace-chemical-electric-pipe-west-base.png",
 			priority = "extra-high",
@@ -414,7 +395,7 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 	}
 
 	if tint then
-		-- East: wrap base with mask + highlights layers
+		-- Wrap the east base with the mask and highlights layers.
 		pictures.east = {
 			layers = {
 				pictures.east,
@@ -438,7 +419,6 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 				},
 			},
 		}
-		-- South
 		pictures.south = {
 			layers = {
 				pictures.south,
@@ -462,7 +442,6 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 				},
 			},
 		}
-		-- West
 		pictures.west = {
 			layers = {
 				pictures.west,
@@ -500,17 +479,16 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 	}
 end
 
--- Public API
-
+---Defines the options for the vanilla electric furnace sprite set.
 ---@class FurnaceElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The variant to draw.
+---@field tint? Color
+---The variant to use.
 ---@field variant "standard"
 
 ---Gets the sprite set for the vanilla electric furnace.
----@param params FurnaceElectricSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params FurnaceElectricSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the vanilla electric furnace.
 ---
 ---#### Examples
 ---```lua
@@ -541,20 +519,20 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for an electric furnace of the `variant` and in the tints given by `params`.
-M.get_icon = IconCatalog.dispatch(
+M.get_icon = IconBuilderFactory.dispatch(
 	"variant",
 	{ "standard", "mixing", "chemical", "chemical-mixing" },
 	"get_icon",
 	function(variant)
 		-- The standard furnace uses vanilla artwork; the rest are Bob's.
 		local name = variant == "standard" and "furnace-electric" or "furnace-electric-" .. variant
-		local catalog = variant == "standard" and base_icons or bobs_icons
+		local factory = variant == "standard" and base_icons or bobs_icons
 
-		return catalog:tinted(name)
+		return factory:tinted(name)
 	end
 )
 

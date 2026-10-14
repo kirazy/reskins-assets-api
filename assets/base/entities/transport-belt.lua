@@ -8,20 +8,20 @@
 local _defines = require("api.defines")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 -- TODO: Lift the hash-based auto-replace logic from Prismatic Belts.
 -- TODO: Strip out the transport-belt-connectable replace from all-things-not-a-transport-belt.
 
----Builds the belt animation set for the given `tint` and `belt_sprite`.
+---Gets the belt animation set for the given `tint` and `belt_sprite`.
 ---
----Every transport-belt-connectable entity uses the same belt, so the splitter and underground
----belt producers take theirs from here rather than each building their own.
----@param tint Color?
----@param belt_sprite BeltSprites
----@return TransportBeltAnimationSet
+---Every transport-belt-connectable entity uses the same belt animation set, including the splitter and the underground
+---belt.
+---@param tint? Color The tint of the belt.
+---@param belt_sprite BeltSprites The belt sprites.
+---@return TransportBeltAnimationSet # The animation set.
 ---@nodiscard
 function M.get_belt_animation_set(tint, belt_sprite)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/transport-belt/"
@@ -74,7 +74,7 @@ function M.get_belt_animation_set(tint, belt_sprite)
 	return { animation_set = animation_set }
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/transport-belt/"
@@ -114,15 +114,16 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(2, { layers = layers })
 end
 
+---Defines the options for the vanilla transport belt sprite set.
 ---@class TransportBeltSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The belt artwork to draw.
+---@field tint? Color
+---The belt artwork to use.
 ---@field belt_sprite BeltSprites
 
 ---Gets the sprite set for the vanilla transport belt.
----@param params TransportBeltSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<TransportBeltSpriteSet>
+---@param params TransportBeltSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<TransportBeltSpriteSet> # The sprite set definition for the vanilla transport belt.
 ---
 ---#### Examples
 ---```lua
@@ -152,7 +153,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla transport belt, in the tints given by `params`.
 M.get_icon = icons:tinted("transport-belt"):build("get_icon")

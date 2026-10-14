@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local layers = {
@@ -28,7 +28,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(layers, {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/nutrient-extractor/nutrient-extractor-mask.png",
 			priority = "extra-high",
 			width = 160,
@@ -39,7 +38,6 @@ local function get_graphics_set(tint)
 			tint = tint,
 		})
 		table.insert(layers, {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/nutrient-extractor/nutrient-extractor-highlights.png",
 			priority = "extra-high",
 			width = 160,
@@ -60,13 +58,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's nutrient extractor sprite set.
 ---@class NutrientExtractorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's nutrient extractor.
----@param params NutrientExtractorSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params NutrientExtractorSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's nutrient extractor.
 ---
 ---#### Examples
 ---```lua
@@ -96,7 +95,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's nutrient extractor, in the tints given by `params`.
 M.get_icon = icons:tinted("nutrient-extractor"):build("get_icon")

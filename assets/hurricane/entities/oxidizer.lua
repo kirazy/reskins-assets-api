@@ -11,7 +11,7 @@ local _constants = require("assets.constants")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -19,7 +19,7 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "tint", Common.color:optional() },
 })
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	check_get_graphics_set(tint)
@@ -99,22 +99,23 @@ local function get_graphics_set(tint)
 	}
 end
 
+---Defines the options for the oxidizer sprites.
 ---@class OxidizerSpritesParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 local check_params = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
 		}),
 	},
 })
 
 ---Gets the sprite set for the Hurricane oxidizer.
----@param params OxidizerSpritesParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params OxidizerSpritesParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the Hurricane oxidizer.
 ---
 ---#### Examples
 ---```lua
@@ -124,7 +125,7 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = oxidizer.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
----@throws Thrown when `params.tint` is not a `Color`.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -148,7 +149,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-hurricane__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-hurricane__/graphics/icons" })
 
 ---Gets the icon for the Hurricane oxidizer, in the tints given by `params`.
 M.get_icon = icons:tinted("oxidizer"):build("get_icon")

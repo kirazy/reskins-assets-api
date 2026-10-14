@@ -22,7 +22,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set RoboportSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type RoboportSpriteSetApplicator
@@ -32,6 +32,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
+---Defines the graphics set fields of a roboport.
 ---@class (exact) RoboportGraphicsSet
 ---@field base Sprite
 ---@field base_patch Sprite
@@ -40,10 +41,10 @@ return {
 ---@field door_animation_down Animation
 ---@field recharging_animation Animation
 
----The sprite data of a `SpriteSetDefinition` of type `roboport_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `roboport_sprite_set`.
 ---@class (exact) RoboportSpriteSet : EntityWithHealthSpriteSet
 ---The sprites making up the roboport, spread across the prototype's own fields.
 ---@field graphics_set RoboportGraphicsSet
 
----The applicator for roboports.
+---Applies the `RoboportSpriteSet` to `RoboportPrototype` instances.
 ---@class (exact) RoboportSpriteSetApplicator : SpriteSetApplicator<RoboportPrototype, RoboportSpriteSet>

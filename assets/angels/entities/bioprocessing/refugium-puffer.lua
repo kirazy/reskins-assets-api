@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local working_visualisations = {
@@ -32,7 +32,6 @@ local function get_graphics_set(tint)
 			always_draw = true,
 			animation = {
 				layers = {
-					-- Base patch
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/refugium-puffer/refugium-puffer-base-patch.png",
 						priority = "extra-high",
@@ -40,7 +39,6 @@ local function get_graphics_set(tint)
 						height = 256,
 						shift = { 0, -0.5 },
 					},
-					-- Mask
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/refugium-puffer/refugium-puffer-mask.png",
 						priority = "extra-high",
@@ -49,7 +47,6 @@ local function get_graphics_set(tint)
 						shift = { 0, -0.5 },
 						tint = tint,
 					},
-					-- Highlights
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/refugium-puffer/refugium-puffer-highlights.png",
 						priority = "extra-high",
@@ -78,13 +75,14 @@ local function get_graphics_set(tint)
 	}
 end
 
+---Defines the options for the Angel's puffer refugium sprite set.
 ---@class RefugiumPufferSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's puffer refugium.
----@param params RefugiumPufferSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params RefugiumPufferSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's puffer refugium.
 ---
 ---#### Examples
 ---```lua
@@ -114,7 +112,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's puffer refugium, in the tints given by `params`.
 M.get_icon = icons:tinted("refugium-puffer"):build("get_icon")

@@ -6,16 +6,15 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local animation = {
 		layers = {
-			-- Base
 			{
 				filename = "__angelspetrochemgraphics__/graphics/entity/advanced-chemical-plant/advanced-chemical-plant.png",
 				priority = "extra-high",
@@ -26,7 +25,6 @@ local function get_graphics_set(tint)
 				animation_speed = 0.5,
 				shift = { 0, 0 },
 			},
-			-- Base Patch
 			{
 				filename = "__reskins-assets-angels__/graphics/entity/chemical-plant-advanced/chemical-plant-advanced-base-patch.png",
 				priority = "extra-high",
@@ -41,7 +39,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/chemical-plant-advanced/chemical-plant-advanced-mask.png",
 			priority = "extra-high",
 			width = 224,
@@ -52,7 +49,6 @@ local function get_graphics_set(tint)
 			tint = tint,
 		})
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/chemical-plant-advanced/chemical-plant-advanced-highlights.png",
 			priority = "extra-high",
 			width = 224,
@@ -73,13 +69,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's advanced chemical plant sprite set.
 ---@class AdvancedChemicalPlantSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's advanced chemical plant.
----@param params AdvancedChemicalPlantSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params AdvancedChemicalPlantSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's advanced chemical plant.
 ---
 ---#### Examples
 ---```lua
@@ -109,7 +106,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's advanced chemical plant, in the tints given by `params`.
 M.get_icon = icons:tinted("chemical-plant-advanced"):build("get_icon")

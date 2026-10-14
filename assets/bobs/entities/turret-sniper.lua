@@ -6,19 +6,20 @@
 ---@namespace Reskins.Assets.Bobs.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
+---Defines the options for the Bob's sniper turret sprite set.
 ---@class TurretSniperSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Bob's sniper turret.
 ---
 ---The set defines its nominal dimensions only. No artwork is drawn for this turret yet.
----@param params TurretSniperSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<TurretSpriteSet>
+---@param params TurretSniperSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<TurretSpriteSet> # The sprite set definition for Bob's sniper turret.
 ---
 ---#### Examples
 ---```lua
@@ -47,7 +48,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for Bob's sniper turret, in the tints given by `params`.
 M.get_icon = icons:tinted("turret-sniper"):build("get_icon")

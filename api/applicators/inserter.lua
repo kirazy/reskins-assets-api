@@ -21,7 +21,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set InserterSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type InserterSpriteSetApplicator
@@ -31,7 +31,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `inserter_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `inserter_sprite_set`.
 ---@class (exact) InserterSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `hand_base_picture`.
 ---@field hand_base_picture Sprite
@@ -48,5 +48,5 @@ return {
 ---The prototype's `platform_picture`.
 ---@field platform_picture Sprite4Way
 
----The applicator for inserters.
+---Applies the `InserterSpriteSet` to `InserterPrototype` instances.
 ---@class (exact) InserterSpriteSetApplicator : SpriteSetApplicator<InserterPrototype, InserterSpriteSet>

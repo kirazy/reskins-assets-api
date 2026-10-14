@@ -7,7 +7,7 @@
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 local V = require("__reskins-sprite-utils__.validation")
 
 local M = {}
@@ -23,7 +23,7 @@ local function get_pipe_path(pipe_material)
 	end
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return BoilerPictureSet
 local function get_picture_set(tint, pipe_material)
@@ -263,7 +263,7 @@ local function get_pipe_covers(pipe_material)
 	})--[[@as Animation4Way]]
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return RotatedAnimation
 local function get_corpse_animation(tint, pipe_material)
@@ -319,15 +319,16 @@ local function get_corpse_animation(tint, pipe_material)
 	return animation
 end
 
+---Defines the options for the vanilla heat exchanger sprite set.
 ---@class HeatExchangerSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The material the pipes are built from. Defaults to iron.
+---@field tint? Color
+---The material from which the pipes are built.
 ---@field pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 
 ---Gets the sprite set for the vanilla heat exchanger.
----@param params HeatExchangerSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<BoilerSpriteSet>
+---@param params HeatExchangerSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<BoilerSpriteSet> # The sprite set definition for the vanilla heat exchanger.
 ---
 ---#### Examples
 ---```lua
@@ -364,14 +365,16 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 local heat_pipe_material = V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" })
 
 ---Gets the icon for a heat exchanger with the given `pipe_material` and in the tints given by `params`.
 ---
 ---Every exchanger shares one mask and one highlights layer, only the base layer differs by material.
-M.get_icon =
-	icons:tinted("heat-exchanger"):keyed("pipe_material", heat_pipe_material, { IconCatalog.role.base }):build("get_icon")
+M.get_icon = icons
+	:tinted("heat-exchanger")
+	:keyed("pipe_material", heat_pipe_material, { IconBuilderFactory.role.base })
+	:build("get_icon")
 
 return M

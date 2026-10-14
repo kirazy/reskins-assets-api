@@ -21,7 +21,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set PipeToGroundSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type PipeToGroundSpriteSetApplicator
@@ -31,7 +31,7 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `pipe_to_ground_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `pipe_to_ground_sprite_set`.
 ---@class (exact) PipeToGroundSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `horizontal_window_bounding_box`.
 ---@field horizontal_window_bounding_box BoundingBox
@@ -40,9 +40,9 @@ return {
 ---The prototype's `pictures`.
 ---@field pictures Sprite4Way
 ---The prototype's `frozen_patch`.
----@field frozen_patch Sprite4Way?
+---@field frozen_patch? Sprite4Way
 ---Pipe graphics for the prototype's `fluid_box`.
 ---@field fluid_box FluidBoxGraphics
 
----The applicator for pipe-to-ground segments.
+---Applies the `PipeToGroundSpriteSet` to `PipeToGroundPrototype` instances.
 ---@class (exact) PipeToGroundSpriteSetApplicator : SpriteSetApplicator<PipeToGroundPrototype, PipeToGroundSpriteSet>

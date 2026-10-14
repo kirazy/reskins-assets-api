@@ -8,11 +8,11 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
-local RoboportVariant = V.integer():in_range(0, 4)
+local RoboportVariant = V.one_of({ 0, 1, 2, 3, 4 })
 
 local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "tint", Common.color:optional() },
@@ -20,7 +20,7 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "door_variant", RoboportVariant },
 })
 
----@param tint Color?
+---@param tint? Color
 ---@param antenna_variant 0|1|2|3|4
 ---@param door_variant 0|1|2|3|4
 ---@return RoboportGraphicsSet
@@ -79,7 +79,7 @@ local function get_graphics_set(tint, antenna_variant, door_variant)
 	})
 
 	local base_patch_layers = {
-		-- Padding placeholder required by the roboport prototype.
+		-- The roboport prototype requires a placeholder for padding.
 		{
 			filename = "__core__/graphics/empty.png",
 			priority = "medium",
@@ -163,7 +163,7 @@ local function get_graphics_set(tint, antenna_variant, door_variant)
 	return graphics_set
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/roboport/remnants/"
@@ -206,17 +206,18 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation) }
 end
 
+---Defines the options for the vanilla roboport sprite set.
 ---@class RoboportSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The antenna to draw: `0` is the base game's, `1`-`4` are Bob's.
+---@field tint? Color
+---The antenna variant. 0 is the base game's antenna, and the variants between 1 and 4 are Bob's.
 ---@field antenna_variant 0|1|2|3|4
----The door to draw: `0` is the base game's, `1`-`4` are Bob's.
+---The door variant. 0 is the base game's door, and the variants between 1 and 4 are Bob's.
 ---@field door_variant 0|1|2|3|4
 
 ---Gets the sprite set for the vanilla roboport.
----@param params RoboportSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<RoboportSpriteSet>
+---@param params RoboportSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<RoboportSpriteSet> # The sprite set definition for the vanilla roboport.
 ---
 ---#### Examples
 ---```lua
@@ -248,11 +249,11 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----The tier of a roboport, selecting the artwork it is drawn with.
+---The tier of a roboport, which selects its artwork.
 ---@alias RoboportTier 1|2|3|4
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for the vanilla roboport, in the tints given by `params`.
 M.get_icon = base_icons:tinted("roboport"):build("get_icon")
@@ -262,7 +263,7 @@ M.get_icon = base_icons:tinted("roboport"):build("get_icon")
 ---Every tier shares one mask and one highlights layer, only the base layer differs by tier.
 M.get_tier_icon = bobs_icons
 	:tinted("roboport")
-	:keyed("tier", V.integer():in_range(1, 4), { IconCatalog.role.base })
+	:keyed("tier", V.one_of({ 1, 2, 3, 4 }), { IconBuilderFactory.role.base })
 	:build("get_tier_icon")
 
 return M

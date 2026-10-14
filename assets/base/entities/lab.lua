@@ -6,7 +6,7 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 local _sprite_utils = { sprites = require("__reskins-sprite-utils__.sprites") }
 
 local V = require("__reskins-sprite-utils__.validation")
@@ -14,7 +14,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation
 local function get_on_animation(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/lab/"
@@ -86,7 +86,7 @@ local function get_on_animation(tint)
 	return animation
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation
 local function get_off_animation(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/lab/"
@@ -177,7 +177,7 @@ local function get_water_reflection()
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/lab/remnants/"
@@ -222,13 +222,14 @@ local function get_corpse_animation(tint)
 	return _sprite_utils.sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 end
 
+---Defines the options for the vanilla lab sprite set.
 ---@class LabSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla lab.
----@param params LabSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<LabSpriteSet>
+---@param params LabSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<LabSpriteSet> # The sprite set definition for the vanilla lab.
 ---
 ---#### Examples
 ---```lua
@@ -260,7 +261,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla lab, in the tints given by `params`.
 M.get_icon = icons:tinted("lab"):build("get_icon")

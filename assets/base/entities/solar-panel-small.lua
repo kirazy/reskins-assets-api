@@ -10,13 +10,13 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 local assets_path = _defines.assets_source.bobs_assets .. "/graphics/entity/solar-panel-small/"
 
----@param tint Color?
+---@param tint? Color
 ---@return SpriteVariations
 local function get_picture(tint)
 	---@type SpriteVariations
@@ -87,7 +87,7 @@ local function get_overlay()
 	return overlay
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local remnants_path = assets_path .. "remnants/"
@@ -130,17 +130,18 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 end
 
+---Defines the options for the Bob's small solar panel sprite set.
 ---@class SolarPanelSmallSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 local check_params = V.signature("get_sprite_set", {
-	{ "params", V.shape({ tint = Common.color:optional() }) },
+	{ "params", V.struct({ tint = Common.color:optional() }) },
 })
 
 ---Gets the sprite set for Bob's small solar panel.
----@param params SolarPanelSmallSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<SolarPanelSpriteSet>
+---@param params SolarPanelSmallSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<SolarPanelSpriteSet> # The sprite set definition for Bob's small solar panel.
 ---
 ---#### Examples
 ---```lua
@@ -150,7 +151,7 @@ local check_params = V.signature("get_sprite_set", {
 ---local sprite_set = solar_panel_small.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
----@throws Thrown when `params.tint` is not a `Color`.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -174,7 +175,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for Bob's small solar panel, in the tints given by `params`.
 M.get_icon = icons:tinted("solar-panel-small"):build("get_icon")

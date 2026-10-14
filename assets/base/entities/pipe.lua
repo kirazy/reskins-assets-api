@@ -9,19 +9,18 @@ local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
+---Defines the options for the pipe sprites.
 ---@class PipeGraphicsParams
----Default iron.
+---The pipe material.
 ---@field pipe_material PipeMaterial
----When true, includes the frozen sprites in the graphics pack. Default false.
----@field include_frozen_pictures boolean?
+---When `true`, indicates that the frozen sprites are included in the graphics pack. Default `false`.
+---@field include_frozen_pictures? boolean
 
----
----Gets a `RotatedAnimationVariations` object containing pipe remnant sprites of the given
----`pipe_material`.
+---Gets a `RotatedAnimationVariations` object containing pipe remnant sprites of the given `pipe_material`.
 ---@param pipe_material PipeMaterial
 ---@return RotatedAnimationVariations animation
 local function get_corpse_animation(pipe_material)
@@ -182,7 +181,7 @@ local function get_frozen_pictures()
 end
 
 ---@param pipe_material PipeMaterial
----@param include_frozen_pictures boolean?
+---@param include_frozen_pictures? boolean
 ---@return PipePictures
 local function get_pictures(pipe_material, include_frozen_pictures)
 	local material_asset = _pipes.asset_from_material(pipe_material)
@@ -591,7 +590,7 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 end
 
 ---@param pipe_material PipeMaterial
----@param include_frozen_pictures boolean?
+---@param include_frozen_pictures? boolean
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 	local pipe_covers = _pipes.pipe_covers(pipe_material)
@@ -608,17 +607,18 @@ local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 	return fluid_box_graphics
 end
 
+---Defines the options for the vanilla and Bob's pipes sprite set.
 ---@class PipeSpriteSetParams
----The material the pipes are built from. Defaults to iron.
+---The material from which the pipes are built.
 ---@field pipe_material PipeMaterial
----Whether to include the frozen artwork. Defaults to `false`.
----@field include_frozen_pictures boolean?
+---When `true`, indicates that the frozen artwork is included. Default `false`.
+---@field include_frozen_pictures? boolean
 
 ---Gets the sprite set for the vanilla and Bob's pipes.
 ---
 ---Window bounding boxes are the base game's.
----@param params PipeSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<PipeSpriteSet>
+---@param params PipeSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<PipeSpriteSet> # The sprite set definition for the vanilla and Bob's pipes.
 ---
 ---#### Examples
 ---```lua
@@ -652,16 +652,16 @@ function M.get_sprite_set(params)
 end
 
 ---Gets the icon for a pipe built from the `material` given by `params`.
-M.get_icon = IconCatalog.dispatch("material", _defines.pipe_material, "get_icon", function(pipe_material)
-	-- The iron pipe icon comes from the base game rather than an assets mod.
+M.get_icon = IconBuilderFactory.dispatch("material", _defines.pipe_material, "get_icon", function(pipe_material)
+	-- The iron pipe icon comes from the base game.
 	if pipe_material == _defines.pipe_material.iron then
-		return IconCatalog:create({ folder = "__base__/graphics/icons" }):flat("pipe")
+		return IconBuilderFactory:create({ folder = "__base__/graphics/icons" }):flat("pipe")
 	end
 
 	local folder = _pipes.asset_from_material(pipe_material) .. "/graphics/icons/pipe"
 	local name = _pipes.name_from_material(pipe_material)
 
-	return IconCatalog:create({ folder = folder }):flat(name .. "-pipe")
+	return IconBuilderFactory:create({ folder = folder }):flat(name .. "-pipe")
 end)
 
 return M

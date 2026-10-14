@@ -7,11 +7,11 @@
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/centrifuge/"
@@ -19,7 +19,7 @@ local function get_graphics_set(tint)
 	---@type Animation
 	local idle_animation = {
 		layers = {
-			-- Centrifuge C — no tint layers; C sub-assembly is always unmodified base-game appearance
+			-- Centrifuge C has no tint layers; the C sub-assembly keeps the base game appearance.
 			{
 				filename = "__base__/graphics/entity/centrifuge/centrifuge-C.png",
 				priority = "high",
@@ -41,7 +41,6 @@ local function get_graphics_set(tint)
 				frame_count = 64,
 				shift = util.by_pixel(16.75, -10),
 			},
-			-- Centrifuge B — base
 			{
 				filename = "__base__/graphics/entity/centrifuge/centrifuge-B.png",
 				priority = "high",
@@ -56,7 +55,6 @@ local function get_graphics_set(tint)
 	}
 
 	if tint then
-		-- Centrifuge B — mask and highlights
 		table.insert(idle_animation.layers--[[@cast -?]], {
 			filename = assets_path .. "centrifuge-b-mask.png",
 			priority = "high",
@@ -81,7 +79,6 @@ local function get_graphics_set(tint)
 		})
 	end
 
-	-- Centrifuge B — shadow
 	table.insert(idle_animation.layers--[[@cast -?]], {
 		filename = "__base__/graphics/entity/centrifuge/centrifuge-B-shadow.png",
 		priority = "high",
@@ -94,7 +91,6 @@ local function get_graphics_set(tint)
 		shift = util.by_pixel(63.25, 15.25),
 	})
 
-	-- Centrifuge A — base
 	table.insert(idle_animation.layers--[[@cast -?]], {
 		filename = "__base__/graphics/entity/centrifuge/centrifuge-A.png",
 		priority = "high",
@@ -107,7 +103,6 @@ local function get_graphics_set(tint)
 	})
 
 	if tint then
-		-- Centrifuge A — mask and highlights
 		table.insert(idle_animation.layers--[[@cast -?]], {
 			filename = assets_path .. "centrifuge-a-mask.png",
 			priority = "high",
@@ -132,7 +127,6 @@ local function get_graphics_set(tint)
 		})
 	end
 
-	-- Centrifuge A — shadow
 	table.insert(idle_animation.layers--[[@cast -?]], {
 		filename = "__base__/graphics/entity/centrifuge/centrifuge-A-shadow.png",
 		priority = "high",
@@ -147,21 +141,18 @@ local function get_graphics_set(tint)
 
 	---@type WorkingVisualisation[]
 	local working_visualisations = {
-		-- Area light
 		{
 			effect = "uranium-glow",
 			apply_recipe_tint = "primary",
 			fadeout = true,
 			light = { intensity = 0.1, size = 9.9, shift = { 0.0, 0.0 }, color = { r = 0.0, g = 1.0, b = 0.0 } },
 		},
-		-- Working lights — three sub-assembly glow layers
 		{
 			effect = "uranium-glow",
 			fadeout = true,
 			apply_recipe_tint = "primary",
 			animation = {
 				layers = {
-					-- Centrifuge C
 					{
 						filename = assets_path .. "lights/centrifuge-c-light.png",
 						priority = "high",
@@ -174,7 +165,6 @@ local function get_graphics_set(tint)
 						shift = util.by_pixel(0, -27.25),
 						draw_as_glow = true,
 					},
-					-- Centrifuge B
 					{
 						filename = assets_path .. "lights/centrifuge-b-light.png",
 						priority = "high",
@@ -187,7 +177,6 @@ local function get_graphics_set(tint)
 						shift = util.by_pixel(16.75, 0.5),
 						draw_as_glow = true,
 					},
-					-- Centrifuge A
 					{
 						filename = assets_path .. "lights/centrifuge-a-light.png",
 						priority = "high",
@@ -212,13 +201,12 @@ local function get_graphics_set(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/centrifuge/"
 
 	local layers = {
-		-- Base
 		{
 			filename = "__base__/graphics/entity/centrifuge/remnants/centrifuge-remnants.png",
 			width = 286,
@@ -230,7 +218,6 @@ local function get_corpse_animation(tint)
 	}
 
 	if tint then
-		-- Mask
 		table.insert(layers, {
 			filename = assets_path .. "remnants/centrifuge-remnants-mask.png",
 			width = 286,
@@ -240,7 +227,6 @@ local function get_corpse_animation(tint)
 			tint = tint,
 			scale = 0.5,
 		})
-		-- Highlights
 		table.insert(layers, {
 			filename = assets_path .. "remnants/centrifuge-remnants-highlights.png",
 			width = 286,
@@ -255,13 +241,14 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(1, { layers = layers })
 end
 
+---Defines the options for the vanilla centrifuge sprite set.
 ---@class CentrifugeSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla centrifuge.
----@param params CentrifugeSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params CentrifugeSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the vanilla centrifuge.
 ---
 ---#### Examples
 ---```lua
@@ -291,7 +278,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla centrifuge, in the tints given by `params`.
 M.get_icon = icons:tinted("centrifuge"):build("get_icon")

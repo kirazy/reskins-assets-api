@@ -11,11 +11,11 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
--- The horsehead is drawn the same whether the base beneath it is flipped or not.
+-- The horsehead artwork is the same whether the base beneath it is flipped or not.
 ---@param params PumpjackSpriteSetParams
 ---@return Animation[]
 ---@nodiscard
@@ -139,8 +139,8 @@ local function get_horsehead_layers(params)
 	return layers
 end
 
----@param params PumpjackSpriteSetParams
----@param is_flipped boolean When `true`, draws the base the pumpjack presents when mirrored.
+---@param params PumpjackSpriteSetParams The parameters of the sprite set.
+---@param is_flipped boolean When `true`, selects the base the pumpjack presents when mirrored.
 ---@return Animation[]
 ---@nodiscard
 local function get_base_layers(params, is_flipped)
@@ -217,8 +217,8 @@ local function get_base_layers(params, is_flipped)
 	return layers
 end
 
----@param params PumpjackSpriteSetParams
----@param is_flipped boolean When `true`, draws the base the pumpjack presents when mirrored.
+---@param params PumpjackSpriteSetParams The parameters of the sprite set.
+---@param is_flipped boolean When `true`, selects the base the pumpjack presents when mirrored.
 ---@return MiningDrillGraphicsSet
 ---@nodiscard
 local function get_graphics_set(params, is_flipped)
@@ -237,6 +237,8 @@ local function get_graphics_set(params, is_flipped)
 	return graphics_set
 end
 
+---@param params PumpjackSpriteSetParams
+---@return MiningDrillGraphicsSet
 local function translate_graphics_set_to_legacy(params)
 	local standard = get_graphics_set(params, false)
 	local flipped = get_graphics_set(params, true)
@@ -263,10 +265,10 @@ local function translate_graphics_set_to_legacy(params)
 	return graphics_set
 end
 
--- The remnants take one tint where the entity takes three; no artwork is drawn for the body and
+-- The remnants take one tint where the entity takes three; no artwork exists for the body and
 -- accent colors yet.
----@param base_layer FileName The file the remnants' base layer is drawn from.
----@param tint Color? The color to tint the mask.
+---@param base_layer FileName The file of the remnants' base layer.
+---@param tint? Color The color to tint the mask.
 ---@return RotatedAnimationVariations
 ---@nodiscard
 local function get_corpse_animation(base_layer, tint)
@@ -310,28 +312,27 @@ local function get_corpse_animation(base_layer, tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 end
 
+---Defines the options for the vanilla pumpjack sprite set.
 ---@class PumpjackSpriteSetParams
----The color to tint the stripe running the length of the horsehead, and the remnants. When `nil`, the
----tintable layers are omitted from the set.
----@field tint Color?
----The color to tint the pumpjack's body. When `nil`, the pumpjack is drawn in the base game's own colors
----instead.
----@field base_tint Color?
----The color to tint the pumpjack's accents. When `nil`, the tintable layers are omitted from the set rather
----than drawn untinted.
----@field accent_tint Color?
----The speed the horsehead rocks at. Defaults to `0.5`.
----@field animation_speed double?
+---The color to tint the stripe running the length of the horsehead, and the remnants. When `nil`, the tintable layers
+---are omitted from the set.
+---@field tint? Color
+---The color to tint the pumpjack's body. When `nil`, the base game green-tinted artwork is used.
+---@field base_tint? Color
+---The color to tint the pumpjack's accents. When `nil`, the tintable layers are omitted from the set.
+---@field accent_tint? Color
+---The speed at which the horsehead rocks. Default `0.5`.
+---@field animation_speed? double
 
-local params_shape = V.shape({
+local params_struct = V.struct({
 	tint = Common.color:optional(),
 	base_tint = Common.color:optional(),
 	accent_tint = Common.color:optional(),
 	animation_speed = Common.positive_number:optional(),
 })
 
----@param params PumpjackSpriteSetParams
----@param corpse_base_layer FileName The file the remnants' base layer is drawn from.
+---@param params PumpjackSpriteSetParams The parameters of the sprite set.
+---@param corpse_base_layer FileName The file of the remnants' base layer.
 ---@return SpriteSetDefinition<MiningDrillSpriteSet>
 ---@nodiscard
 local function get_definition(params, corpse_base_layer)
@@ -367,12 +368,12 @@ local function get_definition(params, corpse_base_layer)
 end
 
 local check_get_sprite_set = V.signature("get_sprite_set", {
-	{ "params", params_shape },
+	{ "params", params_struct },
 })
 
 ---Gets the sprite set for the vanilla pumpjack.
----@param params PumpjackSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<MiningDrillSpriteSet>
+---@param params PumpjackSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for the vanilla pumpjack.
 ---
 ---#### Examples
 ---```lua
@@ -390,12 +391,12 @@ function M.get_sprite_set(params)
 end
 
 local check_get_water_sprite_set = V.signature("get_water_sprite_set", {
-	{ "params", params_shape },
+	{ "params", params_struct },
 })
 
 ---Gets the sprite set for a water pumpjack.
----@param params PumpjackSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<MiningDrillSpriteSet>
+---@param params PumpjackSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for a water pumpjack.
 ---
 ---#### Examples
 ---```lua
@@ -416,7 +417,7 @@ function M.get_water_sprite_set(params)
 end
 
 ---@param prefix string The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
----@param tint Color? The color to tint the mask.
+---@param tint? Color The color to tint the mask.
 ---@return SafeIconData[]
 ---@nodiscard
 local function get_tinted_layers(prefix, tint)
@@ -430,8 +431,8 @@ local function get_tinted_layers(prefix, tint)
 	return layers
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for the vanilla pumpjack, in the tints given by `params`.
 M.get_icon = base_icons:tinted("pumpjack"):build("get_icon")

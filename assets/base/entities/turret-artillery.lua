@@ -6,25 +6,25 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----The sprite data of a `SpriteSetDefinition` of type `artillery_turret_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `artillery_turret_sprite_set`.
 ---
----Provisional: no applicator consumes this sprite set type yet. When one is written, this
----declaration moves to it.
+---Provisional: no applicator consumes this sprite set type yet.
 ---@class (exact) TurretArtillerySpriteSet : EntityWithHealthSpriteSet
 
+---Defines the options for the vanilla artillery turret sprite set.
 ---@class TurretArtillerySpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla artillery turret.
 ---
 ---The set defines its nominal dimensions only. No artwork is drawn for this turret yet.
----@param params TurretArtillerySpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<TurretArtillerySpriteSet>
+---@param params TurretArtillerySpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<TurretArtillerySpriteSet> # The sprite set definition for the vanilla artillery turret.
 ---
 ---#### Examples
 ---```lua
@@ -53,7 +53,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla artillery turret, in the tints given by `params`.
 M.get_icon = icons:tinted("turret-artillery"):build("get_icon")

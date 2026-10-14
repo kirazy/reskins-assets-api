@@ -9,8 +9,8 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
 
----The `SpriteSetType` for each prototype type name. Applying a sprite set to a prototype whose
----`SpriteSetType` has no registered applicator raises an error.
+---The `SpriteSetType` for each prototype type name. Applying a sprite set raises an error when the `SpriteSetType` of
+---the prototype has no registered applicator.
 ---@type table<PrototypeType, SpriteSetType>
 local set_type_by_prototype_type = {
 	["assembling-machine"] = _defines.sprite_set_type.crafting_machine_sprite_set,
@@ -46,8 +46,7 @@ local set_type_by_prototype_type = {
 	["lab"] = _defines.sprite_set_type.lab_sprite_set,
 }
 
----Provides applicator registries, which map each `SpriteSetType` to the applicator that applies it,
----and each prototype type to its `SpriteSetType`.
+---Provides methods for creating applicator registries, which apply sprite sets to prototypes.
 ---
 ---#### Examples
 ---```lua
@@ -59,7 +58,7 @@ local _factory = {}
 local check_register = V.signature("register", {
 	{
 		"applicator",
-		V.shape({
+		V.struct({
 			set_type = AssetsCommon.sprite_set_type,
 			apply_to = AssetsCommon.applicator_function,
 		}):describe_as("a SpriteSetApplicator"),
@@ -68,55 +67,47 @@ local check_register = V.signature("register", {
 
 ---Creates an empty applicator registry.
 ---
----Registries are independent; applicators registered in one are not visible to another.
----@return ApplicatorRegistry # A registry with no applicators registered in it.
----
 ---#### Examples
 ---```lua
+----- Create a registry with only the accumulator applicator.
 ---local ApplicatorRegistry = require("__reskins-assets-api__.api.applicator-registry")
 ---
 ---local registry = ApplicatorRegistry.new()
 ---registry.register(require("__reskins-assets-api__.api.applicators.accumulator"))
 ---```
+---@return ApplicatorRegistry
 ---@nodiscard
 function _factory.new()
-	---Applies sprite sets to prototypes, using the applicator registered for the type of each prototype.
+	---Represents a registry that applies sprite sets to prototypes, using the applicator registered for the type of
+	---each prototype.
 	---
-	---The shared registry is `api.applicators`, populated with the applicators provided by this mod. A
-	---registry created by `new` is empty and independent.
+	---`api.applicators` returns the shared registry, which has every applicator of this mod registered.
 	---
 	---#### Examples
 	---```lua
 	---local Applicators = require("__reskins-assets-api__.api.applicators")
-	---
-	---local entity = data.raw["assembling-machine"]["assembling-machine-1"]
-	---Applicators.apply_sprite_set(entity, sprite_set)
-	---
-	----- The same sprite set may be directly applied to the corpse.
-	---local corpse = data.raw["corpse"]["assembling-machine-1-remnants"]
-	---Applicators.apply_sprite_set(corpse, sprite_set)
 	---```
 	---@class ApplicatorRegistry
 	local registry = {}
 
-	---The applicators registered here, keyed by `SpriteSetType`.
+	---The registered applicators, by `SpriteSetType`.
 	---@type table<SpriteSetType, AnySpriteSetApplicator>
 	local applicators = {}
 
-	---The applicators, keyed by `SpriteSetType`. Calling `apply_to` on an applicator directly does not
-	---convert the sprite set, scale it, or apply the common entity sprites such as water reflections and
-	---the integration patch; use `apply_sprite_set` instead.
+	---The applicators, by `SpriteSetType`. Calling `apply_to` on an applicator directly does not convert the sprite
+	---set, scale it, or apply the fields common to every applicator; `apply_sprite_set` does all of these.
 	registry.applicators = applicators
 
 	---Registers the given `applicator` for the `SpriteSetType` it declares.
 	---@param applicator AnySpriteSetApplicator The applicator to register.
-	---@throws Thrown when `applicator` does not define a `SpriteSetType` and an `apply_to`.
+	---@throws When `applicator` is not a `SpriteSetApplicator`.
 	function registry.register(applicator)
 		check_register(applicator)
 
 		applicators[applicator.set_type] = applicator
 	end
 
+	---Creates a copy of the given `definition` with its sprite set scaled for the given `prototype`.
 	---@generic T extends AnySpriteSetDefinition
 	---@param definition T
 	---@param prototype EntityWithHealthPrototype|CorpsePrototype
@@ -141,6 +132,7 @@ function _factory.new()
 		}
 	end
 
+	---Applies the given `definition` to the given `corpse_prototype`.
 	---@param corpse_prototype CorpsePrototype
 	---@param definition SpriteSetDefinition<EntityWithHealthSpriteSet>
 	---@param params ApplySpriteSetParams
@@ -157,6 +149,7 @@ function _factory.new()
 		end
 	end
 
+	---Applies the fields common to every applicator from the given `sprite_set` to the given `prototype`.
 	---@param prototype EntityWithHealthPrototype
 	---@param sprite_set EntityWithHealthSpriteSet
 	local function apply_common_fields(prototype, sprite_set)
@@ -165,6 +158,7 @@ function _factory.new()
 		prototype.water_reflection = sprite_set.water_reflection
 	end
 
+	---Applies the given `definition` to the given entity `prototype`.
 	---@param prototype EntityWithHealthPrototype
 	---@param definition AnySpriteSetDefinition
 	---@param params ApplySpriteSetParams
@@ -178,11 +172,11 @@ function _factory.new()
 		applicator.apply_to(prototype, resolved_set)
 	end
 
-	---Indicates whether a sprite set can be applied to the given `prototype`: a corpse, or an entity
-	---whose type maps to a `SpriteSetType` with a registered applicator.
-	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to route.
-	---@return boolean # Whether the prototype can be routed.
-	---@return string? # What was wanted, when it cannot.
+	---Indicates whether a sprite set can be applied to the given `prototype`. A sprite set can be applied to a corpse,
+	---or to an entity with a type that maps to a `SpriteSetType` with a registered applicator.
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to which a sprite set is applied.
+	---@return boolean # `true` when a sprite set can be applied to the prototype; otherwise, `false`.
+	---@return string? # A description of the fault, when a sprite set cannot be applied.
 	local function is_routable(prototype)
 		if prototype.type == "corpse" then
 			return true
@@ -191,13 +185,13 @@ function _factory.new()
 		local set_type = set_type_by_prototype_type[prototype.type]
 		if not set_type then
 			return false,
-				string.format("must be a prototype whose type takes a known sprite set type, got '%s'", prototype.type)
+				string.format("no sprite set type available for type '%s'", prototype.type)
 		end
 
 		if not applicators[set_type] then
 			return false,
 				string.format(
-					"must be a prototype whose type has an implemented applicator; '%s' takes '%s', which has not been implemented",
+					"no registered applicator supports type '%s' with sprite set type '%s'",
 					prototype.type,
 					set_type
 				)
@@ -206,46 +200,79 @@ function _factory.new()
 		return true
 	end
 
-	-- Built per registry, since the rule reaching `is_routable` reads this registry's own applicators.
+	---Indicates whether the sprite set of the given `definition` can be scaled for the given `prototype` with the given
+	---`params`.
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype
+	---@param definition AnySpriteSetDefinition
+	---@param params? ApplySpriteSetParams
+	---@return boolean
+	---@return string?
+	local function can_scale(prototype, definition, params)
+		params = params or {}
+
+		return PrototypeScaler.can_resolve(prototype, {
+			nominal_width = definition.set.nominal_width,
+			nominal_height = definition.set.nominal_height,
+			scale = params.scale,
+			scale_factor = params.scale_factor,
+		})
+	end
+
+	-- Create the signature for each registry, because `is_routable` reads the applicators of the registry.
 	local check_apply_sprite_set = V.signature("apply_sprite_set", {
 		{ "prototype", AssetsCommon.prototype },
 		{ "definition", AssetsCommon.sprite_set_definition },
 		{
 			"params",
-			V.shape({
+			V.struct({
 				scale = Common.positive_number:optional(),
 				scale_factor = Common.positive_number:optional(),
 			})
 				:strict()
+				:where(function(value)
+					return value.scale == nil or value.scale_factor == nil
+				end, "sets both 'scale' and 'scale_factor'")
 				:describe_as("an ApplySpriteSetParams")
 				:optional(),
 		},
 	}, {
 		{ parameter = "prototype", arguments = { "prototype" }, check = is_routable },
+		{ parameter = "prototype", arguments = { "prototype", "definition", "params" }, check = can_scale },
 	})
 
 	---Applies the given `definition` to the given `prototype`.
 	---
-	---- For a corpse prototype, the fields of `definition.set.corpse` are copied onto it. For any other
-	---  `EntityWithHealthPrototype`, the applicator registered for its type is used.
-	---- If `definition.set_type` is not the `SpriteSetType` of the applicator, the sprite set is
-	---  converted with `api.converters`, which checks `definition.converters` first.
-	---- The sprite set is scaled for `prototype` with `PrototypeScaler`, from the nominal dimensions of
-	---  the sprite set and the `selection_box` of the prototype, unless `params.scale` or
-	---  `params.scale_factor` is given.
-	---- `definition` is not modified.
+	---The sprite set type of `definition` may differ from the sprite set type of `prototype`. The sprite set is then
+	---converted to the sprite set type of `prototype`, when a conversion between the two types exists.
+	---
+	---The sprite set is scaled to the scale that `params` sets, if any. Otherwise, it is scaled when the size of
+	---`prototype` differs from the nominal size of the sprite set.
 	---
 	---#### Parameters
-	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to apply `definition` to.
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to which `definition` is applied.
 	---@param definition AnySpriteSetDefinition The sprite set definition to apply.
-	---@param params ApplySpriteSetParams? Scaling options.
-	---@throws Thrown when `prototype` is not a prototype.
-	---@throws Thrown when `definition` is not a `SpriteSetDefinition`.
-	---@throws Thrown when `definition.set.corpse` defines a field no `CorpsePrototype` has.
-	---@throws Thrown when `params` defines an unrecognized field, or a `scale` or `scale_factor` that is not a positive number.
-	---@throws Thrown when `prototype.type` has no known `SpriteSetType`.
-	---@throws Thrown when `prototype.type`'s `SpriteSetType` has no applicator registered here.
-	---@throws Thrown when `definition.set_type` does not match the sprite set type of the applicator and neither `definition.converters` nor a registered conversion connects them.
+	---@param params? ApplySpriteSetParams Scaling options.
+	---
+	---#### Examples
+	---```lua
+	----- Apply a sprite set to the assembling machine and to its remnants.
+	---local Applicators = require("__reskins-assets-api__.api.applicators")
+	---
+	---Applicators.apply_sprite_set(data.raw["assembling-machine"]["assembling-machine-1"], sprite_set)
+	---Applicators.apply_sprite_set(data.raw["corpse"]["assembling-machine-1-remnants"], sprite_set)
+	----- The corpse takes the fields of sprite_set.set.corpse.
+	---```
+	---@throws When `prototype` is not a prototype.
+	---@throws When `definition` is not a `SpriteSetDefinition`.
+	---@throws When `definition.set.corpse` defines a field that a `CorpsePrototype` does not have.
+	---@throws When `params` defines an unrecognized field, or a `scale` or `scale_factor` that is not a positive number.
+	---@throws When `params` sets both `scale` and `scale_factor`.
+	---@throws When neither `params.scale` nor `params.scale_factor` is given, and `prototype` has no `selection_box` with a positive width and height.
+	---@throws When `prototype.type` has no known `SpriteSetType`.
+	---@throws When no applicator is registered for the `SpriteSetType` of `prototype.type`.
+	---@throws When `definition.set_type` does not match the sprite set type of the applicator and neither `definition.converters` nor a registered conversion connects them.
+	---@see ConverterRegistry.resolve
+	---@see PrototypeScaler.for_prototype
 	function registry.apply_sprite_set(prototype, definition, params)
 		check_apply_sprite_set(prototype, definition, params)
 

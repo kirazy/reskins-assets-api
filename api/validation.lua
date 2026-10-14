@@ -9,31 +9,14 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 ---Provides validators for the values used by this API.
 ---
----Builder methods return a new validator, so an entry may be narrowed for a specific use without
----modifying the shared validator:
----
----```lua
----local CraftingMachineSet = AssetsCommon.sprite_set_definition:where(function(value)
----    return value.set_type == _defines.sprite_set_type.crafting_machine_sprite_set
----end, "must be a crafting machine sprite set")
----```
----
----Validators for Factorio structures, such as icons, colors, vectors, and file paths, are provided
----by `__reskins-sprite-utils__.validation.common`.
----
 ---#### Examples
 ---```lua
 ---local AssetsCommon = require("__reskins-assets-api__.api.validation")
----
----local check_get_symbol = V.signature("get_symbol", {
----    { "symbol", AssetsCommon.symbol },
----    { "tint", Common.color },
----})
 ---```
+---@see Reskins.SpriteUtils.Validation.Common
 ---@class AssetsCommon
 local _common = {}
 
--- Icon vocabulary
 
 ---A validator that checks that a value is a symbol name.
 _common.symbol = V.one_of(_defines.symbol):describe_as("a symbol name")
@@ -47,12 +30,10 @@ _common.light = V.one_of(_defines.light):describe_as("a light name")
 ---A validator that checks that a value is a pipe material.
 _common.pipe_material = V.one_of(_defines.pipe_material):describe_as("a pipe material")
 
--- Prototypes
 
----A validator that checks that a value is a prototype with `type` and `name` fields. Unknown fields
----are permitted.
----@type ShapeValidator<PrototypeBase>
-_common.prototype = V.shape({
+---A validator that checks that a value is a prototype with `type` and `name` fields, and permits unknown fields.
+---@type StructValidator<PrototypeBase>
+_common.prototype = V.struct({
 	type = Common.prototype_type_name,
 	name = Common.prototype_name,
 }):describe_as("a prototype")
@@ -79,15 +60,14 @@ _common.bounding_box = V.table()
 	end, "a BoundingBox with an x and y coordinate for each of its two corners")
 	:describe_as("a BoundingBox")
 
----A validator that checks that a value is an entity prototype with a `selection_box`.
----@type ShapeValidator<EntityPrototype>
-_common.entity_prototype = V.shape({
+---A validator that checks that a value is an entity prototype with a `selection_box` that is `nil` or a `BoundingBox`.
+---@type StructValidator<EntityPrototype>
+_common.entity_prototype = V.struct({
 	type = Common.prototype_type_name,
 	name = Common.prototype_name,
 	selection_box = _common.bounding_box:optional(),
 }):describe_as("an entity prototype")
 
--- Sprite sets
 
 ---A validator that checks that a value is a `SpriteSetType`.
 _common.sprite_set_type = V.one_of(_defines.sprite_set_type):describe_as("a SpriteSetType")
@@ -96,11 +76,9 @@ _common.sprite_set_type = V.one_of(_defines.sprite_set_type):describe_as("a Spri
 ---@type Validator<AnySpriteSetTransformer>
 _common.sprite_set_transformer = V.func():describe_as("a sprite set transformer")
 
----A validator that checks that a value is a `CorpseSpriteSet`: remnant artwork that is rescaled with
----the sprite set and copied onto the corpse prototype field by field. Unknown fields are not
----permitted.
----@type ShapeValidator<CorpseSpriteSet>
-_common.corpse_sprite_set = V.shape({
+---A validator that checks that a value is a `CorpseSpriteSet` with no other fields.
+---@type StructValidator<CorpseSpriteSet>
+_common.corpse_sprite_set = V.struct({
 	animation = V.any():optional(),
 	animation_overlay = V.any():optional(),
 	animation_overlay_render_layer = V.any():optional(),
@@ -132,18 +110,18 @@ _common.corpse_sprite_set = V.shape({
 ---@type Validator<fun(prototype: table, set: table)>
 _common.applicator_function = V.func():describe_as("an applicator function")
 
----A validator that checks that a value is a sprite set with nominal dimensions. Unknown fields are
----permitted; a `corpse` field is validated.
----@type ShapeValidator<SpriteSetBase>
-_common.sprite_set = V.shape({
+---A validator that checks that a value is a sprite set with nominal dimensions. Unknown fields are permitted; a
+---`corpse` field is validated.
+---@type StructValidator<SpriteSetBase>
+_common.sprite_set = V.struct({
 	nominal_width = Common.positive_number,
 	nominal_height = Common.positive_number,
 	corpse = _common.corpse_sprite_set:optional(),
 }):describe_as("a sprite set")
 
 ---A validator that checks that a value is a `SpriteSetDefinition`.
----@type ShapeValidator<AnySpriteSetDefinition>
-_common.sprite_set_definition = V.shape({
+---@type StructValidator<AnySpriteSetDefinition>
+_common.sprite_set_definition = V.struct({
 	set_type = _common.sprite_set_type,
 	set = _common.sprite_set,
 	converters = V.map(_common.sprite_set_type, _common.sprite_set_transformer):optional(),

@@ -11,7 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -19,7 +19,7 @@ local BASE_FOLDER = "__base__/graphics/entity/electric-mining-drill/electric-min
 local BLUE_FOLDER = "__reskins-assets-bobs__/graphics/entity/mining-drill-electric/frame-blue/mining-drill-electric-"
 local DRILL_FOLDER = "__reskins-assets-base__/graphics/entity/mining-drill-electric/mining-drill-electric-"
 
----The housing the drill is built into.
+---The housing into which the drill is built.
 ---@alias MiningDrillElectricFrame
 ---| "base" # The base game's own housing.
 ---| "blue" # The blue housing Bob's area drills are built into.
@@ -42,7 +42,7 @@ local BLUE_PARTS = {
 
 local BASE_DIRECTION = { north = "N", east = "E", south = "S", west = "W" }
 
----@param frame MiningDrillElectricFrame The housing the part is drawn for.
+---@param frame MiningDrillElectricFrame The housing of the part.
 ---@param part string The part, named for its direction and role, as `"north-wet-front"`.
 ---@return FileName
 ---@nodiscard
@@ -100,7 +100,7 @@ local SHADOW_SEQUENCE = {
 	21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1,
 }
 
----@param tint Color?
+---@param tint? Color
 ---@param speed double
 ---@return Animation
 ---@nodiscard
@@ -170,9 +170,9 @@ local function get_vertical_drill_animation(tint, speed)
 	return animation
 end
 
----@param tint Color?
----@param speed double
----@param is_front boolean When `true`, draws the half of the head that stands in front of the housing.
+---@param tint? Color The tint of the tintable layers.
+---@param speed double The animation speed.
+---@param is_front boolean When `true`, selects the half of the head that stands in front of the housing.
 ---@return Animation
 ---@nodiscard
 local function get_horizontal_drill_animation(tint, speed, is_front)
@@ -279,10 +279,10 @@ local function get_smoke_front()
 end
 
 ---@param direction string The direction letter naming the artwork, as `"N"`.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_directional_smoke(direction, width, height, shift, speed)
@@ -650,7 +650,8 @@ local function get_wet_animation(frame, speed)
 	}
 end
 
----The visualisations both graphics sets open with: the dust the drill throws up, and the head itself.
+---Gets the working visualisations with which both graphics sets open. They are the dust thrown up by the drill and the
+---drill head.
 ---@param params MiningDrillElectricSpriteSetParams
 ---@param speed double
 ---@return WorkingVisualisation[]
@@ -686,7 +687,7 @@ local function get_shared_working_visualisations(params, speed)
 	}
 end
 
----The dust the drill throws up towards the viewer.
+---Gets the dust the drill throws up towards the viewer.
 ---@param speed double
 ---@return WorkingVisualisation
 ---@nodiscard
@@ -702,8 +703,8 @@ local function get_front_smoke(speed)
 	}
 end
 
----The half of the head that stands in front of the housing.
----@param tint Color?
+---Gets the half of the head that stands in front of the housing.
+---@param tint? Color
 ---@param speed double
 ---@return WorkingVisualisation
 ---@nodiscard
@@ -742,7 +743,6 @@ local function get_dry_working_visualisations(params, speed)
 	table.insert(visualisations, get_front_smoke(speed))
 	table.insert(visualisations, get_front_drill(params.tint, speed))
 
-	-- Front Frame
 	table.insert(visualisations, {
 		always_draw = true,
 		east_animation = {
@@ -816,7 +816,6 @@ local function get_wet_working_visualisations(params, speed)
 
 	table.insert(visualisations, get_front_smoke(speed))
 
-	-- Fluid Window Background (Bottom)
 	table.insert(visualisations, {
 		secondary_draw_order = -49,
 		always_draw = true,
@@ -861,7 +860,6 @@ local function get_wet_working_visualisations(params, speed)
 		},
 	})
 
-	-- Fluid Base (Bottom)
 	table.insert(visualisations, {
 		always_draw = true,
 		secondary_draw_order = -48,
@@ -907,7 +905,6 @@ local function get_wet_working_visualisations(params, speed)
 		},
 	})
 
-	-- Fluid Flow (Bottom)
 	table.insert(visualisations, {
 		secondary_draw_order = -47,
 		always_draw = true,
@@ -955,7 +952,6 @@ local function get_wet_working_visualisations(params, speed)
 
 	table.insert(visualisations, get_front_drill(params.tint, speed))
 
-	-- Fluid Window Background (Front)
 	table.insert(visualisations, {
 		always_draw = true,
 		north_animation = {
@@ -1012,7 +1008,6 @@ local function get_wet_working_visualisations(params, speed)
 		},
 	})
 
-	-- Fluid Base (Front)
 	table.insert(visualisations, {
 		always_draw = true,
 		apply_tint = "input-fluid-base-color",
@@ -1070,7 +1065,6 @@ local function get_wet_working_visualisations(params, speed)
 		},
 	})
 
-	-- Fluid Flow (Front)
 	table.insert(visualisations, {
 		always_draw = true,
 		apply_tint = "input-fluid-flow-color",
@@ -1128,7 +1122,6 @@ local function get_wet_working_visualisations(params, speed)
 		},
 	})
 
-	-- Front Frame (Wet)
 	table.insert(visualisations, {
 		always_draw = true,
 		north_animation = {
@@ -1203,7 +1196,7 @@ local function get_wet_working_visualisations(params, speed)
 	return visualisations
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 ---@nodiscard
 local function get_corpse_animation(tint)
@@ -1247,18 +1240,19 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(4, animation)
 end
 
+---Defines the options for the vanilla electric mining drill sprite set.
 ---@class MiningDrillElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The housing the drill is built into. Defaults to `"base"`.
----@field frame MiningDrillElectricFrame?
----The speed the drill's head strokes at. Defaults to `0.4`.
----@field animation_speed double?
+---@field tint? Color
+---The housing into which the drill is built. Default `"base"`.
+---@field frame? MiningDrillElectricFrame
+---The speed at which the head of the drill strokes. Default `0.4`.
+---@field animation_speed? double
 
 local check_get_sprite_set = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
 			frame = V.one_of({ "base", "blue" }):optional(),
 			animation_speed = Common.positive_number:optional(),
@@ -1267,8 +1261,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the vanilla electric mining drill.
----@param params MiningDrillElectricSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<MiningDrillSpriteSet>
+---@param params MiningDrillElectricSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for the vanilla electric mining drill.
 ---
 ---#### Examples
 ---```lua
@@ -1325,7 +1319,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla electric mining drill, in the tints given by `params`.
 M.get_icon = icons:tinted("mining-drill-electric"):build("get_icon")

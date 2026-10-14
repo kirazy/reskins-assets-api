@@ -8,7 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -30,7 +30,7 @@ local function get_pipe_path(pipe_material)
 	end
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param pipe_path string
 ---@return Sprite
 local function get_picture(tint, pipe_path)
@@ -93,16 +93,16 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "pipe_material", ReactorPipeMaterial:optional() },
 })
 
----@param tint Color?
----@param pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
----@return NuclearReactorGraphicsSet
+---@param tint? Color
+---@param pipe_material? "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
+---@return ReactorGraphicsSet
 local function get_graphics_set(tint, pipe_material)
 	check_get_graphics_set(tint, pipe_material)
 
 	pipe_material = pipe_material or "base"
 
 	local pipe_path = get_pipe_path(pipe_material)
-	---@type NuclearReactorGraphicsSet
+	---@type ReactorGraphicsSet
 	local graphics_set = {
 		connection_patches_connected = {
 			sheet = {
@@ -186,8 +186,8 @@ local check_get_corpse_animation = V.signature("get_corpse_animation", {
 	{ "pipe_material", ReactorPipeMaterial:optional() },
 })
 
----@param tint Color?
----@param pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
+---@param tint? Color
+---@param pipe_material? "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return RotatedAnimation
 local function get_corpse_animation(tint, pipe_material)
 	check_get_corpse_animation(tint, pipe_material)
@@ -244,17 +244,18 @@ local function get_corpse_animation(tint, pipe_material)
 	return animation
 end
 
+---Defines the options for the vanilla nuclear reactor sprite set.
 ---@class NuclearReactorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The material the pipes are built from. Defaults to iron.
----@field pipe_material ("base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper")?
----Whether the fuel's own color lights the glow. Defaults to `false`.
----@field use_fuel_glow_color boolean?
+---@field tint? Color
+---The material from which the pipes are built. Default `"base"`.
+---@field pipe_material? "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
+---When `true`, indicates that the fuel's own color lights the glow. Default `false`.
+---@field use_fuel_glow_color? boolean
 
 ---Gets the sprite set for the vanilla nuclear reactor.
----@param params NuclearReactorSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<NuclearReactorSpriteSet>
+---@param params NuclearReactorSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<ReactorSpriteSet> # The sprite set definition for the vanilla nuclear reactor.
 ---
 ---#### Examples
 ---```lua
@@ -268,7 +269,7 @@ end
 function M.get_sprite_set(params)
 	local pipe_material = params.pipe_material or "base"
 
-	---@type SpriteSetDefinition<NuclearReactorSpriteSet>
+	---@type SpriteSetDefinition<ReactorSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.reactor_sprite_set,
 		set = {
@@ -287,14 +288,14 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----The fuel a reactor burns, selecting the artwork its core is drawn with.
+---The fuel a reactor burns, which selects the artwork of its core.
 ---@alias NuclearReactorFuel
 ---| "uranium"
 ---| "thorium"
 ---| "deuterium-blue"
 ---| "deuterium-pink"
 
----The material a reactor is built from.
+---The material from which a reactor is built.
 ---@alias NuclearReactorMaterial
 ---| "base"
 ---| "aluminum-invar"
@@ -302,12 +303,12 @@ end
 ---| "silver-aluminum"
 ---| "silver-titanium"
 
----The color a reactor's glow is drawn in.
+---The color of a reactor's glow.
 ---@alias NuclearReactorGlowColor
 ---| "blue"
 ---| "cyan"
 
--- The materials each fuel's reactor is drawn in. Not every pairing is drawn.
+-- The materials with artwork for each fuel's reactor. Not every pairing has artwork.
 local FUEL_MATERIALS = {
 	["uranium"] = {
 		["base"] = true,
@@ -326,19 +327,18 @@ local MATERIAL = V.one_of({ "base", "aluminum-invar", "gold-copper", "silver-alu
 local GLOW_COLOR = V.one_of({ "blue", "cyan" })
 
 -- Every reactor shares one mask and one highlights layer, so only the base has a key.
-local BASE_LAYER = { IconCatalog.role.base }
+local BASE_LAYER = { IconBuilderFactory.role.base }
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
-local assorted_icons = IconCatalog:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local assorted_icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
 ---Gets the icon for the vanilla nuclear reactor, in the tints given by `params`.
 M.get_icon = base_icons:tinted("nuclear-reactor"):build("get_icon")
 
----Gets the icon for a reactor burning the `fuel`, built from the `material`, and in the tints given
----by `params`.
+---Gets the icon for a reactor burning the `fuel`, built from the `material`, and in the tints given by `params`.
 ---
----Not every fuel is drawn in every material.
+---Not every fuel has artwork in every material.
 M.get_fuel_icon = bobs_icons
 	:tinted("nuclear-reactor")
 	:keyed("fuel", FUEL, BASE_LAYER)
@@ -350,12 +350,12 @@ M.get_fuel_icon = bobs_icons
 			check = function(fuel, material)
 				return FUEL_MATERIALS[fuel][material] == true
 			end,
-			message = "must be a material the given fuel's reactor is drawn in",
+			message = "a material for which the reactor of the given fuel has artwork",
 		},
 	})
 
----Gets the icon for a reactor glowing in the `glow_color`, built from the `material`, and in the
----tints given by `params`.
+---Gets the icon for a reactor glowing in the `glow_color`, built from the `material`, and in the tints given by
+---`params`.
 M.get_realistic_icon = assorted_icons
 	:tinted("realistic-nuclear-reactor")
 	:keyed("glow_color", GLOW_COLOR, BASE_LAYER)

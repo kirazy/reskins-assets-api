@@ -9,11 +9,11 @@ local _defines = require("api.defines")
 local _belts = require("assets.base.entities.transport-belt")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation4Way
 local function get_structure(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/splitter/"
@@ -74,7 +74,7 @@ local function get_structure(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation4Way
 local function get_structure_patch(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/splitter/"
@@ -135,7 +135,7 @@ local function get_structure_patch(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/splitter/"
@@ -175,15 +175,16 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(1, { layers = layers })
 end
 
+---Defines the options for the vanilla splitter sprite set.
 ---@class SplitterSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The belt artwork to draw.
+---@field tint? Color
+---The belt artwork to use.
 ---@field belt_sprite BeltSprites
 
 ---Gets the sprite set for the vanilla splitter.
----@param params SplitterSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<TransportBeltSpriteSet>
+---@param params SplitterSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<TransportBeltSpriteSet> # The sprite set definition for the vanilla splitter.
 ---
 ---#### Examples
 ---```lua
@@ -215,7 +216,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla splitter, in the tints given by `params`.
 M.get_icon = icons:tinted("splitter"):build("get_icon")

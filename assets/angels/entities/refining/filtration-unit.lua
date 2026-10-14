@@ -6,7 +6,7 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -74,12 +74,11 @@ local mirrored_pipe_pictures = {
 	},
 }
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local animation = {
 		layers = {
-			-- Base
 			{
 				filename = "__angelsrefininggraphics__/graphics/entity/filtration-unit/filtration-unit.png",
 				priority = "extra-high",
@@ -92,7 +91,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/filtration-unit/filtration-unit-mask.png",
 			priority = "extra-high",
 			width = 224,
@@ -101,7 +99,6 @@ local function get_graphics_set(tint)
 			tint = tint,
 		})
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/filtration-unit/filtration-unit-highlights.png",
 			priority = "extra-high",
 			width = 224,
@@ -120,13 +117,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's filtration unit sprite set.
 ---@class FiltrationUnitSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's filtration unit.
----@param params FiltrationUnitSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params FiltrationUnitSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's filtration unit.
 ---
 ---#### Examples
 ---```lua
@@ -164,7 +162,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's filtration unit, in the tints given by `params`.
 M.get_icon = icons:tinted("filtration-unit"):build("get_icon")

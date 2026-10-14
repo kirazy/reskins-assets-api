@@ -1,6 +1,4 @@
--- The applicator registry every caller shares: one built from api.applicator-registry, populated with every
--- implemented applicator, and returned. This is the primary entry point for API consumers looking
--- to apply a sprite set to an arbitrary prototype.
+-- Provides the shared applicator registry with all applicators pre-registered.
 --
 -- Register an applicator here when adding a corresponding applicator definition under
 -- api/applicators/.

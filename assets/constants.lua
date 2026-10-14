@@ -1,5 +1,7 @@
 local _constants = {}
 
+---Gets the colors for each status of an entity, for working visualisations that apply the status tint.
+---@return data.StatusColors
 function _constants.get_status_colors()
 	return {
 		no_power = { 0, 0, 0, 0 }, -- If no_power is not specified or is nil, it defaults to clear color {0,0,0,0}

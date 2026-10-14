@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return { idle: RotatedAnimation, in_motion: RotatedAnimation, working: RotatedAnimation, shadow_idle: RotatedAnimation, shadow_in_motion: RotatedAnimation, shadow_working: RotatedAnimation }
 local function get_animations(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/construction-robot/"
@@ -176,7 +176,7 @@ local function get_animations(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/construction-robot/remnants/"
@@ -220,13 +220,14 @@ local function get_corpse_animation(tint)
 	return { animation, util.copy(animation), util.copy(animation) }
 end
 
+---Defines the options for the vanilla construction robot sprite set.
 ---@class RobotConstructionSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla construction robot.
----@param params RobotConstructionSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<ConstructionRobotSpriteSet>
+---@param params RobotConstructionSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<ConstructionRobotSpriteSet> # The sprite set definition for the vanilla construction robot.
 ---
 ---#### Examples
 ---```lua
@@ -258,14 +259,14 @@ function M.get_sprite_set(params)
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 1,
-			nominal_height = 2,
+			nominal_height = 1,
 		},
 	}
 
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla construction robot, in the tints given by `params`.
 M.get_icon = icons:tinted("robot-construction"):build("get_icon")

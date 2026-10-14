@@ -2,73 +2,162 @@
 
 ---@namespace Reskins.Assets
 
----The type name of an [EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html).
+---Represents the type name of an
+---[EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html).
 ---@alias PrototypeType string
 
+---Represents a function that converts a sprite set of type `TIn` to a new sprite set of type `TOut`.
+---
+---The function must not modify the sprite set it is given.
 ---@alias SpriteSetTransformer<TIn : SpriteSetBase, TOut : SpriteSetBase> fun(sprite_set: TIn): TOut
+
+---Represents a `SpriteSetTransformer` of any sprite set types.
 ---@alias AnySpriteSetTransformer SpriteSetTransformer<any, any>
 
----Options for `apply_sprite_set`. Every field is optional.
+---Defines the options of `ApplicatorRegistry.apply_sprite_set`.
 ---@class (exact) ApplySpriteSetParams
----The desired resulting sprite scale, relative to the baseline of `0.5`. Overrides automatic
----scaling. Ignored if `scale_factor` is also set.
----@field scale double?
----An explicit scale multiplier multiplied against the nominal scale.
----
----Overrides both `scale` and automatic scaling.
----@field scale_factor double?
+---The desired resulting sprite scale, relative to the baseline of 0.5. The scale overrides automatic scaling.
+---@field scale? double
+---A multiplier applied to the scale of the sprites, which overrides automatic scaling.
+---@field scale_factor? double
 
----The fields every sprite set shares, regardless of the prototype kind it is applied to.
+---Defines the fields that every sprite set has.
 ---@class (exact) SpriteSetBase
----The sprite's design width, in tiles. Used for scaling.
+---The width of the `selection_box` of the entity for which the artwork is designed.
 ---@field nominal_width double
----The sprite's design height, in tiles. Used for scaling.
+---The height of the `selection_box` of the entity for which the artwork is designed.
 ---@field nominal_height double
 
----The fields shared by sprite sets for `EntityWithHealthPrototype` entities, applied the same way
----by every applicator.
+---Defines the fields of a sprite set that apply to every `EntityWithHealthPrototype`.
 ---@class (exact) EntityWithHealthSpriteSet : SpriteSetBase
----The prototype's `integration_patch`.
----@field integration_patch Sprite4Way?
----The prototype's `integration_patch_render_layer`.
----@field integration_patch_render_layer RenderLayer?
----The death explosion artwork of the entity, applied by `SpriteSetApplicator.apply_to_explosion`.
----@field dying_explosion any
----The remnant artwork of the entity. Applied when the sprite set is applied to a `CorpsePrototype`;
----not applied to the entity itself.
----@field corpse CorpseSpriteSet?
----The prototype's `water_reflection`.
----@field water_reflection WaterReflectionDefinition?
+---May also be defined inside `graphics_set` instead of directly in the entity prototype. This is useful for entities that use a `graphics_set` property to define their graphics, because then all graphics can be defined in one place.
+---
+---Sprite drawn on ground under the entity to make it feel more integrated into the ground.
+---
+---See [EntityWithHealthPrototype::integration_patch](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html#integration_patch).
+---@field integration_patch? Sprite4Way
+---May also be defined inside `graphics_set` instead of directly in the entity prototype. This is useful for entities that use a `graphics_set` property to define their graphics, because then all graphics can be defined in one place.
+---
+---See [EntityWithHealthPrototype::integration_patch_render_layer](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html#integration_patch_render_layer).
+---@field integration_patch_render_layer? RenderLayer
+---The death explosion artwork of the entity, which is not applied by any applicator.
+---@field dying_explosion? any
+---The remnant artwork of the entity. The artwork is applied when the sprite set is applied to a `CorpsePrototype`.
+---@field corpse? CorpseSpriteSet
+---May also be defined inside `graphics_set` instead of directly in the entity prototype. This is useful for entities that use a `graphics_set` property to define their graphics, because then all graphics can be defined in one place.
+---
+---[Currently only renders](https://forums.factorio.com/100703) for [EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html) and [CorpsePrototype](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html)..
+---
+---See [EntityPrototype::water_reflection](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#water_reflection).
+---@field water_reflection? WaterReflectionDefinition
 
+---Defines the remnant artwork of an entity. Each field is copied onto the field of the same name of the
+---`CorpsePrototype`.
 ---@class (exact) CorpseSpriteSet
----@field animation RotatedAnimationVariations?
----@field animation_overlay RotatedAnimationVariations?
----@field animation_overlay_render_layer RenderLayer?
----@field animation_render_layer RenderLayer?
----@field decay_animation RotatedAnimationVariations?
----@field decay_frame_transition_duration float?
+---The dying animation.
+---
+---See [CorpsePrototype::animation](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation).
+---@field animation? RotatedAnimationVariations
+---Variation count must be the same as `animation` variation count. Direction count must be the same as `animation` direction count. Frame count must be the same as `animation` frame count.
+---
+---See [CorpsePrototype::animation_overlay](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_overlay).
+---@field animation_overlay? RotatedAnimationVariations
+---The render layer of `animation_overlay`.
+---
+---See [CorpsePrototype::animation_overlay_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_overlay_render_layer).
+---@field animation_overlay_render_layer? RenderLayer
+---The render layer of `animation`.
+---
+---See [CorpsePrototype::animation_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_render_layer).
+---@field animation_render_layer? RenderLayer
+---The animation of the corpse as it decays.
+---
+---See [CorpsePrototype::decay_animation](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#decay_animation).
+---@field decay_animation? RotatedAnimationVariations
+---The duration of the transition between the frames of `decay_animation`.
+---
+---See [CorpsePrototype::decay_frame_transition_duration](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#decay_frame_transition_duration).
+---@field decay_frame_transition_duration? float
+---May not be an empty array. May not be used if there is no `animation` defined.
+---
+---The inner arrays are called "groups" and must all have the same size.
+---
+---The indices map to the directions of `animation` and they are 1-indexed. After the `shuffle_directions_at_frame` frame of the `animation`, these indices are used as the direction when choosing which frame to render. The chosen shuffled direction can be any direction in the same group as the non-shuffled direction. Which direction is chosen from the group depends on the shuffle variation which is `dying_graphics_variation % group_size`.
+---
+---See [CorpsePrototype::direction_shuffle](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#direction_shuffle).
 ---@field direction_shuffle? ((uint16)[])[]
+---Multiplier for `time_before_shading_off` and `time_before_removed`. Must be positive.
+---
+---Controls the speed of the animation: `1 ÷ dying_speed = duration of the animation`
+---
+---See [CorpsePrototype::dying_speed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#dying_speed).
 ---@field dying_speed? float
----@field final_render_layer RenderLayer?
+---The render layer of the corpse after `animation` finishes.
+---
+---See [CorpsePrototype::final_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#final_render_layer).
+---@field final_render_layer? RenderLayer
+---The patch drawn on the ground under the corpse.
+---
+---See [CorpsePrototype::ground_patch](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch).
 ---@field ground_patch? AnimationVariations
+---The animation of `ground_patch` as it decays.
+---
+---See [CorpsePrototype::ground_patch_decay](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_decay).
 ---@field ground_patch_decay? AnimationVariations
+---The delay before `ground_patch` fades in.
+---
+---See [CorpsePrototype::ground_patch_fade_in_delay](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_fade_in_delay).
 ---@field ground_patch_fade_in_delay? float
+---The speed at which `ground_patch` fades in.
+---
+---See [CorpsePrototype::ground_patch_fade_in_speed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_fade_in_speed).
 ---@field ground_patch_fade_in_speed? float
+---The duration of the fade out of `ground_patch`.
+---
+---See [CorpsePrototype::ground_patch_fade_out_duration](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_fade_out_duration).
 ---@field ground_patch_fade_out_duration? float
+---The time at which `ground_patch` starts to fade out.
+---
+---See [CorpsePrototype::ground_patch_fade_out_start](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_fade_out_start).
 ---@field ground_patch_fade_out_start? float
+---The patch drawn on the ground over `ground_patch`.
+---
+---See [CorpsePrototype::ground_patch_higher](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_higher).
 ---@field ground_patch_higher? AnimationVariations
+---The render layer of `ground_patch`.
+---
+---See [CorpsePrototype::ground_patch_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_render_layer).
 ---@field ground_patch_render_layer? RenderLayer
+---Defines after which frame in the `animation` the `direction_shuffle` should be applied. Can be set to `0`, frames are 1-indexed.
+---
+---See [CorpsePrototype::shuffle_directions_at_frame](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#shuffle_directions_at_frame).
 ---@field shuffle_directions_at_frame? uint8
+---The splash animation of the corpse.
+---
+---See [CorpsePrototype::splash](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#splash).
 ---@field splash? AnimationVariations
+---The render layer of `splash`.
+---
+---See [CorpsePrototype::splash_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#splash_render_layer).
 ---@field splash_render_layer? RenderLayer
+---Controls the speed of the splash animation: `1 ÷ splash_speed = duration of the splash animation`
+---
+---See [CorpsePrototype::splash_speed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#splash_speed).
 ---@field splash_speed? float
+---The offset of the render layer of the corpse when it is underwater.
+---
+---See [CorpsePrototype::underwater_layer_offset](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#underwater_layer_offset).
 ---@field underwater_layer_offset? int8
+---The patch drawn under the corpse when it is underwater.
+---
+---See [CorpsePrototype::underwater_patch](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#underwater_patch).
 ---@field underwater_patch? RotatedSprite
 
----A sprite set with its `SpriteSetType`, which selects the applicator that applies it.
+---Defines a sprite set with its `SpriteSetType`, which selects the applicator that applies it.
 ---
 ---#### Examples
 ---```lua
+----- Define a crafting machine sprite set.
 ---local _defines = require("__reskins-assets-api__.api.defines")
 ---
 ------@type SpriteSetDefinition<CraftingMachineSpriteSet>
@@ -82,60 +171,118 @@
 ---@field set_type SpriteSetType
 ---The sprite data itself.
 ---@field set TSet
----Conversions of `set` to other `SpriteSetType`s, keyed by type. Checked before the conversions
----registered in `api.converters`.
----@field converters table<SpriteSetType, SpriteSetTransformer<TSet, any>>?
+---The conversions of `set` to other sprite set types, by `SpriteSetType`. These conversions are checked before the
+---conversions registered in `api.converters`.
+---@field converters? table<SpriteSetType, SpriteSetTransformer<TSet, any>>
 
----A `SpriteSetDefinition` of any `SpriteSetType`.
+---Defines a `SpriteSetDefinition` of any `SpriteSetType`.
 ---@class (exact) AnySpriteSetDefinition : SpriteSetDefinition<any>
 
----Applies a sprite set of type `U` to one kind of prototype. Registered with `api.applicators` and
----selected by the type of the target prototype.
+---Defines an applicator that applies a sprite set of type `U` to one type of prototype. It is registered with
+---`api.applicators` and selected by the type of the target prototype.
 ---
----Corpses are not handled by applicators; `apply_sprite_set` copies the `corpse` field of the sprite
----set onto a `CorpsePrototype` directly.
+---Corpses are not handled by applicators; `apply_sprite_set` copies the `corpse` field of the sprite set onto a
+---`CorpsePrototype` directly.
 ---@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype, U: EntityWithHealthSpriteSet>
 ---The `SpriteSetType` accepted by `apply_to` and `apply_to_explosion`.
 ---@field set_type SpriteSetType
 ---Applies the given `set` to the given entity `prototype`.
 ---
----Applies the fields specific to this kind of prototype. The fields of `EntityWithHealthSpriteSet`
----are applied by `ApplicatorRegistry.apply_sprite_set` before this is called.
+---Applies the fields that belong to this prototype type. The fields of `EntityWithHealthSpriteSet` are applied by
+---`ApplicatorRegistry.apply_sprite_set` before this is called.
 ---@field apply_to fun(prototype: T, set: U)
 ---Applies `set` to the explosion prototype `explosion`.
 ---@field apply_to_explosion fun(explosion: ExplosionPrototype, set: U)
 
----A `SpriteSetApplicator` of any prototype and sprite set type.
+---Defines a `SpriteSetApplicator` of any prototype and sprite set type.
 ---@class (exact) AnySpriteSetApplicator : SpriteSetApplicator<any, any>
 
----The sprite data of a `SpriteSetDefinition` of type `flying_robot_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `flying_robot_sprite_set`.
 ---@class (exact) FlyingRobotSpriteSet : EntityWithHealthSpriteSet
----The prototype's `idle`.
+---The animation of the robot when it is idle.
+---
+---See [CombatRobotPrototype::idle](https://lua-api.factorio.com/latest/prototypes/CombatRobotPrototype.html#idle).
 ---@field idle RotatedAnimation
----The prototype's `in_motion`.
+---The animation of the robot when it is moving.
+---
+---See [CombatRobotPrototype::in_motion](https://lua-api.factorio.com/latest/prototypes/CombatRobotPrototype.html#in_motion).
 ---@field in_motion RotatedAnimation
----The prototype's `shadow_idle`.
+---The shadow of the robot when it is idle.
+---
+---See [CombatRobotPrototype::shadow_idle](https://lua-api.factorio.com/latest/prototypes/CombatRobotPrototype.html#shadow_idle).
 ---@field shadow_idle RotatedAnimation
----The prototype's `shadow_in_motion`.
+---The shadow of the robot when it is moving.
+---
+---See [CombatRobotPrototype::shadow_in_motion](https://lua-api.factorio.com/latest/prototypes/CombatRobotPrototype.html#shadow_in_motion).
 ---@field shadow_in_motion RotatedAnimation
 
----The sprite data of a `SpriteSetDefinition` of type `turret_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `turret_sprite_set`.
 ---@class (exact) TurretSpriteSet : EntityWithHealthSpriteSet
 
+---Defines the graphics fields of a pipe connection.
 ---@class (exact) PipeConnectionGraphics
+---Array of the [WorkingVisualisation::name](https://lua-api.factorio.com/latest/types/WorkingVisualisation.html#name) of working visualisations to enable when this pipe connection is present.
+---
+---If the owning fluidbox has [draw\_only\_when\_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected) set to `true`, then the working visualisation is only enabled if this pipe connection is *connected*.
+---
+---See [PipeConnectionDefinition::enable_working_visualisations](https://lua-api.factorio.com/latest/types/PipeConnectionDefinition.html#enable_working_visualisations).
 ---@field enable_working_visualisations string[]
+---Primary direction this connection points to when entity direction is north and the entity is not mirrored. When entity is rotated or mirrored, effective direction will be computed based on this value.
+---
+---Only loaded, and mandatory if `connection_type` is `"normal"` or `"underground"`.
+---
+---See [PipeConnectionDefinition::direction](https://lua-api.factorio.com/latest/types/PipeConnectionDefinition.html#direction).
 ---@field direction defines.direction
 
+---Defines the graphics fields of a fluid box.
 ---@class (exact) FluidBoxGraphics
----@field pipe_connections PipeConnectionGraphics[]?
----@field render_layer RenderLayer?
----@field draw_only_when_connected boolean?
----@field pipe_covers Sprite4Way?
----@field pipe_covers_frozen Sprite4Way?
----@field pipe_picture Sprite4Way?
----@field pipe_picture_frozen Sprite4Way?
----@field mirrored_pipe_picture Sprite4Way?
----@field mirrored_pipe_picture_frozen Sprite4Way?
----@field secondary_draw_order int8?
----@field secondary_draw_orders FluidBoxSecondaryDrawOrders?
----@field enable_working_visualisations string[]?
+---The graphics fields of each pipe connection of the fluid box.
+---@field pipe_connections? PipeConnectionGraphics[]
+---The render layer of the graphics of the fluid box.
+---
+---See [FluidBox::render_layer](https://lua-api.factorio.com/latest/types/FluidBox.html#render_layer).
+---@field render_layer? RenderLayer
+---When `true`, indicates that the graphics of the fluid box are drawn only when it is connected.
+---
+---See [FluidBox::draw_only_when_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected).
+---@field draw_only_when_connected? boolean
+---The pictures to show when no fluid box is connected to this one.
+---
+---See [FluidBox::pipe_covers](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_covers).
+---@field pipe_covers? Sprite4Way
+---The frozen form of `pipe_covers`.
+---
+---See [FluidBox::pipe_covers_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_covers_frozen).
+---@field pipe_covers_frozen? Sprite4Way
+---The pipe drawn at each pipe connection of the fluid box.
+---
+---See [FluidBox::pipe_picture](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_picture).
+---@field pipe_picture? Sprite4Way
+---The frozen form of `pipe_picture`.
+---
+---See [FluidBox::pipe_picture_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_picture_frozen).
+---@field pipe_picture_frozen? Sprite4Way
+---Pipe picture variation used when owner machine is flipped. If no picture is loaded, pipe\_picture is used instead.
+---
+---See [FluidBox::mirrored_pipe_picture](https://lua-api.factorio.com/latest/types/FluidBox.html#mirrored_pipe_picture).
+---@field mirrored_pipe_picture? Sprite4Way
+---Frozen pipe picture variation used when owner machine is flipped. If no picture is loaded, pipe\_picture\_frozen is used instead.
+---
+---See [FluidBox::mirrored_pipe_picture_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#mirrored_pipe_picture_frozen).
+---@field mirrored_pipe_picture_frozen? Sprite4Way
+---Set the secondary draw order for all orientations. Used to determine render order for sprites with the same `render_layer` in the same position. Sprites with a higher `secondary_draw_order` are drawn on top.
+---
+---See [FluidBox::secondary_draw_order](https://lua-api.factorio.com/latest/types/FluidBox.html#secondary_draw_order).
+---@field secondary_draw_order? int8
+---Set the secondary draw order for each orientation. Used to determine render order for sprites with the same `render_layer` in the same position. Sprites with a higher `secondary_draw_order` are drawn on top.
+---
+---The individual directions default to the value of `secondary_draw_order`.
+---
+---See [FluidBox::secondary_draw_orders](https://lua-api.factorio.com/latest/types/FluidBox.html#secondary_draw_orders).
+---@field secondary_draw_orders? FluidBoxSecondaryDrawOrders
+---Array of the [WorkingVisualisation::name](https://lua-api.factorio.com/latest/types/WorkingVisualisation.html#name) of working visualisations to enable when this fluidbox is present.
+---
+---If `draw_only_when_connected` is `true`, then the working visualisation are only enabled when this is *connected*.
+---
+---See [FluidBox::enable_working_visualisations](https://lua-api.factorio.com/latest/types/FluidBox.html#enable_working_visualisations).
+---@field enable_working_visualisations? string[]

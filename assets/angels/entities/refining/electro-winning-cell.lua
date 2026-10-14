@@ -6,7 +6,7 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -42,11 +42,10 @@ local pipe_pictures = {
 	},
 }
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local layers = {
-		-- Base
 		{
 			-- cspell: disable-next-line
 			filename = "__angelsrefininggraphics__/graphics/entity/electro-whinning-cell/electro-whinning-cell.png",
@@ -62,7 +61,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(layers, {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/electro-winning-cell/electro-winning-cell-mask.png",
 			priority = "extra-high",
 			width = 224,
@@ -73,7 +71,6 @@ local function get_graphics_set(tint)
 			tint = tint,
 		})
 		table.insert(layers, {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/electro-winning-cell/electro-winning-cell-highlights.png",
 			priority = "extra-high",
 			width = 224,
@@ -94,13 +91,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's electro-winning cell sprite set.
 ---@class ElectroWinningCellSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's electro-winning cell.
----@param params ElectroWinningCellSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params ElectroWinningCellSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's electro-winning cell.
 ---
 ---#### Examples
 ---```lua
@@ -137,7 +135,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's electro-winning cell, in the tints given by `params`.
 M.get_icon = icons:tinted("electro-winning-cell"):build("get_icon")

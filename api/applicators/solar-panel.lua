@@ -16,7 +16,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set SolarPanelSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type SolarPanelSpriteSetApplicator
@@ -26,12 +26,12 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `solar_panel_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `solar_panel_sprite_set`.
 ---@class (exact) SolarPanelSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `picture`.
----@field picture SpriteVariations?
+---@field picture? SpriteVariations
 ---The prototype's `overlay`.
----@field overlay SpriteVariations?
+---@field overlay? SpriteVariations
 
----The applicator for solar panels.
+---Applies the `SolarPanelSpriteSet` to `SolarPanelPrototype` instances.
 ---@class (exact) SolarPanelSpriteSetApplicator : SpriteSetApplicator<SolarPanelPrototype, SolarPanelSpriteSet>

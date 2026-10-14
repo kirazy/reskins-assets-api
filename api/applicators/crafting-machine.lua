@@ -63,12 +63,11 @@ local function collect_directions_from_fluid_box(fluid_box)
 	return directions
 end
 
----Finds the first `FluidBoxGraphics` in `fluid_box_graphics` that matches the given set of
----prototype fluid box directions.
+---Finds the first `FluidBoxGraphics` in `fluid_box_graphics` that matches the given set of prototype fluid box
+---directions.
 ---
----A match is found when any direction in a `FluidBoxGraphics.pipe_connections` entry is
----present in `directions`. If no direction-specific match is found, the first entry
----with no `pipe_connections` is returned as a universal fallback.
+---A match is found when any direction in a `FluidBoxGraphics.pipe_connections` entry is present in `directions`. If no
+---direction-specific match is found, the first entry with no `pipe_connections` is returned as a universal fallback.
 ---@param directions FluidBoxDirections
 ---@param fluid_box_graphics FluidBoxGraphics[]
 ---@return FluidBoxGraphics?
@@ -91,11 +90,10 @@ local function find_matching_fluid_box_graphics(directions, fluid_box_graphics)
 	return util.copy(fallback_graphics)
 end
 
----Applies fluid box graphics to the specified `prototype`.
+---Applies fluid box graphics to the given `prototype`.
 ---
----Each prototype fluid box is matched to a `FluidBoxGraphics` entry by direction. A
----`FluidBoxGraphics` with no `pipe_connections` acts as a universal fallback and is applied
----to any fluid box that has no more-specific match.
+---Each prototype fluid box is matched to a `FluidBoxGraphics` entry by direction. A `FluidBoxGraphics` with no
+---`pipe_connections` acts as a universal fallback and is applied to any fluid box that has no more-specific match.
 ---
 ---The prototype is mutated in place.
 ---@param prototype CraftingMachinePrototype
@@ -186,11 +184,12 @@ local function collect_pipe_connection_directions(prototype)
 	return directions
 end
 
----Builds a 2D connection matrix: `matrix[entity_facing_dir][sprite_dir]` = `"connected"` | `"capped"`.
+---Builds a 2D connection matrix, indexed as `matrix[entity_facing_dir][sprite_dir]`, with the values `"connected"` and
+---`"capped"`.
 ---
----The north-facing connection set is rotated clockwise for each entity facing. A sprite direction is
----connected if rotating it counterclockwise to north maps to a direction in the connection set. If
----`is_flipped` is `true`, the connection set is mirrored east-west first.
+---The north-facing connection set is rotated clockwise for each entity facing. A sprite direction is connected if
+---rotating it counterclockwise to north maps to a direction in the connection set. If `is_flipped` is `true`, the
+---connection set is mirrored east-west first.
 ---@param directions defines.direction[]
 ---@param is_flipped boolean
 ---@return table<defines.direction, table<defines.direction, "connected"|"capped">>
@@ -229,24 +228,25 @@ local function mirror_directions(directions)
 end
 
 ---Gets the behind and front direction sets of the given `connectors` for the flipped orientation:
----`flipped_behind_directions` and `flipped_front_directions` if defined; otherwise, the horizontal
----mirror of `behind_directions` and `front_directions`.
+---`flipped_behind_directions` and `flipped_front_directions` if defined; otherwise, the horizontal mirror of
+---`behind_directions` and `front_directions`.
 ---@param connectors WorkingVisualisationPipeConnectors
----@return defines.direction[] behind_directions, defines.direction[] front_directions
+---@return defines.direction[] behind_directions
+---@return defines.direction[] front_directions
 local function resolve_flipped_directions(connectors)
 	return connectors.flipped_behind_directions or mirror_directions(connectors.behind_directions),
 		connectors.flipped_front_directions or mirror_directions(connectors.front_directions)
 end
 
----Builds the two pipe connector working_visualisation entries for one orientation.
+---Gets the two pipe connector `working_visualisations` entries for one orientation.
 ---
----WV1 (`secondary_draw_order = -1`) covers connectors that render behind the entity body.
----WV2 (normal draw order) covers connectors that render in front, plus any shadow patches.
+---The first entry, with `secondary_draw_order = -1`, contains the connectors drawn behind the entity body. The second
+---entry contains the connectors drawn in front, and any shadow patches.
 ---@param connectors WorkingVisualisationPipeConnectors
 ---@param directions defines.direction[]
 ---@param is_flipped boolean
----@return WorkingVisualisation # WV1: behind (secondary_draw_order = -1)
----@return WorkingVisualisation # WV2: front
+---@return WorkingVisualisation # The entry drawn behind the entity body, with `secondary_draw_order = -1`.
+---@return WorkingVisualisation # The entry drawn in front of the entity body.
 local function build_pipe_connector_visualisations(connectors, directions, is_flipped)
 	local matrix = build_connection_matrix(directions, is_flipped)
 	local behind_dirs, front_dirs = connectors.behind_directions, connectors.front_directions
@@ -268,9 +268,8 @@ local function build_pipe_connector_visualisations(connectors, directions, is_fl
 			table.insert(front_layers, connectors.get_picture(matrix[facing][sprite_dir], sprite_dir, is_flipped))
 		end
 
-		-- Shadow patches draw on the same layer regardless of WV; appended to behind_layers for
-		-- simplicity. Keyed by sprite direction: fires whenever that sprite direction is connected
-		-- in this rotation.
+		-- Shadow patches render on the shadow layer, and are appended to `behind_layers`. They are keyed
+		-- by sprite direction, and draw whenever that sprite direction is connected in this rotation.
 		if connectors.get_shadow then
 			for _, sprite_dir in pairs(all_dirs) do
 				if matrix[facing][sprite_dir] == "connected" then
@@ -309,14 +308,14 @@ local function build_pipe_connector_visualisations(connectors, directions, is_fl
 end
 
 ---Builds and appends pipe connector working_visualisations to `prototype.graphics_set` (and
----`prototype.graphics_set_flipped`, if present), from `connectors` and the prototype's own fluid
----box connection directions.
+---`prototype.graphics_set_flipped`, if present), from `connectors` and the prototype's own fluid box connection
+---directions.
 ---
 ---The prototype is mutated in place.
 ---@param prototype CraftingMachinePrototype
 ---@param connectors WorkingVisualisationPipeConnectors
 local function apply_working_visualisation_pipe_connectors(prototype, connectors)
-	assert(prototype.graphics_set, "prototype.graphics_set must be set before applying pipe connectors")
+	assert(prototype.graphics_set, "The prototype has no graphics_set to which the pipe connectors can be applied.")
 
 	local directions = collect_pipe_connection_directions(prototype)
 
@@ -333,8 +332,8 @@ local function apply_working_visualisation_pipe_connectors(prototype, connectors
 	end
 end
 
----Applies the given crafting machine sprite set `value` to the given `prototype`. `value` must be
----of the sprite set type this applicator accepts.
+---Applies the given crafting machine sprite set `value` to the given `prototype`. `value` must be of the sprite set
+---type this applicator accepts.
 ---@param prototype CraftingMachinePrototype
 ---@param sprite_set CraftingMachineSpriteSet
 local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
@@ -361,7 +360,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param sprite_set CraftingMachineSpriteSet
 local function apply_sprite_set_to_explosion(explosion, sprite_set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type CraftingMachineSpriteSetApplicator
@@ -377,39 +376,37 @@ return {
 ---An optional shadow patch drawn when `direction` is connected. Returns `nil` for no shadow there.
 ---@alias PipeConnectorShadow fun(direction: defines.direction, is_flipped: boolean): Animation?
 
----Pipe connector artwork built when applied, from the fluid box connection directions of the
----prototype, for a crafting machine whose pipe artwork is defined as rotated working
----visualisations. Fluid box pictures are not used.
+---Represents pipe connector artwork defined as rotated animations in `working_visualisations`.
 ---@class (exact) WorkingVisualisationPipeConnectors
 ---The connected or capped pipe connector artwork for a sprite direction and flip orientation.
 ---@field get_picture PipeConnectorPicture
 ---The shadow patch for a connected direction and flip orientation, if this entity has one.
----@field get_shadow PipeConnectorShadow?
+---@field get_shadow? PipeConnectorShadow
 ---Sprite directions, unflipped, drawn behind the entity body (`secondary_draw_order = -1`).
 ---@field behind_directions defines.direction[]
 ---Sprite directions, unflipped, drawn in front of the entity body.
 ---@field front_directions defines.direction[]
----Overrides `behind_directions` for the flipped orientation. Defaults to a horizontal mirror of
----`behind_directions` when omitted; set explicitly if the flipped geometry doesn't mirror cleanly.
----@field flipped_behind_directions defines.direction[]?
----Overrides `front_directions` for the flipped orientation. Defaults to a horizontal mirror of
----`front_directions` when omitted; set explicitly if the flipped geometry doesn't mirror cleanly.
----@field flipped_front_directions defines.direction[]?
+---Overrides `behind_directions` for the flipped orientation. When `nil`, a horizontal mirror of `behind_directions`
+---is used; set explicitly if the flipped geometry doesn't mirror cleanly.
+---@field flipped_behind_directions? defines.direction[]
+---Overrides `front_directions` for the flipped orientation. When `nil`, a horizontal mirror of `front_directions` is
+---used; set explicitly if the flipped geometry doesn't mirror cleanly.
+---@field flipped_front_directions? defines.direction[]
 
----The sprite data of a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
 ---@class (exact) CraftingMachineSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set CraftingMachineGraphicsSet
 ---The prototype's `graphics_set_flipped`, for a crafting machine that supports flipping.
----@field graphics_set_flipped CraftingMachineGraphicsSet?
+---@field graphics_set_flipped? CraftingMachineGraphicsSet
 ---Fluid box pipe graphics, matched to the prototype's fluid boxes by direction.
----@field fluid_boxes FluidBoxGraphics[]?
----Pipe connector artwork built from the fluid box connection directions of the prototype. May be
----given with or without `fluid_boxes`.
----@field working_visualisation_pipe_connectors WorkingVisualisationPipeConnectors?
----Sets the prototype's `fluid_boxes_off_when_no_fluid_recipe` (`AssemblingMachinePrototype` only;
----ignored for furnaces).
----@field fluid_boxes_off_when_no_fluid_recipe boolean?
+---@field fluid_boxes? FluidBoxGraphics[]
+---Pipe connector artwork built from the fluid box connection directions of the prototype. May be given with or without
+---`fluid_boxes`.
+---@field working_visualisation_pipe_connectors? WorkingVisualisationPipeConnectors
+---When `true`, indicates that the fluid boxes of the prototype are hidden while its recipe uses no fluid. Applied to an
+---`AssemblingMachinePrototype`, and ignored otherwise;
+---@field fluid_boxes_off_when_no_fluid_recipe? boolean
 
----The applicator for crafting machines (`AssemblingMachinePrototype`, `FurnacePrototype`).
+---Applies the `CraftingMachineSpriteSet` to `AssemblingMachinePrototype` and `FurnacePrototype` instances.
 ---@class (exact) CraftingMachineSpriteSetApplicator : SpriteSetApplicator<CraftingMachinePrototype, CraftingMachineSpriteSet>

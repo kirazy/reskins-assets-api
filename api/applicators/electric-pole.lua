@@ -15,7 +15,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set ElectricPoleSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type ElectricPoleSpriteSetApplicator
@@ -25,10 +25,10 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `electric_pole_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `electric_pole_sprite_set`.
 ---@class (exact) ElectricPoleSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `pictures`.
 ---@field pictures RotatedSprite
 
----The applicator for electric poles.
+---Applies the `ElectricPoleSpriteSet` to `ElectricPolePrototype` instances.
 ---@class (exact) ElectricPoleSpriteSetApplicator : SpriteSetApplicator<ElectricPolePrototype, ElectricPoleSpriteSet>

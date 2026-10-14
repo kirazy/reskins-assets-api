@@ -8,13 +8,12 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 -- Setup inheritance.
 
--- Private sprite helpers
 -- Working lights are split between base assets (plain/unoriented) and the
 -- bobs fluid-furnace lights folder (left/right oriented variants).
 
@@ -129,8 +128,6 @@ local function get_steel_furnace_water_reflection()
 	return water_reflection
 end
 
--- Working visualisation builders
-
 ---@return WorkingVisualisation[]
 local function get_standard_working_visualisations()
 	return {
@@ -197,7 +194,6 @@ end
 ---@return WorkingVisualisation[]
 local function get_fluid_working_visualisations()
 	return {
-		-- Fire effect
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -205,7 +201,6 @@ local function get_fluid_working_visualisations()
 			south_animation = get_steel_furnace_fire_animation(),
 			west_animation = get_steel_furnace_fire_animation("left"),
 		},
-		-- Glow
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -213,7 +208,6 @@ local function get_fluid_working_visualisations()
 			south_animation = get_steel_furnace_glow(),
 			west_animation = get_steel_furnace_glow(),
 		},
-		-- Furnace flicker
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -221,7 +215,6 @@ local function get_fluid_working_visualisations()
 			south_animation = get_steel_furnace_working_light(),
 			west_animation = get_steel_furnace_working_light("left"),
 		},
-		-- Ground light
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -235,7 +228,6 @@ end
 ---@return WorkingVisualisation[]
 local function get_chemical_working_visualisations_main()
 	return {
-		-- Fire effect
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -243,7 +235,6 @@ local function get_chemical_working_visualisations_main()
 			south_animation = get_steel_furnace_fire_animation("right"),
 			west_animation = get_steel_furnace_fire_animation(),
 		},
-		-- Glow
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -251,7 +242,6 @@ local function get_chemical_working_visualisations_main()
 			south_animation = get_steel_furnace_glow(),
 			west_animation = get_steel_furnace_glow(),
 		},
-		-- Furnace flicker
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -259,7 +249,6 @@ local function get_chemical_working_visualisations_main()
 			south_animation = get_steel_furnace_working_light("right"),
 			west_animation = get_steel_furnace_working_light(),
 		},
-		-- Ground light
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -273,7 +262,6 @@ end
 ---@return WorkingVisualisation[]
 local function get_chemical_working_visualisations_flipped()
 	return {
-		-- Fire effect
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -281,7 +269,6 @@ local function get_chemical_working_visualisations_flipped()
 			east_animation = get_steel_furnace_fire_animation(),
 			south_animation = get_steel_furnace_fire_animation("left"),
 		},
-		-- Glow
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -289,7 +276,6 @@ local function get_chemical_working_visualisations_flipped()
 			east_animation = get_steel_furnace_glow(),
 			south_animation = get_steel_furnace_glow(),
 		},
-		-- Furnace flicker
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -297,7 +283,6 @@ local function get_chemical_working_visualisations_flipped()
 			east_animation = get_steel_furnace_working_light(),
 			south_animation = get_steel_furnace_working_light("left"),
 		},
-		-- Ground light
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -311,28 +296,24 @@ end
 ---@return WorkingVisualisation[]
 local function get_chemical_fluid_working_visualisations_main()
 	return {
-		-- Fire effect
 		{
 			fadeout = true,
 			effect = "flicker",
 			south_animation = get_steel_furnace_fire_animation("right"),
 			west_animation = get_steel_furnace_fire_animation("left"),
 		},
-		-- Glow
 		{
 			fadeout = true,
 			effect = "flicker",
 			south_animation = get_steel_furnace_glow(),
 			west_animation = get_steel_furnace_glow(),
 		},
-		-- Furnace flicker
 		{
 			fadeout = true,
 			effect = "flicker",
 			south_animation = get_steel_furnace_working_light("right"),
 			west_animation = get_steel_furnace_working_light("left"),
 		},
-		-- Ground light
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -345,28 +326,24 @@ end
 ---@return WorkingVisualisation[]
 local function get_chemical_fluid_working_visualisations_flipped()
 	return {
-		-- Fire effect
 		{
 			fadeout = true,
 			effect = "flicker",
 			east_animation = get_steel_furnace_fire_animation("right"),
 			south_animation = get_steel_furnace_fire_animation("left"),
 		},
-		-- Glow
 		{
 			fadeout = true,
 			effect = "flicker",
 			east_animation = get_steel_furnace_glow(),
 			south_animation = get_steel_furnace_glow(),
 		},
-		-- Furnace flicker
 		{
 			fadeout = true,
 			effect = "flicker",
 			east_animation = get_steel_furnace_working_light("right"),
 			south_animation = get_steel_furnace_working_light("left"),
 		},
-		-- Ground light
 		{
 			fadeout = true,
 			effect = "flicker",
@@ -376,17 +353,15 @@ local function get_chemical_fluid_working_visualisations_flipped()
 	}
 end
 
--- Animation layer builder
--- Constructs the base+mask+highlights+shadow layer stack for a given variant.
-
+---Gets the base+mask+highlights+shadow layer stack for the given `variant`.
 ---@param variant "standard" | "fluid" | "chemical" | "chemical-fluid"
----@param tint Color?
----@param is_mirror boolean?
+---@param tint? Color
+---@param is_mirror? boolean
 ---@return Animation
 local function build_steel_furnace_animation(variant, tint, is_mirror)
 	local base_path = _defines.assets_source.base_assets .. "/graphics/entity/furnace-steel/"
 	local bobs_folder = ({
-		standard = nil, -- uses base_path
+		standard = nil, -- Uses `base_path`.
 		fluid = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-fluid/",
 		chemical = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-chemical/",
 		["chemical-fluid"] = _defines.assets_source.bobs_assets .. "/graphics/entity/furnace-steel-chemical-fluid/",
@@ -457,9 +432,7 @@ local function build_steel_furnace_animation(variant, tint, is_mirror)
 	return { layers = layers }
 end
 
--- Graphics set builders
-
----@param tint Color?
+---@param tint? Color
 ---@param variant "standard" | "fluid" | "chemical" | "chemical-fluid"
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint, variant)
@@ -490,7 +463,7 @@ local function get_graphics_set(tint, variant)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param variant "chemical" | "chemical-fluid"
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set_flipped(tint, variant)
@@ -510,7 +483,7 @@ local function get_graphics_set_flipped(tint, variant)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param variant "standard" | "fluid" | "chemical" | "chemical-fluid"
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint, variant)
@@ -572,17 +545,16 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
--- Public API
-
+---Defines the options for the vanilla steel furnace sprite set.
 ---@class FurnaceSteelSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The variant to draw.
+---@field tint? Color
+---The variant to use.
 ---@field variant "standard"
 
 ---Gets the sprite set for the vanilla steel furnace.
----@param params FurnaceSteelSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params FurnaceSteelSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the vanilla steel furnace.
 ---
 ---#### Examples
 ---```lua
@@ -623,7 +595,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = nil,
-			nominal_width = 2,
+			nominal_width = 1.6,
 			nominal_height = 2,
 		},
 	}
@@ -631,16 +603,21 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for a steel furnace of the `variant` and in the tints given by `params`.
-M.get_icon = IconCatalog.dispatch("variant", { "standard", "fluid", "chemical", "chemical-fluid" }, "get_icon", function(variant)
-	-- The standard furnace uses vanilla artwork; the rest are Bob's.
-	local name = variant == "standard" and "furnace-steel" or "furnace-steel-" .. variant
-	local catalog = variant == "standard" and base_icons or bobs_icons
+M.get_icon = IconBuilderFactory.dispatch(
+	"variant",
+	{ "standard", "fluid", "chemical", "chemical-fluid" },
+	"get_icon",
+	function(variant)
+		-- The standard furnace uses vanilla artwork; the rest are Bob's.
+		local name = variant == "standard" and "furnace-steel" or "furnace-steel-" .. variant
+		local factory = variant == "standard" and base_icons or bobs_icons
 
-	return catalog:tinted(name)
-end)
+		return factory:tinted(name)
+	end
+)
 
 return M

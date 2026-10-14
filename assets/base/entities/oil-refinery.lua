@@ -7,20 +7,19 @@
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 -- Setup inheritance.
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/oil-refinery/"
 
 	---@type Animation[]
 	local layers = {
-		-- Base
 		{
 			filename = "__base__/graphics/entity/oil-refinery/oil-refinery.png",
 			priority = "high",
@@ -52,7 +51,6 @@ local function get_graphics_set(tint)
 		})
 	end
 
-	-- Shadow
 	table.insert(layers, {
 		filename = "__base__/graphics/entity/oil-refinery/oil-refinery-shadow.png",
 		width = 674,
@@ -70,7 +68,7 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/oil-refinery/remnants/"
@@ -113,13 +111,14 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
+---Defines the options for the vanilla oil refinery sprite set.
 ---@class OilRefinerySpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla oil refinery.
----@param params OilRefinerySpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params OilRefinerySpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the vanilla oil refinery.
 ---
 ---#### Examples
 ---```lua
@@ -149,7 +148,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla oil refinery, in the tints given by `params`.
 M.get_icon = icons:tinted("oil-refinery"):build("get_icon")

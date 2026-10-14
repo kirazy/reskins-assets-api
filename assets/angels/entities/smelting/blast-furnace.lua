@@ -6,16 +6,15 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local animation = {
 		layers = {
-			-- Base
 			{
 				filename = "__angelssmeltinggraphics__/graphics/entity/blast-furnace/blast-furnace-base.png",
 				priority = "extra-high",
@@ -24,7 +23,6 @@ local function get_graphics_set(tint)
 				shift = util.by_pixel(0, -13.5),
 				scale = 0.5,
 			},
-			-- Shadow
 			{
 				filename = "__angelssmeltinggraphics__/graphics/entity/blast-furnace/blast-furnace-shadow.png",
 				priority = "extra-high",
@@ -39,7 +37,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/blast-furnace/blast-furnace-mask.png",
 			priority = "extra-high",
 			width = 328,
@@ -49,7 +46,6 @@ local function get_graphics_set(tint)
 			scale = 0.5,
 		})
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/blast-furnace/blast-furnace-highlights.png",
 			priority = "extra-high",
 			width = 328,
@@ -125,13 +121,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's blast furnace sprite set.
 ---@class BlastFurnaceSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's blast furnace.
----@param params BlastFurnaceSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params BlastFurnaceSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's blast furnace.
 ---
 ---#### Examples
 ---```lua
@@ -161,7 +158,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's blast furnace, in the tints given by `params`.
 M.get_icon = icons:tinted("blast-furnace"):build("get_icon")

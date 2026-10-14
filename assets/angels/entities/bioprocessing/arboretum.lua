@@ -6,22 +6,20 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local layers = {
-		-- Shadow
 		{
 			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-shadow.png",
 			width = 224,
 			height = 256,
 			shift = { 0, -0.50 },
 		},
-		-- Base
 		{
 			filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-base.png",
 			width = 224,
@@ -32,7 +30,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(layers, {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/arboretum/arboretum-mask.png",
 			priority = "extra-high",
 			width = 224,
@@ -41,7 +38,6 @@ local function get_graphics_set(tint)
 			tint = tint,
 		})
 		table.insert(layers, {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/arboretum/arboretum-highlights.png",
 			priority = "extra-high",
 			width = 224,
@@ -52,14 +48,12 @@ local function get_graphics_set(tint)
 	end
 
 	table.insert(layers, {
-		-- Pipes
 		filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-pipes.png",
 		width = 224,
 		height = 256,
 		shift = { 0, -0.50 },
 	})
 	table.insert(layers, {
-		-- Off state
 		filename = "__angelsbioprocessinggraphics__/graphics/entity/trees/bio-arboretum-off.png",
 		width = 224,
 		height = 256,
@@ -89,13 +83,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's arboretum sprite set.
 ---@class ArboretumSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's arboretum.
----@param params ArboretumSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params ArboretumSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's arboretum.
 ---
 ---#### Examples
 ---```lua
@@ -125,7 +120,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's arboretum, in the tints given by `params`.
 M.get_icon = icons:tinted("arboretum"):build("get_icon")

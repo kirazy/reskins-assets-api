@@ -6,16 +6,15 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	local animation = {
 		layers = {
-			-- Base
 			{
 				filename = "__angelsrefininggraphics__/graphics/entity/washing-plant/washing-plant.png",
 				priority = "extra-high",
@@ -25,7 +24,6 @@ local function get_graphics_set(tint)
 				line_length = 5,
 				shift = { 0, 0 },
 			},
-			-- Base Patch
 			{
 				filename = "__reskins-assets-angels__/graphics/entity/washing-plant/washing-plant-base-patch.png",
 				priority = "extra-high",
@@ -39,7 +37,6 @@ local function get_graphics_set(tint)
 
 	if tint then
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Mask
 			filename = "__reskins-assets-angels__/graphics/entity/washing-plant/washing-plant-mask.png",
 			priority = "extra-high",
 			width = 224,
@@ -49,7 +46,6 @@ local function get_graphics_set(tint)
 			tint = tint,
 		})
 		table.insert(animation.layers--[[@cast -?]], {
-			-- Highlights
 			filename = "__reskins-assets-angels__/graphics/entity/washing-plant/washing-plant-highlights.png",
 			priority = "extra-high",
 			width = 224,
@@ -69,13 +65,14 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Defines the options for the Angel's washing plant sprite set.
 ---@class WashingPlantSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for Angel's washing plant.
----@param params WashingPlantSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params WashingPlantSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's washing plant.
 ---
 ---#### Examples
 ---```lua
@@ -105,7 +102,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
 ---Gets the icon for Angel's washing plant, in the tints given by `params`.
 M.get_icon = icons:tinted("washing-plant"):build("get_icon")

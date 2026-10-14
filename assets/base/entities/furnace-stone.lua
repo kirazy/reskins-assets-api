@@ -8,13 +8,11 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
 -- Setup inheritance.
-
--- Private sprite helpers
 
 ---@return Animation
 ---@private
@@ -71,8 +69,6 @@ local function get_stone_furnace_working_light(orientation)
 	}
 end
 
--- Graphics set builders
-
 ---Gets the water reflection of a generic stone furnace.
 ---@return WaterReflectionDefinition
 local function get_stone_furnace_water_reflection()
@@ -94,7 +90,7 @@ local function get_stone_furnace_water_reflection()
 	return water_reflection
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param variant "standard" | "chemical"
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint, variant)
@@ -156,7 +152,6 @@ local function get_graphics_set(tint, variant)
 	local working_visualisations
 	if is_chemical then
 		working_visualisations = {
-			-- Fire effect
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -164,7 +159,6 @@ local function get_graphics_set(tint, variant)
 				south_animation = get_stone_furnace_fire_animation(),
 				west_animation = get_stone_furnace_fire_animation(),
 			},
-			-- Furnace light
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -173,7 +167,6 @@ local function get_graphics_set(tint, variant)
 				south_animation = get_stone_furnace_working_light("left-front"),
 				west_animation = get_stone_furnace_working_light(),
 			},
-			-- Ground light
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -185,19 +178,16 @@ local function get_graphics_set(tint, variant)
 		animation = _sprites.make_4way_animation_from_spritesheet(animation)
 	else
 		working_visualisations = {
-			-- Fire effect
 			{
 				fadeout = true,
 				effect = "flicker",
 				animation = get_stone_furnace_fire_animation(),
 			},
-			-- Furnace light
 			{
 				fadeout = true,
 				effect = "flicker",
 				animation = get_stone_furnace_working_light(),
 			},
-			-- Ground light
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -214,7 +204,7 @@ local function get_graphics_set(tint, variant)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 ---@private
 local function get_graphics_set_flipped(tint)
@@ -267,7 +257,6 @@ local function get_graphics_set_flipped(tint)
 	return {
 		animation = _sprites.make_4way_animation_from_spritesheet({ layers = layers }),
 		working_visualisations = {
-			-- Fire effect
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -275,7 +264,6 @@ local function get_graphics_set_flipped(tint)
 				east_animation = get_stone_furnace_fire_animation(),
 				south_animation = get_stone_furnace_fire_animation(),
 			},
-			-- Furnace light
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -284,7 +272,6 @@ local function get_graphics_set_flipped(tint)
 				south_animation = get_stone_furnace_working_light("right-front"),
 				west_animation = get_stone_furnace_working_light("bottom"),
 			},
-			-- Ground light
 			{
 				fadeout = true,
 				effect = "flicker",
@@ -296,7 +283,7 @@ local function get_graphics_set_flipped(tint)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param variant "standard" | "chemical"
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint, variant)
@@ -348,17 +335,16 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
--- Public API
-
+---Defines the options for the vanilla stone furnace sprite set.
 ---@class FurnaceStoneSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The variant to draw.
+---@field tint? Color
+---The variant to use.
 ---@field variant "standard"
 
 ---Gets the sprite set for the vanilla stone furnace.
----@param params FurnaceStoneSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params FurnaceStoneSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the vanilla stone furnace.
 ---
 ---#### Examples
 ---```lua
@@ -396,7 +382,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = nil,
-			nominal_width = 2,
+			nominal_width = 1.6,
 			nominal_height = 2,
 		},
 	}
@@ -404,16 +390,16 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local base_icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconCatalog:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for a stone furnace of the `variant` and in the tints given by `params`.
-M.get_icon = IconCatalog.dispatch("variant", { "standard", "chemical" }, "get_icon", function(variant)
+M.get_icon = IconBuilderFactory.dispatch("variant", { "standard", "chemical" }, "get_icon", function(variant)
 	-- The standard furnace uses vanilla artwork; the rest are Bob's.
 	local name = variant == "standard" and "furnace-stone" or "furnace-stone-" .. variant
-	local catalog = variant == "standard" and base_icons or bobs_icons
+	local factory = variant == "standard" and base_icons or bobs_icons
 
-	return catalog:tinted(name)
+	return factory:tinted(name)
 end)
 
 return M

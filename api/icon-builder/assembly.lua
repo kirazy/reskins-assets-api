@@ -11,105 +11,118 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconComposition = require("__reskins-sprite-utils__.icon-composition")
 
----Assembles icons from the state of an icon builder, and validates the arguments of its methods.
+---Provides methods for assembling icons from the state of an icon builder, and for validating the arguments of its
+---methods.
 ---
----This module is internal to the icon builder classes.
+---The module is internal to the icon builders and `IconBuilderFactory`.
 ---@class IconBuilderAssembly
 local _assembly = {}
 
----A tint with an alpha of zero, which the game renders additively.
+---The tint of a `highlights` layer. The game renders an icon layer with a tint alpha of zero additively.
 ---@type Color
 _assembly.ADDITIVE_TINT = { 1, 1, 1, 0 }
 
----Represents the roles of a layer of an icon.
+---Defines the roles of the layers of an icon.
 ---
----A role is the trailing segment of the file name of a layer.
+---The role of a layer is the last segment of its file name, such as the `mask` in `boiler-fire-mask.png`.
 ---@enum IconRole
 _assembly.role = {
-	---The body of the icon.
+	---The base layer of the icon.
 	base = "base",
 
-	---The body of the icon, drawn in the color of the icon.
+	---The mask layer of the icon.
 	mask = "mask",
 
-	---The highlights of the icon, rendered additively over the body.
+	---The highlights layer of the icon.
 	highlights = "highlights",
 }
 
----Controls how one layer of an icon is drawn.
+---Defines the options for one layer of an icon.
 ---@class IconLayerOptions
----The file name segment selecting a group of layers within the icon, such as the `fire` in
+---The segment of the file name that selects a group of layers within the icon, such as the `fire` in
 ---`boiler-fire-mask.png`. Default `nil`.
----@field part string?
----The color of the layer, used when no parameter of the creator supplies one. Default `nil`.
----@field tint Color?
----The size of the artwork of the layer, in pixels. Defaults to the size of the catalog.
----@field icon_size SpriteSizeType?
----The name of the parameter the layer is drawn for. The layer is omitted when the creator is
----called without that parameter; `false` draws the layer always. Defaults to the parameter the
----layer takes its color from, except for `base` layers and the first layer of the icon, which are
----always drawn.
----@field requires (string|false)?
+---@field part? string
+---The tint of the layer when no parameter tints it. The layer added by `highlights` ignores this field. Default `nil`.
+---@field tint? Color
+---The size of the square file of the layer, in pixels. If `nil`, the size of the icon is used.
+---@field icon_size? SpriteSizeType
+---The name of the parameter without which the layer is omitted, or `false` to include the layer always. If `nil`, the
+---layer requires the parameter that tints it, unless it is a base layer added by `base` or `tinted`, or is the first
+---layer of the icon.
+---@field requires? string|false
 
----A rule that checks several parameters of a creator together.
+---Defines a rule that checks several parameters of an icon together.
 ---@class IconParamsRule
----The name of the parameter the failure is reported against. If `nil`, the failure is reported
----against the parameters as a whole.
----@field field string?
+---The name of the parameter against which a failure is reported. If `nil`, a failure is reported against the parameters
+---as a whole.
+---@field field? string
 ---The names of the parameters passed to `check`, in order.
 ---@field fields string[]
----A function that receives the parameters named by `fields`, in order, and returns `true` if they
----are valid together; otherwise, `false` and an optional message that replaces `message`.
+---A function that receives the values of the parameters named by `fields`, in order, and returns `true` if they are
+---valid together; otherwise, `false` and an optional error message that replaces `message`.
 ---@field check fun(...): boolean, string?
----What the parameters must satisfy, phrased to follow `must be`. Used when `check` returns no
----message.
----@field message string?
+---The requirement that the parameters must satisfy, as a phrase that follows "must be", such as
+---`"a supported combination"`. The message is used when `check` returns no error message. Default `"valid"`.
+---@field message? string
 
----One layer of an icon, as recorded by a builder.
+---Defines one layer of an icon, as recorded by a builder.
 ---@class IconBuilderLayer
----The trailing segment of the file name; `nil` for a flat file.
----@field role string?
----The segment of the file name between the stem and the role.
----@field part string?
----The name of the parameter supplying the tint; `nil` when no parameter tints the layer.
----@field tint_param string?
----The tint used when no parameter supplies one.
----@field tint Color?
----The size of the artwork of the layer, in pixels. `nil` to use the size of the icon.
----@field icon_size SpriteSizeType?
----The name of the parameter the layer is drawn for, `false` to draw it always, or `nil` to apply
----the default.
----@field requires (string|false)?
+---The role of the layer, which is the last segment of its file name. The field is `nil` for the layer of a flat icon.
+---@field role? string
+---The segment of the file name before the role, if any.
+---@field part? string
+---The name of the parameter that tints the layer. The field is `nil` when no parameter tints the layer.
+---@field tint_param? string
+---The tint of the layer when no parameter tints it.
+---@field tint? Color
+---The size of the square file of the layer, in pixels. The field is `nil` when the layer uses the size of the icon.
+---@field icon_size? SpriteSizeType
+---The name of the parameter that the layer requires, or `false` when the layer is always included. The field is `nil`
+---when the layer takes the default described by `IconLayerOptions.requires`.
+---@field requires? string|false
 
----One parameter selecting the artwork of an icon, as recorded by a builder.
+---Defines a selection of the layers of an icon by part, or by part and role.
+---@class IconLayerSelector
+---The part of the selected layers.
+---@field part string
+---The role of the selected layer. If `nil`, every layer of `part` is selected.
+---@field role? IconRole|string
+
+---Defines a selection of the layers of an icon, as recorded by a builder.
+---@class IconBuilderSelector
+---The role of the selected layers. The field is `nil` when every layer of `part` is selected.
+---@field role? string
+---The part of the selected layers. The field is `nil` when the layers with no part are selected.
+---@field part? string
+
+---Defines a parameter that selects the artwork of an icon, as recorded by a builder.
 ---@class IconBuilderKey
 ---The name of the parameter.
 ---@field name string
----The validator accepting the values of the parameter.
+---The validator for the values of the parameter.
 ---@field validator Validator<any>
----The roles the key is written into; `nil` for every role.
----@field roles table<string, true>?
+---The layers for which the value of the parameter is appended to the file name. The field is `nil` when the value is
+---appended for every layer.
+---@field layers? IconBuilderSelector[]
 
----The state of an icon builder.
+---Defines the state of an icon builder.
 ---@class IconBuilderState
----The mod-relative folder containing the artwork.
+---The path of the folder containing the artwork.
 ---@field folder string
 ---The name of the icon.
 ---@field name string
----The file name stem of the layers. `nil` to use the name of the icon.
----@field stem string?
----Whether the icon is drawn from a single file.
+---The stem of the file names. The field is `nil` when the name of the icon is used as the stem.
+---@field stem? string
+---When `true`, indicates that the icon has one layer, taken from a single file.
 ---@field flat boolean
 ---The name of the type-specific icon defaults.
----@field defaults_type IconDefaultsType?
----The size of the artwork, in pixels.
----@field icon_size SpriteSizeType?
----The layers of the icon, in drawing order.
+---@field defaults_type? IconDefaultsType
+---The size of the square files of the layers, in pixels, if set.
+---@field icon_size? SpriteSizeType
+---The layers of the icon, in draw order.
 ---@field layers IconBuilderLayer[]
----The parameters selecting the artwork, in order.
+---The parameters that select the artwork, in the order in which their values are appended to the file name.
 ---@field keys IconBuilderKey[]
-
--- Validators
 
 ---A validator that checks that a value is an icon name.
 _assembly.IconName = Common.non_empty_string:describe_as("an icon name")
@@ -121,8 +134,8 @@ _assembly.Role = Common.non_empty_string:describe_as("an icon role")
 _assembly.ParamName = Common.non_empty_string:describe_as("a parameter name")
 
 ---A validator that checks that a value is an `IconLayerOptions` object with no unknown fields.
----@type ShapeValidator<IconLayerOptions>
-_assembly.LayerOptions = V.shape({
+---@type StructValidator<IconLayerOptions>
+_assembly.LayerOptions = V.struct({
 	part = Common.non_empty_string:optional(),
 	tint = Common.color:optional(),
 	icon_size = Common.sprite_size:optional(),
@@ -132,8 +145,8 @@ _assembly.LayerOptions = V.shape({
 	:describe_as("an IconLayerOptions")
 
 ---A validator that checks that a value is an `IconParamsRule` object with no unknown fields.
----@type ShapeValidator<IconParamsRule>
-_assembly.ParamsRule = V.shape({
+---@type StructValidator<IconParamsRule>
+_assembly.ParamsRule = V.struct({
 	field = Common.non_empty_string:optional(),
 	fields = V.array(Common.non_empty_string):not_empty(),
 	check = V.func(),
@@ -151,8 +164,18 @@ _assembly.check_build = V.signature("build", {
 	{ "rules", _assembly.ParamsRules:optional() },
 })
 
----Validates the arguments of `base`, `mask`, and `highlights`.
-_assembly.check_layer_options = V.signature("icon_builder_layer", {
+---Validates the arguments of `base`.
+_assembly.check_base = V.signature("base", {
+	{ "options", _assembly.LayerOptions:optional() },
+})
+
+---Validates the arguments of `mask`.
+_assembly.check_mask = V.signature("mask", {
+	{ "options", _assembly.LayerOptions:optional() },
+})
+
+---Validates the arguments of `highlights`.
+_assembly.check_highlights = V.signature("highlights", {
 	{ "options", _assembly.LayerOptions:optional() },
 })
 
@@ -180,17 +203,26 @@ _assembly.check_tinted_part = V.signature("tinted_part", {
 	{ "name", _assembly.ParamName },
 })
 
+---A validator that checks that a value is a role, or an `IconLayerSelector` object with no unknown fields.
+_assembly.LayerSelector = V.any_of(
+	_assembly.Role,
+	V.struct({
+		part = Common.non_empty_string,
+		role = _assembly.Role:optional(),
+	})
+		:strict()
+		:describe_as("an IconLayerSelector")
+):describe_as("an icon role or an IconLayerSelector")
+
 ---Validates the arguments of `keyed`.
 _assembly.check_keyed = V.signature("keyed", {
 	{ "name", _assembly.ParamName },
 	{ "validator", V.table():describe_as("a validator") },
-	{ "roles", V.array(_assembly.Role):not_empty():optional() },
+	{ "layers", V.array(_assembly.LayerSelector):not_empty():optional() },
 })
 
--- State
-
----Creates a copy of the given state.
----@param state IconBuilderState
+---Creates a copy of the given `state`.
+---@param state IconBuilderState The state to copy.
 ---@return IconBuilderState
 ---@nodiscard
 function _assembly.copy_state(state)
@@ -207,11 +239,11 @@ function _assembly.copy_state(state)
 	}
 end
 
----Creates a layer from the given fields.
----@param role string?
----@param tint_param string?
----@param tint Color?
----@param options IconLayerOptions?
+---Creates a layer with the given `role`, `tint_param`, and `tint`, and the fields of the given `options`.
+---@param role? string The role of the layer, or `nil` for the layer of a flat icon.
+---@param tint_param? string The name of the parameter that tints the layer.
+---@param tint? Color The tint of the layer. If given, `options.tint` is ignored.
+---@param options? IconLayerOptions The options for the layer.
 ---@return IconBuilderLayer
 ---@nodiscard
 function _assembly.new_layer(role, tint_param, tint, options)
@@ -228,11 +260,10 @@ function _assembly.new_layer(role, tint_param, tint, options)
 	}
 end
 
----Creates an instance of the given `class` with the state of the given builder and the given
----layers appended.
----@param builder { state: IconBuilderState }
----@param layers IconBuilderLayer[]
----@param class table
+---Creates an instance of the given `class` with the state of the given builder and the given `layers` appended.
+---@param builder { state: IconBuilderState } The builder from which the state is copied.
+---@param layers IconBuilderLayer[] The layers to append.
+---@param class table The class of the new instance.
 ---@return any
 ---@nodiscard
 function _assembly.with_layers(builder, layers, class)
@@ -244,34 +275,39 @@ function _assembly.with_layers(builder, layers, class)
 	return setmetatable({ state = state }, class)
 end
 
----Creates an instance of the given `class` with the state of the given builder and a key
----appended.
----@param builder { state: IconBuilderState }
----@param name string
----@param validator Validator<any>
----@param roles string[]?
----@param class table
+---Creates an instance of the given `class` with the state of the given builder and a key appended.
+---@param builder { state: IconBuilderState } The builder from which the state is copied.
+---@param name string The name of the parameter.
+---@param validator Validator<any> The validator for the values of the parameter.
+---@param layers? (string|IconLayerSelector)[] The layers for which the value of the parameter is appended to the file name. If `nil`, the value is appended for every layer.
+---@param class table The class of the new instance.
 ---@return any
 ---@nodiscard
-function _assembly.with_key(builder, name, validator, roles, class)
+function _assembly.with_key(builder, name, validator, layers, class)
 	local state = _assembly.copy_state(builder.state)
 
-	---@type table<string, true>?
-	local role_set
-	if roles then
-		role_set = {}
-		for _, role in pairs(roles) do
-			role_set[role] = true
+	---@type IconBuilderSelector[]?
+	local selectors
+	if layers then
+		selectors = {}
+		for index, layer in pairs(layers) do
+			if type(layer) == "string" then
+				selectors[index] = { role = layer }
+			else
+				selectors[index] = { role = layer.role, part = layer.part }
+			end
 		end
 	end
 
-	state.keys[#state.keys + 1] = { name = name, validator = validator, roles = role_set }
+	state.keys[#state.keys + 1] = { name = name, validator = validator, layers = selectors }
 
 	return setmetatable({ state = state }, class)
 end
 
----Creates a `base` layer, tinted by `base_tint` and drawn whether or not one is given.
----@param options IconLayerOptions?
+---Creates a `base` layer, tinted by the `base_tint` parameter when one is given.
+---
+---The layer is always included, unless `options.requires` names a parameter.
+---@param options? IconLayerOptions The options for the layer.
 ---@return IconBuilderLayer
 ---@nodiscard
 function _assembly.base_layer(options)
@@ -283,9 +319,9 @@ function _assembly.base_layer(options)
 	return layer
 end
 
----Creates the base, mask, and highlights layers of the given `part`, tinted like the body of the
----icon.
----@param part string
+---Creates the `base`, `mask`, and `highlights` layers of the given `part`, with the base layer tinted by the
+---`base_tint` parameter and the mask layer tinted by the `tint` parameter.
+---@param part string The segment of the file name that selects the layers.
 ---@return IconBuilderLayer[]
 ---@nodiscard
 function _assembly.tinted_layers(part)
@@ -296,9 +332,10 @@ function _assembly.tinted_layers(part)
 	}
 end
 
----Creates the layers of a mask and highlights pair for the given `part`.
----@param part string
----@param tint_param string
+---Creates the `mask` and `highlights` layers of the given `part`, with the mask layer tinted by the parameter named
+---`tint_param`.
+---@param part string The segment of the file name that selects the layers.
+---@param tint_param string The name of the parameter that tints the mask layer.
 ---@return IconBuilderLayer[]
 ---@nodiscard
 function _assembly.tinted_part_layers(part, tint_param)
@@ -313,9 +350,49 @@ function _assembly.tinted_part_layers(part, tint_param)
 	}
 end
 
--- Assembly
+---Indicates whether the given `selector` selects the given `layer`.
+---@param selector IconBuilderSelector
+---@param layer IconBuilderLayer
+---@return boolean
+---@nodiscard
+local function is_selected(selector, layer)
+	return layer.part == selector.part and (selector.role == nil or layer.role == selector.role)
+end
 
----Gets the file name of the given layer.
+---Indicates whether the value of the given `key` is appended to the file name of the given `layer`.
+---@param key IconBuilderKey
+---@param layer IconBuilderLayer
+---@return boolean
+---@nodiscard
+local function is_keyed(key, layer)
+	if not key.layers then
+		return true
+	end
+
+	for _, selector in pairs(key.layers) do
+		if is_selected(selector, layer) then
+			return true
+		end
+	end
+
+	return false
+end
+
+---Gets a description of the given `selector` for error messages.
+---@param selector IconBuilderSelector
+---@return string
+---@nodiscard
+local function describe_selector(selector)
+	if not selector.part then
+		return string.format("the role '%s'", selector.role)
+	elseif not selector.role then
+		return string.format("the part '%s'", selector.part)
+	end
+
+	return string.format("the role '%s' of the part '%s'", selector.role, selector.part)
+end
+
+---Gets the file name of the given `layer` for the given `params`.
 ---@param state IconBuilderState
 ---@param layer IconBuilderLayer
 ---@param params table<string, any>
@@ -324,7 +401,7 @@ end
 local function resolve_file_name(state, layer, params)
 	local stem = state.stem or state.name
 	for _, key in pairs(state.keys) do
-		if not key.roles or (layer.role and key.roles[layer.role]) then
+		if is_keyed(key, layer) then
 			stem = stem .. "-" .. tostring(params[key.name])
 		end
 	end
@@ -342,9 +419,9 @@ local function resolve_file_name(state, layer, params)
 	return state.folder .. "/" .. state.name .. "/" .. table.concat(segments, "-") .. ".png"
 end
 
----Indicates whether the given layer is drawn for the given parameters.
+---Indicates whether the given `layer` is included for the given `params`.
 ---@param layer IconBuilderLayer
----@param index integer The position of the layer among the layers of the icon.
+---@param index integer
 ---@param params table<string, any>
 ---@return boolean
 ---@nodiscard
@@ -357,9 +434,9 @@ local function is_drawn(layer, index, params)
 	return not requires or params[requires] ~= nil
 end
 
----Assembles the icon described by the given state for the given parameters.
----@param state IconBuilderState
----@param params table<string, any>
+---Creates the icon described by the given `state` for the given `params`.
+---@param state IconBuilderState The state of the builder.
+---@param params table<string, any> The parameters given to the creator.
 ---@return SafeIconData[]
 ---@nodiscard
 function _assembly.assemble(state, params)
@@ -381,12 +458,14 @@ function _assembly.assemble(state, params)
 		end
 	end
 
-	assert(icon_data[1], string.format("The icon '%s' draws no layers for the given parameters.", state.name))
+	if not icon_data[1] then
+		error(string.format("The icon '%s' has no layers for the given parameters.", state.name), 3)
+	end
 
 	return _sprite_utils.icons.add_missing_icons_defaults(icon_data, state.defaults_type)
 end
 
----Creates the validation rule that applies the given parameter rules.
+---Creates the validation rule that applies the given `rules` to the parameters of a creator.
 ---@param rules IconParamsRule[]
 ---@param fields table<string, Validator<any>>
 ---@return ValidationRule<table>
@@ -396,8 +475,7 @@ local function rules_rule(rules, fields)
 		id = "icon-builder.rules",
 		describe = "consistent",
 		check = function(value, ctx)
-			-- A rule spanning parameters cannot handle a parameter of the wrong type; those are
-			-- reported by the shape.
+			-- Skip the rules when a parameter has the wrong type. The struct validator reports that error.
 			for name, validator in pairs(fields) do
 				if not validator:is_valid(value[name]) then
 					return true
@@ -429,32 +507,32 @@ local function rules_rule(rules, fields)
 	}
 end
 
----Creates a composition holding the given icon in the canvas group, with the icon defaults type
----of the given state.
----@param icon_data SafeIconData[] The assembled icon.
----@param state IconBuilderState The state the icon was assembled from.
+---Creates a composition with the given `icon_data` in the canvas group, with the icon defaults type of the given
+---`state`.
+---@param icon_data SafeIconData[] The icon to add.
+---@param state IconBuilderState The state from which the icon was created.
 ---@return IconComposition
 ---@nodiscard
 function _assembly.as_composition(icon_data, state)
 	return IconComposition:from_icons(icon_data, nil, state.defaults_type)
 end
 
----Creates the function that draws the icon described by the given state.
+---Creates a function that returns the icon described by the given `state`.
 ---
----The parameters of the creator are the keys of the state, which are required, and the tint
----parameters of its layers, which are optional. A parameter name used twice is an error.
----@param state IconBuilderState
----@param creator_name string? Defaults to the name of the icon.
----@param rules IconParamsRule[]?
----@param optional boolean Whether the creator may be called without parameters.
----@param finish? fun(icon_data: SafeIconData[], state: IconBuilderState): any Converts the assembled icon to the output of the creator. Defaults to returning the icon.
+---Each key of the given `state` is a required parameter of the creator, and each parameter that tints a layer is
+---optional.
+---@param state IconBuilderState The state of the builder.
+---@param creator_name? string The name of the creator in error messages. If `nil`, the name of the icon is used.
+---@param rules? IconParamsRule[] The rules that check several parameters together.
+---@param optional boolean When `true`, indicates that the creator can be called without parameters.
+---@param finish? fun(icon_data: SafeIconData[], state: IconBuilderState): any The function that converts the icon to the result of the creator. If `nil`, the creator returns the icon.
 ---@return fun(params?: table<string, any>): any
 ---@nodiscard
 function _assembly.make_creator(state, creator_name, rules, optional, finish)
 	local name = creator_name or state.name
 
 	if not state.layers[1] then
-		error(string.format("The icon '%s' draws no layers.", state.name), 3)
+		error(string.format("The icon '%s' has no layers.", state.name), 3)
 	end
 
 	---@type table<string, Validator<any>>
@@ -474,13 +552,38 @@ function _assembly.make_creator(state, creator_name, rules, optional, finish)
 		declare(key.name, key.validator)
 	end
 
-	-- Several layers may share one tint parameter; a key may not share its name with one.
+	-- Declare each tint parameter once, since several layers can share it. A key with the name of a tint parameter is an
+	-- error.
 	---@type table<string, true>
 	local tint_params = {}
 	for _, layer in pairs(state.layers) do
 		if layer.tint_param and not tint_params[layer.tint_param] then
 			tint_params[layer.tint_param] = true
 			declare(layer.tint_param, Common.color:optional())
+		end
+	end
+
+	for _, key in pairs(state.keys) do
+		for _, selector in pairs(key.layers or {}) do
+			local found = false
+			for _, layer in pairs(state.layers) do
+				if is_selected(selector, layer) then
+					found = true
+					break
+				end
+			end
+
+			if not found then
+				error(
+					string.format(
+						"The key '%s' of the icon '%s' selects %s, which no layer of the icon has.",
+						key.name,
+						state.name,
+						describe_selector(selector)
+					),
+					3
+				)
+			end
 		end
 	end
 
@@ -512,16 +615,16 @@ function _assembly.make_creator(state, creator_name, rules, optional, finish)
 		end
 	end
 
-	local shape = V.shape(fields):strict():describe_as("the parameters of the icon")
+	local struct = V.struct(fields):strict():describe_as("the parameters of the icon")
 	if rules and rules[1] then
-		shape = shape:extend(rules_rule(rules, fields))
+		struct = struct:extend(rules_rule(rules, fields))
 	end
 	if optional then
-		shape = shape:optional() --[[@as ShapeValidator<any>]]
+		struct = struct:optional() --[[@as StructValidator<any>]]
 	end
 
 	local check = V.signature(name, {
-		{ "params", shape },
+		{ "params", struct },
 	})
 
 	return function(params)

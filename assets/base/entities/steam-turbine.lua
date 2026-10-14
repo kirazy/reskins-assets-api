@@ -8,11 +8,11 @@
 local _defines = require("api.defines")
 
 local V = require("__reskins-sprite-utils__.validation")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation
 local function get_horizontal_animation(tint)
 	local base_path = "__base__/graphics/entity/steam-turbine/"
@@ -69,7 +69,7 @@ local function get_horizontal_animation(tint)
 	return animation
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation
 local function get_vertical_animation(tint)
 	local base_path = "__base__/graphics/entity/steam-turbine/"
@@ -126,7 +126,7 @@ local function get_vertical_animation(tint)
 	return animation
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimation
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/steam-turbine/remnants/"
@@ -169,13 +169,14 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
+---Defines the options for the vanilla steam turbine sprite set.
 ---@class SteamTurbineSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla steam turbine.
----@param params SteamTurbineSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<GeneratorSpriteSet>
+---@param params SteamTurbineSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<GeneratorSpriteSet> # The sprite set definition for the vanilla steam turbine.
 ---
 ---#### Examples
 ---```lua
@@ -206,7 +207,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla steam turbine, in the tints given by `params`.
 M.get_icon = icons:tinted("steam-turbine"):build("get_icon")

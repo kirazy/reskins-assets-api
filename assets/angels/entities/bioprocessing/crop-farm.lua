@@ -8,7 +8,7 @@
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
@@ -17,7 +17,7 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "variant", V.one_of({ "basic", "temperate", "desert", "swamp" }) },
 })
 
----@param tint Color?
+---@param tint? Color
 ---@param variant "basic"|"temperate"|"desert"|"swamp"
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint, variant)
@@ -68,7 +68,6 @@ local function get_graphics_set(tint, variant)
 			always_draw = true,
 			animation = {
 				layers = {
-					-- Mask
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/field/field-mask.png",
 						priority = "extra-high",
@@ -77,7 +76,6 @@ local function get_graphics_set(tint, variant)
 						shift = { 0, 0 },
 						tint = tint,
 					},
-					-- Highlights
 					{
 						filename = "__reskins-assets-angels__/graphics/entity/field/field-highlights.png",
 						priority = "extra-high",
@@ -119,15 +117,16 @@ local function get_graphics_set(tint, variant)
 	return graphics_set
 end
 
+---Defines the options for the Angel's crop farm sprite set.
 ---@class CropFarmSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The variant to draw.
+---@field tint? Color
+---The variant to use.
 ---@field variant "basic"|"temperate"|"desert"|"swamp"
 
 ---Gets the sprite set for Angel's crop farm.
----@param params CropFarmSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<CraftingMachineSpriteSet>
+---@param params CropFarmSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's crop farm.
 ---
 ---#### Examples
 ---```lua
@@ -157,12 +156,17 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-angels__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
----Gets the icon for Angel's crop farm of the `variant` and in the tints given by `params`.
-M.get_icon = IconCatalog.dispatch("variant", { "basic", "temperate", "desert", "swamp" }, "get_icon", function(key)
-	-- The basic farm's artwork is filed under the bare field name.
-	return icons:tinted(key == "basic" and "field" or "field-" .. key)
-end)
+---Gets the icon for Angel's crop farm of the given `variant` and in the tints given by `params`.
+M.get_icon = IconBuilderFactory.dispatch(
+	"variant",
+	{ "basic", "temperate", "desert", "swamp" },
+	"get_icon",
+	function(key)
+		-- The basic farm's artwork is filed under the bare field name.
+		return icons:tinted(key == "basic" and "field" or "field-" .. key)
+	end
+)
 
 return M

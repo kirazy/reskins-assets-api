@@ -11,7 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local ENTITY_FOLDER = "__reskins-assets-assorted__/graphics/entity/mining-drill-electric-tall/"
 local FOLDER = ENTITY_FOLDER .. "mining-drill-electric-tall-"
@@ -20,12 +20,12 @@ local ICON_FOLDER = "__reskins-assets-assorted__/graphics/icons/mining-drill-ele
 
 local M = {}
 
----The housing the drill is built into.
+---The housing into which the drill is built.
 ---@alias MiningDrillElectricTallFrame
 ---| "yellow" # The yellow housing the semi-classic drill is built into.
 ---| "blue" # The blue housing the semi-classic area drills are built into.
 
----@param frame MiningDrillElectricTallFrame
+---@param frame MiningDrillElectricTallFrame The housing of the drill.
 ---@param part string The part, named for its direction and role, as `"north-wet"`.
 ---@return FileName
 ---@nodiscard
@@ -75,7 +75,7 @@ local SHADOW_SEQUENCE = {
 	21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1,
 }
 
----@param tint Color?
+---@param tint? Color
 ---@param speed double
 ---@return Animation
 ---@nodiscard
@@ -145,9 +145,9 @@ local function get_vertical_drill_animation(tint, speed)
 	return animation
 end
 
----@param tint Color?
----@param speed double
----@param is_front boolean When `true`, draws the half of the head that stands in front of the housing.
+---@param tint? Color The tint of the tintable layers.
+---@param speed double The animation speed.
+---@param is_front boolean When `true`, selects the half of the head that stands in front of the housing.
 ---@return Animation
 ---@nodiscard
 local function get_horizontal_drill_animation(tint, speed, is_front)
@@ -221,11 +221,11 @@ local function get_horizontal_drill_animation(tint, speed, is_front)
 	return animation
 end
 
----@param name string The file the smoke is drawn from, less the folder and the extension.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param name string The file of the smoke, less the folder and the extension.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_directional_smoke(name, width, height, shift, speed)
@@ -246,10 +246,10 @@ local function get_directional_smoke(name, width, height, shift, speed)
 	}
 end
 
----@param name string The file the light is drawn from, less the folder and the extension.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
+---@param name string The file of the light, less the folder and the extension.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
 ---@return Animation
 ---@nodiscard
 local function get_light(name, width, height, shift)
@@ -293,11 +293,11 @@ local function get_secondary_light()
 	}
 end
 
----@param name string The file the fluid layer is drawn from, less the folder and the extension.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param name string The file of the fluid layer, less the folder and the extension.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_fluid_layer(name, width, height, shift, speed)
@@ -316,12 +316,12 @@ local function get_fluid_layer(name, width, height, shift, speed)
 	}
 end
 
----@param frame MiningDrillElectricTallFrame
+---@param frame MiningDrillElectricTallFrame The housing of the drill.
 ---@param part string The part, named for its direction and role.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_frame_layer(frame, part, width, height, shift, speed)
@@ -337,13 +337,13 @@ local function get_frame_layer(frame, part, width, height, shift, speed)
 	}
 end
 
----The halves of the housing that stand in front of the head, which do not repeat with its stroke.
----@param frame MiningDrillElectricTallFrame
+---Gets the halves of the housing that stand in front of the head, which do not repeat with its stroke.
+---@param frame MiningDrillElectricTallFrame The housing of the drill.
 ---@param part string The part, named for its direction and role.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_frame_front_layer(frame, part, width, height, shift, speed)
@@ -358,11 +358,11 @@ local function get_frame_front_layer(frame, part, width, height, shift, speed)
 	}
 end
 
----@param name string The file the output is drawn from, less the folder and the extension.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param name string The file of the output, less the folder and the extension.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_output_layer(name, width, height, shift, speed)
@@ -379,12 +379,12 @@ local function get_output_layer(name, width, height, shift, speed)
 	}
 end
 
----@param frame MiningDrillElectricTallFrame
+---@param frame MiningDrillElectricTallFrame The housing of the drill.
 ---@param part string The part, named for its direction and role.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_frame_output_layer(frame, part, width, height, shift, speed)
@@ -401,11 +401,11 @@ local function get_frame_output_layer(frame, part, width, height, shift, speed)
 	}
 end
 
----@param name string The file the shadow is drawn from, less the folder and the extension.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
----@param speed double
+---@param name string The file of the shadow, less the folder and the extension.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@param speed double The animation speed.
 ---@return Animation
 ---@nodiscard
 local function get_housing_shadow(name, width, height, shift, speed)
@@ -496,8 +496,9 @@ local function get_wet_animation(frame, speed)
 	}
 end
 
----The visualisations both graphics sets open with: the dust the drill throws up, and the head itself.
----@param tint Color?
+---Gets the working visualisations with which both graphics sets open. They are the dust thrown up by the drill and the
+---drill head.
+---@param tint? Color
 ---@param speed double
 ---@return WorkingVisualisation[]
 ---@nodiscard
@@ -571,7 +572,7 @@ local function get_shared_working_visualisations(tint, speed)
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@param speed double
 ---@return WorkingVisualisation
 ---@nodiscard
@@ -595,7 +596,6 @@ local function get_dry_working_visualisations(params, speed)
 	---@type WorkingVisualisation[]
 	local visualisations = get_shared_working_visualisations(params.tint, speed)
 
-	-- Front Frame
 	table.insert(visualisations, {
 		always_draw = true,
 		east_animation = get_frame_front_layer(frame, "east-front", 208, 186, util.by_pixel(3, 2), speed),
@@ -625,7 +625,6 @@ local function get_wet_working_visualisations(params, speed)
 	---@type WorkingVisualisation[]
 	local visualisations = get_shared_working_visualisations(params.tint, speed)
 
-	-- Fluid Window Background (Bottom)
 	table.insert(visualisations, {
 		secondary_draw_order = -49,
 		always_draw = true,
@@ -633,7 +632,6 @@ local function get_wet_working_visualisations(params, speed)
 		south_animation = get_fluid_layer("south-wet-window-background", 132, 88, util.by_pixel(-1, -33), speed),
 	})
 
-	-- Fluid Window Background (Front)
 	table.insert(visualisations, {
 		always_draw = true,
 		north_animation = get_fluid_layer("north-wet-window-background-front", 132, 28, util.by_pixel(-1, -18), speed),
@@ -641,7 +639,6 @@ local function get_wet_working_visualisations(params, speed)
 		west_animation = get_fluid_layer("west-wet-window-background-front", 88, 86, util.by_pixel(11, 0), speed),
 	})
 
-	-- Fluid Base (Bottom)
 	table.insert(visualisations, {
 		always_draw = true,
 		secondary_draw_order = -48,
@@ -650,7 +647,6 @@ local function get_wet_working_visualisations(params, speed)
 		south_animation = get_fluid_layer("south-wet-fluid-background", 130, 96, util.by_pixel(0, -32), speed),
 	})
 
-	-- Fluid Base (Front)
 	table.insert(visualisations, {
 		always_draw = true,
 		apply_tint = "input-fluid-base-color",
@@ -659,7 +655,6 @@ local function get_wet_working_visualisations(params, speed)
 		west_animation = get_fluid_layer("west-wet-fluid-background-front", 82, 88, util.by_pixel(12, -1), speed),
 	})
 
-	-- Fluid Flow (Bottom)
 	table.insert(visualisations, {
 		secondary_draw_order = -47,
 		always_draw = true,
@@ -668,7 +663,6 @@ local function get_wet_working_visualisations(params, speed)
 		south_animation = get_fluid_layer("south-wet-fluid-flow", 130, 88, util.by_pixel(-2, -32), speed),
 	})
 
-	-- Fluid Flow (Front)
 	table.insert(visualisations, {
 		always_draw = true,
 		apply_tint = "input-fluid-flow-color",
@@ -677,7 +671,6 @@ local function get_wet_working_visualisations(params, speed)
 		west_animation = get_fluid_layer("west-wet-fluid-flow-front", 84, 86, util.by_pixel(11, 0), speed),
 	})
 
-	-- Front Frame (Wet)
 	table.insert(visualisations, {
 		always_draw = true,
 		north_animation = {
@@ -710,10 +703,10 @@ local function get_wet_working_visualisations(params, speed)
 	return visualisations
 end
 
----@param name string The file the patch is drawn from, less the folder and the extension.
----@param width SpriteSizeType
----@param height SpriteSizeType
----@param shift Vector
+---@param name string The file of the patch, less the folder and the extension.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
 ---@return Sprite
 ---@nodiscard
 local function get_integration_sprite(name, width, height, shift)
@@ -740,7 +733,7 @@ local function get_integration_patch()
 	}
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 ---@nodiscard
 local function get_corpse_animation(tint)
@@ -784,18 +777,19 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(4, animation)
 end
 
+---Defines the options for the semi-classic electric mining drill sprite set.
 ---@class MiningDrillElectricTallSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
----The housing the drill is built into. Defaults to `"yellow"`.
----@field frame MiningDrillElectricTallFrame?
----The speed the drill's head strokes at. Defaults to `0.4`.
----@field animation_speed double?
+---@field tint? Color
+---The housing into which the drill is built. Default `"yellow"`.
+---@field frame? MiningDrillElectricTallFrame
+---The speed at which the head of the drill strokes. Default `0.4`.
+---@field animation_speed? double
 
 local check_get_sprite_set = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.shape({
+		V.struct({
 			tint = Common.color:optional(),
 			frame = V.one_of({ "yellow", "blue" }):optional(),
 			animation_speed = Common.positive_number:optional(),
@@ -804,8 +798,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the semi-classic electric mining drill.
----@param params MiningDrillElectricTallSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<MiningDrillSpriteSet>
+---@param params MiningDrillElectricTallSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for the semi-classic electric mining drill.
 ---
 ---#### Examples
 ---```lua
@@ -860,7 +854,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
 ---Gets the icon for the semi-classic electric mining drill, in the tints given by `params`.
 M.get_icon = icons:tinted("mining-drill-electric-tall"):build("get_icon")

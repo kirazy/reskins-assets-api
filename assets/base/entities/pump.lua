@@ -6,11 +6,11 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local IconCatalog = require("api.icon-catalog")
+local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
 
----@param tint Color?
+---@param tint? Color
 ---@return Animation4Way
 local function get_animations(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/pump/"
@@ -179,7 +179,7 @@ local function get_animations(tint)
 	return animations
 end
 
----@param tint Color?
+---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
 	local base_path = _defines.assets_source.base .. "/graphics/entity/pump/remnants/"
@@ -223,13 +223,14 @@ local function get_corpse_animation(tint)
 	return { animation }
 end
 
+---Defines the options for the vanilla pump sprite set.
 ---@class PumpSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
----@field tint Color?
+---@field tint? Color
 
 ---Gets the sprite set for the vanilla pump.
----@param params PumpSpriteSetParams The options the sprite set is drawn with.
----@return SpriteSetDefinition<PumpSpriteSet>
+---@param params PumpSpriteSetParams The options for the sprite set.
+---@return SpriteSetDefinition<PumpSpriteSet> # The sprite set definition for the vanilla pump.
 ---
 ---#### Examples
 ---```lua
@@ -259,7 +260,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconCatalog:create({ folder = "__reskins-assets-base__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
 ---Gets the icon for the vanilla pump, in the tints given by `params`.
 M.get_icon = icons:tinted("pump"):build("get_icon")

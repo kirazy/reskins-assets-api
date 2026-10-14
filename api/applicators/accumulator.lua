@@ -15,7 +15,7 @@ end
 ---@param explosion ExplosionPrototype
 ---@param set AccumulatorSpriteSet
 local function apply_sprite_set_to_explosion(explosion, set)
-	error("Not implemented")
+	error("The applicator does not support explosions.")
 end
 
 ---@type AccumulatorSpriteSetApplicator
@@ -25,10 +25,10 @@ return {
 	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
----The sprite data of a `SpriteSetDefinition` of type `accumulator_sprite_set`.
+---Defines the sprite data of a `SpriteSetDefinition` of type `accumulator_sprite_set`.
 ---@class (exact) AccumulatorSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `chargable_graphics`.
 ---@field chargable_graphics ChargableGraphics
 
----The applicator for accumulators.
+---Applies the `AccumulatorSpriteSet` to `AccumulatorPrototype` instances.
 ---@class (exact) AccumulatorSpriteSetApplicator : SpriteSetApplicator<AccumulatorPrototype, AccumulatorSpriteSet>
