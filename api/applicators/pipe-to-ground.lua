@@ -10,11 +10,25 @@ local meld = require("__core__.lualib.meld")
 ---@param prototype PipeToGroundPrototype
 ---@param set PipeToGroundSpriteSet
 local function apply_sprite_set_to_pipe_to_ground(prototype, set)
-	prototype.pictures = util.copy(set.pictures)
-	prototype.frozen_patch = set.frozen_patch
+	local set_copy = util.copy(set)
+	prototype.pictures = set_copy.pictures
+	prototype.frozen_patch = set_copy.frozen_patch
 
-	if prototype.fluid_box and set.fluid_box then
-		meld(prototype.fluid_box, set.fluid_box--[[@as FluidBox]])
+	if prototype.fluid_box and set_copy.fluid_box then
+		-- TODO: This needs to not be a straight merge-across, but rather directionally-aware intelligent merging; additionally pipe_connections is not 1:1.
+		-- prototype.fluid_box.pipe_connections = set_copy.fluid_box.pipe_connections
+
+		prototype.fluid_box.render_layer = set_copy.fluid_box.render_layer
+		prototype.fluid_box.draw_only_when_connected = set_copy.fluid_box.draw_only_when_connected
+		prototype.fluid_box.pipe_covers = set_copy.fluid_box.pipe_covers
+		prototype.fluid_box.pipe_covers_frozen = set_copy.fluid_box.pipe_covers_frozen
+		prototype.fluid_box.pipe_picture = set_copy.fluid_box.pipe_picture
+		prototype.fluid_box.pipe_picture_frozen = set_copy.fluid_box.pipe_picture_frozen
+		prototype.fluid_box.mirrored_pipe_picture = set_copy.fluid_box.mirrored_pipe_picture
+		prototype.fluid_box.mirrored_pipe_picture_frozen = set_copy.fluid_box.mirrored_pipe_picture_frozen
+		prototype.fluid_box.secondary_draw_order = set_copy.fluid_box.secondary_draw_order
+		prototype.fluid_box.secondary_draw_orders = set_copy.fluid_box.secondary_draw_orders
+		prototype.fluid_box.enable_working_visualisations = set_copy.fluid_box.enable_working_visualisations
 	end
 end
 
