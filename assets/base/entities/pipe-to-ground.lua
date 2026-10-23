@@ -213,8 +213,6 @@ function M.get_sprite_set(params)
 	local definition = {
 		set_type = _defines.sprite_set_type.pipe_to_ground_sprite_set,
 		set = {
-			horizontal_window_bounding_box = { { -0.25, -0.28125 }, { 0.25, 0.15625 } },
-			vertical_window_bounding_box = { { -0.28125, -0.5 }, { 0.03125, 0.125 } },
 			pictures = get_pictures(params.pipe_material),
 			frozen_patch = frozen_patch,
 			fluid_box = get_fluid_box_graphics(params.pipe_material),
