@@ -9,6 +9,8 @@ local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
+local V = require("__reskins-sprite-utils__.validation")
+local AssetsCommon = require("api.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
@@ -178,6 +180,30 @@ local function get_frozen_pictures()
 	}
 
 	return frozen_pipe_pictures
+end
+
+--- @param i integer
+local function make_visualization(i)
+	return {
+		filename = "__base__/graphics/entity/pipe/visualization.png",
+		priority = "extra-high",
+		x = i * 64,
+		size = 64,
+		scale = 0.5,
+		flags = { "icon" },
+	}
+end
+
+--- @param i integer
+local function make_disabled_visualization(i)
+	return {
+		filename = "__base__/graphics/entity/pipe/disabled-visualization.png",
+		priority = "extra-high",
+		x = i * 64,
+		size = 64,
+		scale = 0.5,
+		flags = { "icon" },
+	}
 end
 
 ---@param pipe_material PipeMaterial
@@ -533,6 +559,42 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 				},
 			},
 		},
+		straight_vertical_single_visualization = make_visualization(0),
+		straight_vertical_visualization = make_visualization(5),
+		straight_vertical_window_visualization = make_visualization(5),
+		straight_horizontal_window_visualization = make_visualization(10),
+		straight_horizontal_visualization = make_visualization(10),
+		corner_up_right_visualization = make_visualization(3),
+		corner_up_left_visualization = make_visualization(9),
+		corner_down_right_visualization = make_visualization(6),
+		corner_down_left_visualization = make_visualization(12),
+		t_up_visualization = make_visualization(11),
+		t_down_visualization = make_visualization(14),
+		t_right_visualization = make_visualization(7),
+		t_left_visualization = make_visualization(13),
+		cross_visualization = make_visualization(15),
+		ending_up_visualization = make_visualization(1),
+		ending_down_visualization = make_visualization(4),
+		ending_right_visualization = make_visualization(2),
+		ending_left_visualization = make_visualization(8),
+		straight_vertical_single_disabled_visualization = make_disabled_visualization(0),
+		straight_vertical_disabled_visualization = make_disabled_visualization(5),
+		straight_vertical_window_disabled_visualization = make_disabled_visualization(5),
+		straight_horizontal_window_disabled_visualization = make_disabled_visualization(10),
+		straight_horizontal_disabled_visualization = make_disabled_visualization(10),
+		corner_up_right_disabled_visualization = make_disabled_visualization(3),
+		corner_up_left_disabled_visualization = make_disabled_visualization(9),
+		corner_down_right_disabled_visualization = make_disabled_visualization(6),
+		corner_down_left_disabled_visualization = make_disabled_visualization(12),
+		t_up_disabled_visualization = make_disabled_visualization(11),
+		t_down_disabled_visualization = make_disabled_visualization(14),
+		t_right_disabled_visualization = make_disabled_visualization(7),
+		t_left_disabled_visualization = make_disabled_visualization(13),
+		cross_disabled_visualization = make_disabled_visualization(15),
+		ending_up_disabled_visualization = make_disabled_visualization(1),
+		ending_down_disabled_visualization = make_disabled_visualization(4),
+		ending_right_disabled_visualization = make_disabled_visualization(2),
+		ending_left_disabled_visualization = make_disabled_visualization(8),
 		horizontal_window_background = {
 			filename = assets_base_path .. "pipe-horizontal-window-background.png",
 			priority = "extra-high",
@@ -663,5 +725,38 @@ M.get_icon = IconBuilderFactory.dispatch("material", _defines.pipe_material, "ge
 
 	return IconBuilderFactory:create({ folder = folder }):flat(name .. "-pipe")
 end)
+
+local pipe_material_tints = {
+	[_defines.pipe_material.iron] = { 0.810, 0.739, 0.651, 1 },
+	[_defines.pipe_material.aluminum] = util.color("#ffffff"),
+	[_defines.pipe_material.copper] = util.color("#d45539"),
+	[_defines.pipe_material.stone] = util.color("#cfcfcf"),
+	[_defines.pipe_material.bronze] = util.color("#b09954"),
+	[_defines.pipe_material.steel] = util.color("#877c76"),
+	[_defines.pipe_material.plastic] = util.color("#0078ff"),
+	[_defines.pipe_material.brass] = util.color("#f9c854"),
+	[_defines.pipe_material.titanium] = util.color("#adadb2"),
+	[_defines.pipe_material.ceramic] = util.color("#8f7967"),
+	[_defines.pipe_material.tungsten] = util.color("#3b3b3b"),
+	[_defines.pipe_material.nitinol] = util.color("#706f6b"),
+	[_defines.pipe_material.copper_tungsten] = util.color("#99593d"),
+	[_defines.pipe_material.titanium_angels] = util.color("#995f92"),
+	[_defines.pipe_material.ceramic_angels] = util.color("#ffffff"),
+	[_defines.pipe_material.tungsten_angels] = util.color("#7e5f45"),
+	[_defines.pipe_material.nitinol_angels] = util.color("#7664a9"),
+}
+
+local check_get_material_tint = V.signature("get_material_tint", {
+	{ "params", V.struct({ material = AssetsCommon.pipe_material }) },
+})
+
+---Gets the tint corresponding to the specified `pipe_material`.
+---@param params { material: PipeMaterial }
+---@return Color
+function M.get_material_tint(params)
+	check_get_material_tint(params)
+
+	return util.copy(pipe_material_tints[params.material]) --[[@as Color]]
+end
 
 return M
