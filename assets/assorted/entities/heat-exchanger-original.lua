@@ -16,27 +16,21 @@ local M = {}
 ---@return string
 ---@private
 local function get_pipe_path(pipe_material)
-	if pipe_material == "base" then
-		return "__reskins-assets-base__/graphics/entity/heat-exchanger/heat-pipes/base/"
-	else
-		return "__reskins-assets-bobs__/graphics/entity/heat-exchanger/heat-pipes/" .. pipe_material .. "/"
-	end
+	return "__reskins-assets-assorted__/graphics/entity/heat-exchanger-original/heat-pipes/" .. pipe_material .. "/"
 end
 
 ---@param tint? Color
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return BoilerPictureSet
 local function get_picture_set(tint, pipe_material)
-	local base_path = "__base__/graphics/entity/heat-exchanger/"
-	local shadow_path = "__base__/graphics/entity/boiler/"
-	local assets_path = "__reskins-assets-base__/graphics/entity/heat-exchanger/"
+	local assets_path = "__reskins-assets-assorted__/graphics/entity/heat-exchanger-original/"
 	local pipe_path = get_pipe_path(pipe_material)
 
 	---@type Animation
 	local north = {
 		layers = {
 			{
-				filename = base_path .. "heatex-N-idle.png",
+				filename = assets_path .. "heat-exchanger-north-idle-base.png",
 				priority = "extra-high",
 				width = 269,
 				height = 221,
@@ -50,7 +44,7 @@ local function get_picture_set(tint, pipe_material)
 	local east = {
 		layers = {
 			{
-				filename = base_path .. "heatex-E-idle.png",
+				filename = assets_path .. "heat-exchanger-east-idle-base.png",
 				priority = "extra-high",
 				width = 211,
 				height = 301,
@@ -64,7 +58,7 @@ local function get_picture_set(tint, pipe_material)
 	local south = {
 		layers = {
 			{
-				filename = base_path .. "heatex-S-idle.png",
+				filename = assets_path .. "heat-exchanger-south-idle-base.png",
 				priority = "extra-high",
 				width = 260,
 				height = 201,
@@ -78,7 +72,7 @@ local function get_picture_set(tint, pipe_material)
 	local west = {
 		layers = {
 			{
-				filename = base_path .. "heatex-W-idle.png",
+				filename = assets_path .. "heat-exchanger-west-idle-base.png",
 				priority = "extra-high",
 				width = 196,
 				height = 273,
@@ -202,7 +196,7 @@ local function get_picture_set(tint, pipe_material)
 
 	-- Shadows are always appended last.
 	table.insert(north.layers--[[@cast -?]], {
-		filename = shadow_path .. "boiler-N-shadow.png",
+		filename = assets_path .. "heat-exchanger-north-shadow.png",
 		priority = "extra-high",
 		width = 274,
 		height = 164,
@@ -211,7 +205,7 @@ local function get_picture_set(tint, pipe_material)
 		scale = 0.5,
 	})
 	table.insert(east.layers--[[@cast -?]], {
-		filename = shadow_path .. "boiler-E-shadow.png",
+		filename = assets_path .. "heat-exchanger-east-shadow.png",
 		priority = "extra-high",
 		width = 184,
 		height = 194,
@@ -220,7 +214,7 @@ local function get_picture_set(tint, pipe_material)
 		scale = 0.5,
 	})
 	table.insert(south.layers--[[@cast -?]], {
-		filename = shadow_path .. "boiler-S-shadow.png",
+		filename = assets_path .. "heat-exchanger-south-shadow.png",
 		priority = "extra-high",
 		width = 311,
 		height = 131,
@@ -229,7 +223,7 @@ local function get_picture_set(tint, pipe_material)
 		scale = 0.5,
 	})
 	table.insert(west.layers--[[@cast -?]], {
-		filename = shadow_path .. "boiler-W-shadow.png",
+		filename = assets_path .. "heat-exchanger-west-shadow.png",
 		priority = "extra-high",
 		width = 206,
 		height = 218,
@@ -267,15 +261,14 @@ end
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return RotatedAnimation
 local function get_corpse_animation(tint, pipe_material)
-	local assets_path = "__reskins-assets-base__/graphics/entity/heat-exchanger/remnants/"
+	local assets_path = "__reskins-assets-assorted__/graphics/entity/heat-exchanger-original/remnants/"
 	local pipe_path = get_pipe_path(pipe_material)
-	local pipe_remnant_filename = pipe_material == "base" and "heat-pipe-remnants.png" or "heat-pipe-remnants-base.png"
 
 	---@type RotatedAnimation
 	local animation = {
 		layers = {
 			{
-				filename = "__base__/graphics/entity/heat-exchanger/remnants/heat-exchanger-remnants.png",
+				filename = assets_path .. "heat-exchanger-remnants-base.png",
 				width = 272,
 				height = 262,
 				direction_count = 4,
@@ -308,7 +301,7 @@ local function get_corpse_animation(tint, pipe_material)
 
 	-- Pipe remnant is always appended regardless of tint.
 	table.insert(animation.layers--[[@cast -?]], {
-		filename = pipe_path .. pipe_remnant_filename,
+		filename = pipe_path .. "heat-pipe-remnants-base.png",
 		width = 272,
 		height = 262,
 		direction_count = 4,
@@ -319,20 +312,20 @@ local function get_corpse_animation(tint, pipe_material)
 	return animation
 end
 
----Defines the options for the vanilla heat exchanger sprite set.
+---Defines the options for the original heat exchanger sprite set.
 ---@class HeatExchangerSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 ---The material from which the pipes are built.
 ---@field pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 
----Gets the sprite set for the vanilla heat exchanger.
+---Gets the sprite set for the original heat exchanger.
 ---@param params HeatExchangerSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<BoilerSpriteSet> # The sprite set definition for the vanilla heat exchanger.
+---@return SpriteSetDefinition<BoilerSpriteSet> # The sprite set definition for the original heat exchanger.
 ---
 ---#### Examples
 ---```lua
----local heat_exchanger = require("__reskins-assets-api__.assets.base.entities.heat-exchanger")
+---local heat_exchanger = require("__reskins-assets-api__.assets.assorted.entities.heat-exchanger-original")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
 ---
 ---local sprite_set = heat_exchanger.get_sprite_set({ tint = tint, pipe_material = pipe_material })
@@ -365,15 +358,15 @@ function M.get_sprite_set(params)
 	return definition
 end
 
-local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
 local heat_pipe_material = V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" })
 
----Gets the icon for a heat exchanger with the given `pipe_material` and in the tints given by `params`.
+---Gets the icon for an original heat exchanger with the given `pipe_material` and in the tints given by `params`.
 ---
----Every exchanger shares one mask and one highlights layer, only the base layer differs by material.
+---Every heat exchanger shares one mask and one highlights layer, only the base layer differs by material.
 M.get_icon = icons
-	:tinted("heat-exchanger")
+	:tinted("heat-exchanger-original")
 	:keyed("pipe_material", heat_pipe_material, { IconBuilderFactory.role.base })
 	:build("get_icon")
 

@@ -16,12 +16,12 @@ local M = {}
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
-	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/oil-refinery/"
+	local assets_path = _defines.assets_source.assorted_assets .. "/graphics/entity/oil-refinery-original/"
 
 	---@type Animation[]
 	local layers = {
 		{
-			filename = "__base__/graphics/entity/oil-refinery/oil-refinery.png",
+			filename = assets_path .. "oil-refinery-base.png",
 			priority = "high",
 			width = 386,
 			height = 430,
@@ -52,7 +52,7 @@ local function get_graphics_set(tint)
 	end
 
 	table.insert(layers, {
-		filename = "__base__/graphics/entity/oil-refinery/oil-refinery-shadow.png",
+		filename = assets_path .. "oil-refinery-shadow.png",
 		width = 674,
 		height = 426,
 		shift = util.by_pixel(82.5, 26.5),
@@ -71,13 +71,13 @@ end
 ---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
-	local assets_path = _defines.assets_source.base_assets .. "/graphics/entity/oil-refinery/remnants/"
+	local assets_path = _defines.assets_source.assorted_assets .. "/graphics/entity/oil-refinery-original/remnants/"
 
 	---@type RotatedAnimation
 	local animation = {
 		layers = {
 			{
-				filename = "__base__/graphics/entity/oil-refinery/remnants/refinery-remnants.png",
+				filename = assets_path .. "oil-refinery-remnants-base.png",
 				width = 467,
 				height = 415,
 				direction_count = 1,
@@ -111,18 +111,18 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
----Defines the options for the vanilla oil refinery sprite set.
+---Defines the options for the original oil refinery sprite set.
 ---@class OilRefinerySpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
----Gets the sprite set for the vanilla oil refinery.
+---Gets the sprite set for the original oil refinery.
 ---@param params OilRefinerySpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the vanilla oil refinery.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the original oil refinery.
 ---
 ---#### Examples
 ---```lua
----local oil_refinery = require("__reskins-assets-api__.assets.base.entities.oil-refinery")
+---local oil_refinery = require("__reskins-assets-api__.assets.assorted.entities.oil-refinery-original")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
 ---
 ---local sprite_set = oil_refinery.get_sprite_set({ tint = tint })
