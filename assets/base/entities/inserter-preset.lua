@@ -35,7 +35,6 @@ local long_capable_presets = {
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/inserters/"
 local base_path = "__reskins-assets-base__/graphics/entity/"
 
-
 ---A preset inserter type. Each value names one subfolder in `reskins-assets-bobs/graphics/entity/inserters/`.
 ---@alias InserterPreset
 ---| "inserter"
@@ -57,7 +56,6 @@ local base_path = "__reskins-assets-base__/graphics/entity/"
 ---When `true`, indicates that the long-arm hand sprite variants are selected. Valid for non-bulk presets other than
 ---`"inserter-long-handed"`.
 ---@field is_long? boolean
-
 
 ---Gets the arm sprite, `hand_base_picture`, for the given `preset`.
 ---@param preset InserterPreset

@@ -184,17 +184,12 @@ function _factory.new()
 
 		local set_type = set_type_by_prototype_type[prototype.type]
 		if not set_type then
-			return false,
-				string.format("no sprite set type available for type '%s'", prototype.type)
+			return false, string.format("no sprite set type available for type '%s'", prototype.type)
 		end
 
 		if not applicators[set_type] then
 			return false,
-				string.format(
-					"no registered applicator supports type '%s' with sprite set type '%s'",
-					prototype.type,
-					set_type
-				)
+				string.format("no registered applicator supports type '%s' with sprite set type '%s'", prototype.type, set_type)
 		end
 
 		return true

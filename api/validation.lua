@@ -17,7 +17,6 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 ---@class AssetsCommon
 local _common = {}
 
-
 ---A validator that checks that a value is a symbol name.
 _common.symbol = V.one_of(_defines.symbol):describe_as("a symbol name")
 
@@ -29,7 +28,6 @@ _common.light = V.one_of(_defines.light):describe_as("a light name")
 
 ---A validator that checks that a value is a pipe material.
 _common.pipe_material = V.one_of(_defines.pipe_material):describe_as("a pipe material")
-
 
 ---A validator that checks that a value is a prototype with `type` and `name` fields, and permits unknown fields.
 ---@type StructValidator<PrototypeBase>
@@ -67,7 +65,6 @@ _common.entity_prototype = V.struct({
 	name = Common.prototype_name,
 	selection_box = _common.bounding_box:optional(),
 }):describe_as("an entity prototype")
-
 
 ---A validator that checks that a value is a `SpriteSetType`.
 _common.sprite_set_type = V.one_of(_defines.sprite_set_type):describe_as("a SpriteSetType")
