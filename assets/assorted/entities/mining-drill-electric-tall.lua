@@ -6,6 +6,7 @@
 ---@namespace Reskins.Assets.Assorted.Entities
 
 local _defines = require("api.defines")
+local _constants = require("assets.constants")
 
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
@@ -820,17 +821,21 @@ function M.get_sprite_set(params)
 	local definition = {
 		set_type = _defines.sprite_set_type.mining_drill_sprite_set,
 		set = {
+			---@diagnostic disable-next-line: assign-type-mismatch
 			graphics_set = {
 				animation = get_dry_animation(frame, speed),
 				working_visualisations = get_dry_working_visualisations(params, speed),
+				status_colors = _constants.get_status_colors(),
 				drilling_vertical_movement_duration = 10 / speed,
 				shift_animation_waypoint_stop_duration = 195 / speed,
 				shift_animation_transition_duration = 30 / speed,
 			},
 			graphics_set_flipped = nil,
+			---@diagnostic disable-next-line: assign-type-mismatch
 			wet_mining_graphics_set = {
 				animation = get_wet_animation(frame, speed),
 				working_visualisations = get_wet_working_visualisations(params, speed),
+				status_colors = _constants.get_status_colors(),
 				drilling_vertical_movement_duration = 10 / speed,
 				shift_animation_waypoint_stop_duration = 195 / speed,
 				shift_animation_transition_duration = 30 / speed,
