@@ -33,10 +33,6 @@ return {
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `pipe_to_ground_sprite_set`.
 ---@class (exact) PipeToGroundSpriteSet : EntityWithHealthSpriteSet
----The prototype's `horizontal_window_bounding_box`.
----@field horizontal_window_bounding_box BoundingBox
----The prototype's `vertical_window_bounding_box`.
----@field vertical_window_bounding_box BoundingBox
 ---The prototype's `pictures`.
 ---@field pictures Sprite4Way
 ---The prototype's `frozen_patch`.
