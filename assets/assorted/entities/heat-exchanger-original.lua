@@ -3,7 +3,7 @@
 ---@using Reskins.Assets.Applicators
 ---@using Reskins.SpriteUtils
 
----@namespace Reskins.Assets.Base.Entities
+---@namespace Reskins.Assets.Assorted.Entities
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
