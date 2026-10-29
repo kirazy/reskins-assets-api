@@ -1,3 +1,5 @@
+---@diagnostic disable: generic-constraint-mismatch
+
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
@@ -25,34 +27,29 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 local function get_circuit_connector()
 	local base_path = "__base__/graphics/entity/assembling-machine-1/"
 	return circuit_connector_definitions.create_vector({
-		---@diagnostic disable-next-line: generic-constraint-mismatch
 		connector_main = util.sprite_load(base_path .. "assembling-machine-1-connection", {
 			priority = "low",
 			frame_count = 1,
 			scale = 0.5,
 		}),
-		---@diagnostic disable-next-line: generic-constraint-mismatch
 		connector_shadow = util.sprite_load(base_path .. "assembling-machine-1-connection-shadow", {
 			priority = "low",
 			frame_count = 1,
 			scale = 0.5,
 			draw_as_shadow = true,
 		}),
-		---@diagnostic disable-next-line: generic-constraint-mismatch
 		led_blue = util.sprite_load(base_path .. "assembling-machine-1-connection-lights-blue", {
 			priority = "low",
 			frame_count = 1,
 			scale = 0.5,
 			draw_as_glow = true,
 		}),
-		---@diagnostic disable-next-line: generic-constraint-mismatch
 		led_green = util.sprite_load(base_path .. "assembling-machine-1-connection-lights-green", {
 			priority = "low",
 			frame_count = 1,
 			scale = 0.5,
 			draw_as_glow = true,
 		}),
-		---@diagnostic disable-next-line: generic-constraint-mismatch
 		led_red = util.sprite_load(base_path .. "assembling-machine-1-connection-lights-red", {
 			priority = "low",
 			frame_count = 1,
@@ -88,47 +85,40 @@ local function get_assembler_graphics_set(tint, tier)
 	return {
 		animation = {
 			layers = {
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-base", {
 					priority = "high",
 					repeat_count = 64,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-base-mask", {
 					priority = "high",
 					repeat_count = 64,
 					tint = tint,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-base-highlights", {
 					priority = "high",
 					repeat_count = 64,
 					blend_mode = "additive-soft",
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-animation", {
 					priority = "high",
 					frame_count = 64,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-animation-mask", {
 					priority = "high",
 					frame_count = 64,
 					tint = tint,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-animation-highlights", {
 					priority = "high",
 					frame_count = 64,
 					blend_mode = "additive-soft",
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				util.sprite_load(base_path .. "assembling-machine-" .. tier .. "-shadow", {
 					priority = "high",
 					frame_count = tier == 3 and 64 or nil,
@@ -142,7 +132,6 @@ local function get_assembler_graphics_set(tint, tier)
 			{
 				apply_tint = "status",
 				always_draw = true,
-				---@diagnostic disable-next-line: generic-constraint-mismatch
 				animation = util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-status-light", {
 					priority = "high",
 					draw_as_glow = true,
@@ -165,17 +154,17 @@ local function get_assembler_graphics_set(tint, tier)
 end
 
 ---@param tint? Color
+---@param tier 1|2|3
 ---@return Sprite4Way
 ---@nodiscard
-local function get_assembler_3_pipe_pictures(tint)
-	local assets_path = "__reskins-assets-base__/graphics/entity/assembling-machine-3/"
+local function get_assembler_pipe_pictures(tint, tier)
+	local assets_path = "__reskins-assets-base__/graphics/entity/assembling-machine-" .. tier .. "/"
 
 	---@type Sprite4Way
 	return {
 		north = {
 			layers = {
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-north", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-north", {
 					priority = "extra-high",
 					scale = 0.5,
 				}),
@@ -183,19 +172,16 @@ local function get_assembler_3_pipe_pictures(tint)
 		},
 		east = {
 			layers = {
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-east", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-east", {
 					priority = "extra-high",
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-east-mask", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-east-mask", {
 					priority = "extra-high",
 					tint = tint,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-east-highlights", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-east-highlights", {
 					priority = "extra-high",
 					blend_mode = "additive-soft",
 					scale = 0.5,
@@ -204,19 +190,16 @@ local function get_assembler_3_pipe_pictures(tint)
 		},
 		south = {
 			layers = {
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-south", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-south", {
 					priority = "extra-high",
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-south-mask", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-south-mask", {
 					priority = "extra-high",
 					tint = tint,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-south-highlights", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-south-highlights", {
 					priority = "extra-high",
 					blend_mode = "additive-soft",
 					scale = 0.5,
@@ -226,19 +209,16 @@ local function get_assembler_3_pipe_pictures(tint)
 		},
 		west = {
 			layers = {
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-west", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-west", {
 					priority = "extra-high",
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-west-mask", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-west-mask", {
 					priority = "extra-high",
 					tint = tint,
 					scale = 0.5,
 				}),
-				---@diagnostic disable-next-line: generic-constraint-mismatch
-				util.sprite_load(assets_path .. "assembling-machine-3-pipe-west-highlights", {
+				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-west-highlights", {
 					priority = "extra-high",
 					blend_mode = "additive-soft",
 					scale = 0.5,
@@ -249,10 +229,11 @@ local function get_assembler_3_pipe_pictures(tint)
 end
 
 ---@param tint? Color
+---@param tier 1|2|3
 ---@param draw_order? int8
 ---@return FluidBoxGraphics
-local function get_fluid_box_graphics(tint, draw_order)
-	local pipe_pictures = get_assembler_3_pipe_pictures(tint)
+local function get_fluid_box_graphics(tint, tier, draw_order)
+	local pipe_pictures = get_assembler_pipe_pictures(tint, tier)
 
 	---@type FluidBoxGraphics
 	return {
@@ -382,7 +363,7 @@ function M.get_sprite_set(params)
 	-- Ensure fluid box pipe pictures draw over the mask and highlights.
 	assert(graphics_set.animation and graphics_set.animation.layers)
 	local draw_order = #graphics_set.animation.layers
-	local fluid_box = get_fluid_box_graphics(params.tint, draw_order) --, params.use_simple_pipe_pictures)
+	local fluid_box = get_fluid_box_graphics(params.tint, tier, draw_order) --, params.use_simple_pipe_pictures)
 
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
