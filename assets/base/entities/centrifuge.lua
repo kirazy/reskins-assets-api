@@ -132,11 +132,26 @@ end
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
-	return {
+	---@type CraftingMachineGraphicsSet
+	local graphics_set = {
 		always_draw_idle_animation = true,
 		idle_animation = get_idle_animation(tint),
 		working_visualisations = get_working_visualisations(),
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		graphics_set.reset_animation_when_frozen = true
+		graphics_set.frozen_patch = {
+			filename = "__space-age__/graphics/entity/frozen/centrifuge/centrifuge-frozen.png",
+			priority = "high",
+			width = 256,
+			height = 320,
+			shift = util.by_pixel(0, -16),
+			scale = 0.5,
+		}
+	end
+
+	return graphics_set
 end
 
 ---@param tint? Color
