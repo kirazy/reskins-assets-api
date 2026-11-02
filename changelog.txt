@@ -3,11 +3,12 @@ Version: 0.2.1
 Date: ????
   Changes:
     - Revised blending mode from additive-soft to additive.
+    - The centrifuge sprite set now includes the water reflection, and uses the re-rendered sprites from Factorio 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2026-11-01
   Features:
-    - Updated for Factorio 2.1
+    - Updated for Factorio 2.1.
     - Added the applicator framework: `api.applicators` applies a sprite set to a prototype in one call, handling routing, sprite set type conversion, and scaling on the caller's behalf.
       - `applicators.apply_sprite_set(prototype, definition, params)` routes on `prototype.type` to the applicator that applies it; a `corpse` prototype instead applies the fields of `definition.set.corpse` directly.
       - `defines.sprite_set_type` names the sprite set types, each recording the prototype types that consume it.

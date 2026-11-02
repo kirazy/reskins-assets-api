@@ -1,3 +1,5 @@
+---@diagnostic disable: generic-constraint-mismatch
+
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
@@ -5,142 +7,103 @@
 
 ---@namespace Reskins.Assets.Base.Entities
 
-local _sprites = require("__reskins-sprite-utils__.sprites")
+local _sprite_utils = {
+	sprites = require("__reskins-sprite-utils__.sprites"),
+	utils = require("__reskins-sprite-utils__.utils"),
+}
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+
+local BASE_PATH = "__base__/graphics/entity/centrifuge/"
+local ASSETS_BASE_PATH = "__reskins-assets-base__/graphics/entity/centrifuge/"
 
 local M = {}
 
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
-	local assets_path = "__reskins-assets-base__/graphics/entity/centrifuge/"
-
-	---@type Animation
-	local idle_animation = {
-		layers = {
-			-- Centrifuge C has no tint layers; the C sub-assembly keeps the base game appearance.
-			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-C.png",
-				priority = "high",
-				scale = 0.5,
-				line_length = 8,
-				width = 237,
-				height = 214,
-				frame_count = 64,
-				shift = util.by_pixel(-0.25, -26.5),
-			},
-			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-C-shadow.png",
-				priority = "high",
-				draw_as_shadow = true,
-				scale = 0.5,
-				line_length = 8,
-				width = 279,
-				height = 152,
-				frame_count = 64,
-				shift = util.by_pixel(16.75, -10),
-			},
-			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-B.png",
-				priority = "high",
-				scale = 0.5,
-				line_length = 8,
-				width = 156,
-				height = 234,
-				frame_count = 64,
-				shift = util.by_pixel(23, 6.5),
-			},
-		},
+---@return Animation[]
+local function get_idle_animation_integration_layers(tint)
+	---@type Animation[]
+	local layers = {
+		util.sprite_load(BASE_PATH .. "centrifuge-ABC-integration", {
+			priority = "high",
+			scale = 0.5,
+			frame_count = 1,
+			repeat_count = 64,
+		}),
 	}
 
 	if tint then
-		table.insert(idle_animation.layers--[[@cast -?]], {
-			filename = assets_path .. "centrifuge-b-mask.png",
+		layers[#layers + 1] = util.sprite_load(ASSETS_BASE_PATH .. "centrifuge-abc-integration-mask", {
 			priority = "high",
+			scale = 0.5,
+			frame_count = 1,
+			repeat_count = 64,
 			tint = tint,
-			scale = 0.5,
-			line_length = 8,
-			width = 156,
-			height = 234,
-			frame_count = 64,
-			shift = util.by_pixel(23, 6.5),
 		})
-		table.insert(idle_animation.layers--[[@cast -?]], {
-			filename = assets_path .. "centrifuge-b-highlights.png",
+		layers[#layers + 1] = util.sprite_load(ASSETS_BASE_PATH .. "centrifuge-abc-integration-highlights", {
 			priority = "high",
-			blend_mode = "additive-soft",
 			scale = 0.5,
-			line_length = 8,
-			width = 156,
-			height = 234,
-			frame_count = 64,
-			shift = util.by_pixel(23, 6.5),
+			frame_count = 1,
+			repeat_count = 64,
+			blend_mode = "additive",
 		})
 	end
 
-	table.insert(idle_animation.layers--[[@cast -?]], {
-		filename = "__base__/graphics/entity/centrifuge/centrifuge-B-shadow.png",
-		priority = "high",
-		draw_as_shadow = true,
-		scale = 0.5,
-		line_length = 8,
-		width = 251,
-		height = 149,
-		frame_count = 64,
-		shift = util.by_pixel(63.25, 15.25),
-	})
+	return layers
+end
 
-	table.insert(idle_animation.layers--[[@cast -?]], {
-		filename = "__base__/graphics/entity/centrifuge/centrifuge-A.png",
-		priority = "high",
-		scale = 0.5,
-		line_length = 8,
-		width = 139,
-		height = 246,
-		frame_count = 64,
-		shift = util.by_pixel(-26.25, 3.5),
-	})
+---@param tint? Color
+---@return Animation[]
+local function get_idle_animation_layers(tint)
+	---@type Animation[]
+	local layers = {
+		util.sprite_load(BASE_PATH .. "centrifuge-ABC", {
+			priority = "high",
+			scale = 0.5,
+			frame_count = 64,
+		}),
+	}
 
 	if tint then
-		table.insert(idle_animation.layers--[[@cast -?]], {
-			filename = assets_path .. "centrifuge-a-mask.png",
+		layers[#layers + 1] = util.sprite_load(ASSETS_BASE_PATH .. "centrifuge-abc-mask", {
 			priority = "high",
+			scale = 0.5,
+			frame_count = 64,
 			tint = tint,
-			scale = 0.5,
-			line_length = 8,
-			width = 139,
-			height = 246,
-			frame_count = 64,
-			shift = util.by_pixel(-26.25, 3.5),
 		})
-		table.insert(idle_animation.layers--[[@cast -?]], {
-			filename = assets_path .. "centrifuge-a-highlights.png",
+		layers[#layers + 1] = util.sprite_load(ASSETS_BASE_PATH .. "centrifuge-abc-highlights", {
 			priority = "high",
-			blend_mode = "additive-soft",
 			scale = 0.5,
-			line_length = 8,
-			width = 139,
-			height = 246,
 			frame_count = 64,
-			shift = util.by_pixel(-26.25, 3.5),
+			blend_mode = "additive",
 		})
 	end
 
-	table.insert(idle_animation.layers--[[@cast -?]], {
-		filename = "__base__/graphics/entity/centrifuge/centrifuge-A-shadow.png",
-		priority = "high",
-		draw_as_shadow = true,
-		scale = 0.5,
-		line_length = 8,
-		width = 230,
-		height = 124,
-		frame_count = 64,
-		shift = util.by_pixel(8.5, 23.5),
-	})
+	return layers
+end
 
-	---@type WorkingVisualisation[]
-	local working_visualisations = {
+---@param tint? Color
+---@return Animation
+local function get_idle_animation(tint)
+	return {
+		layers = _sprite_utils.utils.array_concat(
+			get_idle_animation_integration_layers(tint),
+			get_idle_animation_layers(tint),
+			{
+				util.sprite_load("__base__/graphics/entity/centrifuge/centrifuge-ABC-shadow", {
+					priority = "high",
+					scale = 0.5,
+					frame_count = 64,
+					draw_as_shadow = true,
+				}),
+			}
+		),
+	}
+end
+
+---@return WorkingVisualisation[]
+local function get_working_visualisations()
+	return {
 		{
 			effect = "uranium-glow",
 			apply_recipe_tint = "primary",
@@ -149,66 +112,39 @@ local function get_graphics_set(tint)
 		},
 		{
 			effect = "uranium-glow",
-			fadeout = true,
 			apply_recipe_tint = "primary",
+			fadeout = true,
 			animation = {
 				layers = {
-					{
-						filename = assets_path .. "lights/centrifuge-c-light.png",
+					util.sprite_load(ASSETS_BASE_PATH .. "lights/centrifuge-abc-light", {
 						priority = "high",
 						scale = 0.5,
-						blend_mode = "additive",
-						line_length = 8,
-						width = 190,
-						height = 207,
 						frame_count = 64,
-						shift = util.by_pixel(0, -27.25),
-						draw_as_glow = true,
-					},
-					{
-						filename = assets_path .. "lights/centrifuge-b-light.png",
-						priority = "high",
-						scale = 0.5,
 						blend_mode = "additive",
-						line_length = 8,
-						width = 131,
-						height = 206,
-						frame_count = 64,
-						shift = util.by_pixel(16.75, 0.5),
 						draw_as_glow = true,
-					},
-					{
-						filename = assets_path .. "lights/centrifuge-a-light.png",
-						priority = "high",
-						scale = 0.5,
-						blend_mode = "additive",
-						line_length = 8,
-						width = 108,
-						height = 197,
-						frame_count = 64,
-						shift = util.by_pixel(-23.5, -1.75),
-						draw_as_glow = true,
-					},
+					}),
 				},
 			},
 		},
 	}
+end
 
+---@param tint? Color
+---@return CraftingMachineGraphicsSet
+local function get_graphics_set(tint)
 	return {
 		always_draw_idle_animation = true,
-		idle_animation = idle_animation,
-		working_visualisations = working_visualisations,
+		idle_animation = get_idle_animation(tint),
+		working_visualisations = get_working_visualisations(),
 	}
 end
 
 ---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
-	local assets_path = "__reskins-assets-base__/graphics/entity/centrifuge/"
-
 	local layers = {
 		{
-			filename = "__base__/graphics/entity/centrifuge/remnants/centrifuge-remnants.png",
+			filename = BASE_PATH .. "remnants/centrifuge-remnants.png",
 			width = 286,
 			height = 284,
 			direction_count = 1,
@@ -219,7 +155,7 @@ local function get_corpse_animation(tint)
 
 	if tint then
 		table.insert(layers, {
-			filename = assets_path .. "remnants/centrifuge-remnants-mask.png",
+			filename = ASSETS_BASE_PATH .. "remnants/centrifuge-remnants-mask.png",
 			width = 286,
 			height = 284,
 			direction_count = 1,
@@ -228,17 +164,34 @@ local function get_corpse_animation(tint)
 			scale = 0.5,
 		})
 		table.insert(layers, {
-			filename = assets_path .. "remnants/centrifuge-remnants-highlights.png",
+			filename = ASSETS_BASE_PATH .. "remnants/centrifuge-remnants-highlights.png",
 			width = 286,
 			height = 284,
 			direction_count = 1,
 			shift = util.by_pixel(7, 4),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
 
-	return _sprites.make_rotated_animation_variations_from_spritesheet(1, { layers = layers })
+	return _sprite_utils.sprites.make_rotated_animation_variations_from_spritesheet(1, { layers = layers })
+end
+
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = BASE_PATH .. "centrifuge-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 32,
+			shift = util.by_pixel(0, 65),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
 end
 
 ---Defines the options for the vanilla centrifuge sprite set.
@@ -269,7 +222,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},
