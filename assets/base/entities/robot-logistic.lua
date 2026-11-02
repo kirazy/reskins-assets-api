@@ -67,7 +67,7 @@ local function get_animations(tint)
 			width = body_w,
 			height = body_h,
 			shift = body_shift,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			direction_count = 16,
 			scale = 0.5,
 		}
@@ -154,7 +154,7 @@ local function get_corpse_animation(tint)
 			height = 114,
 			direction_count = 1,
 			shift = util.by_pixel(1, 1),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

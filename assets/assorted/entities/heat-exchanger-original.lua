@@ -98,7 +98,7 @@ local function get_picture_set(tint, pipe_material)
 			width = 269,
 			height = 221,
 			shift = util.by_pixel(-1.25, 5.25),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 
@@ -117,7 +117,7 @@ local function get_picture_set(tint, pipe_material)
 			width = 211,
 			height = 301,
 			shift = util.by_pixel(-1.75, 1.25),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 
@@ -136,7 +136,7 @@ local function get_picture_set(tint, pipe_material)
 			width = 260,
 			height = 201,
 			shift = util.by_pixel(4, 10.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 
@@ -155,7 +155,7 @@ local function get_picture_set(tint, pipe_material)
 			width = 196,
 			height = 273,
 			shift = util.by_pixel(1.5, 7.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -294,7 +294,7 @@ local function get_corpse_animation(tint, pipe_material)
 			height = 262,
 			direction_count = 4,
 			shift = util.by_pixel(0.5, 8),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

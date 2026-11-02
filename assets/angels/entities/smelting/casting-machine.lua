@@ -53,7 +53,7 @@ local function get_graphics_set_internal(tint, is_flipped)
 							priority = "high",
 							frame_count = 49,
 							animation_speed = 0.5,
-							blend_mode = "additive-soft",
+							blend_mode = "additive",
 							scale = 0.5,
 						}
 					),

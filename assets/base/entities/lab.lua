@@ -77,7 +77,7 @@ local function get_on_animation(tint)
 			frame_count = 33,
 			line_length = 11,
 			animation_speed = 1 / 3,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(0, 1.5),
 			scale = 0.5,
 		})
@@ -127,7 +127,7 @@ local function get_off_animation(tint)
 			filename = assets_path .. "lab-highlights.png",
 			width = 194,
 			height = 174,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(0, 1.5),
 			scale = 0.5,
 		})
@@ -214,7 +214,7 @@ local function get_corpse_animation(tint)
 			height = 196,
 			direction_count = 1,
 			shift = util.by_pixel(12, 4.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

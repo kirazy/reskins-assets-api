@@ -92,7 +92,7 @@ local function get_picture_set(tint, fire_tint)
 			width = 269,
 			height = 221,
 			shift = util.by_pixel(-1.25, 5.25),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 
@@ -111,7 +111,7 @@ local function get_picture_set(tint, fire_tint)
 			width = 216,
 			height = 301,
 			shift = util.by_pixel(-3, 1.25),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 
@@ -130,7 +130,7 @@ local function get_picture_set(tint, fire_tint)
 			width = 260,
 			height = 192,
 			shift = util.by_pixel(4, 13),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 
@@ -149,7 +149,7 @@ local function get_picture_set(tint, fire_tint)
 			width = 196,
 			height = 273,
 			shift = util.by_pixel(1.5, 7.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -357,7 +357,7 @@ local function get_corpse_animation(tint)
 			height = 220,
 			direction_count = 4,
 			shift = util.by_pixel(-0.5, -3),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

@@ -63,7 +63,7 @@ local function get_graphics_set(tint)
 			frame_count = 60,
 			animation_speed = 0.5,
 			shift = util.by_pixel(0, 0),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

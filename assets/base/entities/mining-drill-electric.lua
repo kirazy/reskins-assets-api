@@ -148,7 +148,7 @@ local function get_vertical_drill_animation(tint, speed)
 			animation_speed = speed,
 			frame_sequence = ANIMATION_SEQUENCE,
 			shift = util.by_pixel(1, -11),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -224,7 +224,7 @@ local function get_horizontal_drill_animation(tint, speed, is_front)
 			animation_speed = speed,
 			frame_sequence = ANIMATION_SEQUENCE,
 			shift = shift,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -1233,7 +1233,7 @@ local function get_corpse_animation(tint)
 			height = 328,
 			direction_count = 1,
 			shift = util.by_pixel(7, -0.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

@@ -50,7 +50,7 @@ local function get_horizontal_animation(tint)
 			height = 245,
 			repeat_count = 8,
 			shift = util.by_pixel(0, -2.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -107,7 +107,7 @@ local function get_vertical_animation(tint)
 			height = 347,
 			repeat_count = 8,
 			shift = util.by_pixel(4.75, 6.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -161,7 +161,7 @@ local function get_corpse_animation(tint)
 			height = 408,
 			direction_count = 4,
 			shift = util.by_pixel(6, 0),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

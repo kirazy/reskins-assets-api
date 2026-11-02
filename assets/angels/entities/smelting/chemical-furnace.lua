@@ -80,7 +80,7 @@ local function get_graphics_set(tint)
 				},
 			},
 			animation_speed = 0.5,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-1, -11.5),
 			scale = 0.5,
 		})

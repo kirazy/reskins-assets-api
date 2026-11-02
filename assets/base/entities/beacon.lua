@@ -64,7 +64,7 @@ local function get_base_animation_element(slot_count, tint)
 			filename = folder .. "highlights.png",
 			width = 212,
 			height = 192,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(0.5, 1),
 			scale = 0.5,
 		})
@@ -181,7 +181,7 @@ local function get_6_slot_module_overlay(tint)
 			filename = folder .. "highlights.png",
 			width = 212,
 			height = 192,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(0.5, 1),
 			scale = 0.5,
 		})
@@ -732,7 +732,7 @@ local function get_corpse_animation(tint)
 			width = 212,
 			height = 206,
 			shift = util.by_pixel(1, 5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

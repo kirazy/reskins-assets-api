@@ -72,7 +72,7 @@ local function get_picture(tint, pipe_path)
 			width = 302,
 			height = 318,
 			shift = util.by_pixel(-5, -7),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -227,7 +227,7 @@ local function get_corpse_animation(tint, pipe_material)
 			height = 396,
 			direction_count = 1,
 			shift = util.by_pixel(7, 4),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

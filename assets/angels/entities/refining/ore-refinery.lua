@@ -51,7 +51,7 @@ local function get_graphics_set(tint)
 			width = 440,
 			height = 509,
 			shift = util.by_pixel(0.5, -16),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -70,7 +70,7 @@ local function get_graphics_set(tint)
 					height = 509,
 					shift = util.by_pixel(0.5, -16),
 					draw_as_glow = true,
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				},
 			},

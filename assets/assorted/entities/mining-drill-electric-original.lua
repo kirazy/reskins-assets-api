@@ -112,7 +112,7 @@ local function get_direction_animation(direction, params, speed)
 		local highlights = get_drill_layer(direction, "-highlights", part.drill, speed)
 
 		mask.tint = params.tint
-		highlights.blend_mode = "additive-soft"
+		highlights.blend_mode = "additive"
 
 		table.insert(animation.layers--[[@cast -?]], mask)
 		table.insert(animation.layers--[[@cast -?]], highlights)

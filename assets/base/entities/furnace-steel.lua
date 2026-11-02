@@ -413,7 +413,7 @@ local function build_steel_furnace_animation(variant, tint, is_mirror)
 			priority = "high",
 			width = 172,
 			height = 174,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-1, 2),
 			scale = 0.5,
 		})
@@ -536,7 +536,7 @@ local function get_corpse_animation(tint, variant)
 			height = 238,
 			line_length = direction_count,
 			direction_count = direction_count,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(4, 0.5),
 			scale = 0.5,
 		})

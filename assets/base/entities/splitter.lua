@@ -57,7 +57,7 @@ local function get_structure(tint)
 				frame_count = 32,
 				line_length = 8,
 				shift = shift,
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		end
@@ -118,7 +118,7 @@ local function get_structure_patch(tint)
 				frame_count = 32,
 				line_length = 8,
 				shift = shift,
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		end
@@ -167,7 +167,7 @@ local function get_corpse_animation(tint)
 			height = 190,
 			direction_count = 4,
 			shift = util.by_pixel(3.5, 1.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

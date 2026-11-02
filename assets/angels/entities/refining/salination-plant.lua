@@ -80,7 +80,7 @@ local function get_graphics_set(tint)
 			height = 540,
 			repeat_count = 36,
 			shift = util.by_pixel(-2.5, -12),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			animation_speed = 0.5,
 			scale = 0.5,
 		})

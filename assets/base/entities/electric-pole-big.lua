@@ -48,7 +48,7 @@ local function get_pictures(tint)
 			height = 312,
 			direction_count = 4,
 			shift = util.by_pixel(0, -51),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -102,7 +102,7 @@ local function get_corpse_animation(tint)
 			height = 188,
 			direction_count = 1,
 			shift = util.by_pixel(43, 0.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -145,7 +145,7 @@ local function get_corpse_animation_overlay(tint)
 			height = 252,
 			direction_count = 1,
 			shift = util.by_pixel(-1.5, -48),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

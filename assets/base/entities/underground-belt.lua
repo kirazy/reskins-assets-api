@@ -50,7 +50,7 @@ local function get_structure(tint)
 				width = 192,
 				height = 192,
 				y = y_offset,
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		end
@@ -116,7 +116,7 @@ local function get_corpse_animation(tint)
 			height = 144,
 			direction_count = 8,
 			shift = util.by_pixel(10.5, 3),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

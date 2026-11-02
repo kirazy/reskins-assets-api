@@ -90,7 +90,7 @@ local function get_graphics_set(tint)
 						width = 333,
 						height = 363,
 						shift = util.by_pixel_hr(-1, -1),
-						blend_mode = "additive-soft",
+						blend_mode = "additive",
 						scale = 0.5,
 					},
 				},

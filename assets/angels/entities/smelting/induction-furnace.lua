@@ -261,7 +261,7 @@ local function get_color_mask_working_vis(tint, is_flipped)
 					priority = "high",
 					frame_count = 36,
 					animation_speed = 0.5,
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				}),
 			},

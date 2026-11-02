@@ -66,7 +66,7 @@ function M.get_belt_animation_set(tint, belt_sprite)
 			height = 128,
 			frame_count = frame_count,
 			direction_count = 20,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -106,7 +106,7 @@ local function get_corpse_animation(tint)
 			height = 102,
 			direction_count = 4,
 			shift = util.by_pixel(1, -0.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

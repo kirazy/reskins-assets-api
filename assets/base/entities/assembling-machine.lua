@@ -99,7 +99,7 @@ local function get_assembler_graphics_set(tint, tier)
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-base-highlights", {
 					priority = "high",
 					repeat_count = 64,
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				}),
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-animation", {
@@ -116,7 +116,7 @@ local function get_assembler_graphics_set(tint, tier)
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-animation-highlights", {
 					priority = "high",
 					frame_count = 64,
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				}),
 				util.sprite_load(base_path .. "assembling-machine-" .. tier .. "-shadow", {
@@ -183,7 +183,7 @@ local function get_assembler_pipe_pictures(tint, tier)
 				}),
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-east-highlights", {
 					priority = "extra-high",
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				}),
 			},
@@ -201,7 +201,7 @@ local function get_assembler_pipe_pictures(tint, tier)
 				}),
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-south-highlights", {
 					priority = "extra-high",
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				}),
 				_pipes.vertical_pipe_shadow({ 0, -1 }),
@@ -220,7 +220,7 @@ local function get_assembler_pipe_pictures(tint, tier)
 				}),
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-pipe-west-highlights", {
 					priority = "extra-high",
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				}),
 			},
@@ -280,7 +280,7 @@ local function get_corpse_animation(tint)
 			height = 282,
 			direction_count = 1,
 			shift = util.by_pixel(0, 9.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

@@ -48,7 +48,7 @@ local function get_picture(tint)
 			width = 308,
 			height = 274,
 			shift = util.by_pixel(5, 3.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

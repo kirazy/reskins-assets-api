@@ -64,7 +64,7 @@ local function get_graphics_set(tint, antenna_variant, door_variant)
 			width = 228,
 			height = 277,
 			shift = util.by_pixel(2, 7.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -112,7 +112,7 @@ local function get_graphics_set(tint, antenna_variant, door_variant)
 			width = 138,
 			height = 100,
 			shift = util.by_pixel(1.5, 5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -198,7 +198,7 @@ local function get_corpse_animation(tint)
 			height = 358,
 			direction_count = 1,
 			shift = util.by_pixel(2, 8),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

@@ -61,7 +61,7 @@ local function get_graphics_set(tint)
 				priority = "high",
 				frame_count = 60,
 				animation_speed = 0.5,
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		)

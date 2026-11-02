@@ -104,7 +104,7 @@ local function get_picture_set(tint, pipe_material)
 			north_structure.layers --[[@cast -?]],
 			util.sprite_load(assets_path .. "heat-exchanger-north-idle-highlights", {
 				priority = "extra-high",
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		)
@@ -121,7 +121,7 @@ local function get_picture_set(tint, pipe_material)
 			east_structure.layers --[[@cast -?]],
 			util.sprite_load(assets_path .. "heat-exchanger-east-idle-highlights", {
 				priority = "extra-high",
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		)
@@ -138,7 +138,7 @@ local function get_picture_set(tint, pipe_material)
 			south_structure.layers --[[@cast -?]],
 			util.sprite_load(assets_path .. "heat-exchanger-south-idle-highlights", {
 				priority = "extra-high",
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		)
@@ -155,7 +155,7 @@ local function get_picture_set(tint, pipe_material)
 			west_structure.layers --[[@cast -?]],
 			util.sprite_load(assets_path .. "heat-exchanger-west-idle-highlights", {
 				priority = "extra-high",
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 		)
@@ -297,7 +297,7 @@ local function get_corpse_animation(tint, pipe_material)
 			height = 262,
 			direction_count = 4,
 			shift = util.by_pixel(0.5, 8),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

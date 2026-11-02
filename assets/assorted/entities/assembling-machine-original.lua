@@ -70,7 +70,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 			height = 237,
 			repeat_count = 32,
 			shift = util.by_pixel(0, -0.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 		draw_order = draw_order + 2
@@ -129,7 +129,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 				height = 237,
 				repeat_count = 32,
 				shift = util.by_pixel(0, -0.75),
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.5,
 			})
 			draw_order = draw_order + 2
@@ -218,7 +218,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 						width = 71,
 						height = 38,
 						shift = util.by_pixel(2.25, 13.5),
-						blend_mode = "additive-soft",
+						blend_mode = "additive",
 						scale = 0.5,
 					},
 				},
@@ -243,7 +243,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 					width = 42,
 					height = 76,
 					shift = util.by_pixel(-24.5, 1),
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				},
 			},
@@ -267,7 +267,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 					width = 88,
 					height = 61,
 					shift = util.by_pixel(0, -31.25),
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				},
 			},
@@ -291,7 +291,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 					width = 39,
 					height = 73,
 					shift = util.by_pixel(25.75, 1.25),
-					blend_mode = "additive-soft",
+					blend_mode = "additive",
 					scale = 0.5,
 				},
 			},
@@ -353,7 +353,7 @@ local function get_corpse_animation(tint)
 			height = 282,
 			direction_count = 1,
 			shift = util.by_pixel(0, 9.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

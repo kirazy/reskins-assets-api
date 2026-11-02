@@ -48,7 +48,7 @@ local function get_pictures(tint)
 			width = 219,
 			height = 215,
 			shift = util.by_pixel(-0.25, 3.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -132,7 +132,7 @@ local function get_corpse_animation(tint)
 			width = 426,
 			height = 282,
 			shift = util.by_pixel(27, 21),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

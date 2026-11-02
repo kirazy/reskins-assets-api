@@ -63,7 +63,7 @@ local function get_horsehead_layers(params)
 			width = 206,
 			height = 172,
 			frame_count = 40,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-4.5, -29),
 		})
 	end
@@ -90,7 +90,7 @@ local function get_horsehead_layers(params)
 			width = 206,
 			height = 172,
 			frame_count = 40,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-4.5, -29),
 		})
 	end
@@ -117,7 +117,7 @@ local function get_horsehead_layers(params)
 			width = 206,
 			height = 172,
 			frame_count = 40,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-4.5, -29),
 		})
 	end
@@ -177,7 +177,7 @@ local function get_base_layers(params, is_flipped)
 			priority = "extra-high",
 			width = 261,
 			height = 273,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-2.25, -4.75),
 			scale = 0.5,
 		})
@@ -198,7 +198,7 @@ local function get_base_layers(params, is_flipped)
 			priority = "extra-high",
 			width = 261,
 			height = 273,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(-2.25, -4.75),
 			scale = 0.5,
 		})
@@ -304,7 +304,7 @@ local function get_corpse_animation(base_layer, tint)
 			height = 284,
 			direction_count = 1,
 			shift = util.by_pixel(0, 3.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

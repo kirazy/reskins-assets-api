@@ -53,7 +53,7 @@ local function get_arm_picture(tint, variant)
 			width = 32,
 			height = 136,
 			flags = { "no-crop" },
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.25,
 		})
 
@@ -75,7 +75,7 @@ local function get_arm_picture(tint, variant)
 				width = 32,
 				height = 136,
 				flags = { "no-crop" },
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.25,
 			})
 		end
@@ -154,7 +154,7 @@ local function get_hand_picture(tint, variant, hand_state)
 				width = 130,
 				height = 164,
 				flags = { "no-crop" },
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.25,
 			})
 		else
@@ -173,7 +173,7 @@ local function get_hand_picture(tint, variant, hand_state)
 				width = 130,
 				height = 164,
 				flags = { "no-crop" },
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.25,
 			})
 		end
@@ -197,7 +197,7 @@ local function get_hand_picture(tint, variant, hand_state)
 				width = 130,
 				height = 164,
 				flags = { "no-crop" },
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.25,
 			})
 		end
@@ -220,7 +220,7 @@ local function get_hand_picture(tint, variant, hand_state)
 				width = 130,
 				height = 164,
 				flags = { "no-crop" },
-				blend_mode = "additive-soft",
+				blend_mode = "additive",
 				scale = 0.25,
 			})
 		end
@@ -297,7 +297,7 @@ local function get_platform_picture(tint)
 			priority = "extra-high",
 			width = 106,
 			height = 80,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(1.75, 6.75),
 			scale = 0.5,
 		})
@@ -369,7 +369,7 @@ local function get_corpse_animation(tint, variant)
 			filename = remnants_path .. prefix .. "-highlights.png",
 			width = 134,
 			height = 94,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			direction_count = 1,
 			shift = util.by_pixel(3, -1.5),
 			scale = 0.5,

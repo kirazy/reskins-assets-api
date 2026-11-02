@@ -46,7 +46,7 @@ local function get_graphics_set(tint)
 						width = 288,
 						height = 288,
 						shift = { 0, 0 },
-						blend_mode = "additive-soft",
+						blend_mode = "additive",
 					},
 				},
 			},

@@ -130,7 +130,7 @@ local function get_graphics_set(tint, variant)
 			priority = "high",
 			width = 152,
 			height = 152,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(0, 1),
 			scale = 0.5,
 		})
@@ -237,7 +237,7 @@ local function get_graphics_set_flipped(tint)
 			priority = "high",
 			width = 152,
 			height = 152,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(0, 1),
 			scale = 0.5,
 		})
@@ -326,7 +326,7 @@ local function get_corpse_animation(tint, variant)
 			height = 180,
 			line_length = direction_count,
 			direction_count = direction_count,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			shift = util.by_pixel(2, 17),
 			scale = 0.5,
 		})

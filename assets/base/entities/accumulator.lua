@@ -82,7 +82,7 @@ local function get_accumulator_pictures(sprite_set, tint, repeat_count)
 			height = 189,
 			repeat_count = repeat_count,
 			shift = util.by_pixel(0, -11),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
@@ -225,7 +225,7 @@ local function get_corpse_animation(sprite_set, tint)
 			height = 146,
 			direction_count = 1,
 			shift = util.by_pixel(2.5, 3.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end

@@ -45,7 +45,7 @@ local function get_graphics_set(tint)
 			repeat_count = 25,
 			shift = { 0, 0 },
 			animation_speed = 0.5,
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 		})
 	end
 

@@ -103,7 +103,7 @@ local function get_animations(tint)
 			frame_count = 32,
 			animation_speed = 0.5,
 			shift = util.by_pixel(8, 3.5),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 		})
 
 		table.insert(animations.east.layers--[[@cast -?]], {
@@ -126,7 +126,7 @@ local function get_animations(tint)
 			frame_count = 32,
 			animation_speed = 0.5,
 			shift = util.by_pixel(-0.5, 1.75),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 		})
 
 		table.insert(animations.south.layers--[[@cast -?]], {
@@ -149,7 +149,7 @@ local function get_animations(tint)
 			frame_count = 32,
 			animation_speed = 0.5,
 			shift = util.by_pixel(12.5, -8),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 		})
 
 		table.insert(animations.west.layers--[[@cast -?]], {
@@ -172,7 +172,7 @@ local function get_animations(tint)
 			frame_count = 32,
 			animation_speed = 0.5,
 			shift = util.by_pixel(-0.25, 1.25),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 		})
 	end
 
@@ -215,7 +215,7 @@ local function get_corpse_animation(tint)
 			height = 186,
 			direction_count = 4,
 			shift = util.by_pixel(2, 2),
-			blend_mode = "additive-soft",
+			blend_mode = "additive",
 			scale = 0.5,
 		})
 	end
