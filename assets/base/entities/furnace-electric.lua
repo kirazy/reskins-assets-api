@@ -103,29 +103,52 @@ local function get_electric_furnace_small_propeller(is_shifted)
 	}
 end
 
+local standard_path = "__reskins-assets-base__/graphics/entity/furnace-electric/"
+local mixing_path = "__reskins-assets-bobs__/graphics/entity/furnace-electric-mixing/"
+local chemical_path = "__reskins-assets-bobs__/graphics/entity/furnace-electric-chemical/"
+local chemical_mixing_path = "__reskins-assets-bobs__/graphics/entity/furnace-electric-chemical-mixing/"
+
+---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
+---@return Sprite4Way
+local function get_electric_furnace_frozen_patch(variant)
+	local filename
+	if variant == "standard" then
+		filename = standard_path .. "furnace-electric-frozen.png"
+	elseif variant == "mixing" then
+		filename = mixing_path .. "furnace-electric-mixing-frozen.png"
+	elseif variant == "chemical" then
+		filename = chemical_path .. "furnace-chemical-electric-frozen.png"
+	elseif variant == "chemical-mixing" then
+		filename = chemical_mixing_path .. "furnace-chemical-electric-mixing-frozen.png"
+	end
+
+	return {
+		filename = filename,
+		priority = "high",
+		width = 238,
+		height = 212,
+		shift = util.by_pixel(1, 1),
+		scale = 0.5,
+	}
+end
+
 ---Gets the working light animation for the given `variant`.
 ---@param variant "standard" | "mixing" | "chemical" | "chemical-mixing"
 ---@param is_obstructed? boolean
 ---@return Animation
----@private
 local function get_electric_furnace_working_light(variant, is_obstructed)
 	local filename
 	if variant == "standard" then
-		filename = _defines.assets_source.base_assets
-			.. "/graphics/entity/furnace-electric/lights/furnace-electric-light.png"
+		filename = standard_path .. "lights/furnace-electric-light.png"
 	elseif variant == "mixing" then
-		filename = _defines.assets_source.bobs_assets
-			.. "/graphics/entity/furnace-electric-mixing/furnace-electric-mixing-light.png"
+		filename = mixing_path .. "furnace-electric-mixing-light.png"
 	elseif variant == "chemical" then
-		filename = _defines.assets_source.bobs_assets
-			.. "/graphics/entity/furnace-electric-chemical/furnace-chemical-electric-light.png"
+		filename = chemical_path .. "furnace-chemical-electric-light.png"
 	elseif variant == "chemical-mixing" then
 		if is_obstructed then
-			filename = _defines.assets_source.bobs_assets
-				.. "/graphics/entity/furnace-electric-chemical-mixing/furnace-chemical-electric-mixing-light-obstructed.png"
+			filename = chemical_mixing_path .. "furnace-chemical-electric-mixing-light-obstructed.png"
 		else
-			filename = _defines.assets_source.bobs_assets
-				.. "/graphics/entity/furnace-electric-chemical-mixing/furnace-chemical-electric-mixing-light.png"
+			filename = chemical_mixing_path .. "furnace-chemical-electric-mixing-light.png"
 		end
 	end
 
@@ -272,10 +295,16 @@ local function get_graphics_set(tint, variant)
 	end
 
 	---@type CraftingMachineGraphicsSet
-	return {
+	local graphics_set = {
 		animation = animation,
 		working_visualisations = working_visualisations,
 	}
+
+	if feature_flags["freezing"] then
+		graphics_set.frozen_patch = get_electric_furnace_frozen_patch(variant)
+	end
+
+	return graphics_set
 end
 
 ---Gets the shared remnant base+mask+highlights layer stack.
@@ -479,12 +508,29 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 	}
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/electric-furnace/electric-furnace-reflection.png",
+			priority = "extra-high",
+			width = 24,
+			height = 24,
+			shift = util.by_pixel(5, 40),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla electric furnace sprite set.
 ---@class FurnaceElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 ---The variant to use.
----@field variant "standard"
+---@field variant "standard" | "mixing" | "chemical" | "chemical-mixing"
 
 ---Gets the sprite set for the vanilla electric furnace.
 ---@param params FurnaceElectricSpriteSetParams The options for the sprite set.
@@ -510,7 +556,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},
