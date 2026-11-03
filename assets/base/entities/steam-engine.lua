@@ -129,6 +129,19 @@ local function get_vertical_animation(tint)
 end
 
 ---@param tint? Color
+---@return GeneratorPictureSet
+local function get_generator_pictures(tint)
+	return {
+		north = {
+			animation = get_vertical_animation(tint),
+		},
+		east = {
+			animation = get_horizontal_animation(tint),
+		},
+	}
+end
+
+---@param tint? Color
 ---@return RotatedAnimation
 local function get_corpse_animation(tint)
 	local assets_path = "__reskins-assets-base__/graphics/entity/steam-engine/remnants/"
@@ -171,6 +184,24 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/steam-engine/steam-engine-reflection.png",
+			priority = "extra-high",
+			width = 40,
+			height = 44,
+			shift = util.by_pixel(0, 55),
+			variation_count = 2,
+			repeat_count = 2,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
+end
+
 ---Defines the options for the vanilla steam engine sprite set.
 ---@class SteamEngineSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -194,13 +225,13 @@ function M.get_sprite_set(params)
 	local definition = {
 		set_type = _defines.sprite_set_type.generator_sprite_set,
 		set = {
-			horizontal_animation = get_horizontal_animation(params.tint),
-			vertical_animation = get_vertical_animation(params.tint),
+			two_direction_only = true,
+			pictures = get_generator_pictures(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 5,
 		},

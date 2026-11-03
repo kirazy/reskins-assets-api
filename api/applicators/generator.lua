@@ -9,8 +9,8 @@ local _defines = require("api.defines")
 ---@param prototype GeneratorPrototype
 ---@param set GeneratorSpriteSet
 local function apply_sprite_set_to_generator(prototype, set)
-	prototype.horizontal_animation = util.copy(set.horizontal_animation)
-	prototype.vertical_animation = util.copy(set.vertical_animation)
+	prototype.two_direction_only = set.two_direction_only
+	prototype.pictures = util.copy(set.pictures)
 end
 
 ---@param explosion ExplosionPrototype
@@ -27,13 +27,11 @@ return {
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `generator_sprite_set`.
----
----The structure is specific to Factorio 2.0 and changes with Factorio 2.1.
 ---@class (exact) GeneratorSpriteSet : EntityWithHealthSpriteSet
----The prototype's `horizontal_animation`.
----@field horizontal_animation Animation
----The prototype's `vertical_animation`.
----@field vertical_animation Animation
+---When `true`, the sprite set uses only the `north` and `east` directions of the `pictures` field.
+---@field two_direction_only boolean
+---The prototype's `pictures`.
+---@field pictures GeneratorPictureSet
 
 ---Applies the `GeneratorSpriteSet` to `GeneratorPrototype` instances.
 ---@class (exact) GeneratorSpriteSetApplicator : SpriteSetApplicator<GeneratorPrototype, GeneratorSpriteSet>
