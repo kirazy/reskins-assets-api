@@ -73,6 +73,8 @@ local function get_circuit_connector()
 	})
 end
 
+local FROZEN_PATH = "__space-age__/graphics/entity/frozen/assembling-machine/"
+
 ---@param tint? Color
 ---@param tier 1|2|3
 ---@return CraftingMachineGraphicsSet
@@ -82,7 +84,7 @@ local function get_assembler_graphics_set(tint, tier)
 	local base_path = "__base__/graphics/entity/assembling-machine-" .. tier .. "/"
 
 	---@type CraftingMachineGraphicsSet
-	return {
+	local graphics_set = {
 		animation = {
 			layers = {
 				util.sprite_load(assets_path .. "assembling-machine-" .. tier .. "-base", {
@@ -151,6 +153,16 @@ local function get_assembler_graphics_set(tint, tier)
 		},
 		status_colors = _constants.get_status_colors(),
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		graphics_set.reset_animation_when_frozen = true
+		graphics_set.frozen_patch = util.sprite_load(FROZEN_PATH .. "assembling-machine-" .. tier .. "-frozen", {
+			priority = "high",
+			scale = 0.5,
+		})
+	end
+
+	return graphics_set
 end
 
 ---@param tint? Color
@@ -228,6 +240,29 @@ local function get_assembler_pipe_pictures(tint, tier)
 	}
 end
 
+---@return Sprite4Way
+---@nodiscard
+local function get_assembler_pipe_pictures_frozen()
+	return {
+		north = util.sprite_load(FROZEN_PATH .. "assembling-machine-pipe-N-frozen", {
+			priority = "extra-high",
+			scale = 0.5,
+		}),
+		east = util.sprite_load(FROZEN_PATH .. "assembling-machine-pipe-E-frozen", {
+			priority = "extra-high",
+			scale = 0.5,
+		}),
+		south = util.sprite_load(FROZEN_PATH .. "assembling-machine-pipe-S-frozen", {
+			priority = "extra-high",
+			scale = 0.5,
+		}),
+		west = util.sprite_load(FROZEN_PATH .. "assembling-machine-pipe-W-frozen", {
+			priority = "extra-high",
+			scale = 0.5,
+		}),
+	}
+end
+
 ---@param tint? Color
 ---@param tier 1|2|3
 ---@param draw_order? int8
@@ -236,7 +271,8 @@ local function get_fluid_box_graphics(tint, tier, draw_order)
 	local pipe_pictures = get_assembler_pipe_pictures(tint, tier)
 
 	---@type FluidBoxGraphics
-	return {
+	local graphics = {
+		type = "fluid",
 		pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
 		pipe_picture = pipe_pictures,
 		secondary_draw_orders = {
@@ -246,6 +282,13 @@ local function get_fluid_box_graphics(tint, tier, draw_order)
 			west = draw_order,
 		},
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
+		graphics.pipe_picture_frozen = get_assembler_pipe_pictures_frozen()
+	end
+
+	return graphics
 end
 
 ---@param tint? Color
