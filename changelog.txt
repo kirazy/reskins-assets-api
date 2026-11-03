@@ -7,6 +7,7 @@ Date: ????
     - Revised blending mode from additive-soft to additive.
     - The centrifuge sprite set now includes the water reflection, and uses the re-rendered sprites from Factorio 2.1.
     - Electric furnace sprite sets now include the water reflection and frozen sprites.
+    - Steel furnace sprite sets now include the water reflection.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2026-11-01

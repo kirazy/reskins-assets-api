@@ -545,12 +545,29 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/steel-furnace/steel-furnace-reflection.png",
+			priority = "extra-high",
+			width = 20,
+			height = 24,
+			shift = util.by_pixel(0, 45),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla steel furnace sprite set.
 ---@class FurnaceSteelSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 ---The variant to use.
----@field variant "standard"
+---@field variant "standard"|"fluid"|"chemical"|"chemical-fluid"
 
 ---Gets the sprite set for the vanilla steel furnace.
 ---@param params FurnaceSteelSpriteSetParams The options for the sprite set.
@@ -575,8 +592,6 @@ function M.get_sprite_set(params)
 		graphics_set_flipped = get_graphics_set_flipped(params.tint, params.variant)
 	end
 
-	local has_fluid_boxes = params.variant ~= "standard"
-
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
@@ -589,12 +604,12 @@ function M.get_sprite_set(params)
 				},
 			},
 			-- Chemical variants have fluid boxes but must show them regardless of active recipe.
-			fluid_boxes_off_when_no_fluid_recipe = not has_fluid_boxes,
+			fluid_boxes_off_when_no_fluid_recipe = false,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 1.6,
 			nominal_height = 2,
 		},
