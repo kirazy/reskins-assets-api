@@ -359,6 +359,10 @@ end
 ---@field machine_tier AssemblingMachineTier
 ---When `true`, indicates that the electronics machine artwork is included. Default `false`.
 ---@field use_electronics_set? boolean
+---When `true`, indicates that the burner machine artwork is included. Default `false`.
+---@field use_burner_set? boolean
+---When `true`, indicates that the steam machine artwork is included. Default `false`.
+---@field use_steam_set? boolean
 ---When `true`, indicates that the simple pipe connections are included. Default `false`.
 ---@field use_simple_pipe_pictures? boolean
 
@@ -368,6 +372,10 @@ local check_params = V.signature("get_sprite_set", {
 		V.struct({
 			tint = Common.color:optional(),
 			machine_tier = V.one_of({ 1, 2, 3, 4, 5, 6 }),
+			use_electronics_set = V.boolean():optional(),
+			use_burner_set = V.boolean():optional(),
+			use_steam_set = V.boolean():optional(),
+			use_simple_pipe_pictures = V.boolean():optional(),
 		}),
 	},
 })
