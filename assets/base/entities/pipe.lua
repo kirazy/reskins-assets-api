@@ -644,7 +644,7 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 		},
 	}
 
-	if include_frozen_pictures then
+	if feature_flags["freezing"] and mods["space-age"] then
 		pipe_pictures = util.merge({ pipe_pictures, get_frozen_pictures() })
 	end
 
@@ -652,9 +652,8 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 end
 
 ---@param pipe_material PipeMaterial
----@param include_frozen_pictures? boolean
 ---@return FluidBoxGraphics
-local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
+local function get_fluid_box_graphics(pipe_material)
 	local pipe_covers = _pipes.pipe_covers(pipe_material)
 
 	---@type FluidBoxGraphics
@@ -662,7 +661,7 @@ local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 		pipe_covers = pipe_covers,
 	}
 
-	if include_frozen_pictures then
+	if feature_flags["freezing"] and mods["space-age"] then
 		fluid_box_graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
 	end
 
@@ -673,8 +672,6 @@ end
 ---@class PipeSpriteSetParams
 ---The material from which the pipes are built.
 ---@field pipe_material PipeMaterial
----When `true`, indicates that the frozen artwork is included. Default `false`.
----@field include_frozen_pictures? boolean
 
 ---Gets the sprite set for the vanilla and Bob's pipes.
 ---
@@ -698,7 +695,7 @@ function M.get_sprite_set(params)
 		set = {
 			horizontal_window_bounding_box = { { -0.25, -0.28125 }, { 0.25, 0.15625 } },
 			vertical_window_bounding_box = { { -0.28125, -0.5 }, { 0.03125, 0.125 } },
-			pictures = get_pictures(params.pipe_material, params.include_frozen_pictures),
+			pictures = get_pictures(params.pipe_material),
 			fluid_box = get_fluid_box_graphics(params.pipe_material),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,

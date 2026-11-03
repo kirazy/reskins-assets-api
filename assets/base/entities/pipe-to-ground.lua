@@ -167,9 +167,8 @@ local function get_pictures(pipe_material)
 end
 
 ---@param pipe_material PipeMaterial
----@param include_frozen_pictures? boolean
 ---@return FluidBoxGraphics
-local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
+local function get_fluid_box_graphics(pipe_material)
 	local pipe_covers = _pipes.pipe_covers(pipe_material)
 
 	---@type FluidBoxGraphics
@@ -177,7 +176,7 @@ local function get_fluid_box_graphics(pipe_material, include_frozen_pictures)
 		pipe_covers = pipe_covers,
 	}
 
-	if include_frozen_pictures then
+	if feature_flags["freezing"] and mods["space-age"] then
 		fluid_box_graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
 	end
 
@@ -188,8 +187,6 @@ end
 ---@class PipeToGroundSpriteSetParams
 ---The material from which the pipes are built.
 ---@field pipe_material PipeMaterial
----When `true`, indicates that the frozen artwork is included. Default `false`.
----@field include_frozen_pictures? boolean
 
 ---Gets the sprite set for the vanilla and Bob's underground pipes.
 ---
@@ -207,14 +204,11 @@ end
 ---```
 ---@nodiscard
 function M.get_sprite_set(params)
-	local frozen_patch = params.include_frozen_pictures and get_frozen_pictures() or nil
-
 	---@type SpriteSetDefinition<PipeToGroundSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.pipe_to_ground_sprite_set,
 		set = {
 			pictures = get_pictures(params.pipe_material),
-			frozen_patch = frozen_patch,
 			fluid_box = get_fluid_box_graphics(params.pipe_material),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
@@ -225,6 +219,10 @@ function M.get_sprite_set(params)
 			nominal_height = 1,
 		},
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		definition.set.frozen_patch = get_frozen_pictures()
+	end
 
 	return definition
 end

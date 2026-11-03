@@ -10,6 +10,7 @@ Date: ????
     - The centrifuge sprite set now includes the water reflection, and uses the re-rendered sprites from Factorio 2.1.
     - Electric furnace sprite sets now include the water reflection and frozen sprites.
     - Steel furnace, stone furnace, steam engine and steam turbine sprite sets now include the water reflection.
+    - Pipe and pipe-to-ground `get_sprite_set` methods now implicitly handle inclusion of frozen sprites; the `include_frozen_pictures` optional parameter has been removed.
   Bugfixes:
     - Corrected the generator applicator and sprite set to correctly reflect the parameters required for Factorio 2.1.
 ---------------------------------------------------------------------------------------------------
