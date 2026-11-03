@@ -129,7 +129,7 @@ end
 ---@param tint? Color
 ---@return GeneratorPictureSet
 local function get_generator_pictures(tint)
-	return {
+	local pictures = {
 		north = {
 			animation = get_vertical_animation(tint),
 		},
@@ -137,6 +137,25 @@ local function get_generator_pictures(tint)
 			animation = get_horizontal_animation(tint),
 		},
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		pictures.north.frozen_patch = {
+			filename = "__space-age__/graphics/entity/frozen/steam-turbine/steam-turbine-V.png",
+			width = 217,
+			height = 347,
+			shift = util.by_pixel(4.75, 6.75),
+			scale = 0.5,
+		}
+		pictures.east.frozen_patch = {
+			filename = "__space-age__/graphics/entity/frozen/steam-turbine/steam-turbine-H.png",
+			width = 320,
+			height = 245,
+			shift = util.by_pixel(0, -2.75),
+			scale = 0.5,
+		}
+	end
+
+	return pictures
 end
 
 ---@param tint? Color
