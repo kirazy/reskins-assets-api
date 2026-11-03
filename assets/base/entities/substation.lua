@@ -110,6 +110,23 @@ local function get_corpse_animation(tint)
 	return { animation }
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/substation/substation-reflection.png",
+			priority = "extra-high",
+			width = 20,
+			height = 28,
+			shift = util.by_pixel(0, 55),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla substation sprite set.
 ---@class SubstationSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -139,7 +156,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 2,
 			nominal_height = 2,
 		},

@@ -153,6 +153,23 @@ local function get_corpse_animation_overlay(tint)
 	return { animation, util.copy(animation), util.copy(animation), util.copy(animation) }
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/big-electric-pole/big-electric-pole-reflection.png",
+			priority = "extra-high",
+			width = 16,
+			height = 32,
+			shift = util.by_pixel(0, 60),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla big electric pole sprite set.
 ---@class ElectricPoleBigSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -184,7 +201,7 @@ function M.get_sprite_set(params)
 				animation = get_corpse_animation(params.tint),
 				animation_overlay = get_corpse_animation_overlay(params.tint),
 			},
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 2,
 			nominal_height = 2,
 		},

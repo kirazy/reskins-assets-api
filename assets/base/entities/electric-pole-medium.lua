@@ -156,6 +156,23 @@ local function get_corpse_animation_overlay(tint)
 	return { animation, util.copy(animation), util.copy(animation) }
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/medium-electric-pole/medium-electric-pole-reflection.png",
+			priority = "extra-high",
+			width = 12,
+			height = 28,
+			shift = util.by_pixel(0, 55),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla medium electric pole sprite set.
 ---@class ElectricPoleMediumSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -187,7 +204,7 @@ function M.get_sprite_set(params)
 				animation = get_corpse_animation(params.tint),
 				animation_overlay = get_corpse_animation_overlay(params.tint),
 			},
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 1,
 			nominal_height = 1,
 		},
