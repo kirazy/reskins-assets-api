@@ -236,6 +236,8 @@
 
 ---Defines the graphics fields of a fluid box.
 ---@class (exact) FluidBoxGraphics
+---The type of fluid box to which the graphics apply.
+---@field type? "heat"|"fluid"
 ---The graphics fields of each pipe connection of the fluid box.
 ---@field pipe_connections? PipeConnectionGraphics[]
 ---The render layer of the graphics of the fluid box.
