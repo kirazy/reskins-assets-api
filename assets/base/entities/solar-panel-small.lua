@@ -96,7 +96,7 @@ local function get_corpse_animation(tint)
 	local animation = {
 		layers = {
 			{
-				filename = remnants_path .. "small-solar-panel-remnants-base.png",
+				filename = remnants_path .. "solar-panel-small-remnants-base.png",
 				width = 246,
 				height = 198,
 				direction_count = 1,
@@ -108,7 +108,7 @@ local function get_corpse_animation(tint)
 
 	if tint then
 		table.insert(animation.layers--[[@cast -?]], {
-			filename = remnants_path .. "small-solar-panel-remnants-mask.png",
+			filename = remnants_path .. "solar-panel-small-remnants-mask.png",
 			width = 246,
 			height = 198,
 			direction_count = 1,
@@ -117,7 +117,7 @@ local function get_corpse_animation(tint)
 			scale = 0.5,
 		})
 		table.insert(animation.layers--[[@cast -?]], {
-			filename = remnants_path .. "small-solar-panel-remnants-highlights.png",
+			filename = remnants_path .. "solar-panel-small-remnants-highlights.png",
 			width = 246,
 			height = 198,
 			direction_count = 1,
@@ -128,6 +128,23 @@ local function get_corpse_animation(tint)
 	end
 
 	return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
+end
+
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = assets_path .. "solar-panel-small-reflection.png",
+			priority = "extra-high",
+			width = 20,
+			height = 24,
+			shift = util.by_pixel(3, 24),
+			variation_count = 1,
+			scale = 4.5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
 end
 
 ---Defines the options for the Bob's small solar panel sprite set.
@@ -166,7 +183,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 2,
 			nominal_height = 2,
 		},

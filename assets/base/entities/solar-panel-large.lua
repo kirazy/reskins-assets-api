@@ -8,6 +8,7 @@
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
 
@@ -86,6 +87,67 @@ local function get_overlay()
 	return overlay
 end
 
+---@param tint? Color
+---@return RotatedAnimationVariations
+local function get_corpse_animation(tint)
+	local remnants_path = _defines.assets_source.base_assets .. "/graphics/entity/solar-panel/remnants/"
+
+	---@type RotatedAnimation
+	local animation = {
+		layers = {
+			{
+				filename = _defines.assets_source.base .. "/graphics/entity/solar-panel/remnants/solar-panel-remnants.png",
+				width = 290,
+				height = 282,
+				direction_count = 1,
+				shift = util.by_pixel(3.5, 0),
+				scale = 0.5,
+			},
+		},
+	}
+
+	if tint then
+		table.insert(animation.layers--[[@cast -?]], {
+			filename = remnants_path .. "solar-panel-remnants-mask.png",
+			width = 290,
+			height = 282,
+			direction_count = 1,
+			shift = util.by_pixel(3.5, 0),
+			tint = tint,
+			scale = 0.5,
+		})
+		table.insert(animation.layers--[[@cast -?]], {
+			filename = remnants_path .. "solar-panel-remnants-highlights.png",
+			width = 290,
+			height = 282,
+			direction_count = 1,
+			shift = util.by_pixel(3.5, 0),
+			blend_mode = "additive",
+			scale = 0.5,
+		})
+	end
+
+	_sprites.rescale_prototype(animation, 4 / 3)
+	return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
+end
+
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = assets_path .. "solar-panel-large-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 24,
+			shift = util.by_pixel(7, 56),
+			variation_count = 1,
+			scale = 5.5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the Bob's large solar panel sprite set.
 ---@class SolarPanelLargeSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -121,9 +183,9 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			-- Bob's large solar panel has no remnant artwork.
-			corpse = nil,
-			water_reflection = nil,
+			-- Use standard panel remnants pending large remnant sprites.
+			corpse = { animation = get_corpse_animation(params.tint) },
+			water_reflection = get_water_reflection(),
 			nominal_width = 4,
 			nominal_height = 4,
 		},
