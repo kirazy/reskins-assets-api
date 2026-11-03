@@ -355,6 +355,10 @@ local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
 		---@cast prototype AssemblingMachinePrototype
 		prototype.fluid_boxes_off_when_no_fluid_recipe = sprite_set.fluid_boxes_off_when_no_fluid_recipe
 	end
+
+	if sprite_set.circuit_connector then
+		prototype.circuit_connector = util.copy(sprite_set.circuit_connector)
+	end
 end
 
 ---@param explosion ExplosionPrototype
@@ -395,6 +399,7 @@ return {
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
 ---@class (exact) CraftingMachineSpriteSet : EntityWithHealthSpriteSet
+---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 ---The prototype's `graphics_set`.
 ---@field graphics_set CraftingMachineGraphicsSet
 ---The prototype's `graphics_set_flipped`, for a crafting machine that supports flipping.

@@ -422,6 +422,7 @@ function M.get_sprite_set(params)
 		set = {
 			-- TODO: we need to a) setup the pipe picture sprites with tintable pipes, and b) take pipe tints
 			graphics_set = graphics_set,
+			circuit_connector = get_circuit_connector(),
 			fluid_boxes = { fluid_box },
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
