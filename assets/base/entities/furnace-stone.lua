@@ -335,12 +335,29 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/stone-furnace/stone-furnace-reflection.png",
+			priority = "extra-high",
+			width = 16,
+			height = 16,
+			shift = util.by_pixel(0, 35),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla stone furnace sprite set.
 ---@class FurnaceStoneSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 ---The variant to use.
----@field variant "standard"
+---@field variant "standard"|"chemical"
 
 ---Gets the sprite set for the vanilla stone furnace.
 ---@param params FurnaceStoneSpriteSetParams The options for the sprite set.
@@ -376,12 +393,12 @@ function M.get_sprite_set(params)
 					pipe_picture = nil,
 				},
 			},
-			fluid_boxes_off_when_no_fluid_recipe = params.variant ~= "chemical" and nil or false,
+			fluid_boxes_off_when_no_fluid_recipe = false,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 1.6,
 			nominal_height = 2,
 		},
