@@ -450,6 +450,32 @@ function M.get_sprite_set(params)
 	return definition
 end
 
+local check_get_pipe_pictures = V.signature("get_pipe_pictures", {
+	{
+		"params",
+		V.struct({
+			tint = Common.color:optional(),
+			use_simple_pipe_pictures = V.boolean():optional(),
+		}),
+	},
+})
+
+---Defines the options for the original assembling machine pipe pictures.
+---@class AssemblingMachinePipePicturesParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
+---@field tint? data.Color
+---When `true`, omits the `north` mask and highlights and uses the `-simple` east variant.
+---@field use_simple_pipe_pictures? boolean
+
+---Gets the original assembling machine pipe pictures.
+---@param params AssemblingMachinePipePicturesParams
+---@return Sprite4Way
+---@nodiscard
+function M.get_pipe_pictures(params)
+	check_get_pipe_pictures(params)
+	return assembling_machine_pipe_pictures(params.tint, params.use_simple_pipe_pictures)
+end
+
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
