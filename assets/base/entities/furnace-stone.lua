@@ -388,11 +388,6 @@ function M.get_sprite_set(params)
 		set = {
 			graphics_set = graphics_set,
 			graphics_set_flipped = graphics_set_flipped,
-			fluid_boxes = {
-				{
-					pipe_picture = nil,
-				},
-			},
 			fluid_boxes_off_when_no_fluid_recipe = false,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,

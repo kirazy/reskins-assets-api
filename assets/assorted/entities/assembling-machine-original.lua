@@ -6,7 +6,6 @@
 ---@namespace Reskins.Assets.Assorted.Entities
 
 local _defines = require("api.defines")
-local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 
@@ -310,7 +309,6 @@ local function get_fluid_box_graphics(tint, draw_order, use_simple_pipe_pictures
 
 	---@type FluidBoxGraphics
 	return {
-		pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
 		pipe_picture = pipe_pictures,
 		secondary_draw_orders = {
 			north = -1,

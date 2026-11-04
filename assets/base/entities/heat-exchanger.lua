@@ -260,6 +260,56 @@ local function get_pipe_covers(pipe_material)
 	})--[[@as Animation4Way]]
 end
 
+---@return Animation4Way
+local function get_heat_pipe_covers()
+	return _sprites.make_4way_animation_from_spritesheet(apply_heat_pipe_glow({
+		filename = get_pipe_path("base") .. "heat-pipe-endings-heated.png",
+		width = 64,
+		height = 64,
+		direction_count = 4,
+		scale = 0.5,
+	}))
+end
+
+---@return Sprite4Way
+local function get_heat_picture()
+	local pipe_path = get_pipe_path("base")
+	local base_path = "__base__/graphics/entity/heat-exchanger/"
+
+	---@param direction "north"|"east"|"south"|"west"
+	---@param width integer
+	---@param height integer
+	---@param shift Vector
+	---@return Sprite
+	local function get_direction(direction, width, height, shift)
+		return {
+			layers = {
+				apply_heat_pipe_glow({
+					filename = pipe_path .. "heat-pipe-" .. direction .. "-heated.png",
+					priority = "extra-high",
+					width = width,
+					height = height,
+					shift = shift,
+					scale = 0.5,
+				}),
+				apply_heat_pipe_glow(util.sprite_load(base_path .. "heatex-" .. direction:sub(1, 1):upper() .. "-glow", {
+					priority = "extra-high",
+					blend_mode = "additive",
+					scale = 0.5,
+				})),
+			},
+		}
+	end
+
+	---@type Sprite4Way
+	return {
+		north = get_direction("north", 44, 96, util.by_pixel(-0.5, 8.5)),
+		east = get_direction("east", 80, 80, util.by_pixel(-21, -13)),
+		south = get_direction("south", 28, 40, util.by_pixel(-1, -30)),
+		west = get_direction("west", 64, 76, util.by_pixel(23, -13)),
+	}
+end
+
 ---@param tint? Color
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return RotatedAnimation
@@ -353,19 +403,18 @@ end
 ---```
 ---@nodiscard
 function M.get_sprite_set(params)
-	-- FIXME: the pipe covers ride on `fluid_boxes`, which the boiler applicator does not
-	-- consume yet. See the fluid box FIXME in `api/applicators/boiler.lua`.
 	---@type SpriteSetDefinition<BoilerSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.boiler_sprite_set,
 		set = {
 			pictures = get_picture_set(params.tint, params.pipe_material),
-			-- FIXME: This needs to apply only to heat-style energy source fluid boxes, not all fluid boxes.
-			-- fluid_boxes = {
-			-- 	{
-			-- 		pipe_covers = get_pipe_covers(params.pipe_material) --[[@as Sprite4Way]],
-			-- 	},
-			-- },
+			heat_buffers = {
+				{
+					pipe_covers = get_pipe_covers(params.pipe_material) --[[@as Sprite4Way]],
+					heat_pipe_covers = get_heat_pipe_covers() --[[@as Sprite4Way]],
+					heat_picture = get_heat_picture(),
+				},
+			},
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,

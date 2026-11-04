@@ -50,6 +50,8 @@ local function boiler_to_crafting_machine_sprite_set_transformer(sprite_set)
 	local out_value = {
 		graphics_set = graphics_set,
 		fluid_boxes = sprite_set.fluid_boxes,
+		heat_buffers = sprite_set.heat_buffers,
+		pipe_material = sprite_set.pipe_material,
 		nominal_height = sprite_set.nominal_height,
 		nominal_width = sprite_set.nominal_width,
 		integration_patch = sprite_set.integration_patch,

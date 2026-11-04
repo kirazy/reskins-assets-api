@@ -272,8 +272,6 @@ local function get_fluid_box_graphics(tint, tier, draw_order)
 
 	---@type FluidBoxGraphics
 	local graphics = {
-		type = "fluid",
-		pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
 		pipe_picture = pipe_pictures,
 		secondary_draw_orders = {
 			north = -1,
@@ -284,7 +282,6 @@ local function get_fluid_box_graphics(tint, tier, draw_order)
 	}
 
 	if feature_flags["freezing"] and mods["space-age"] then
-		graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
 		graphics.pipe_picture_frozen = get_assembler_pipe_pictures_frozen()
 	end
 

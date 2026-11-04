@@ -6,7 +6,6 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
-local _pipes = require("assets.base.entities.pipe-pictures")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
 
@@ -499,7 +498,6 @@ local function get_electric_furnace_fluid_box_graphics(tint)
 	---@type FluidBoxGraphics[]
 	return {
 		{
-			pipe_covers = _pipes.pipe_covers(_defines.pipe_material.iron),
 			pipe_picture = pictures,
 			secondary_draw_orders = {
 				north = -1,

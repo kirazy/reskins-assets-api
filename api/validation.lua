@@ -74,8 +74,7 @@ _common.sprite_set_type = V.one_of(_defines.sprite_set_type):describe_as("a Spri
 _common.sprite_set_transformer = V.func():describe_as("a sprite set transformer")
 
 ---A validator that checks that a value is a `CorpseSpriteSet` with no other fields.
----@type StructValidator<CorpseSpriteSet>
-_common.corpse_sprite_set = V.struct({
+_common.corpse_sprite_set = V.class("CorpseSpriteSet", {
 	animation = V.any():optional(),
 	animation_overlay = V.any():optional(),
 	animation_overlay_render_layer = V.any():optional(),
@@ -107,13 +106,46 @@ _common.corpse_sprite_set = V.struct({
 ---@type Validator<fun(prototype: table, set: table)>
 _common.applicator_function = V.func():describe_as("an applicator function")
 
+---A validator that checks that a value is a `FluidBoxGraphics` with no unrecognized fields.
+_common.fluid_box_graphics = V.class("FluidBoxGraphics", {
+	pipe_connections = V.array(V.table()):optional(),
+	render_layer = V.any():optional(),
+	draw_only_when_connected = V.any():optional(),
+	always_draw_covers = V.any():optional(),
+	pipe_covers = V.any():optional(),
+	pipe_covers_frozen = V.any():optional(),
+	pipe_picture = V.any():optional(),
+	pipe_picture_frozen = V.any():optional(),
+	mirrored_pipe_picture = V.any():optional(),
+	mirrored_pipe_picture_frozen = V.any():optional(),
+	secondary_draw_order = V.any():optional(),
+	secondary_draw_orders = V.any():optional(),
+	enable_working_visualisations = V.any():optional(),
+})
+	:strict()
+	:describe_as("a FluidBoxGraphics")
+
+---A validator that checks that a value is a `HeatBufferGraphics` with no unrecognized fields.
+_common.heat_buffer_graphics = V.class("HeatBufferGraphics", {
+	connections = V.array(V.table()):optional(),
+	pipe_covers = V.any():optional(),
+	heat_pipe_covers = V.any():optional(),
+	heat_picture = V.any():optional(),
+	heat_glow = V.any():optional(),
+})
+	:strict()
+	:describe_as("a HeatBufferGraphics")
+
 ---A validator that checks that a value is a sprite set with nominal dimensions. Unknown fields are permitted; a
----`corpse` field is validated.
+---`corpse` field, a `fluid_boxes` field, a `heat_buffers` field, and a `pipe_material` field are validated.
 ---@type StructValidator<SpriteSetBase>
 _common.sprite_set = V.struct({
 	nominal_width = Common.positive_number,
 	nominal_height = Common.positive_number,
 	corpse = _common.corpse_sprite_set:optional(),
+	fluid_boxes = V.array(_common.fluid_box_graphics):optional(),
+	heat_buffers = V.array(_common.heat_buffer_graphics):optional(),
+	pipe_material = _common.pipe_material:optional(),
 }):describe_as("a sprite set")
 
 ---A validator that checks that a value is a `SpriteSetDefinition`.

@@ -8,6 +8,8 @@ local PrototypeScaler = require("api.prototype-scaler")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
+local FluidBoxes = require("api.fluid-boxes")
+local HeatBuffers = require("api.heat-buffers")
 
 ---The `SpriteSetType` for each prototype type name. Applying a sprite set raises an error when the `SpriteSetType` of
 ---the prototype has no registered applicator.
@@ -123,7 +125,14 @@ function _factory.new()
 		})
 
 		local scaled_set = util.copy(definition.set)
+
 		scaler:rescale(scaled_set)
+
+		-- `rescale` does not scale `fluid_boxes`. Move the positions of the connections that the fluid
+		-- box graphics match with the artwork.
+		for _, graphics in pairs(scaled_set.fluid_boxes or {}) do
+			scaler:rescale(graphics.pipe_connections)
+		end
 
 		return {
 			set_type = definition.set_type,
@@ -156,6 +165,12 @@ function _factory.new()
 		prototype.integration_patch = sprite_set.integration_patch
 		prototype.integration_patch_render_layer = sprite_set.integration_patch_render_layer
 		prototype.water_reflection = sprite_set.water_reflection
+
+		FluidBoxes.apply(prototype, sprite_set.fluid_boxes or {}, { pipe_material = sprite_set.pipe_material })
+
+		if sprite_set.heat_buffers then
+			HeatBuffers.apply(prototype, sprite_set.heat_buffers)
+		end
 	end
 
 	---Applies the given `definition` to the given entity `prototype`.

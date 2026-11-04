@@ -136,10 +136,25 @@ end
 ---```
 ---@nodiscard
 function M.get_sprite_set(params)
-	---@type FluidBoxGraphics
-	local fluid_box = {
-		pipe_picture = pipe_pictures,
-		mirrored_pipe_picture = mirrored_pipe_pictures,
+	-- The two connections on each side take opposite pipe pictures.
+	---@type FluidBoxGraphics[]
+	local fluid_boxes = {
+		{
+			pipe_connections = {
+				{ direction = defines.direction.south, position = { 1, 2 } },
+				{ direction = defines.direction.north, position = { -1, -2 } },
+			},
+			pipe_picture = pipe_pictures,
+			mirrored_pipe_picture = mirrored_pipe_pictures,
+		},
+		{
+			pipe_connections = {
+				{ direction = defines.direction.south, position = { -1, 2 } },
+				{ direction = defines.direction.north, position = { 1, -2 } },
+			},
+			pipe_picture = mirrored_pipe_pictures,
+			mirrored_pipe_picture = pipe_pictures,
+		},
 	}
 
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
@@ -147,7 +162,7 @@ function M.get_sprite_set(params)
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
 			graphics_set = get_graphics_set(params.tint),
-			fluid_boxes = { fluid_box },
+			fluid_boxes = fluid_boxes,
 			fluid_boxes_off_when_no_fluid_recipe = false,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,

@@ -50,6 +50,19 @@
 ---
 ---See [EntityPrototype::water_reflection](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#water_reflection).
 ---@field water_reflection? WaterReflectionDefinition
+---The graphics of the fluid boxes of the prototype, including the fluid box of a fluid energy source. Each fluid box is
+---matched to a `FluidBoxGraphics` by the directions and positions of its pipe connections.
+---
+---A fluid box that matches no `FluidBoxGraphics` has its pipe pictures removed, and takes the pipe covers of
+---`pipe_material`.
+---@field fluid_boxes? FluidBoxGraphics[]
+---The graphics of the heat energy source and the heat buffer of the prototype. Each is matched to a
+---`HeatBufferGraphics` by the directions and positions of its connections. A heat energy source or heat buffer that
+---matches no `HeatBufferGraphics` is not modified.
+---@field heat_buffers? HeatBufferGraphics[]
+---The material of the pipes in the artwork. The pipe covers of a fluid box are created in this material when its
+---`FluidBoxGraphics` does not define `pipe_covers`. Default `"iron"`.
+---@field pipe_material? PipeMaterial
 
 ---Defines the remnant artwork of an entity. Each field is copied onto the field of the same name of the
 ---`CorpsePrototype`.
@@ -223,22 +236,34 @@
 ---@class (exact) PipeConnectionGraphics
 ---Array of the [WorkingVisualisation::name](https://lua-api.factorio.com/latest/types/WorkingVisualisation.html#name) of working visualisations to enable when this pipe connection is present.
 ---
----If the owning fluidbox has [draw\_only\_when\_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected) set to `true`, then the working visualisation is only enabled if this pipe connection is *connected*.
+---If the owning fluid box has [draw\_only\_when\_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected) set to `true`, then the working visualisation is only enabled if this pipe connection is *connected*.
 ---
 ---See [PipeConnectionDefinition::enable_working_visualisations](https://lua-api.factorio.com/latest/types/PipeConnectionDefinition.html#enable_working_visualisations).
----@field enable_working_visualisations string[]
+---@field enable_working_visualisations? string[]
 ---Primary direction this connection points to when entity direction is north and the entity is not mirrored. When entity is rotated or mirrored, effective direction will be computed based on this value.
 ---
 ---Only loaded, and mandatory if `connection_type` is `"normal"` or `"underground"`.
 ---
 ---See [PipeConnectionDefinition::direction](https://lua-api.factorio.com/latest/types/PipeConnectionDefinition.html#direction).
 ---@field direction defines.direction
+---Position relative to entity's center where pipes can connect to this fluid box regardless the directions of entity.
+---
+---When `nil`, the graphics match a pipe connection in `direction` at any position. Otherwise, they match a pipe
+---connection in `direction` within half a tile of `position`, scaled with the sprite set.
+---
+---See [PipeConnectionDefinition::position](https://lua-api.factorio.com/latest/types/PipeConnectionDefinition.html#position).
+---@field position? MapPosition
 
 ---Defines the graphics fields of a fluid box.
+---
+---A fluid box takes the `FluidBoxGraphics` with a pipe connection that matches one of its own by direction and
+---position. When none matches, it takes the `FluidBoxGraphics` with a pipe connection that matches by direction, then
+---the first `FluidBoxGraphics` with no `pipe_connections`.
+---
+---Every field of the fluid box defined by this type is set, except `pipe_covers` and `pipe_covers_frozen`.
 ---@class (exact) FluidBoxGraphics
----The type of fluid box to which the graphics apply.
----@field type? "heat"|"fluid"
----The graphics fields of each pipe connection of the fluid box.
+---The graphics fields of each pipe connection of the fluid box, which also select the fluid boxes to which the graphics
+---apply. When `nil`, the graphics apply to any fluid box that no other `FluidBoxGraphics` matches.
 ---@field pipe_connections? PipeConnectionGraphics[]
 ---The render layer of the graphics of the fluid box.
 ---
@@ -248,11 +273,19 @@
 ---
 ---See [FluidBox::draw_only_when_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected).
 ---@field draw_only_when_connected? boolean
+---Defaults to true if `pipe_picture` is not defined, otherwise defaults to false.
+---
+---See [FluidBox::always_draw_covers](https://lua-api.factorio.com/latest/types/FluidBox.html#always_draw_covers).
+---@field always_draw_covers? boolean
 ---The pictures to show when no fluid box is connected to this one.
+---
+---When `nil`, the fluid box takes the pipe covers of the `pipe_material` of the sprite set.
 ---
 ---See [FluidBox::pipe_covers](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_covers).
 ---@field pipe_covers? Sprite4Way
 ---The frozen form of `pipe_covers`.
+---
+---When `nil` and the freezing feature is enabled, the fluid box takes the frozen pipe covers.
 ---
 ---See [FluidBox::pipe_covers_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_covers_frozen).
 ---@field pipe_covers_frozen? Sprite4Way
@@ -288,3 +321,47 @@
 ---
 ---See [FluidBox::enable_working_visualisations](https://lua-api.factorio.com/latest/types/FluidBox.html#enable_working_visualisations).
 ---@field enable_working_visualisations? string[]
+
+---Defines the graphics fields of a heat connection.
+---@class (exact) HeatConnectionGraphics
+---The "outward" direction of this heat connection. For a connection to succeed, the other heat connection must face the opposite direction (a south-facing connection needs a north-facing connection to succeed). A connection rotates with the entity.
+---
+---See [HeatConnectionDefinition::direction](https://lua-api.factorio.com/latest/types/HeatConnectionDefinition.html#direction).
+---@field direction defines.direction
+---The location of the heat pipe connection, relative to the center of the entity in the north-facing direction.
+---
+---When `nil`, the graphics match a heat connection in `direction` at any position. Otherwise, they match a heat
+---connection in `direction` within half a tile of `position`, scaled with the sprite set.
+---
+---See [HeatConnectionDefinition::position](https://lua-api.factorio.com/latest/types/HeatConnectionDefinition.html#position).
+---@field position? MapPosition
+
+---Defines the graphics fields of a heat energy source or a heat buffer.
+---
+---A heat energy source or heat buffer takes the `HeatBufferGraphics` with a connection that matches one of its own by
+---direction and position. When none matches, it takes the `HeatBufferGraphics` with a connection that matches by
+---direction, then the first `HeatBufferGraphics` with no `connections`. Only the fields that the `HeatBufferGraphics`
+---defines are set.
+---
+---`heat_picture` and `heat_glow` are scaled with the sprite set. `pipe_covers` and `heat_pipe_covers` keep their size.
+---@class (exact) HeatBufferGraphics
+---The graphics fields of each heat connection, which also select the heat energy sources and heat buffers to which the
+---graphics apply. When `nil`, the graphics apply to any heat energy source or heat buffer that no other
+---`HeatBufferGraphics` matches.
+---@field connections? HeatConnectionGraphics[]
+---The pictures to show when no heat connection is connected to this one.
+---
+---See [HeatBuffer::pipe_covers](https://lua-api.factorio.com/latest/types/HeatBuffer.html#pipe_covers).
+---@field pipe_covers? Sprite4Way
+---The form of `pipe_covers` drawn when the heat buffer is heated.
+---
+---See [HeatBuffer::heat_pipe_covers](https://lua-api.factorio.com/latest/types/HeatBuffer.html#heat_pipe_covers).
+---@field heat_pipe_covers? Sprite4Way
+---The picture drawn when the heat buffer is heated.
+---
+---See [HeatBuffer::heat_picture](https://lua-api.factorio.com/latest/types/HeatBuffer.html#heat_picture).
+---@field heat_picture? Sprite4Way
+---The glow drawn when the heat buffer is heated.
+---
+---See [HeatBuffer::heat_glow](https://lua-api.factorio.com/latest/types/HeatBuffer.html#heat_glow).
+---@field heat_glow? Sprite4Way

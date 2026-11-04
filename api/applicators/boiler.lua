@@ -11,11 +11,8 @@ local _defines = require("api.defines")
 local function apply_sprite_set_to_boiler(prototype, sprite_set)
 	prototype.pictures = util.copy(sprite_set.pictures)
 
-	-- FIXME: Need to handle application of fluid boxes to the `fluid_box`, `output_fluid_box` and
-	-- fluid energy source `fluid_box`.
-
-	-- `integration_patch`, `integration_patch_render_layer`, and `water_reflection` are applied by
-	-- `apply_common_fields` in `api.applicator-registry`.
+	-- `integration_patch`, `integration_patch_render_layer`, `water_reflection`, `fluid_boxes`, and `heat_buffers` are
+	-- applied by `apply_common_fields` in `api.applicator-registry`.
 
 	-- FIXME need to handle explosion application in this step based on the package set explosion definition.
 end
@@ -41,8 +38,6 @@ return {
 ---When `true`, indicates that the light intensity of the energy source controls the alpha of `fire_glow`. When `false`,
 ---the alpha is always 1.
 ---@field fire_glow_flicker_enabled? boolean
----Fluid box pipe graphics, matched to the prototype's fluid boxes by direction.
----@field fluid_boxes? FluidBoxGraphics[]
 ---The boiler's directional sprites.
 ---@field pictures BoilerPictureSet
 

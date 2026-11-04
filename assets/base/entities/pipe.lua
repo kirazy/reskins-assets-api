@@ -651,23 +651,6 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 	return pipe_pictures
 end
 
----@param pipe_material PipeMaterial
----@return FluidBoxGraphics
-local function get_fluid_box_graphics(pipe_material)
-	local pipe_covers = _pipes.pipe_covers(pipe_material)
-
-	---@type FluidBoxGraphics
-	local fluid_box_graphics = {
-		pipe_covers = pipe_covers,
-	}
-
-	if feature_flags["freezing"] and mods["space-age"] then
-		fluid_box_graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
-	end
-
-	return fluid_box_graphics
-end
-
 ---Defines the options for the vanilla and Bob's pipes sprite set.
 ---@class PipeSpriteSetParams
 ---The material from which the pipes are built.
@@ -696,7 +679,7 @@ function M.get_sprite_set(params)
 			horizontal_window_bounding_box = { { -0.25, -0.28125 }, { 0.25, 0.15625 } },
 			vertical_window_bounding_box = { { -0.28125, -0.5 }, { 0.03125, 0.125 } },
 			pictures = get_pictures(params.pipe_material),
-			fluid_box = get_fluid_box_graphics(params.pipe_material),
+			pipe_material = params.pipe_material,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,

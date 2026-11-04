@@ -166,23 +166,6 @@ local function get_pictures(pipe_material)
 	return pipe_to_ground_pictures
 end
 
----@param pipe_material PipeMaterial
----@return FluidBoxGraphics
-local function get_fluid_box_graphics(pipe_material)
-	local pipe_covers = _pipes.pipe_covers(pipe_material)
-
-	---@type FluidBoxGraphics
-	local fluid_box_graphics = {
-		pipe_covers = pipe_covers,
-	}
-
-	if feature_flags["freezing"] and mods["space-age"] then
-		fluid_box_graphics.pipe_covers_frozen = _pipes.pipe_covers_frozen()
-	end
-
-	return fluid_box_graphics
-end
-
 ---Defines the options for the vanilla and Bob's underground pipes sprite set.
 ---@class PipeToGroundSpriteSetParams
 ---The material from which the pipes are built.
@@ -209,7 +192,7 @@ function M.get_sprite_set(params)
 		set_type = _defines.sprite_set_type.pipe_to_ground_sprite_set,
 		set = {
 			pictures = get_pictures(params.pipe_material),
-			fluid_box = get_fluid_box_graphics(params.pipe_material),
+			pipe_material = params.pipe_material,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
