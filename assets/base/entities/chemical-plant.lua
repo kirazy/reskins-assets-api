@@ -347,6 +347,7 @@ function M.get_sprite_set(params)
 		set = {
 			graphics_set = get_graphics_set(params.tint),
 			circuit_connector = get_circuit_connector(),
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = ChemicalPlantExplosion.get_explosion({

@@ -162,9 +162,9 @@ local function build_pipe_connector_visualisations(connectors, directions, is_fl
 	return wv1, wv2
 end
 
----Builds and appends pipe connector working_visualisations to `prototype.graphics_set` (and
----`prototype.graphics_set_flipped`, if present), from `connectors` and the prototype's own fluid box connection
----directions.
+---Builds pipe connector working_visualisations from `connectors` and the prototype's own fluid box connection
+---directions, and inserts them as the first two working_visualisations of `prototype.graphics_set` (and
+---`prototype.graphics_set_flipped`, if present).
 ---
 ---The prototype is mutated in place.
 ---@param prototype CraftingMachinePrototype
@@ -176,14 +176,14 @@ local function apply_working_visualisation_pipe_connectors(prototype, connectors
 
 	prototype.graphics_set.working_visualisations = prototype.graphics_set.working_visualisations or {}
 	local wv1, wv2 = build_pipe_connector_visualisations(connectors, directions, false)
-	table.insert(prototype.graphics_set.working_visualisations, wv1)
-	table.insert(prototype.graphics_set.working_visualisations, wv2)
+	table.insert(prototype.graphics_set.working_visualisations, 1, wv1)
+	table.insert(prototype.graphics_set.working_visualisations, 2, wv2)
 
 	if prototype.graphics_set_flipped then
 		prototype.graphics_set_flipped.working_visualisations = prototype.graphics_set_flipped.working_visualisations or {}
 		local wv1_f, wv2_f = build_pipe_connector_visualisations(connectors, directions, true)
-		table.insert(prototype.graphics_set_flipped.working_visualisations, wv1_f)
-		table.insert(prototype.graphics_set_flipped.working_visualisations, wv2_f)
+		table.insert(prototype.graphics_set_flipped.working_visualisations, 1, wv1_f)
+		table.insert(prototype.graphics_set_flipped.working_visualisations, 2, wv2_f)
 	end
 end
 
@@ -207,7 +207,7 @@ local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
 		prototype.fluid_boxes_off_when_no_fluid_recipe = sprite_set.fluid_boxes_off_when_no_fluid_recipe
 	end
 
-	Assignment.safe_assign(prototype, sprite_set, { "circuit_connector", "circuit_connector_flipped" })
+	Assignment.safe_assign(prototype, sprite_set, { "circuit_connector", "circuit_connector_flipped", "use_mirroring" })
 end
 
 ---@type CraftingMachineSpriteSetApplicator
@@ -248,8 +248,14 @@ return {
 ---@field graphics_set CraftingMachineGraphicsSet
 ---The prototype's `graphics_set_flipped`, for a crafting machine that supports flipping.
 ---@field graphics_set_flipped? CraftingMachineGraphicsSet
----Pipe connector artwork built from the fluid box connection directions of the prototype. May be given with or without
----`fluid_boxes`.
+---Defaults to true if `vector_to_place_result` is given.
+---
+---When `nil`, the `use_mirroring` of the prototype is not modified.
+---
+---See [CraftingMachinePrototype::use_mirroring](https://lua-api.factorio.com/latest/prototypes/CraftingMachinePrototype.html#use_mirroring).
+---@field use_mirroring? boolean
+---Pipe connector artwork built from the fluid box connection directions of the prototype. The artwork is drawn as the
+---first two working visualisations. May be given with or without `fluid_boxes`.
 ---@field working_visualisation_pipe_connectors? WorkingVisualisationPipeConnectors
 ---When `true`, indicates that the fluid boxes of the prototype are hidden while its recipe uses no fluid. Applied to an
 ---`AssemblingMachinePrototype`, and ignored otherwise;
