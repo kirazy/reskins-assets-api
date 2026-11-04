@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `mining_drill_sprite_set` to `prototype`.
 ---@param prototype MiningDrillPrototype
@@ -11,9 +12,8 @@ local _defines = require("api.defines")
 local function apply_sprite_set_to_mining_drill(prototype, set)
 	prototype.graphics_set = util.copy(set.graphics_set)
 	prototype.wet_mining_graphics_set = util.copy(set.wet_mining_graphics_set)
-	prototype.radius_visualisation_picture = util.copy(set.radius_visualisation_picture)
-	prototype.base_picture = util.copy(set.base_picture)
-	prototype.base_render_layer = util.copy(set.base_render_layer)
+
+	Assignment.safe_assign(prototype, set, { "circuit_connector", "circuit_connector_flipped" })
 
 	-- Flipped graphics sets exist in Factorio 2.1 and later.
 	if helpers.compare_versions(mods["base"], "2.1.0") >= 0 then
@@ -40,10 +40,10 @@ return {
 ---@field wet_mining_graphics_set? MiningDrillGraphicsSet
 ---The prototype's `wet_mining_graphics_set_flipped`, in Factorio 2.1 and later.
 ---@field wet_mining_graphics_set_flipped? MiningDrillGraphicsSet
----The prototype's `radius_visualisation_picture`.
----@field radius_visualisation_picture? Sprite
----@field base_picture? Sprite4Way
----@field base_render_layer? RenderLayer
+---When `nil`, the circuit connector of the prototype is not modified.
+---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+---When `nil`, the flipped circuit connector of the prototype is not modified.
+---@field circuit_connector_flipped? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 
 ---Applies the `MiningDrillSpriteSet` to `MiningDrillPrototype` instances.
 ---@class (exact) MiningDrillSpriteSetApplicator : SpriteSetApplicator<MiningDrillPrototype, MiningDrillSpriteSet>

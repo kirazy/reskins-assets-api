@@ -59,6 +59,7 @@ local function boiler_to_crafting_machine_sprite_set_transformer(sprite_set)
 		dying_explosion = sprite_set.dying_explosion,
 		corpse = sprite_set.corpse,
 		water_reflection = sprite_set.water_reflection,
+		drawing_box_vertical_extension = sprite_set.drawing_box_vertical_extension,
 	}
 
 	return out_value

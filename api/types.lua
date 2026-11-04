@@ -50,6 +50,11 @@
 ---
 ---See [EntityPrototype::water_reflection](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#water_reflection).
 ---@field water_reflection? WaterReflectionDefinition
+---Specification of extra vertical space needed to see the whole entity in GUIs. This is used to calculate the correct
+---zoom and positioning in the entity info gui, for example in the entity tooltip.
+---
+---See [EntityPrototype::drawing_box_vertical_extension](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#drawing_box_vertical_extension).
+---@field drawing_box_vertical_extension? double
 ---The graphics of the fluid boxes of the prototype, including the fluid box of a fluid energy source. Each fluid box is
 ---matched to a `FluidBoxGraphics` by the directions and positions of its pipe connections.
 ---
@@ -63,6 +68,13 @@
 ---The material of the pipes in the artwork. The pipe covers of a fluid box are created in this material when its
 ---`FluidBoxGraphics` does not define `pipe_covers`. Default `"iron"`.
 ---@field pipe_material? PipeMaterial
+---The light flicker of the burner or fluid energy source of the prototype. The light flicker is set on the
+---`energy_source` of the prototype when it is a burner or fluid energy source, and on the `burner` of the prototype
+---when it has one.
+---
+---When `nil`, the light flicker of the energy source is not modified. The light flicker is not set on a prototype with
+---no burner or fluid energy source.
+---@field light_flicker? LightFlickeringDefinition
 
 ---Defines the remnant artwork of an entity. Each field is copied onto the field of the same name of the
 ---`CorpsePrototype`.

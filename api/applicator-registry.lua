@@ -39,6 +39,37 @@ local corpse_fields = {
 	"underwater_patch",
 }
 
+-- The fields of a prototype that may hold a burner or fluid energy source.
+local light_flicker_energy_source_fields = {
+	"energy_source",
+	"burner",
+}
+
+-- The types of energy source that have a `light_flicker`.
+local light_flicker_energy_source_types = {
+	["burner"] = true,
+	["fluid"] = true,
+}
+
+---Sets the `light_flicker` of each burner or fluid energy source of the given `prototype` to a copy of the given
+---`light_flicker`, in place.
+---
+---Each energy source is replaced with a copy before it is modified.
+---@param prototype EntityWithHealthPrototype
+---@param light_flicker LightFlickeringDefinition
+local function apply_light_flicker(prototype, light_flicker)
+	local fields = prototype --[[@as table<string, any>]]
+
+	for _, field in pairs(light_flicker_energy_source_fields) do
+		local energy_source = fields[field]
+		if energy_source and light_flicker_energy_source_types[energy_source.type] then
+			local copy = util.copy(energy_source)
+			copy.light_flicker = util.copy(light_flicker)
+			fields[field] = copy
+		end
+	end
+end
+
 ---The `SpriteSetType` for each prototype type name. Applying a sprite set raises an error when the `SpriteSetType` of
 ---the prototype has no registered applicator.
 ---@type table<PrototypeType, SpriteSetType>
@@ -165,9 +196,13 @@ function _factory.new()
 
 		-- `rescale` does not scale `fluid_boxes`. Move the positions of the connections that the fluid
 		-- box graphics match with the artwork.
-		for _, graphics in pairs(scaled_set.fluid_boxes or {}) do
-			scaler:rescale(graphics.pipe_connections)
+		-- Rescale every connection in one call, so that a table shared by two fluid box graphics is rescaled once.
+		local pipe_connections = {}
+		for index, graphics in pairs(scaled_set.fluid_boxes or {}) do
+			pipe_connections[index] = graphics.pipe_connections
 		end
+
+		scaler:rescale(pipe_connections)
 
 		return {
 			set_type = definition.set_type,
@@ -198,11 +233,16 @@ function _factory.new()
 		prototype.integration_patch = sprite_set.integration_patch
 		prototype.integration_patch_render_layer = sprite_set.integration_patch_render_layer
 		prototype.water_reflection = sprite_set.water_reflection
+		prototype.drawing_box_vertical_extension = sprite_set.drawing_box_vertical_extension
 
 		FluidBoxes.apply(prototype, sprite_set.fluid_boxes or {}, { pipe_material = sprite_set.pipe_material })
 
 		if sprite_set.heat_buffers then
 			HeatBuffers.apply(prototype, sprite_set.heat_buffers)
+		end
+
+		if sprite_set.light_flicker then
+			apply_light_flicker(prototype, sprite_set.light_flicker)
 		end
 	end
 

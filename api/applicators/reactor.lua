@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `reactor_sprite_set` to `prototype`.
 ---@param prototype ReactorPrototype
@@ -26,6 +27,10 @@ local function apply_sprite_set_to_reactor(prototype, set)
 		prototype.working_light_picture = graphics_set.working_light_picture
 		prototype.use_fuel_glow_color = nil
 	end
+
+	prototype.light = util.copy(set.light)
+
+	Assignment.safe_assign(prototype, set, { "circuit_connector" })
 end
 
 ---@type ReactorSpriteSetApplicator
@@ -53,6 +58,10 @@ return {
 ---When `true`, indicates that the working light glows in the color of the fuel, and the applicator uses the
 ---`fuel_glow_working_light_picture` from `graphics_set`.
 ---@field use_fuel_glow_color boolean
+---When `nil`, the light of the prototype is removed.
+---@field light? LightDefinition
+---When `nil`, the circuit connector of the prototype is not modified.
+---@field circuit_connector? CircuitConnectorDefinition
 
 ---Applies the `ReactorSpriteSet` to `ReactorPrototype` instances.
 ---@class (exact) ReactorSpriteSetApplicator : SpriteSetApplicator<ReactorPrototype, ReactorSpriteSet>
