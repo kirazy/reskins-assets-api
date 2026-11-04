@@ -205,7 +205,7 @@ _defines.sprite_set_type = {
 	heat_pipe_sprite_set = "HeatPipeSpriteSet",
 
 	---The sprite set for `CombatRobotPrototype`.
-	flying_robot_sprite_set = "FlyingRobotSpriteSet",
+	combat_robot_sprite_set = "CombatRobotSpriteSet",
 
 	---The sprite set for `ConstructionRobotPrototype`.
 	construction_robot_sprite_set = "ConstructionRobotSpriteSet",
@@ -225,6 +225,9 @@ _defines.sprite_set_type = {
 	---The sprite set for `PumpPrototype`.
 	pump_sprite_set = "PumpSpriteSet",
 
+	---The sprite set for `LandMinePrototype`.
+	land_mine_sprite_set = "LandMineSpriteSet",
+
 	---The sprite set for `RadarPrototype`.
 	radar_sprite_set = "RadarSpriteSet",
 
@@ -239,6 +242,15 @@ _defines.sprite_set_type = {
 
 	---The sprite set for `LabPrototype`.
 	lab_sprite_set = "LabSpriteSet",
+
+	---The sprite set for `UnitPrototype`.
+	unit_sprite_set = "UnitSpriteSet",
+
+	---The sprite set for `WallPrototype`.
+	wall_sprite_set = "WallSpriteSet",
+
+	---The sprite set for `GatePrototype`.
+	gate_sprite_set = "GateSpriteSet",
 }
 
 return _defines

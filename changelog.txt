@@ -11,6 +11,7 @@ Date: ????
     - Added `api.connection-matching`, which matches graphics to a fluid box, heat energy source, or heat buffer by the directions and positions of its connections.
   Changes:
     - Revised blending mode from additive-soft to additive.
+    - `defines.sprite_set_type.flying_robot_sprite_set` is replaced by `combat_robot_sprite_set`, the sprite set type of `CombatRobotSpriteSet`.
     - Removed `apply_to_explosion` from `SpriteSetApplicator`.
     - The centrifuge sprite set now includes the water reflection, and uses the re-rendered sprites from Factorio 2.1.
     - Electric furnace sprite sets now include the water reflection and frozen sprites.

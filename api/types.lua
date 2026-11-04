@@ -208,7 +208,7 @@
 ---Defines a `SpriteSetApplicator` of any prototype and sprite set type.
 ---@class (exact) AnySpriteSetApplicator : SpriteSetApplicator<any, any>
 
----Defines the sprite data of a `SpriteSetDefinition` of type `flying_robot_sprite_set`.
+---Defines the sprite data shared by the sprite sets of flying robots.
 ---@class (exact) FlyingRobotSpriteSet : EntityWithHealthSpriteSet
 ---The animation of the robot when it is idle.
 ---
@@ -228,13 +228,92 @@
 ---@field shadow_in_motion RotatedAnimation
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `turret_sprite_set`.
+---
+---The fields that belong to `FluidTurretPrototype` are applied to a fluid turret only.
 ---@class (exact) TurretSpriteSet : EntityWithHealthSpriteSet
+---@field folded_animation RotatedAnimation8Way
+---@field preparing_animation? RotatedAnimation8Way
+---@field prepared_animation? RotatedAnimation8Way
+---@field prepared_alternative_animation? RotatedAnimation8Way
+---@field starting_attack_animation? RotatedAnimation8Way
+---@field attacking_animation? RotatedAnimation8Way
+---@field ending_attack_animation? RotatedAnimation8Way
+---@field folding_animation? RotatedAnimation8Way
+---@field energy_glow_animation? RotatedAnimation8Way
+---The range of the flickering of the alpha of `energy_glow_animation`. Default is range 0.2, so animation alpha can be
+---anywhere between 0.8 and 1.0.
+---
+---See [TurretPrototype::energy_glow_animation_flicker_strength](https://lua-api.factorio.com/latest/prototypes/TurretPrototype.html#energy_glow_animation_flicker_strength).
+---@field energy_glow_animation_flicker_strength? float
+---The intensity of light in the form of `energy_glow_animation` drawn on top of `energy_glow_animation`.
+---
+---See [TurretPrototype::glow_light_intensity](https://lua-api.factorio.com/latest/prototypes/TurretPrototype.html#glow_light_intensity).
+---@field glow_light_intensity? float
+---@field resource_indicator_animation? RotatedAnimation8Way
+---@field gun_animation_render_layer? RenderLayer
+---@field gun_animation_secondary_draw_order? uint8
+---@field graphics_set TurretGraphicsSet
+---@field integration? Sprite
+---@field special_effect? TurretSpecialEffect
+---Set of [circuit connector definitions](https://lua-api.factorio.com/latest/types/CircuitConnectorDefinition.html) for
+---all directions used by this turret. Required amount of elements is based on other prototype values: 8 elements if
+---building-direction-8-way flag is set, or 16 elements if building-direction-16-way flag is set, or 4 elements if
+---`turret_base_has_direction` is set to true, or 1 element.
+---
+---When `nil`, the circuit connector of the prototype is not modified.
+---
+---See [TurretPrototype::circuit_connector](https://lua-api.factorio.com/latest/prototypes/TurretPrototype.html#circuit_connector).
+---@field circuit_connector? CircuitConnectorDefinition[]
+---The `source_offset` of the `attack_parameters` of the prototype. When `nil`, the `source_offset` of the prototype is
+---not modified.
+---
+---See [BeamAttackParameters::source_offset](https://lua-api.factorio.com/latest/types/BeamAttackParameters.html#source_offset).
+---@field source_offset? Vector
+---The `source_direction_count` of the `attack_parameters` of the prototype. When `nil`, the `source_direction_count` of
+---the prototype is not modified.
+---
+---See [BeamAttackParameters::source_direction_count](https://lua-api.factorio.com/latest/types/BeamAttackParameters.html#source_direction_count).
+---@field source_direction_count? uint32
+---The `projectile_center` of the `attack_parameters` of the prototype. When `nil`, the `projectile_center` of the
+---prototype is not modified.
+---
+---See [ProjectileAttackParameters::projectile_center](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#projectile_center).
+---@field projectile_center? Vector
+---The `projectile_creation_distance` of the `attack_parameters` of the prototype. When `nil`, the
+---`projectile_creation_distance` of the prototype is not modified.
+---
+---See [ProjectileAttackParameters::projectile_creation_distance](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#projectile_creation_distance).
+---@field projectile_creation_distance? float
+---The fields of the `shell_particle` of the `attack_parameters` of the prototype that the set defines. The other fields
+---of the `shell_particle` of the prototype are not modified.
+---
+---See [ProjectileAttackParameters::shell_particle](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#shell_particle).
+---@field shell_particle? CircularParticleCreationSpecification
+---@field muzzle_animation? Animation
+---@field muzzle_light? LightDefinition
+---@field enough_fuel_indicator_picture? Sprite8Way
+---@field enough_fuel_indicator_light? LightDefinition
+---@field not_enough_fuel_indicator_picture? Sprite8Way
+---@field not_enough_fuel_indicator_light? LightDefinition
+---The sprite will be drawn on top of fluid turrets that are out of fluid ammunition. If the `out_of_ammo_alert_icon` is
+---not set, [UtilitySprites::fluid_icon](https://lua-api.factorio.com/latest/prototypes/UtilitySprites.html#fluid_icon)
+---will be used instead.
+---
+---See [FluidTurretPrototype::out_of_ammo_alert_icon](https://lua-api.factorio.com/latest/prototypes/FluidTurretPrototype.html#out_of_ammo_alert_icon).
+---@field out_of_ammo_alert_icon? Sprite
+---@field folded_muzzle_animation_shift? AnimatedVector
+---@field preparing_muzzle_animation_shift? AnimatedVector
+---@field prepared_muzzle_animation_shift? AnimatedVector
+---@field starting_attack_muzzle_animation_shift? AnimatedVector
+---@field attacking_muzzle_animation_shift? AnimatedVector
+---@field ending_attack_muzzle_animation_shift? AnimatedVector
+---@field folding_muzzle_animation_shift? AnimatedVector
 
 ---Defines the graphics fields of a pipe connection.
 ---@class (exact) PipeConnectionGraphics
 ---Array of the [WorkingVisualisation::name](https://lua-api.factorio.com/latest/types/WorkingVisualisation.html#name) of working visualisations to enable when this pipe connection is present.
 ---
----If the owning fluid box has [draw\_only\_when\_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected) set to `true`, then the working visualisation is only enabled if this pipe connection is *connected*.
+---If the owning fluid box has [draw_only_when_connected](https://lua-api.factorio.com/latest/types/FluidBox.html#draw_only_when_connected) set to `true`, then the working visualisation is only enabled if this pipe connection is *connected*.
 ---
 ---See [PipeConnectionDefinition::enable_working_visualisations](https://lua-api.factorio.com/latest/types/PipeConnectionDefinition.html#enable_working_visualisations).
 ---@field enable_working_visualisations? string[]
@@ -295,11 +374,11 @@
 ---
 ---See [FluidBox::pipe_picture_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_picture_frozen).
 ---@field pipe_picture_frozen? Sprite4Way
----Pipe picture variation used when owner machine is flipped. If no picture is loaded, pipe\_picture is used instead.
+---Pipe picture variation used when owner machine is flipped. If no picture is loaded, pipe_picture is used instead.
 ---
 ---See [FluidBox::mirrored_pipe_picture](https://lua-api.factorio.com/latest/types/FluidBox.html#mirrored_pipe_picture).
 ---@field mirrored_pipe_picture? Sprite4Way
----Frozen pipe picture variation used when owner machine is flipped. If no picture is loaded, pipe\_picture\_frozen is used instead.
+---Frozen pipe picture variation used when owner machine is flipped. If no picture is loaded, pipe_picture_frozen is used instead.
 ---
 ---See [FluidBox::mirrored_pipe_picture_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#mirrored_pipe_picture_frozen).
 ---@field mirrored_pipe_picture_frozen? Sprite4Way

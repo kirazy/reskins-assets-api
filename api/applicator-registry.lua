@@ -36,16 +36,20 @@ local set_type_by_prototype_type = {
 	["heat-pipe"] = _defines.sprite_set_type.heat_pipe_sprite_set,
 	["construction-robot"] = _defines.sprite_set_type.construction_robot_sprite_set,
 	["logistic-robot"] = _defines.sprite_set_type.logistic_robot_sprite_set,
-	["combat-robot"] = _defines.sprite_set_type.flying_robot_sprite_set,
+	["combat-robot"] = _defines.sprite_set_type.combat_robot_sprite_set,
 	["accumulator"] = _defines.sprite_set_type.accumulator_sprite_set,
 	["inserter"] = _defines.sprite_set_type.inserter_sprite_set,
 	["reactor"] = _defines.sprite_set_type.reactor_sprite_set,
 	["pump"] = _defines.sprite_set_type.pump_sprite_set,
+	["land-mine"] = _defines.sprite_set_type.land_mine_sprite_set,
 	["radar"] = _defines.sprite_set_type.radar_sprite_set,
 	["roboport"] = _defines.sprite_set_type.roboport_sprite_set,
 	["solar-panel"] = _defines.sprite_set_type.solar_panel_sprite_set,
 	["storage-tank"] = _defines.sprite_set_type.storage_tank_sprite_set,
 	["lab"] = _defines.sprite_set_type.lab_sprite_set,
+	["unit"] = _defines.sprite_set_type.unit_sprite_set,
+	["wall"] = _defines.sprite_set_type.wall_sprite_set,
+	["gate"] = _defines.sprite_set_type.gate_sprite_set,
 }
 
 ---Provides methods for creating applicator registries, which apply sprite sets to prototypes.
