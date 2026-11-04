@@ -9,6 +9,8 @@ Date: ????
     - Completed the laser turret sprite set.
     - Completed the plasma turret sprite set.
     - Added the electrolyser sprite set.
+    - Added the fluid generator sprite set.
+    - Added the burner generator sprite set and the burner generator applicator.
     - Added the land mine sprite set and the land mine applicator.
     - Added the laser beam graphics set.
     - Added the laser robot sprite set and the combat robot applicator.
@@ -19,7 +21,21 @@ Date: ????
     - Added the tank icon.
     - Added the locomotive, cargo wagon, fluid wagon, and artillery wagon icons.
     - Added the drone sprite set and the unit applicator.
+    - Added the robot charge port sprite set.
+    - Added the robochest sprite set.
+    - Added the logistic zone expander and logistic zone interface sprite sets.
+    - Added the valve sprite set and the valve applicator.
+    - Added the air pump and water pump sprite sets.
+    - Added the heat pipe sprite set and the heat pipe applicator.
+    - Added the heat source sprite set.
+    - Added the small storage tank sprite set.
+    - Added the area mining drill icon.
+    - Added the greenhouse sprite set.
+    - Added the logistic chest sprite set and icons, and the logistic container applicator.
+    - Completed the tinted and preset inserter sprite sets.
     - Added method `get_pipe_pictures` to the original assembling machine sprite set.
+    - Added method `get_frozen_patch` to the vanilla lab sprite set.
+    - Added method `get_smoke` to the fluid generator and burner generator sprite sets.
     - Added `HeatBufferGraphics` and `HeatConnectionGraphics`, the graphics of a heat energy source or heat buffer.
     - Added `api.fluid-boxes`, which applies `FluidBoxGraphics` to the fluid boxes of a prototype.
     - Added `api.heat-buffers`, which applies `HeatBufferGraphics` to the heat energy source and heat buffer of a prototype.
@@ -33,7 +49,11 @@ Date: ????
     - The gun turret and sniper turret sprite sets now place the projectile and the shell particle on the gun.
     - The centrifuge sprite set now includes the water reflection, and uses the re-rendered sprites from Factorio 2.1.
     - Electric furnace sprite sets now include the water reflection and frozen sprites.
+    - The electric mining drill sprite set now includes the integration patch and the water reflection.
+    - `MiningDrillSpriteSet` now has `circuit_connector` and `circuit_connector_flipped`, and the electric mining drill sprite set now includes the circuit connector.
     - Steel furnace, stone furnace, steam engine and steam turbine sprite sets now include the water reflection.
+    - The chemical plant sprite set now includes the circuit connector, the water reflection, and frozen sprites.
+    - The pumpjack sprite sets now include the circuit connector and frozen sprites.
     - Pipe and pipe-to-ground `get_sprite_set` methods now implicitly handle inclusion of frozen sprites; the `include_frozen_pictures` optional parameter has been removed.
     - `fluid_boxes`, `heat_buffers`, and `pipe_material` are now fields of every sprite set, and `apply_sprite_set` applies them to the prototype for every applicator.
     - `apply_sprite_set` now sets the pipe covers of every fluid box to the pipe covers of the `pipe_material` of the sprite set when its `FluidBoxGraphics` defines none, and adds the frozen pipe covers when the freezing feature is enabled.
@@ -44,10 +64,29 @@ Date: ????
     - The nuclear reactor sprite set now includes the heat picture.
     - The radar sprite set now includes the water reflection.
     - The working visualisations of a `PipeConnectionGraphics` are now enabled on the matching pipe connection of the prototype.
+    - The beacon sprite set now draws the untinted copy of the beacon light as a light.
+    - `CraftingMachineSpriteSet` now has `circuit_connector_flipped`, and the distillery sprite set now includes the circuit connector and the flipped circuit connector.
+    - The `get_sprite_set` method of the distillery sprite set now validates its parameters.
+    - `ReactorSpriteSet` now has `circuit_connector`, and the nuclear reactor sprite set now includes the circuit connector.
+    - `PumpSpriteSet` now has `fluid_animation`, `glass_pictures`, `frozen_patch`, `circuit_connector`, and `wagon_connection_graphics`, and the pump sprite set now includes them.
+    - The pump sprite set now rejects parameters that are not a `PumpSpriteSetParams`.
+    - The boiler sprite set now rejects parameters that are not a `BoilerSpriteSetParams`.
+    - The lab sprite set now rejects parameters that are not a `LabSpriteSetParams`.
+    - The heat exchanger sprite sets now reject parameters that are not a `HeatExchangerSpriteSetParams`.
+    - `StorageTankSpriteSet` now has `window_bounding_box` and `circuit_connector`, and the storage tank and four-way storage tank sprite sets now include them.
     - `EntityWithHealthSpriteSet` now has `drawing_box_vertical_extension`, and the sprite sets now include it wherever the source entity defines it.
+    - `EntityWithHealthSpriteSet` now has `light_flicker`, and the boiler, stone furnace, steel furnace, burner generator, and heat source sprite sets now include it.
+    - The nuclear reactor and burner assembling machine sprite sets now include the light flicker.
+    - `ReactorSpriteSet` now has `light`, and the reactor applicator removes the light of a reactor when the sprite set defines none.
+    - The beacon and mining drill sprite sets no longer define the radius visualisation picture, and the applicators no longer apply it. `MiningDrillSpriteSet` no longer has `radius_visualisation_picture`.
   Bugfixes:
     - Fixed that two of the four fluid boxes of the filtration unit took the wrong pipe pictures.
     - Corrected the generator applicator and sprite set to correctly reflect the parameters required for Factorio 2.1.
+    - Fixed that both remnant variations of the beacon drew the first variation.
+    - Fixed that the pump sprite set drew no shadow.
+    - Fixed that the lab sprite set included the frozen patch when Space Age was not loaded.
+    - Fixed that the boiler applicator did not set `fire_flicker_enabled` and `fire_glow_flicker_enabled`. The heat exchanger sprite sets now include both.
+    - Fixed that the remnants of the lab sprite set were placed at the position of the radar remnants.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2026-11-01

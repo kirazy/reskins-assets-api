@@ -139,6 +139,28 @@ local function get_working_visualisations()
 	}
 end
 
+---Gets the frozen patch of the chemical plant for each direction.
+---@return Sprite4Way
+local function get_frozen_patch()
+	local filename = "__space-age__/graphics/entity/frozen/chemical-plant/chemical-plant-frozen.png"
+
+	---@type Sprite4Way
+	local frozen_patch = {}
+	for index, direction in pairs({ "north", "east", "south", "west" }) do
+		frozen_patch[direction] = {
+			filename = filename,
+			priority = "high",
+			x = 220 * (index - 1),
+			width = 220,
+			height = 292,
+			shift = util.by_pixel(0.5, -9),
+			scale = 0.5,
+		}
+	end
+
+	return frozen_patch
+end
+
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
@@ -199,7 +221,61 @@ local function get_graphics_set(tint)
 		working_visualisations = get_working_visualisations(),
 	}
 
+	if feature_flags["freezing"] and mods["space-age"] then
+		graphics_set.frozen_patch = get_frozen_patch()
+	end
+
 	return graphics_set
+end
+
+---Gets the circuit connector of the chemical plant for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 2,
+			main_offset = util.by_pixel(16.5, -20),
+			shadow_offset = util.by_pixel(12.5 + 16.5 - 3, 18.5 - 20),
+			show_shadow = true,
+		},
+		{
+			variation = 7,
+			main_offset = util.by_pixel(3, 0),
+			shadow_offset = util.by_pixel(12.5, 18.5),
+			show_shadow = true,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-15, -2.5),
+			shadow_offset = util.by_pixel(12.5 - 15 - 3, 18.5 - 2.5),
+			show_shadow = true,
+		},
+		{
+			variation = 30,
+			main_offset = util.by_pixel(-12.5, -14.5),
+			shadow_offset = util.by_pixel(12.5 - 12.5 - 3, 18.5 - 14.5),
+			show_shadow = true,
+		},
+	})
+end
+
+---Gets the water reflection of the chemical plant.
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/chemical-plant/chemical-plant-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 36,
+			shift = util.by_pixel(5, 60),
+			variation_count = 4,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
 end
 ---@param tint? Color
 ---@return RotatedAnimationVariations
@@ -268,10 +344,12 @@ function M.get_sprite_set(params)
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
 			graphics_set = get_graphics_set(params.tint),
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
+			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.4,
 			nominal_width = 3,
 			nominal_height = 3,

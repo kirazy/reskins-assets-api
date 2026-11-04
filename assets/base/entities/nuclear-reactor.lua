@@ -244,6 +244,42 @@ local function get_corpse_animation(tint, pipe_material)
 	return animation
 end
 
+---Gets the circuit connector of the nuclear reactor.
+---@return CircuitConnectorDefinition
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_single(universal_connector_template, {
+		variation = 27,
+		main_offset = util.by_pixel(40, 40),
+		shadow_offset = util.by_pixel(45, 54.5),
+		show_shadow = false,
+	})
+end
+
+---Gets the water reflection of the nuclear reactor.
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/nuclear-reactor/nuclear-reactor-reflection.png",
+			width = 74,
+			height = 74,
+			scale = 5,
+		},
+		rotate = false,
+	}
+end
+
+---Gets the light flicker of the nuclear reactor energy source, which shows no light.
+---@return LightFlickeringDefinition
+local function get_light_flicker()
+	return {
+		color = { 0, 0, 0 },
+		minimum_light_size = 0,
+		light_intensity_to_size_coefficient = 0,
+	}
+end
+
 ---Defines the options for the vanilla nuclear reactor sprite set.
 ---@class NuclearReactorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -290,7 +326,9 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, pipe_material) },
-			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
+			water_reflection = get_water_reflection(),
+			light_flicker = get_light_flicker(),
 			nominal_width = 5,
 			nominal_height = 5,
 		},

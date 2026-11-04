@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local _sprite_utils = { sprites = require("__reskins-sprite-utils__.sprites") }
 
 local M = {}
 
@@ -109,9 +110,10 @@ local function get_antenna_top_animation_element(slot_count)
 end
 
 ---@param apply_tint boolean
+---@param draw_as_light boolean
 ---@return AnimationElement
 ---@nodiscard
-local function get_light_animation_element(apply_tint)
+local function get_light_animation_element(apply_tint, draw_as_light)
 	---@type AnimationElement
 	return {
 		render_layer = "object",
@@ -124,6 +126,7 @@ local function get_light_animation_element(apply_tint)
 			height = 186,
 			frame_count = 45,
 			animation_speed = 0.5,
+			draw_as_light = draw_as_light,
 			blend_mode = "additive",
 			shift = util.by_pixel(0.5, -18),
 			scale = 0.5,
@@ -737,7 +740,7 @@ local function get_corpse_animation(tint)
 		})
 	end
 
-	return { animation, util.copy(animation) }
+	return _sprite_utils.sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 end
 
 ---@return WaterReflectionDefinition
@@ -820,9 +823,9 @@ function M.get_sprite_set(params)
 	local animation_list = {
 		get_base_animation_element(slot_count, params.tint),
 		get_antenna_top_animation_element(slot_count),
-		get_light_animation_element(true),
+		get_light_animation_element(true, false),
 		-- The base game draws the light twice, and the second copy brightens the first.
-		get_light_animation_element(false),
+		get_light_animation_element(false, true),
 	}
 
 	if slot_count == 4 then

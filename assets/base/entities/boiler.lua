@@ -365,6 +365,16 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
+---Gets the light flicker of the boiler energy source, which shows no light.
+---@return LightFlickeringDefinition
+local function get_light_flicker()
+	return {
+		color = { 0, 0, 0 },
+		minimum_light_size = 0,
+		light_intensity_to_size_coefficient = 0,
+	}
+end
+
 ---@return WaterReflectionDefinition
 local function get_water_reflection()
 	return {
@@ -396,12 +406,12 @@ end
 local check_params = V.signature("get_sprite_set", {
 	{
 		"params",
-		V.struct({
+		V.class("BoilerSpriteSetParams", {
 			tint = Common.color:optional(),
 			fire_tint = Common.color:optional(),
 			fire_flicker_enabled = V.boolean():optional(),
 			fire_glow_flicker_enabled = V.boolean():optional(),
-		}),
+		}):strict(),
 	},
 })
 
@@ -420,6 +430,7 @@ local check_params = V.signature("get_sprite_set", {
 ----- The sprite set is converted for prototypes other than boilers.
 ---applicators.apply_sprite_set(assembling_machine_entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tint` or `params.fire_tint` is not a `Color`.
 ---@throws When `params.fire_flicker_enabled` or `params.fire_glow_flicker_enabled` is not a boolean.
 ---@nodiscard
@@ -440,6 +451,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil, -- FIXME: type this and then build it out.
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
+			light_flicker = get_light_flicker(),
 			nominal_width = 3,
 			nominal_height = 2,
 		},

@@ -7,6 +7,8 @@
 
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/distillery/"
@@ -167,6 +169,70 @@ local function get_graphics_set_flipped(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of the distillery for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 0,
+			main_offset = util.by_pixel(21, 14),
+			shadow_offset = util.by_pixel(9, 9),
+			show_shadow = false,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-24, 15),
+			shadow_offset = util.by_pixel(0, 0),
+			show_shadow = false,
+		},
+		{
+			variation = 0,
+			main_offset = util.by_pixel(-11, 14),
+			shadow_offset = util.by_pixel(9, 9),
+			show_shadow = false,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-24, -17.5),
+			shadow_offset = util.by_pixel(0, 0),
+			show_shadow = false,
+		},
+	})
+end
+
+---Gets the circuit connector of the distillery for each direction when it is flipped.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector_flipped()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 0,
+			main_offset = util.by_pixel(-11, 14),
+			shadow_offset = util.by_pixel(9, 9),
+			show_shadow = false,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-24, -17.5),
+			shadow_offset = util.by_pixel(0, 0),
+			show_shadow = false,
+		},
+		{
+			variation = 0,
+			main_offset = util.by_pixel(21, 14),
+			shadow_offset = util.by_pixel(9, 9),
+			show_shadow = false,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-24, 15),
+			shadow_offset = util.by_pixel(0, 0),
+			show_shadow = false,
+		},
+	})
+end
+
 ---@return WaterReflectionDefinition
 local function get_water_reflection()
 	return {
@@ -189,10 +255,18 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("DistillerySpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for the distillery.
 ---
----The set defines its nominal dimensions only. Its `graphics_set` is empty, and no artwork is drawn for the
----distillery yet.
+---The frozen patch is included when the freezing feature is enabled.
 ---@param params DistillerySpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the distillery.
 ---
@@ -204,14 +278,19 @@ end
 ---local sprite_set = distillery.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
 			graphics_set = get_graphics_set(params.tint),
 			graphics_set_flipped = get_graphics_set_flipped(params.tint),
+			circuit_connector = get_circuit_connector(),
+			circuit_connector_flipped = get_circuit_connector_flipped(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,

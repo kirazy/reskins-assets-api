@@ -9,8 +9,11 @@ local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local M = {}
+
+local heat_pipe_material = V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" })
 
 ---@param pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 ---@return string
@@ -362,6 +365,16 @@ end
 ---The material from which the pipes are built.
 ---@field pipe_material "base"|"aluminum-invar"|"silver-aluminum"|"silver-titanium"|"gold-copper"
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("HeatExchangerSpriteSetParams", {
+			tint = Common.color:optional(),
+			pipe_material = heat_pipe_material,
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for the original heat exchanger.
 ---@param params HeatExchangerSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<BoilerSpriteSet> # The sprite set definition for the original heat exchanger.
@@ -374,12 +387,19 @@ end
 ---local sprite_set = heat_exchanger.get_sprite_set({ tint = tint, pipe_material = pipe_material })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
+---@throws When `params.pipe_material` is not one of `"base"`, `"aluminum-invar"`, `"silver-aluminum"`, `"silver-titanium"`, or `"gold-copper"`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<BoilerSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.boiler_sprite_set,
 		set = {
+			fire_flicker_enabled = true,
+			fire_glow_flicker_enabled = true,
 			pictures = get_picture_set(params.tint, params.pipe_material),
 			heat_buffers = {
 				{
@@ -402,8 +422,6 @@ function M.get_sprite_set(params)
 end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
-
-local heat_pipe_material = V.one_of({ "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" })
 
 ---Gets the icon for an original heat exchanger with the given `pipe_material` and in the tints given by `params`.
 ---

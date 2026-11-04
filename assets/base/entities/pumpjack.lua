@@ -217,6 +217,26 @@ local function get_base_layers(params, is_flipped)
 	return layers
 end
 
+---Gets the patch of ice drawn over the base when the pumpjack is frozen.
+---@param is_flipped boolean When `true`, selects the frozen patch of the flipped pumpjack.
+---@return Sprite4Way
+---@nodiscard
+local function get_frozen_patch(is_flipped)
+	local flipped = is_flipped and "-flipped" or ""
+
+	---@type Sprite4Way
+	return {
+		sheet = {
+			filename = "__space-age__/graphics/entity/frozen/pumpjack/pumpjack" .. flipped .. ".png",
+			priority = "extra-high",
+			width = 261,
+			height = 273,
+			shift = util.by_pixel(-2.25, -4.75),
+			scale = 0.5,
+		},
+	}
+end
+
 ---@param params PumpjackSpriteSetParams The parameters of the sprite set.
 ---@param is_flipped boolean When `true`, selects the base the pumpjack presents when mirrored.
 ---@return MiningDrillGraphicsSet
@@ -233,6 +253,11 @@ local function get_graphics_set(params, is_flipped)
 			}),
 		},
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		graphics_set.frozen_patch = get_frozen_patch(is_flipped)
+		graphics_set.reset_animation_when_frozen = true
+	end
 
 	return graphics_set
 end
@@ -260,9 +285,44 @@ local function translate_graphics_set_to_legacy(params)
 				west_animation = flipped.working_visualisations[1].west_animation,
 			},
 		},
+		frozen_patch = standard.frozen_patch,
+		reset_animation_when_frozen = standard.reset_animation_when_frozen,
 	}
 
 	return graphics_set
+end
+
+---Gets the circuit connector of the pumpjack for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+---@nodiscard
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 26,
+			main_offset = util.by_pixel(3, -28.5),
+			shadow_offset = util.by_pixel(3, -28.5),
+			show_shadow = true,
+		},
+		{
+			variation = 26,
+			main_offset = util.by_pixel(3, -28.5),
+			shadow_offset = util.by_pixel(3, -28.5),
+			show_shadow = true,
+		},
+		{
+			variation = 26,
+			main_offset = util.by_pixel(3, -28.5),
+			shadow_offset = util.by_pixel(3, -28.5),
+			show_shadow = true,
+		},
+		{
+			variation = 26,
+			main_offset = util.by_pixel(3, -28.5),
+			shadow_offset = util.by_pixel(3, -28.5),
+			show_shadow = true,
+		},
+	})
 end
 
 -- The remnants take one tint where the entity takes three; no artwork exists for the body and
@@ -342,11 +402,7 @@ local function get_definition(params, corpse_base_layer)
 		set = {
 			wet_mining_graphics_set = nil,
 			wet_mining_graphics_set_flipped = nil,
-			radius_visualisation_picture = {
-				filename = "__base__/graphics/entity/pumpjack/pumpjack-radius-visualization.png",
-				width = 12,
-				height = 12,
-			},
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
@@ -373,6 +429,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 })
 
 ---Gets the sprite set for the vanilla pumpjack.
+---
+---The frozen patch is included when the freezing feature is enabled and Space Age is loaded.
 ---@param params PumpjackSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for the vanilla pumpjack.
 ---
@@ -396,6 +454,8 @@ local check_get_water_sprite_set = V.signature("get_water_sprite_set", {
 })
 
 ---Gets the sprite set for a water pumpjack.
+---
+---The frozen patch is included when the freezing feature is enabled and Space Age is loaded.
 ---@param params PumpjackSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<MiningDrillSpriteSet> # The sprite set definition for a water pumpjack.
 ---

@@ -49,13 +49,19 @@ local base_path = "__reskins-assets-base__/graphics/entity/"
 ---| "inserter-bulk-filter"
 ---| "inserter-express-bulk-filter"
 
----Defines the options for the preset inserter sprites.
----@class InserterPresetGraphicsParams
----The preset.
----@field preset InserterPreset
----When `true`, indicates that the long-arm hand sprite variants are selected. Valid for non-bulk presets other than
----`"inserter-long-handed"`.
----@field is_long? boolean
+local InserterPresetName = V.one_of({
+	"inserter",
+	"inserter-burner",
+	"inserter-fast",
+	"inserter-express",
+	"inserter-filter",
+	"inserter-express-filter",
+	"inserter-long-handed",
+	"inserter-bulk",
+	"inserter-express-bulk",
+	"inserter-bulk-filter",
+	"inserter-express-bulk-filter",
+})
 
 ---Gets the arm sprite, `hand_base_picture`, for the given `preset`.
 ---@param preset InserterPreset
@@ -186,6 +192,72 @@ local function get_corpse_animation(preset)
 	})
 end
 
+---Gets the frozen arm, `hand_base_frozen`.
+---@return Sprite
+local function get_arm_frozen()
+	return {
+		filename = "__space-age__/graphics/entity/frozen/inserter/inserter-hand.png",
+		priority = "extra-high",
+		x = 130 * 4,
+		width = 130,
+		height = 136,
+		scale = 0.25,
+	}
+end
+
+---Gets the frozen open or closed hand, `hand_open_frozen` or `hand_closed_frozen`.
+---@param preset InserterPreset
+---@param hand_state "open"|"closed"
+---@return Sprite
+local function get_hand_frozen(preset, hand_state)
+	local is_bulk = bulk_presets[preset] == true
+
+	-- The sheet holds the open and closed bulk hands, then the open and closed hands, then the arm.
+	local x = (is_bulk and 0 or 130 * 2) + (hand_state == "closed" and 130 or 0)
+
+	return {
+		filename = "__space-age__/graphics/entity/frozen/inserter/inserter-hand.png",
+		priority = "extra-high",
+		x = x,
+		width = 130,
+		height = 164,
+		scale = 0.25,
+	}
+end
+
+---Gets the frozen platform, `platform_frozen`.
+---@return Sprite4Way
+local function get_platform_frozen()
+	return {
+		sheet = {
+			filename = "__space-age__/graphics/entity/frozen/inserter/inserter-platform.png",
+			priority = "extra-high",
+			width = 105,
+			height = 79,
+			shift = util.by_pixel(1.5, 6.5),
+			scale = 0.5,
+		},
+	}
+end
+
+---Gets the light flicker of the burner or fluid energy source of the inserter, which shows no light.
+---@return LightFlickeringDefinition
+local function get_light_flicker()
+	return { color = { 0, 0, 0 } }
+end
+
+---Gets the circuit connector of the inserter for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(inserter_connector_template, {
+		{ variation = 2, main_offset = { 0, 0 }, shadow_offset = { 0, 0 }, show_shadow = true, render_layer = "floor" },
+		{ variation = 3, main_offset = { 0, 0 }, shadow_offset = { 0, 0 }, show_shadow = true, render_layer = "floor" },
+		{ variation = 0, main_offset = { 0, 0 }, shadow_offset = { 0, 0 }, show_shadow = true, render_layer = "floor" },
+		{ variation = 1, main_offset = { 0, 0 }, shadow_offset = { 0, 0 }, show_shadow = true, render_layer = "floor" },
+	})
+end
+
 ---Defines the options for the preset (untinted) inserters sprite set.
 ---@class InserterPresetSpriteSetParams
 ---The preset to use.
@@ -193,6 +265,20 @@ end
 ---When `true`, indicates that the inserter has long-arm hands. Only the non-bulk presets other than
 ---`"inserter-long-handed"` have them.
 ---@field is_long? boolean
+
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("InserterPresetSpriteSetParams", {
+			preset = InserterPresetName,
+			is_long = V.boolean():optional(),
+		})
+			:strict()
+			:where(function(value)
+				return not value.is_long or long_capable_presets[value.preset] == true
+			end, "sets 'is_long' for a preset that has no long hands"),
+	},
+})
 
 ---Gets the sprite set for the preset (untinted) inserters.
 ---@param params InserterPresetSpriteSetParams The options for the sprite set.
@@ -206,19 +292,16 @@ end
 ---local sprite_set = inserter_preset.get_sprite_set({ preset = preset })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params.preset` is not an `InserterPreset`.
+---@throws When `params.is_long` is not a boolean.
+---@throws When `params.is_long` is `true` for a preset that has no long hands.
+---@throws When `params` defines an unrecognized field.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	local preset = params.preset
 	local is_long = params.is_long or false
-
-	-- Validate: bulk presets and inserter-long-handed do not support is_long.
-	if is_long and not long_capable_presets[preset] then
-		error(
-			"InserterPresetSpriteSet: 'is_long' is given for the preset '"
-				.. tostring(preset)
-				.. "', which has no long-handed variant."
-		)
-	end
 
 	---@type SpriteSetDefinition<InserterSpriteSet>
 	local definition = {
@@ -231,6 +314,8 @@ function M.get_sprite_set(params)
 			hand_open_shadow = get_hand_shadow(preset, "open"),
 			hand_closed_shadow = get_hand_shadow(preset, "closed"),
 			platform_picture = get_platform_picture(preset),
+			circuit_connector = get_circuit_connector(),
+			light_flicker = get_light_flicker(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
@@ -241,26 +326,18 @@ function M.get_sprite_set(params)
 		},
 	}
 
+	if feature_flags["freezing"] and mods["space-age"] then
+		definition.set.hand_base_frozen = get_arm_frozen()
+		definition.set.hand_open_frozen = get_hand_frozen(preset, "open")
+		definition.set.hand_closed_frozen = get_hand_frozen(preset, "closed")
+		definition.set.platform_frozen = get_platform_frozen()
+	end
+
 	return definition
 end
 
 local check_get_icon = V.signature("get_icon", {
-	{
-		"preset",
-		V.one_of({
-			"inserter",
-			"inserter-burner",
-			"inserter-fast",
-			"inserter-express",
-			"inserter-filter",
-			"inserter-express-filter",
-			"inserter-long-handed",
-			"inserter-bulk",
-			"inserter-express-bulk",
-			"inserter-bulk-filter",
-			"inserter-express-bulk-filter",
-		}),
-	},
+	{ "preset", InserterPresetName },
 })
 
 ---Gets the icon for the given preset inserter.

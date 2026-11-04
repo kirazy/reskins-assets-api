@@ -1241,6 +1241,92 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(4, animation)
 end
 
+---Gets the patch drawn on the ground under the drill when it faces the given `direction`.
+---@param direction string The direction letter naming the artwork, as `"N"`.
+---@param width SpriteSizeType The width of the sprite, in pixels.
+---@param height SpriteSizeType The height of the sprite, in pixels.
+---@param shift Vector The shift of the sprite.
+---@return Sprite
+---@nodiscard
+local function get_integration_sprite(direction, width, height, shift)
+	return {
+		priority = "high",
+		filename = BASE_FOLDER .. direction .. "-integration.png",
+		width = width,
+		height = height,
+		shift = shift,
+		scale = 0.5,
+	}
+end
+
+---Gets the integration patch of the drill for each direction.
+---@return Sprite4Way
+---@nodiscard
+local function get_integration_patch()
+	---@type Sprite4Way
+	return {
+		north = get_integration_sprite("N", 216, 218, util.by_pixel(-1, 1)),
+		east = get_integration_sprite("E", 236, 214, util.by_pixel(3, 2)),
+		south = get_integration_sprite("S", 214, 230, util.by_pixel(0, 3)),
+		west = get_integration_sprite("W", 234, 214, util.by_pixel(-4, 1)),
+	}
+end
+
+---Gets the water reflection of the drill.
+---@return WaterReflectionDefinition
+---@nodiscard
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = BASE_FOLDER .. "reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 36,
+			shift = util.by_pixel(5, 60),
+			variation_count = 4,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
+end
+
+---Gets the circuit connector of the drill for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-44, -41),
+			shadow_offset = util.by_pixel(-34, -36),
+			show_shadow = false,
+			secondary_draw_order = 14,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(34, 30),
+			shadow_offset = util.by_pixel(36, 35),
+			show_shadow = false,
+			secondary_draw_order = 48,
+		},
+		{
+			variation = 0,
+			main_offset = util.by_pixel(-35, 24),
+			shadow_offset = util.by_pixel(-34, 31),
+			show_shadow = false,
+			secondary_draw_order = 48,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-34, 37),
+			shadow_offset = util.by_pixel(-40, 49),
+			show_shadow = false,
+			secondary_draw_order = 48,
+		},
+	})
+end
+
 ---Defines the options for the vanilla electric mining drill sprite set.
 ---@class MiningDrillElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -1304,16 +1390,13 @@ function M.get_sprite_set(params)
 				shift_animation_transition_duration = 30 / speed,
 			},
 			wet_mining_graphics_set_flipped = nil,
-			radius_visualisation_picture = {
-				filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-radius-visualization.png",
-				width = 10,
-				height = 10,
-			},
-			integration_patch = nil,
+			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
+			circuit_connector_flipped = nil,
 			nominal_width = 3,
 			nominal_height = 3,
 		},
@@ -1326,5 +1409,14 @@ local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/grap
 
 ---Gets the icon for the vanilla electric mining drill, in the tints given by `params`.
 M.get_icon = icons:tinted("mining-drill-electric"):build("get_icon")
+
+local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
+local area_icon_builder = bobs_icons:tinted("mining-drill-electric-area")
+
+---Gets the icon for the area mining drill, in the tints given by `params`.
+M.get_area_icon = area_icon_builder:build("get_area_icon")
+
+---Gets the icon for the area mining drill as an `IconComposition`, in the tints given by `params`.
+M.get_area_icon_composition = area_icon_builder:build_composition("get_area_icon_composition")
 
 return M

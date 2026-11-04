@@ -335,6 +335,16 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
+---Gets the light flicker of the stone furnace energy source, which shows no light.
+---@return LightFlickeringDefinition
+local function get_light_flicker()
+	return {
+		color = { 0, 0, 0 },
+		minimum_light_size = 0,
+		light_intensity_to_size_coefficient = 0,
+	}
+end
+
 ---@return WaterReflectionDefinition
 local function get_water_reflection()
 	return {
@@ -373,9 +383,6 @@ end
 ---```
 ---@nodiscard
 function M.get_sprite_set(params)
-	-- FIXME: `energy_source.light_flicker` belongs on the prototype rather than in sprite data,
-	-- so it has no home on `CraftingMachineSpriteSet`. Until it does, this furnace's fire
-	-- flickers at full brightness.
 	local graphics_set = get_graphics_set(params.tint, params.variant)
 	local graphics_set_flipped = nil
 	if params.variant == "chemical" then
@@ -394,6 +401,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = get_water_reflection(),
+			light_flicker = get_light_flicker(),
 			nominal_width = 1.6,
 			nominal_height = 2,
 		},

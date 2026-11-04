@@ -70,6 +70,17 @@ local function get_picture_set_enemy()
 	}
 end
 
+---Gets the circuit connector of the land mine.
+---@return CircuitConnectorDefinition
+local function get_circuit_connector()
+	return {
+		points = {
+			wire = { red = { -0.1, 0.3 }, green = { 0.1, 0.3 } },
+			shadow = { red = { -0.1, 0.3 }, green = { 0.1, 0.3 } },
+		},
+	}
+end
+
 ---Defines the options for the land mine sprite set.
 ---@class MineSpriteSetParams
 ---The variant of the land mine, which selects its artwork.
@@ -105,7 +116,7 @@ function M.get_sprite_set(params)
 			picture_safe = get_picture_safe(params.variant),
 			picture_set = get_picture_set(params.variant),
 			picture_set_enemy = get_picture_set_enemy(),
-			circuit_connector = util.copy(circuit_connector_definitions["land-mine"]),
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,

@@ -345,6 +345,12 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the light flicker of the burner assembling machine energy source, which shows no light.
+---@return LightFlickeringDefinition
+local function get_burner_light_flicker()
+	return { color = { 0, 0, 0 } }
+end
+
 ---The tier of an assembling machine, which selects its gear.
 ---@alias AssemblingMachineTier 1|2|3|4|5|6
 
@@ -386,13 +392,13 @@ local remapped_machine_tiers = {
 	[6] = 3,
 }
 
----Gets the sprite set for the original standard assembling machine.
+---Gets the sprite set for the standard assembling machine.
 ---@param params AssemblingMachineSpritesParams The options for the sprite set.
----@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the original standard assembling machine.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the standard assembling machine.
 ---
 ---#### Examples
 ---```lua
----local assembling_machine = require("__reskins-assets-api__.assets.assorted.entities.assembling-machine-original")
+---local assembling_machine = require("__reskins-assets-api__.assets.base.entities.assembling-machine")
 ---local applicators = require("__reskins-assets-api__.api.applicators")
 ---
 ---local sprite_set = assembling_machine.get_sprite_set({ tint = tint, machine_tier = 3 })
@@ -400,7 +406,7 @@ local remapped_machine_tiers = {
 ---```
 ---@throws When `params.machine_tier` is not between 1 and 6.
 ---@throws When `params.tint` is not a `Color`.
----@throws When `params.use_electronics_set` or `params.use_simple_pipe_pictures` is not a boolean.
+---@throws When `params.use_electronics_set`, `params.use_burner_set`, `params.use_steam_set`, or `params.use_simple_pipe_pictures` is not a boolean.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_params(params)
@@ -427,6 +433,7 @@ function M.get_sprite_set(params)
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = tier == 3 and 0.2 or nil,
+			light_flicker = params.use_burner_set and get_burner_light_flicker() or nil,
 			nominal_width = 3,
 			nominal_height = 3,
 		},

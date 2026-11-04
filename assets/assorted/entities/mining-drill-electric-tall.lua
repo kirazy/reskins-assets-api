@@ -841,11 +841,6 @@ function M.get_sprite_set(params)
 				shift_animation_transition_duration = 30 / speed,
 			},
 			wet_mining_graphics_set_flipped = nil,
-			radius_visualisation_picture = {
-				filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-radius-visualization.png",
-				width = 10,
-				height = 10,
-			},
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,

@@ -175,6 +175,38 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the storage tank for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 27,
+			main_offset = util.by_pixel(33.5, 18.5),
+			shadow_offset = util.by_pixel(33.5, 18.5),
+			show_shadow = false,
+		},
+		{
+			variation = 25,
+			main_offset = util.by_pixel(-33.5, 19.5),
+			shadow_offset = util.by_pixel(-33.5, 19.5),
+			show_shadow = false,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(33.5, 18.5),
+			shadow_offset = util.by_pixel(33.5, 18.5),
+			show_shadow = false,
+		},
+		{
+			variation = 25,
+			main_offset = util.by_pixel(-33.5, 19.5),
+			shadow_offset = util.by_pixel(-33.5, 19.5),
+			show_shadow = false,
+		},
+	})
+end
+
 ---Defines the options for the vanilla storage tank sprite set.
 ---@class StorageTankSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -199,6 +231,8 @@ function M.get_sprite_set(params)
 		set_type = _defines.sprite_set_type.storage_tank_sprite_set,
 		set = {
 			pictures = get_pictures(params.tint),
+			window_bounding_box = { { -0.125, 0.6875 }, { 0.1875, 1.1875 } },
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,

@@ -282,11 +282,6 @@ function M.get_sprite_set(params)
 				working_visualisations = get_wet_working_visualisations(speed),
 			},
 			wet_mining_graphics_set_flipped = nil,
-			radius_visualisation_picture = {
-				filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-radius-visualization.png",
-				width = 10,
-				height = 10,
-			},
 			-- The drill draws its own frame through which the fluid runs, so the engine draws none.
 			integration_patch = util.empty_sprite(),
 			integration_patch_render_layer = nil,

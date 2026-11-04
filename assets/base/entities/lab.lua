@@ -136,8 +136,13 @@ local function get_off_animation(tint)
 	return animation
 end
 
----@return Sprite
+---Gets the frozen patch of the lab, when the freezing feature is enabled and Space Age is loaded.
+---@return Sprite?
 local function get_frozen_patch()
+	if not (feature_flags["freezing"] and mods["space-age"]) then
+		return nil
+	end
+
 	return {
 		filename = "__space-age__/graphics/entity/frozen/lab/lab.png",
 		width = 194,
@@ -188,10 +193,11 @@ local function get_corpse_animation(tint)
 		layers = {
 			{
 				filename = base_path .. "lab-remnants.png",
+				line_length = 1,
 				width = 266,
 				height = 196,
 				direction_count = 1,
-				shift = util.by_pixel(12, 4.5),
+				shift = util.by_pixel(7, 5.5),
 				scale = 0.5,
 			},
 		},
@@ -201,19 +207,21 @@ local function get_corpse_animation(tint)
 		---@cast animation.layers -?
 		table.insert(animation.layers, {
 			filename = assets_path .. "lab-remnants-mask.png",
+			line_length = 1,
 			width = 266,
 			height = 196,
 			direction_count = 1,
-			shift = util.by_pixel(12, 4.5),
+			shift = util.by_pixel(7, 5.5),
 			tint = tint,
 			scale = 0.5,
 		})
 		table.insert(animation.layers, {
 			filename = assets_path .. "lab-remnants-highlights.png",
+			line_length = 1,
 			width = 266,
 			height = 196,
 			direction_count = 1,
-			shift = util.by_pixel(12, 4.5),
+			shift = util.by_pixel(7, 5.5),
 			blend_mode = "additive",
 			scale = 0.5,
 		})
@@ -227,7 +235,18 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("LabSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for the vanilla lab.
+---
+---The frozen patch is included when the freezing feature is enabled and Space Age is loaded.
 ---@param params LabSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<LabSpriteSet> # The sprite set definition for the vanilla lab.
 ---
@@ -239,8 +258,12 @@ end
 ---local sprite_set = lab.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<LabSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.lab_sprite_set,
@@ -259,6 +282,13 @@ function M.get_sprite_set(params)
 	}
 
 	return definition
+end
+
+---Gets the frozen patch of the vanilla lab.
+---@return Sprite? # The frozen patch, or `nil` when the freezing feature is disabled or Space Age is not loaded.
+---@nodiscard
+function M.get_frozen_patch()
+	return get_frozen_patch()
 end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
