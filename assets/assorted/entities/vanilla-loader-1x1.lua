@@ -111,6 +111,7 @@ function M.get_sprite_set(params)
 				direction_in = get_direction(params.tint, is_filter, 0),
 				direction_out = get_direction(params.tint, is_filter, 192),
 			},
+			structure_render_layer = "object",
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
