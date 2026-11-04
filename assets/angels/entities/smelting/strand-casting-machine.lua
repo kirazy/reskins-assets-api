@@ -6,10 +6,17 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local OilRefineryExplosion = require("assets.base.explosions.oil-refinery")
+
+local SMELTING_GRAPHICS_PATH = "__angelssmeltinggraphics__/graphics/entity/strand-casting-machine/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/strand-casting-machine/"
 
 local M = {}
 
+---Gets the graphics set of Angel's strand casting machine.
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
@@ -20,7 +27,7 @@ local function get_graphics_set(tint)
 			animation = {
 				layers = {
 					{
-						filename = "__angelssmeltinggraphics__/graphics/entity/strand-casting-machine/strand-casting-machine-idle-state.png",
+						filename = SMELTING_GRAPHICS_PATH .. "strand-casting-machine-idle-state.png",
 						priority = "high",
 						width = 329,
 						height = 392,
@@ -28,7 +35,7 @@ local function get_graphics_set(tint)
 						scale = 0.5,
 					},
 					{
-						filename = "__angelssmeltinggraphics__/graphics/entity/strand-casting-machine/strand-casting-machine-shadow.png",
+						filename = SMELTING_GRAPHICS_PATH .. "strand-casting-machine-shadow.png",
 						priority = "high",
 						width = 444,
 						height = 311,
@@ -43,24 +50,10 @@ local function get_graphics_set(tint)
 			apply_recipe_tint = "primary",
 			always_draw = true,
 			animation = {
-				filename = "__angelssmeltinggraphics__/graphics/entity/strand-casting-machine/strand-casting-machine-recipe-mask.png",
+				filename = SMELTING_GRAPHICS_PATH .. "strand-casting-machine-recipe-mask.png",
 				priority = "high",
 				width = 329,
 				height = 392,
-				shift = util.by_pixel(0, -16.5),
-				scale = 0.5,
-			},
-		},
-		{
-			fadeout = true,
-			animation = {
-				filename = "__angelssmeltinggraphics__/graphics/entity/strand-casting-machine/strand-casting-machine-working-animation.png",
-				priority = "high",
-				width = 329,
-				height = 392,
-				line_length = 6,
-				frame_count = 24,
-				animation_speed = 0.5,
 				shift = util.by_pixel(0, -16.5),
 				scale = 0.5,
 			},
@@ -73,7 +66,7 @@ local function get_graphics_set(tint)
 			animation = {
 				layers = {
 					{
-						filename = "__reskins-assets-angels__/graphics/entity/strand-casting-machine/strand-casting-machine-mask.png",
+						filename = ASSETS_ANGELS_PATH .. "strand-casting-machine-mask.png",
 						priority = "extra-high",
 						width = 329,
 						height = 392,
@@ -82,7 +75,7 @@ local function get_graphics_set(tint)
 						scale = 0.5,
 					},
 					{
-						filename = "__reskins-assets-angels__/graphics/entity/strand-casting-machine/strand-casting-machine-highlights.png",
+						filename = ASSETS_ANGELS_PATH .. "strand-casting-machine-highlights.png",
 						priority = "extra-high",
 						width = 329,
 						height = 392,
@@ -98,7 +91,22 @@ local function get_graphics_set(tint)
 	table.insert(working_visualisations, {
 		fadeout = true,
 		animation = {
-			filename = "__angelssmeltinggraphics__/graphics/entity/strand-casting-machine/strand-casting-machine-light.png",
+			filename = SMELTING_GRAPHICS_PATH .. "strand-casting-machine-working-animation.png",
+			priority = "high",
+			width = 329,
+			height = 392,
+			line_length = 6,
+			frame_count = 24,
+			animation_speed = 0.5,
+			shift = util.by_pixel(0, -16.5),
+			scale = 0.5,
+		},
+	})
+
+	table.insert(working_visualisations, {
+		fadeout = true,
+		animation = {
+			filename = SMELTING_GRAPHICS_PATH .. "strand-casting-machine-light.png",
 			priority = "high",
 			width = 329,
 			height = 392,
@@ -156,6 +164,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("StrandCastingMachineSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's strand casting machine.
 ---@param params StrandCastingMachineSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's strand casting machine.
@@ -168,19 +185,29 @@ end
 ---local sprite_set = strand_casting_machine.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
 			graphics_set = get_graphics_set(params.tint),
+			circuit_connector = get_circuit_connector(),
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = OilRefineryExplosion.get_explosion({
+				tints = params.tint and {
+					["oil-refinery-metal-particle-big-tint"] = params.tint,
+					["oil-refinery-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 1,
 			nominal_width = 5,
 			nominal_height = 5,

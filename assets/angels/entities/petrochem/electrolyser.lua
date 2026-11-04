@@ -165,7 +165,7 @@ function M.get_sprite_set(params)
 			graphics_set = { animation = get_animation(params.tint) },
 			circuit_connector = get_circuit_connector(),
 			fluid_boxes = { get_fluid_box_graphics() },
-			fluid_boxes_off_when_no_fluid_recipe = false,
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = AssemblingMachine1Explosion.get_explosion({

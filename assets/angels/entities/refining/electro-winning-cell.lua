@@ -6,45 +6,19 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/electro-winning-cell/"
 
 local M = {}
 
--- The ore-floatation-cell picture set is used only for the electro-winning-cell entity.
-local pipe_pictures = {
-	north = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-north.png",
-		priority = "extra-high",
-		width = 48,
-		height = 48,
-		shift = { 0.01, 0.95 },
-	},
-	east = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-east.png",
-		priority = "extra-high",
-		width = 40,
-		height = 45,
-		shift = { -0.71875, 0.1 },
-	},
-	south = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-south.png",
-		priority = "extra-high",
-		width = 34,
-		height = 39,
-		shift = { 0, -0.75 },
-	},
-	west = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-west.png",
-		priority = "extra-high",
-		width = 40,
-		height = 45,
-		shift = { 0.78125, 0.01 },
-	},
-}
-
+---Gets the animation of Angel's electro-winning cell.
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
+---@return Animation
+local function get_animation(tint)
 	local layers = {
 		{
 			-- cspell: disable-next-line
@@ -60,8 +34,8 @@ local function get_graphics_set(tint)
 	}
 
 	if tint then
-		table.insert(layers, {
-			filename = "__reskins-assets-angels__/graphics/entity/electro-winning-cell/electro-winning-cell-mask.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "electro-winning-cell-mask.png",
 			priority = "extra-high",
 			width = 224,
 			height = 224,
@@ -69,9 +43,9 @@ local function get_graphics_set(tint)
 			shift = { 0, 0 },
 			animation_speed = 0.5,
 			tint = tint,
-		})
-		table.insert(layers, {
-			filename = "__reskins-assets-angels__/graphics/entity/electro-winning-cell/electro-winning-cell-highlights.png",
+		}
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "electro-winning-cell-highlights.png",
 			priority = "extra-high",
 			width = 224,
 			height = 224,
@@ -79,22 +53,63 @@ local function get_graphics_set(tint)
 			shift = { 0, 0 },
 			animation_speed = 0.5,
 			blend_mode = "additive",
-		})
+		}
 	end
 
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = { layers = layers },
-		working_visualisations = {},
-	}
+	return { layers = layers }
+end
 
-	return graphics_set
+---Gets the graphics of the fluid boxes of Angel's electro-winning cell.
+---@return FluidBoxGraphics
+local function get_fluid_box_graphics()
+	-- The ore-floatation-cell picture set is used only for the electro-winning-cell entity.
+	return {
+		pipe_picture = {
+			north = {
+				filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-north.png",
+				priority = "extra-high",
+				width = 48,
+				height = 48,
+				shift = { 0.01, 0.95 },
+			},
+			east = {
+				filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-east.png",
+				priority = "extra-high",
+				width = 40,
+				height = 45,
+				shift = { -0.71875, 0.1 },
+			},
+			south = {
+				filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-south.png",
+				priority = "extra-high",
+				width = 34,
+				height = 39,
+				shift = { 0, -0.75 },
+			},
+			west = {
+				filename = "__angelsrefininggraphics__/graphics/entity/ore-floatation-cell/pipe-west.png",
+				priority = "extra-high",
+				width = 40,
+				height = 45,
+				shift = { 0.78125, 0.01 },
+			},
+		},
+	}
 end
 
 ---Defines the options for the Angel's electro-winning cell sprite set.
 ---@class ElectroWinningCellSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
+
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("ElectroWinningCellSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
 
 ---Gets the sprite set for Angel's electro-winning cell.
 ---@param params ElectroWinningCellSpriteSetParams The options for the sprite set.
@@ -108,24 +123,28 @@ end
 ---local sprite_set = electro_winning_cell.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
-	---@type FluidBoxGraphics
-	local fluid_box = {
-		pipe_picture = pipe_pictures,
-	}
+	check_get_sprite_set(params)
 
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
-			fluid_boxes = { fluid_box },
-			fluid_boxes_off_when_no_fluid_recipe = false,
+			graphics_set = { animation = get_animation(params.tint) },
+			fluid_boxes = { get_fluid_box_graphics() },
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
 			nominal_width = 5,
 			nominal_height = 5,

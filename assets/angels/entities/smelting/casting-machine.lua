@@ -7,10 +7,17 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ChemicalPlantExplosion = require("assets.base.explosions.chemical-plant")
+
+local SMELTING_GRAPHICS_PATH = "__angelssmeltinggraphics__/graphics/entity/casting-machine/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/casting-machine/"
 
 local M = {}
 
+---Gets the graphics set of Angel's casting machine.
 ---@param tint? Color
 ---@param is_flipped? boolean
 ---@return CraftingMachineGraphicsSet
@@ -22,13 +29,10 @@ local function get_graphics_set_internal(tint, is_flipped)
 		{
 			always_draw = true,
 			render_layer = "floor",
-			animation = util.sprite_load(
-				"__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-integration-patch" .. flipped,
-				{
-					priority = "high",
-					scale = 0.5,
-				}
-			),
+			animation = util.sprite_load(SMELTING_GRAPHICS_PATH .. "casting-machine-integration-patch" .. flipped, {
+				priority = "high",
+				scale = 0.5,
+			}),
 		},
 	}
 
@@ -37,26 +41,20 @@ local function get_graphics_set_internal(tint, is_flipped)
 			always_draw = true,
 			animation = {
 				layers = {
-					util.sprite_load(
-						"__reskins-assets-angels__/graphics/entity/casting-machine/casting-machine" .. flipped .. "-mask",
-						{
-							priority = "high",
-							frame_count = 49,
-							animation_speed = 0.5,
-							tint = tint,
-							scale = 0.5,
-						}
-					),
-					util.sprite_load(
-						"__reskins-assets-angels__/graphics/entity/casting-machine/casting-machine" .. flipped .. "-highlights",
-						{
-							priority = "high",
-							frame_count = 49,
-							animation_speed = 0.5,
-							blend_mode = "additive",
-							scale = 0.5,
-						}
-					),
+					util.sprite_load(ASSETS_ANGELS_PATH .. "casting-machine" .. flipped .. "-mask", {
+						priority = "high",
+						frame_count = 49,
+						animation_speed = 0.5,
+						tint = tint,
+						scale = 0.5,
+					}),
+					util.sprite_load(ASSETS_ANGELS_PATH .. "casting-machine" .. flipped .. "-highlights", {
+						priority = "high",
+						frame_count = 49,
+						animation_speed = 0.5,
+						blend_mode = "additive",
+						scale = 0.5,
+					}),
 				},
 			},
 		})
@@ -66,35 +64,26 @@ local function get_graphics_set_internal(tint, is_flipped)
 	local graphics_set = {
 		animation = {
 			layers = {
-				util.sprite_load(
-					"__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-animation" .. flipped,
-					{
-						priority = "high",
-						frame_count = 49,
-						animation_speed = 0.5,
-						scale = 0.5,
-					}
-				),
-				util.sprite_load(
-					"__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-animation-shadow" .. flipped,
-					{
-						priority = "high",
-						frame_count = 49,
-						animation_speed = 0.5,
-						draw_as_shadow = true,
-						scale = 0.5,
-					}
-				),
-				util.sprite_load(
-					"__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-lights" .. flipped,
-					{
-						priority = "high",
-						frame_count = 49,
-						animation_speed = 0.5,
-						draw_as_light = true,
-						scale = 0.5,
-					}
-				),
+				util.sprite_load(SMELTING_GRAPHICS_PATH .. "casting-machine-animation" .. flipped, {
+					priority = "high",
+					frame_count = 49,
+					animation_speed = 0.5,
+					scale = 0.5,
+				}),
+				util.sprite_load(SMELTING_GRAPHICS_PATH .. "casting-machine-animation-shadow" .. flipped, {
+					priority = "high",
+					frame_count = 49,
+					animation_speed = 0.5,
+					draw_as_shadow = true,
+					scale = 0.5,
+				}),
+				util.sprite_load(SMELTING_GRAPHICS_PATH .. "casting-machine-lights" .. flipped, {
+					priority = "high",
+					frame_count = 49,
+					animation_speed = 0.5,
+					draw_as_light = true,
+					scale = 0.5,
+				}),
 			},
 		},
 		working_visualisations = working_visualisations,
@@ -103,12 +92,14 @@ local function get_graphics_set_internal(tint, is_flipped)
 	return graphics_set
 end
 
+---Gets the graphics set of Angel's casting machine when it is not flipped.
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
 	return get_graphics_set_internal(tint, false)
 end
 
+---Gets the graphics set of Angel's casting machine when it is flipped.
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set_flipped(tint)
@@ -152,6 +143,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("CastingMachineSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's casting machine.
 ---@param params CastingMachineSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's casting machine.
@@ -164,22 +164,30 @@ end
 ---local sprite_set = casting_machine.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
 			graphics_set = get_graphics_set(params.tint),
 			graphics_set_flipped = get_graphics_set_flipped(params.tint),
-			fluid_boxes = {},
-			fluid_boxes_off_when_no_fluid_recipe = false,
+			circuit_connector = get_circuit_connector(),
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = ChemicalPlantExplosion.get_explosion({
+				tints = params.tint and {
+					["chemical-plant-metal-particle-big"] = params.tint,
+					["chemical-plant-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.3,
 			nominal_width = 3,
 			nominal_height = 3,

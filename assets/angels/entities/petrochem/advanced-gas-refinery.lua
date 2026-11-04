@@ -8,16 +8,23 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _pipes = require("assets.base.entities.pipe-pictures")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local OilRefineryExplosion = require("assets.base.explosions.oil-refinery")
+
+local PETROCHEM_GRAPHICS_PATH = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/gas-refinery-advanced/"
 
 local M = {}
 
+---Gets the animation of Angel's advanced gas refinery.
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
+---@return Animation4Way
+local function get_animation(tint)
 	local layers = {
 		{
-			filename = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/advanced-gas-refinery-base.png",
+			filename = PETROCHEM_GRAPHICS_PATH .. "advanced-gas-refinery-base.png",
 			priority = "extra-high",
 			width = 462,
 			height = 657,
@@ -25,7 +32,7 @@ local function get_graphics_set(tint)
 			scale = 0.5,
 		},
 		{
-			filename = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/advanced-gas-refinery-shadow.png",
+			filename = PETROCHEM_GRAPHICS_PATH .. "advanced-gas-refinery-shadow.png",
 			priority = "extra-high",
 			vertically_oriented = true,
 			width = 655,
@@ -37,137 +44,137 @@ local function get_graphics_set(tint)
 	}
 
 	if tint then
-		table.insert(layers, {
-			filename = "__reskins-assets-angels__/graphics/entity/gas-refinery-advanced/gas-refinery-advanced-mask.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "gas-refinery-advanced-mask.png",
 			priority = "extra-high",
 			width = 462,
 			height = 657,
 			shift = util.by_pixel(0, -42),
 			tint = tint,
 			scale = 0.5,
-		})
-		table.insert(layers, {
-			filename = "__reskins-assets-angels__/graphics/entity/gas-refinery-advanced/gas-refinery-advanced-highlights.png",
+		}
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "gas-refinery-advanced-highlights.png",
 			priority = "extra-high",
 			width = 462,
 			height = 657,
 			shift = util.by_pixel(0, -42),
 			blend_mode = "additive",
 			scale = 0.5,
-		})
+		}
 	end
 
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = _sprites.make_4way_animation_from_spritesheet({ layers = layers }) --[[@as Animation4Way]],
-		working_visualisations = {
-			{
-				fadeout = true,
-				constant_speed = true,
-				north_position = util.by_pixel(-89, -121.5),
-				east_position = util.by_pixel(34.5, -192.5),
-				south_position = util.by_pixel(90.5, -79),
-				west_position = util.by_pixel(-16, -20),
-				animation = {
-					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-smoke.png",
-					width = 54,
-					height = 144,
-					line_length = 5,
-					frame_count = 20,
-					animation_speed = 0.75,
-					allow_reducing_frames = true,
-					shift = util.by_pixel(1.0, -31.5),
-					scale = 0.5,
+	return _sprites.make_4way_animation_from_spritesheet({ layers = layers }) --[[@as Animation4Way]]
+end
+
+---Gets the working visualisations of Angel's advanced gas refinery.
+---@return WorkingVisualisation[]
+local function get_working_visualisations()
+	return {
+		{
+			fadeout = true,
+			constant_speed = true,
+			north_position = util.by_pixel(-89, -121.5),
+			east_position = util.by_pixel(34.5, -192.5),
+			south_position = util.by_pixel(90.5, -79),
+			west_position = util.by_pixel(-16, -20),
+			animation = {
+				filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-smoke.png",
+				width = 54,
+				height = 144,
+				line_length = 5,
+				frame_count = 20,
+				animation_speed = 0.75,
+				allow_reducing_frames = true,
+				shift = util.by_pixel(1.0, -31.5),
+				scale = 0.5,
+			},
+		},
+		{
+			fadeout = true,
+			constant_speed = true,
+			north_position = util.by_pixel(-89, -121.5),
+			east_position = util.by_pixel(34.5, -192.5),
+			south_position = util.by_pixel(90.5, -79),
+			west_position = util.by_pixel(-16, -20),
+			animation = {
+				filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-light.png",
+				width = 28,
+				height = 86,
+				line_length = 5,
+				frame_count = 20,
+				animation_speed = 0.75,
+				allow_reducing_frames = true,
+				blend_mode = "additive",
+				draw_as_glow = true,
+				shift = util.by_pixel(0.5, -18.5),
+				scale = 0.5,
+			},
+		},
+		{
+			fadeout = true,
+			-- Convert this to use make4way
+			north_animation = {
+				filename = PETROCHEM_GRAPHICS_PATH .. "advanced-gas-refinery-light.png",
+				priority = "high",
+				width = 462,
+				height = 657,
+				shift = util.by_pixel(0, -42),
+				blend_mode = "additive-soft",
+				draw_as_glow = true,
+				scale = 0.5,
+			},
+			east_animation = {
+				filename = PETROCHEM_GRAPHICS_PATH .. "advanced-gas-refinery-light.png",
+				priority = "high",
+				width = 462,
+				height = 657,
+				x = 462,
+				shift = util.by_pixel(0, -42),
+				blend_mode = "additive-soft",
+				draw_as_glow = true,
+				scale = 0.5,
+			},
+			south_animation = {
+				filename = PETROCHEM_GRAPHICS_PATH .. "advanced-gas-refinery-light.png",
+				priority = "high",
+				width = 462,
+				height = 657,
+				x = 924,
+				shift = util.by_pixel(0, -42),
+				blend_mode = "additive-soft",
+				draw_as_glow = true,
+				scale = 0.5,
+			},
+			west_animation = {
+				filename = PETROCHEM_GRAPHICS_PATH .. "advanced-gas-refinery-light.png",
+				priority = "high",
+				width = 462,
+				height = 657,
+				x = 1386,
+				shift = util.by_pixel(0, -42),
+				blend_mode = "additive-soft",
+				draw_as_glow = true,
+				scale = 0.5,
+			},
+		},
+		{
+			always_draw = true,
+			north_animation = {
+				layers = {
+					_pipes.vertical_pipe_shadow({ -1, -3 }),
+					(_pipes.vertical_pipe_shadow({ 3, -3 })),
 				},
 			},
-			{
-				fadeout = true,
-				constant_speed = true,
-				north_position = util.by_pixel(-89, -121.5),
-				east_position = util.by_pixel(34.5, -192.5),
-				south_position = util.by_pixel(90.5, -79),
-				west_position = util.by_pixel(-16, -20),
-				animation = {
-					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-light.png",
-					width = 28,
-					height = 86,
-					line_length = 5,
-					frame_count = 20,
-					animation_speed = 0.75,
-					allow_reducing_frames = true,
-					blend_mode = "additive",
-					draw_as_glow = true,
-					shift = util.by_pixel(0.5, -18.5),
-					scale = 0.5,
-				},
-			},
-			{
-				fadeout = true,
-				-- Convert this to use make4way
-				north_animation = {
-					filename = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/advanced-gas-refinery-light.png",
-					priority = "high",
-					width = 462,
-					height = 657,
-					shift = util.by_pixel(0, -42),
-					blend_mode = "additive",
-					draw_as_glow = true,
-					scale = 0.5,
-				},
-				east_animation = {
-					filename = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/advanced-gas-refinery-light.png",
-					priority = "high",
-					width = 462,
-					height = 657,
-					x = 462,
-					shift = util.by_pixel(0, -42),
-					blend_mode = "additive",
-					draw_as_glow = true,
-					scale = 0.5,
-				},
-				south_animation = {
-					filename = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/advanced-gas-refinery-light.png",
-					priority = "high",
-					width = 462,
-					height = 657,
-					x = 924,
-					shift = util.by_pixel(0, -42),
-					blend_mode = "additive",
-					draw_as_glow = true,
-					scale = 0.5,
-				},
-				west_animation = {
-					filename = "__angelspetrochemgraphics__/graphics/entity/advanced-gas-refinery/advanced-gas-refinery-light.png",
-					priority = "high",
-					width = 462,
-					height = 657,
-					x = 1386,
-					shift = util.by_pixel(0, -42),
-					blend_mode = "additive",
-					draw_as_glow = true,
-					scale = 0.5,
-				},
-			},
-			{
-				always_draw = true,
-				north_animation = {
-					layers = {
-						_pipes.vertical_pipe_shadow({ -1, -3 }),
-						(_pipes.vertical_pipe_shadow({ 3, -3 })),
-					},
-				},
-				south_animation = {
-					layers = {
-						_pipes.vertical_pipe_shadow({ -3, 3 }),
-						_pipes.vertical_pipe_shadow({ -1, 3 }),
-						(_pipes.vertical_pipe_shadow({ 1, 3 })),
-					},
+			south_animation = {
+				layers = {
+					_pipes.vertical_pipe_shadow({ -3, 3 }),
+					_pipes.vertical_pipe_shadow({ -1, 3 }),
+					(_pipes.vertical_pipe_shadow({ 1, 3 })),
 				},
 			},
 		},
 	}
-
-	return graphics_set
 end
 
 ---Gets the circuit connector of Angel's advanced gas refinery for each direction.
@@ -207,6 +214,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("AdvancedGasRefinerySpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's advanced gas refinery.
 ---@param params AdvancedGasRefinerySpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's advanced gas refinery.
@@ -219,19 +235,32 @@ end
 ---local sprite_set = advanced_gas_refinery.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
+			graphics_set = {
+				animation = get_animation(params.tint),
+				working_visualisations = get_working_visualisations(),
+			},
+			circuit_connector = get_circuit_connector(),
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = OilRefineryExplosion.get_explosion({
+				tints = params.tint and {
+					["oil-refinery-metal-particle-big-tint"] = params.tint,
+					["oil-refinery-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 2.2,
 			nominal_width = 7,
 			nominal_height = 7,

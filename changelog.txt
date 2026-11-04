@@ -9,6 +9,8 @@ Date: ????
     - Added the 1 x 1 and 1 x 2 vanilla loader sprite sets, the `underground_belt_sprite_set`, `splitter_sprite_set`, and `loader_sprite_set` sprite set types with their applicators, and `defines.get_belt_sprites`, which gets the belt sprites for a belt speed.
     - Applying a sprite set to an entity now creates its corpse, dying explosion, and tinted particles, assigns the generic remnants of the base game by size (`defines.generic_remnants`), and builds the death spiral of a flying robot with the death sounds of the base game.
     - Added the dying explosions and particles of the base game as `assets.base.explosions` and `assets.base.particles`, the fields of its corpses other than their artwork as `assets.base.remnants`, and sprite sets for the dying explosion and remnants of the tank and rolling stock.
+    - Added the container sprite set type and applicator, the conversion from valve to storage tank sprite sets, and `use_mirroring` for crafting machine sprite sets.
+    - Added the sprite sets of Angel's big chest and warehouse with their logistic variants, and the icon of Angel's thermal extractor.
   Changes:
     - The sprite sets now include water reflections, circuit connectors, frozen sprites, integration patches, heat pictures and pipe covers, drawing box extensions, light flicker, and the fluid, glass, and wagon connection graphics of the pump wherever the base entity defines them, and their sprite set types have the fields for them.
     - Every sprite set now has `fluid_boxes`, `heat_buffers`, and `pipe_material`, which `apply_sprite_set` applies to every prototype, removing the pipe pictures of a fluid box that matches none of them.
@@ -21,12 +23,15 @@ Date: ????
     - The centrifuge sprite set now uses the re-rendered sprites of Factorio 2.1, and the beacon sprite set now draws the untinted copy of its light as a light.
     - The reactor applicator now removes the light of a reactor when the sprite set defines none.
     - The pump, boiler, lab, heat exchanger, and distillery sprite sets now validate their parameters.
-    - Revised blending mode from additive-soft to additive.
+    - Revised blending mode of highlights from additive-soft to additive.
     - Renamed `defines.sprite_set_type.flying_robot_sprite_set` to `combat_robot_sprite_set`, and removed `apply_to_explosion` from `SpriteSetApplicator`, the `include_frozen_pictures` parameter and `fluid_box` field of the pipe sprite sets, and the radius visualisation from the beacon and mining drill sprite sets.
+    - The sprite sets of Angel's machines, valves, and chests now validate their parameters and define their dying explosions, remnants, mirroring, and pipe pictures, and no longer set `fluid_boxes_off_when_no_fluid_recipe`.
+    - The pipe connectors of a crafting machine sprite set are now its first working visualisations, and `LogisticContainerSpriteSet` now extends `ContainerSpriteSet`.
   Bugfixes:
     - Fixed the pipe pictures of the filtration unit, the remnant variations of the beacon, the shadow of the pump, and the position and frozen patch of the lab.
     - Fixed that the generator sprite set and applicator did not match Factorio 2.1, and that the boiler applicator did not set the fire flicker.
     - Fixed that the Angel's gas refinery, advanced gas refinery, and steam cracker sprite sets drew a fire sprite that Factorio 2.1 removed.
+    - Fixed the pipe pictures of Angel's hydro plant, the artwork paths of Angel's valve, big chest, and warehouse sprite sets, and that Angel's ore leaching plant drew smoke.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2026-11-01

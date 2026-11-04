@@ -6,140 +6,109 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local REFINING_GRAPHICS_PATH = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/ore-leaching-plant/"
 
 local M = {}
 
-local pipe_pictures = {
-	north = util.empty_sprite(),
-	east = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/pipe-east1.png",
-		priority = "extra-high",
-		width = 64,
-		height = 64,
-		scale = 0.5,
-		shift = { -1, 0 },
-	},
-	south = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/pipe-south.png",
-		priority = "extra-high",
-		width = 41,
-		height = 40,
-		shift = { 0.05, -0.375 },
-	},
-	west = util.empty_sprite(),
-}
-
-local mirrored_pipe_pictures = {
-	north = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/pipe-north2.png",
-		priority = "extra-high",
-		width = 64,
-		height = 64,
-		scale = 0.5,
-		shift = { 0, 1 },
-	},
-	east = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/pipe-east2.png",
-		priority = "extra-high",
-		width = 64,
-		height = 64,
-		scale = 0.5,
-		shift = { -1, 0 },
-	},
-	south = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/pipe-south.png",
-		priority = "extra-high",
-		width = 41,
-		height = 40,
-		shift = { 0.05, -0.375 },
-	},
-	west = {
-		filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/pipe-west2.png",
-		priority = "extra-high",
-		width = 64,
-		height = 64,
-		scale = 0.5,
-		shift = { 1, 0 },
-	},
-}
-
+---Gets the animation of Angel's ore leaching plant.
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
-	local animation = {
-		layers = {
-			{
-				filename = "__angelsrefininggraphics__/graphics/entity/ore-leaching-plant/1ore-leaching-plant.png",
-				priority = "extra-high",
-				width = 192,
-				height = 192,
-				shift = { 0.4, -0.14 },
-			},
+---@return Animation
+local function get_animation(tint)
+	local layers = {
+		{
+			filename = REFINING_GRAPHICS_PATH .. "1ore-leaching-plant.png",
+			priority = "extra-high",
+			width = 192,
+			height = 192,
+			shift = { 0.4, -0.14 },
 		},
 	}
 
 	if tint then
-		table.insert(animation.layers--[[@cast -?]], {
-			filename = "__reskins-assets-angels__/graphics/entity/ore-leaching-plant/ore-leaching-plant-mask.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "ore-leaching-plant-mask.png",
 			priority = "extra-high",
 			width = 192,
 			height = 192,
 			shift = { 0.4, -0.14 },
 			tint = tint,
-		})
-		table.insert(animation.layers--[[@cast -?]], {
-			filename = "__reskins-assets-angels__/graphics/entity/ore-leaching-plant/ore-leaching-plant-highlights.png",
+		}
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "ore-leaching-plant-highlights.png",
 			priority = "extra-high",
 			width = 192,
 			height = 192,
 			shift = { 0.4, -0.14 },
 			blend_mode = "additive",
-		})
+		}
 	end
 
-	local shift_offset = util.by_pixel_hr(-63, -191)
+	return { layers = layers }
+end
 
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = animation,
-		working_visualisations = {
-			{
-				apply_recipe_tint = "primary",
-				fadeout = true,
-				constant_speed = true,
-				render_layer = "wires",
-				animation = {
-					filename = "__base__/graphics/entity/chemical-plant/chemical-plant-smoke-outer.png",
-					frame_count = 47,
-					line_length = 16,
-					width = 90,
-					height = 188,
-					animation_speed = 0.5,
-					shift = util.add_shift(util.by_pixel(-2, -40), shift_offset),
-					scale = 0.5,
-				},
+---Gets the graphics of the fluid boxes of Angel's ore leaching plant.
+---@return FluidBoxGraphics
+local function get_fluid_box_graphics()
+	return {
+		pipe_picture = {
+			north = util.empty_sprite(),
+			east = {
+				filename = REFINING_GRAPHICS_PATH .. "pipe-east1.png",
+				priority = "extra-high",
+				width = 64,
+				height = 64,
+				scale = 0.5,
+				shift = { -1, 0 },
 			},
-			{
-				apply_recipe_tint = "secondary",
-				fadeout = true,
-				constant_speed = true,
-				render_layer = "wires",
-				animation = {
-					filename = "__base__/graphics/entity/chemical-plant/chemical-plant-smoke-inner.png",
-					frame_count = 47,
-					line_length = 16,
-					width = 40,
-					height = 84,
-					animation_speed = 0.5,
-					shift = util.add_shift(util.by_pixel(0, -14), shift_offset),
-					scale = 0.5,
-				},
+			south = {
+				filename = REFINING_GRAPHICS_PATH .. "pipe-south.png",
+				priority = "extra-high",
+				width = 41,
+				height = 40,
+				shift = { 0.05, -0.375 },
+			},
+			west = util.empty_sprite(),
+		},
+		mirrored_pipe_picture = {
+			north = {
+				filename = REFINING_GRAPHICS_PATH .. "pipe-north2.png",
+				priority = "extra-high",
+				width = 64,
+				height = 64,
+				scale = 0.5,
+				shift = { 0, 1 },
+			},
+			east = {
+				filename = REFINING_GRAPHICS_PATH .. "pipe-east2.png",
+				priority = "extra-high",
+				width = 64,
+				height = 64,
+				scale = 0.5,
+				shift = { -1, 0 },
+			},
+			south = {
+				filename = REFINING_GRAPHICS_PATH .. "pipe-south.png",
+				priority = "extra-high",
+				width = 41,
+				height = 40,
+				shift = { 0.05, -0.375 },
+			},
+			west = {
+				filename = REFINING_GRAPHICS_PATH .. "pipe-west2.png",
+				priority = "extra-high",
+				width = 64,
+				height = 64,
+				scale = 0.5,
+				shift = { 1, 0 },
 			},
 		},
 	}
-
-	return graphics_set
 end
 
 ---Gets the circuit connector of Angel's ore leaching plant for each direction.
@@ -179,6 +148,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("OreLeachingPlantSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's ore leaching plant.
 ---@param params OreLeachingPlantSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's ore leaching plant.
@@ -191,27 +169,30 @@ end
 ---local sprite_set = ore_leaching_plant.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
-	---@type FluidBoxGraphics
-	local fluid_box = {
-		pipe_picture = pipe_pictures,
-		mirrored_pipe_picture = mirrored_pipe_pictures,
-	}
+	check_get_sprite_set(params)
 
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
-			fluid_boxes = { fluid_box },
-			fluid_boxes_off_when_no_fluid_recipe = false,
+			graphics_set = { animation = get_animation(params.tint) },
+			circuit_connector = get_circuit_connector(),
+			fluid_boxes = { get_fluid_box_graphics() },
+			use_mirroring = true,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			nominal_width = 5,
 			nominal_height = 5,
 		},

@@ -7,16 +7,23 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local REFINING_GRAPHICS_PATH = "__angelsrefininggraphics__/graphics/entity/ore-powderizer/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/powderizer/"
 
 local M = {}
 
+---Gets the animation of Angel's powderizer.
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
+---@return Animation
+local function get_animation(tint)
 	local layers = {
 		{
-			filename = "__angelsrefininggraphics__/graphics/entity/ore-powderizer/powderizer.png",
+			filename = REFINING_GRAPHICS_PATH .. "powderizer.png",
 			priority = "extra-high",
 			width = 256,
 			height = 256,
@@ -29,8 +36,8 @@ local function get_graphics_set(tint)
 	}
 
 	if tint then
-		table.insert(layers, {
-			filename = "__reskins-assets-angels__/graphics/entity/powderizer/powderizer-mask.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "powderizer-mask.png",
 			priority = "extra-high",
 			width = 256,
 			height = 256,
@@ -39,9 +46,9 @@ local function get_graphics_set(tint)
 			animation_speed = 0.5,
 			tint = tint,
 			scale = 0.5,
-		})
-		table.insert(layers, {
-			filename = "__reskins-assets-angels__/graphics/entity/powderizer/powderizer-highlights.png",
+		}
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "powderizer-highlights.png",
 			priority = "extra-high",
 			width = 256,
 			height = 256,
@@ -50,16 +57,10 @@ local function get_graphics_set(tint)
 			animation_speed = 0.5,
 			blend_mode = "additive",
 			scale = 0.5,
-		})
+		}
 	end
 
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = { layers = layers },
-		working_visualisations = {},
-	}
-
-	return graphics_set
+	return { layers = layers }
 end
 
 ---Gets the circuit connector of Angel's powderizer for each direction.
@@ -99,6 +100,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("PowderizerSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's powderizer.
 ---@param params PowderizerSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's powderizer.
@@ -111,19 +121,28 @@ end
 ---local sprite_set = powderizer.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
+			graphics_set = { animation = get_animation(params.tint) },
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			nominal_width = 2,
 			nominal_height = 2,
 		},
