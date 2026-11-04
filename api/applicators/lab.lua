@@ -14,17 +14,10 @@ local function apply_sprite_set_to_lab(prototype, set)
 	prototype.off_animation = util.copy(set.off_animation)
 end
 
----@param explosion ExplosionPrototype
----@param set LabSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type LabSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.lab_sprite_set,
 	apply_to = apply_sprite_set_to_lab,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `lab_sprite_set`.

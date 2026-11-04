@@ -197,15 +197,13 @@
 ---Corpses are not handled by applicators; `apply_sprite_set` copies the `corpse` field of the sprite set onto a
 ---`CorpsePrototype` directly.
 ---@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype, U: EntityWithHealthSpriteSet>
----The `SpriteSetType` accepted by `apply_to` and `apply_to_explosion`.
+---The `SpriteSetType` accepted by `apply_to`.
 ---@field set_type SpriteSetType
 ---Applies the given `set` to the given entity `prototype`.
 ---
 ---Applies the fields that belong to this prototype type. The fields of `EntityWithHealthSpriteSet` are applied by
 ---`ApplicatorRegistry.apply_sprite_set` before this is called.
 ---@field apply_to fun(prototype: T, set: U)
----Applies `set` to the explosion prototype `explosion`.
----@field apply_to_explosion fun(explosion: ExplosionPrototype, set: U)
 
 ---Defines a `SpriteSetApplicator` of any prototype and sprite set type.
 ---@class (exact) AnySpriteSetApplicator : SpriteSetApplicator<any, any>

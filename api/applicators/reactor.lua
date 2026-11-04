@@ -28,17 +28,10 @@ local function apply_sprite_set_to_reactor(prototype, set)
 	end
 end
 
----@param explosion ExplosionPrototype
----@param set ReactorSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type ReactorSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.reactor_sprite_set,
 	apply_to = apply_sprite_set_to_reactor,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the graphics set fields of a reactor.

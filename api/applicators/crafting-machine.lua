@@ -211,17 +211,10 @@ local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
 	end
 end
 
----@param explosion ExplosionPrototype
----@param sprite_set CraftingMachineSpriteSet
-local function apply_sprite_set_to_explosion(explosion, sprite_set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type CraftingMachineSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 	apply_to = apply_sprite_set_to_crafting_machine,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---The pipe connector artwork for one connection state, sprite direction, and flip orientation.

@@ -17,17 +17,10 @@ local function apply_sprite_set_to_boiler(prototype, sprite_set)
 	-- FIXME need to handle explosion application in this step based on the package set explosion definition.
 end
 
----@param explosion ExplosionPrototype
----@param sprite_set BoilerSpriteSet
-local function apply_sprite_set_to_explosion(explosion, sprite_set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type BoilerSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.boiler_sprite_set,
 	apply_to = apply_sprite_set_to_boiler,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `boiler_sprite_set`.

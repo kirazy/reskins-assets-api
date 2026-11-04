@@ -13,17 +13,10 @@ local function apply_sprite_set_to_generator(prototype, set)
 	prototype.pictures = util.copy(set.pictures)
 end
 
----@param explosion ExplosionPrototype
----@param set GeneratorSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type GeneratorSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.generator_sprite_set,
 	apply_to = apply_sprite_set_to_generator,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `generator_sprite_set`.

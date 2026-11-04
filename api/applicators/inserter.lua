@@ -18,17 +18,10 @@ local function apply_sprite_set_to_inserter(prototype, set)
 	prototype.platform_picture = util.copy(set.platform_picture)
 end
 
----@param explosion ExplosionPrototype
----@param set InserterSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type InserterSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.inserter_sprite_set,
 	apply_to = apply_sprite_set_to_inserter,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `inserter_sprite_set`.

@@ -22,17 +22,10 @@ local function apply_sprite_set_to_transport_belt_connectable(prototype, set)
 	end
 end
 
----@param explosion ExplosionPrototype
----@param set TransportBeltSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type TransportBeltSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.transport_belt_sprite_set,
 	apply_to = apply_sprite_set_to_transport_belt_connectable,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `transport_belt_sprite_set`.

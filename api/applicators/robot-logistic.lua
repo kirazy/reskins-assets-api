@@ -20,17 +20,10 @@ local function apply_sprite_set_to_logistic_robot(prototype, set)
 	prototype.shadow_in_motion_with_cargo = util.copy(set.shadow_in_motion_with_cargo)
 end
 
----@param explosion ExplosionPrototype
----@param set LogisticRobotSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type LogisticRobotSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.logistic_robot_sprite_set,
 	apply_to = apply_sprite_set_to_logistic_robot,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `logistic_robot_sprite_set`.

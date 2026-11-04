@@ -24,17 +24,10 @@ local function apply_sprite_set_to_mining_drill(prototype, set)
 	end
 end
 
----@param explosion ExplosionPrototype
----@param set MiningDrillSpriteSet
-local function apply_sprite_set_to_explosion(explosion, set)
-	error("The applicator does not support explosions.")
-end
-
 ---@type MiningDrillSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.mining_drill_sprite_set,
 	apply_to = apply_sprite_set_to_mining_drill,
-	apply_to_explosion = apply_sprite_set_to_explosion,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `mining_drill_sprite_set`.
