@@ -5,6 +5,7 @@
 local V = require("__reskins-sprite-utils__.validation")
 local AssetsCommon = require("api.validation")
 local ConnectionMatching = require("api.connection-matching")
+local Assignment = require("api.assignment")
 
 ---Provides methods for applying `HeatBufferGraphics` to the heat energy source and the heat buffer of a prototype.
 ---
@@ -74,12 +75,7 @@ function _heat_buffers.apply(prototype, heat_buffer_graphics)
 		local graphics = ConnectionMatching.find_graphics(heat_buffer_graphics, "connections", target.connections or {})
 
 		if graphics then
-			local target_fields = target --[[@as table<string, any>]]
-			for _, field in pairs(graphics_fields) do
-				if graphics[field] ~= nil then
-					target_fields[field] = graphics[field]
-				end
-			end
+			Assignment.safe_assign(target, graphics, graphics_fields)
 		end
 	end
 end

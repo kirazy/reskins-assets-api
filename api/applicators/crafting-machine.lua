@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 local FluidBoxes = require("api.fluid-boxes")
 
 -- Cardinal directions in CW order, used for the pipe connection rotation math below.
@@ -206,9 +207,7 @@ local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
 		prototype.fluid_boxes_off_when_no_fluid_recipe = sprite_set.fluid_boxes_off_when_no_fluid_recipe
 	end
 
-	if sprite_set.circuit_connector then
-		prototype.circuit_connector = util.copy(sprite_set.circuit_connector)
-	end
+	Assignment.safe_assign(prototype, sprite_set, { "circuit_connector" })
 end
 
 ---@type CraftingMachineSpriteSetApplicator

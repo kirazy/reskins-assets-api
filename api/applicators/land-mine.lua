@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `land_mine_sprite_set` to `prototype`.
 ---@param prototype LandMinePrototype
@@ -13,9 +14,7 @@ local function apply_sprite_set_to_land_mine(prototype, set)
 	prototype.picture_set = util.copy(set.picture_set)
 	prototype.picture_set_enemy = util.copy(set.picture_set_enemy)
 
-	if set.circuit_connector then
-		prototype.circuit_connector = util.copy(set.circuit_connector)
-	end
+	Assignment.safe_assign(prototype, set, { "circuit_connector" })
 end
 
 ---@type LandMineSpriteSetApplicator

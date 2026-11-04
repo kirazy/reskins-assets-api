@@ -10,6 +10,34 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
 local FluidBoxes = require("api.fluid-boxes")
 local HeatBuffers = require("api.heat-buffers")
+local Assignment = require("api.assignment")
+
+-- Each of these fields of a `CorpseSpriteSet` is applied to the field of the same name of the corpse prototype.
+local corpse_fields = {
+	"animation",
+	"animation_overlay",
+	"animation_overlay_render_layer",
+	"animation_render_layer",
+	"decay_animation",
+	"decay_frame_transition_duration",
+	"direction_shuffle",
+	"dying_speed",
+	"final_render_layer",
+	"ground_patch",
+	"ground_patch_decay",
+	"ground_patch_fade_in_delay",
+	"ground_patch_fade_in_speed",
+	"ground_patch_fade_out_duration",
+	"ground_patch_fade_out_start",
+	"ground_patch_higher",
+	"ground_patch_render_layer",
+	"shuffle_directions_at_frame",
+	"splash",
+	"splash_render_layer",
+	"splash_speed",
+	"underwater_layer_offset",
+	"underwater_patch",
+}
 
 ---The `SpriteSetType` for each prototype type name. Applying a sprite set raises an error when the `SpriteSetType` of
 ---the prototype has no registered applicator.
@@ -157,9 +185,7 @@ function _factory.new()
 			return
 		end
 
-		for key, value in pairs(corpse_set) do
-			corpse_prototype[key] = value
-		end
+		Assignment.safe_assign(corpse_prototype, corpse_set, corpse_fields)
 	end
 
 	---Applies the fields common to every applicator from the given `sprite_set` to the given `prototype`.

@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies the fields of a `set` of type `turret_sprite_set` that belong to `FluidTurretPrototype` to `prototype`.
 ---@param prototype FluidTurretPrototype
@@ -35,6 +36,16 @@ local attack_parameter_fields = {
 	"projectile_creation_distance",
 }
 
+-- Each of these fields of a `ShellParticlePlacement` is applied to the field of the same name of the `shell_particle`
+-- of the `attack_parameters` of the prototype.
+local shell_particle_fields = {
+	"center",
+	"creation_distance",
+	"creation_distance_orientation",
+	"direction",
+	"height",
+}
+
 ---Applies the fields of a `set` of type `turret_sprite_set` that belong to the `attack_parameters` of `prototype`.
 ---@param prototype TurretPrototype
 ---@param set TurretSpriteSet
@@ -51,20 +62,14 @@ local function apply_attack_parameters(prototype, set)
 	local attack_parameters = prototype.attack_parameters
 	assert(attack_parameters, "The prototype has no attack_parameters to which the sprite set can be applied.")
 
-	for _, field in pairs(attack_parameter_fields) do
-		if set[field] ~= nil then
-			attack_parameters[field] = util.copy(set[field])
-		end
-	end
+	Assignment.safe_assign(attack_parameters, set, attack_parameter_fields)
 
 	if set.shell_particle then
 		assert(
 			attack_parameters.shell_particle,
 			"The prototype has no shell_particle to which the sprite set can be applied."
 		)
-		for key, value in pairs(set.shell_particle) do
-			attack_parameters.shell_particle[key] = util.copy(value)
-		end
+		Assignment.safe_assign(attack_parameters.shell_particle, set.shell_particle, shell_particle_fields)
 	end
 end
 
@@ -93,9 +98,7 @@ local function apply_sprite_set_to_turret(prototype, set)
 	prototype.integration = util.copy(set.integration)
 	prototype.special_effect = util.copy(set.special_effect)
 
-	if set.circuit_connector then
-		prototype.circuit_connector = util.copy(set.circuit_connector)
-	end
+	Assignment.safe_assign(prototype, set, { "circuit_connector" })
 
 	apply_attack_parameters(prototype, set)
 

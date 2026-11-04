@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `artillery_turret_sprite_set` to `prototype`.
 ---@param prototype ArtilleryTurretPrototype
@@ -22,9 +23,7 @@ local function apply_sprite_set_to_artillery_turret(prototype, set)
 		graphics_set.cannon_barrel_recoil_shiftings_load_correction_matrix
 	prototype.cannon_barrel_light_direction = graphics_set.cannon_barrel_light_direction
 
-	if set.circuit_connector then
-		prototype.circuit_connector = util.copy(set.circuit_connector)
-	end
+	Assignment.safe_assign(prototype, set, { "circuit_connector" })
 end
 
 ---@type ArtilleryTurretSpriteSetApplicator

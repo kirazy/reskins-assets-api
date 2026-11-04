@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `roboport_sprite_set` to `prototype`.
 ---@param prototype RoboportPrototype
@@ -26,9 +27,7 @@ local function apply_sprite_set_to_roboport(prototype, set)
 	prototype.stationing_offset = graphics_set.stationing_offset
 	prototype.charging_offsets = graphics_set.charging_offsets
 
-	if set.circuit_connector then
-		prototype.circuit_connector = util.copy(set.circuit_connector)
-	end
+	Assignment.safe_assign(prototype, set, { "circuit_connector" })
 end
 
 ---@type RoboportSpriteSetApplicator

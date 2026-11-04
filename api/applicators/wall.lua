@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `wall_sprite_set` to `prototype`.
 ---@param prototype WallPrototype
@@ -23,13 +24,7 @@ local function apply_sprite_set_to_wall(prototype, set)
 	prototype.wall_diode_red_light_bottom = util.copy(set.wall_diode_red_light_bottom)
 	prototype.wall_diode_red_light_left = util.copy(set.wall_diode_red_light_left)
 
-	if set.connected_gate_visualization then
-		prototype.connected_gate_visualization = util.copy(set.connected_gate_visualization)
-	end
-
-	if set.circuit_connector then
-		prototype.circuit_connector = util.copy(set.circuit_connector)
-	end
+	Assignment.safe_assign(prototype, set, { "connected_gate_visualization", "circuit_connector" })
 end
 
 ---@type WallSpriteSetApplicator
