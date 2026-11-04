@@ -6,6 +6,8 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 
 local M = {}
@@ -134,10 +136,37 @@ local function get_corpse_animation(tint)
 	return { animation }
 end
 
+---Gets the water reflection of the radar.
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = _defines.assets_source.base .. "/graphics/entity/radar/radar-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 32,
+			shift = util.by_pixel(5, 35),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla radar sprite set.
 ---@class RadarSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
+
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("RadarSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
 
 ---Gets the sprite set for the vanilla radar.
 ---@param params RadarSpriteSetParams The options for the sprite set.
@@ -151,8 +180,11 @@ end
 ---local sprite_set = radar.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<RadarSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.radar_sprite_set,
@@ -162,7 +194,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

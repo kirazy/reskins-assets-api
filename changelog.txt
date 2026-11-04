@@ -3,16 +3,34 @@ Version: 0.2.1
 Date: ????
   Features:
     - Completed the distillery sprite set.
-    - Added the Bob's electrolyser sprite set.
+    - Completed the artillery turret sprite set and added the artillery turret applicator.
+    - Completed the gun turret sprite set and added the turret applicator.
+    - Completed the sniper turret sprite set.
+    - Completed the laser turret sprite set.
+    - Completed the plasma turret sprite set.
+    - Added the electrolyser sprite set.
+    - Added the land mine sprite set and the land mine applicator.
+    - Added the laser beam graphics set.
+    - Added the laser robot sprite set and the combat robot applicator.
+    - Added the combat robot capsule projectile graphics.
+    - Added the reinforced wall sprite set and the wall applicator.
+    - Added the reinforced gate sprite set and the gate applicator.
+    - Added the spidertron icons.
+    - Added the tank icon.
+    - Added the locomotive, cargo wagon, fluid wagon, and artillery wagon icons.
+    - Added the drone sprite set and the unit applicator.
     - Added method `get_pipe_pictures` to the original assembling machine sprite set.
     - Added `HeatBufferGraphics` and `HeatConnectionGraphics`, the graphics of a heat energy source or heat buffer.
     - Added `api.fluid-boxes`, which applies `FluidBoxGraphics` to the fluid boxes of a prototype.
     - Added `api.heat-buffers`, which applies `HeatBufferGraphics` to the heat energy source and heat buffer of a prototype.
+    - Added `api.assignment`, which assigns the named fields that a table defines to another table.
     - Added `api.connection-matching`, which matches graphics to a fluid box, heat energy source, or heat buffer by the directions and positions of its connections.
   Changes:
     - Revised blending mode from additive-soft to additive.
     - `defines.sprite_set_type.flying_robot_sprite_set` is replaced by `combat_robot_sprite_set`, the sprite set type of `CombatRobotSpriteSet`.
     - Removed `apply_to_explosion` from `SpriteSetApplicator`.
+    - The laser turret sprite set now places the source of the beam on the laser.
+    - The gun turret and sniper turret sprite sets now place the projectile and the shell particle on the gun.
     - The centrifuge sprite set now includes the water reflection, and uses the re-rendered sprites from Factorio 2.1.
     - Electric furnace sprite sets now include the water reflection and frozen sprites.
     - Steel furnace, stone furnace, steam engine and steam turbine sprite sets now include the water reflection.
@@ -24,6 +42,7 @@ Date: ????
     - The pipe and pipe-to-ground sprite sets now set `pipe_material` for their pipe covers; the `fluid_box` field has been removed.
     - The heat exchanger sprite sets now include the heat pipe covers, the heated heat pipe covers, and the heat picture.
     - The nuclear reactor sprite set now includes the heat picture.
+    - The radar sprite set now includes the water reflection.
     - The working visualisations of a `PipeConnectionGraphics` are now enabled on the matching pipe connection of the prototype.
   Bugfixes:
     - Fixed that two of the four fluid boxes of the filtration unit took the wrong pipe pictures.
