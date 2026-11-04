@@ -20,12 +20,6 @@ local Remnants = require("assets.base.remnants")
 
 local M = {}
 
-local check_get_graphics_set = V.signature("get_graphics_set", {
-	{ "tint", Common.color:optional() },
-	{ "assembly_set", V.one_of({ 1, 2, 3, 4, 5, 6 }) },
-	{ "use_electronics_set", V.boolean():optional() },
-})
-
 local function get_circuit_connector()
 	local base_path = "__base__/graphics/entity/assembling-machine-1/"
 	return circuit_connector_definitions.create_vector({

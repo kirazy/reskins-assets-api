@@ -18,8 +18,6 @@ local Remnants = require("assets.base.remnants")
 
 local ENTITY_FOLDER = "__reskins-assets-assorted__/graphics/entity/mining-drill-electric-tall/"
 local FOLDER = ENTITY_FOLDER .. "mining-drill-electric-tall-"
-local ICON_FOLDER = "__reskins-assets-assorted__/graphics/icons/mining-drill-electric-tall/"
-	.. "mining-drill-electric-tall-"
 
 local M = {}
 

@@ -10,7 +10,7 @@
 		"base",
 		"reskins-sprite-utils >= 0.3.1",
 		"? reskins-assets-base >= 2.2.1",
-		"? reskins-assets-bobs >= 2.2.0",
+		"? reskins-assets-bobs >= 2.2.1",
 		"? reskins-assets-angels >= 2.2.0",
 		"? reskins-assets-assorted >= 2.2.0",
 		"? reskins-assets-hurricane",
