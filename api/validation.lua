@@ -80,6 +80,7 @@ _common.corpse_sprite_set = V.class("CorpseSpriteSet", {
 	animation_overlay_final_render_layer = V.any():optional(),
 	animation_overlay_render_layer = V.any():optional(),
 	animation_render_layer = V.any():optional(),
+	collision_box = V.any():optional(),
 	decay_animation = V.any():optional(),
 	decay_frame_transition_duration = V.any():optional(),
 	direction_shuffle = V.any():optional(),

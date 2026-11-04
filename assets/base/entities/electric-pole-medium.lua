@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local MediumElectricPoleExplosion = require("assets.base.explosions.medium-electric-pole")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -203,10 +204,10 @@ function M.get_sprite_set(params)
 			dying_explosion = MediumElectricPoleExplosion.get_explosion({
 				tints = params.tint and { ["medium-electric-pole-long-metal-particle-medium"] = params.tint },
 			}),
-			corpse = {
+			corpse = Remnants.get_corpse("medium-electric-pole-remnants", {
 				animation = get_corpse_animation(params.tint),
 				animation_overlay = get_corpse_animation_overlay(params.tint),
-			},
+			}),
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 2.3,
 			nominal_width = 1,

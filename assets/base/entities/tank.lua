@@ -9,6 +9,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local TankExplosion = require("assets.base.explosions.tank")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -43,17 +44,7 @@ end
 ---Gets the corpse of the tank, which duplicates the vanilla tank remnants.
 ---@return CorpseSpriteSet
 local function get_corpse()
-	return {
-		flags = { "placeable-neutral", "building-direction-8-way", "not-on-map" },
-		hidden_in_factoriopedia = true,
-		subgroup = "transport-remnants",
-		order = "a-k-a",
-		selectable_in_game = false,
-		time_before_removed = 60 * 60 * 15,
-		final_render_layer = "remnants",
-		remove_on_tile_placement = false,
-		animation = get_corpse_animation(),
-	}
+	return Remnants.get_corpse("tank-remnants", { animation = get_corpse_animation() })
 end
 
 ---Defines the options for the tank sprite set.

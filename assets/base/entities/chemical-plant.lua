@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local ChemicalPlantExplosion = require("assets.base.explosions.chemical-plant")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -354,7 +355,7 @@ function M.get_sprite_set(params)
 					["chemical-plant-metal-particle-medium"] = params.tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("chemical-plant-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.4,
 			nominal_width = 3,

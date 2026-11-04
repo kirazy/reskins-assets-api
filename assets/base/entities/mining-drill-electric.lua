@@ -14,6 +14,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local ElectricMiningDrillExplosion = require("assets.base.explosions.electric-mining-drill")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -1396,7 +1397,7 @@ function M.get_sprite_set(params)
 			dying_explosion = ElectricMiningDrillExplosion.get_explosion({
 				tints = params.tint and { ["electric-mining-drill-long-metal-particle-medium"] = params.tint },
 			}),
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("electric-mining-drill-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			circuit_connector = get_circuit_connector(),
 			circuit_connector_flipped = nil,

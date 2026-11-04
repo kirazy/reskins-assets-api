@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local DefenderRobotExplosion = require("assets.base.explosions.defender-robot")
+local Remnants = require("assets.base.remnants")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/robot-laser/"
 
@@ -102,7 +103,7 @@ function M.get_sprite_set()
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = DefenderRobotExplosion.get_explosion({ tints = util.copy(particle_tints) }),
-			corpse = { animation = get_corpse_animation() },
+			corpse = Remnants.get_corpse("defender-remnants", { animation = get_corpse_animation() }),
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,
 			nominal_height = 1,

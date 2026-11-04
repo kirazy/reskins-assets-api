@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -143,7 +144,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("transport-belt-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,

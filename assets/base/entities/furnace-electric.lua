@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
 local ElectricFurnaceExplosion = require("assets.base.explosions.electric-furnace")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -559,7 +560,10 @@ function M.get_sprite_set(params)
 					["electric-furnace-metal-particle-medium"] = params.tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
+			corpse = Remnants.get_corpse(
+				"electric-furnace-remnants",
+				{ animation = get_corpse_animation(params.tint, params.variant) }
+			),
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,

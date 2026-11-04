@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local WallExplosion = require("assets.base.explosions.wall")
+local Remnants = require("assets.base.remnants")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/reinforced-wall/"
 local BASE_PATH = "__base__/graphics/entity/wall/"
@@ -279,7 +280,7 @@ function M.get_sprite_set()
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = WallExplosion.get_explosion({ tints = util.copy(particle_tints) }),
-			corpse = { animation = get_corpse_animation() },
+			corpse = Remnants.get_corpse("wall-remnants", { animation = get_corpse_animation() }),
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,
 			nominal_height = 1,

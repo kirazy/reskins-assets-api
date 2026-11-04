@@ -11,6 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -438,7 +439,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil, -- FIXME: type this and then build it out.
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("assembling-machine-1-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,

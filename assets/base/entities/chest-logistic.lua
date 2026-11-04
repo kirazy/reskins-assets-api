@@ -1,6 +1,7 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.Assets.Base
 ---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
@@ -13,6 +14,7 @@ local BufferChestExplosion = require("assets.base.explosions.buffer-chest")
 local PassiveProviderChestExplosion = require("assets.base.explosions.passive-provider-chest")
 local RequesterChestExplosion = require("assets.base.explosions.requester-chest")
 local StorageChestExplosion = require("assets.base.explosions.storage-chest")
+local Remnants = require("assets.base.remnants")
 
 local BASE_PATH = "__base__/graphics/entity/logistic-chest/"
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/chest-logistic/"
@@ -125,6 +127,17 @@ local function get_dying_explosion(logistic_mode, material)
 	})
 end
 
+---Gets the corpse of the logistic chest for the given `logistic_mode` and `material`, with the other fields of the
+---vanilla remnants of the chest of `logistic_mode`.
+---@param logistic_mode ChestLogisticMode
+---@param material ChestLogisticMaterial
+---@return CorpseSpriteSet
+local function get_corpse(logistic_mode, material)
+	local name = (logistic_mode .. "-chest-remnants") --[[@as BaseRemnantsID]]
+
+	return Remnants.get_corpse(name, { animation = get_corpse_animation(logistic_mode, material) })
+end
+
 ---Gets the circuit connector of the logistic chest.
 ---@return CircuitConnectorDefinition[]
 local function get_circuit_connector()
@@ -198,7 +211,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = get_dying_explosion(params.logistic_mode, params.material),
-			corpse = { animation = get_corpse_animation(params.logistic_mode, params.material) },
+			corpse = get_corpse(params.logistic_mode, params.material),
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,
 			nominal_height = 1,

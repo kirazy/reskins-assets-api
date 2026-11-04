@@ -11,6 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local GunTurretExplosion = require("assets.base.explosions.gun-turret")
+local Remnants = require("assets.base.remnants")
 
 local BASE_PATH = "__base__/graphics/entity/gun-turret/"
 local ASSETS_PATH = "__reskins-assets-base__/graphics/entity/turret-gun/"
@@ -349,7 +350,7 @@ function M.get_sprite_set(params)
 			dying_explosion = GunTurretExplosion.get_explosion({
 				tints = tint and { ["gun-turret-metal-particle-medium"] = tint },
 			}),
-			corpse = { animation = get_corpse_animation(tint) },
+			corpse = Remnants.get_corpse("gun-turret-remnants", { animation = get_corpse_animation(tint) }),
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.2,
 			nominal_width = 2,

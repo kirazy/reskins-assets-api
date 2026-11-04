@@ -92,7 +92,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = {},
+			corpse = nil,
 			water_reflection = nil,
 			nominal_width = 5,
 			nominal_height = 5,

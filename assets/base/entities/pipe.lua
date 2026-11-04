@@ -13,6 +13,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local AssetsCommon = require("api.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local PipeExplosion = require("assets.base.explosions.pipe")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -691,7 +692,7 @@ function M.get_sprite_set(params)
 					["pipe-metal-particle-small"] = particle_tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.pipe_material) },
+			corpse = Remnants.get_corpse("pipe-remnants", { animation = get_corpse_animation(params.pipe_material) }),
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,

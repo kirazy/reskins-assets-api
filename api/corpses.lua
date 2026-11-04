@@ -23,6 +23,7 @@ local corpse_fields = {
 	"animation_overlay_final_render_layer",
 	"animation_overlay_render_layer",
 	"animation_render_layer",
+	"collision_box",
 	"decay_animation",
 	"decay_frame_transition_duration",
 	"direction_shuffle",
@@ -54,74 +55,11 @@ local corpse_fields = {
 	"underwater_patch",
 }
 
--- The fields of a corpse that name it, describe it, or give it an icon. These fields are removed from a created corpse,
--- which takes its name and icon from its entity.
-local identity_fields = {
-	"localised_name",
-	"localised_description",
-	"factoriopedia_description",
-	"factoriopedia_simulation",
-	"icon",
-	"icons",
-	"icon_size",
-}
-
--- The generic remnants of the base game, which many entities share. A created corpse does not take its fields from them.
-local generic_remnants = {
-	["small-remnants"] = true,
-	["1x2-remnants"] = true,
-	["medium-small-remnants"] = true,
-	["medium-remnants"] = true,
-	["big-remnants"] = true,
-}
-
 -- The type names of the flying robots, which have no `corpse` and create their remnants when they fall to the ground.
 local flying_robot_types = {
 	["construction-robot"] = true,
 	["logistic-robot"] = true,
 	["combat-robot"] = true,
-}
-
--- The type names of the vehicles, which leave remnants that turn with the vehicle.
-local vehicle_types = {
-	["locomotive"] = true,
-	["cargo-wagon"] = true,
-	["fluid-wagon"] = true,
-	["artillery-wagon"] = true,
-	["infinity-cargo-wagon"] = true,
-	["car"] = true,
-	["spider-vehicle"] = true,
-}
-
--- The fields of the remnants of the base game for an entity on the tile grid.
-local building_remnants_fields = {
-	flags = { "placeable-neutral", "not-on-map" },
-	hidden_in_factoriopedia = true,
-	selectable_in_game = false,
-	time_before_removed = 60 * 60 * 15,
-	expires = false,
-	final_render_layer = "remnants",
-	remove_on_tile_placement = false,
-}
-
--- The fields of the remnants of the base game for a flying robot or another entity off the tile grid.
-local off_grid_remnants_fields = {
-	flags = { "placeable-neutral", "not-on-map", "placeable-off-grid" },
-	hidden_in_factoriopedia = true,
-	selectable_in_game = false,
-	time_before_removed = 60 * 60 * 15,
-	final_render_layer = "remnants",
-	remove_on_tile_placement = false,
-}
-
--- The fields of the remnants of the base game for a vehicle.
-local vehicle_remnants_fields = {
-	flags = { "placeable-neutral", "building-direction-8-way", "not-on-map" },
-	hidden_in_factoriopedia = true,
-	selectable_in_game = false,
-	time_before_removed = 60 * 60 * 15,
-	final_render_layer = "remnants",
-	remove_on_tile_placement = false,
 }
 
 ---Indicates whether the given `prototype` is a flying robot.
@@ -206,42 +144,11 @@ local function get_entity_localised_name(prototype)
 	return prototype.localised_name and util.copy(prototype.localised_name) or { "entity-name." .. prototype.name }
 end
 
----Gets the corpse that the given `prototype` names, if it exists and is not generic remnants of the base game. A flying
----robot names no corpse, and takes the corpse named `<robot name>-remnants`, if it exists.
----@param prototype EntityWithHealthPrototype
----@return CorpsePrototype?
-local function get_named_corpse(prototype)
-	if is_flying_robot(prototype) then
-		return data.raw["corpse"][prototype.name .. "-remnants"]
-	end
-
-	local corpse = prototype.corpse
-	local name = type(corpse) == "table" and corpse[1] or corpse
-	if type(name) ~= "string" or generic_remnants[name] then
-		return nil
-	end
-
-	return data.raw["corpse"][name]
-end
-
----Gets the fields of the remnants of the base game for the group of entities of the given `prototype`.
----@param prototype EntityWithHealthPrototype
----@return table
-local function get_remnants_fields(prototype)
-	if vehicle_types[prototype.type] then
-		return vehicle_remnants_fields
-	elseif is_off_grid(prototype) then
-		return off_grid_remnants_fields
-	end
-
-	return building_remnants_fields
-end
-
 ---Applies the fields of the given `corpse_sprite_set` to the given `corpse`, in place.
 ---
 ---Each field that `corpse_sprite_set` defines is copied onto the field of the same name of `corpse`. A field that it
 ---does not define is not modified.
----@param corpse CorpsePrototype The corpse to which the fields are applied.
+---@param corpse CorpsePrototype|CorpseSpriteSet The corpse, or the corpse of a sprite set, that takes the fields.
 ---@param corpse_sprite_set CorpseSpriteSet The artwork and the other fields of the corpse.
 function _corpses.apply_corpse_sprite_set(corpse, corpse_sprite_set)
 	Assignment.safe_assign(corpse, corpse_sprite_set, corpse_fields)
@@ -291,10 +198,8 @@ end
 ---`prototype`, in place.
 ---
 ---A `CorpseSpriteSet` is created as the corpse `ar-<entity name>-remnants`, which replaces a corpse of that name. The
----corpse takes the fields of the corpse that `prototype` names, or the fields of the remnants of the base game for the
----group of entities of `prototype` when it names no corpse that exists, or names generic remnants of the base game. It
----then takes the fields of `corpse`, the size of `prototype`, the localised name `{"remnant-name", ...}`, and a copy of
----the icon of `prototype`.
+---corpse takes the fields of `corpse`, the size of `prototype`, the localised name `{"remnant-name", ...}`, and a copy of
+---the icon of `prototype`. It takes no field from the corpse that `prototype` names.
 ---
 ---An `EntityID` is set as given, and `_defines.generic_remnants` sets the generic remnants for the size of `prototype`.
 ---A flying robot creates its corpse when it falls to the ground, so the corpse is not set on it.
@@ -308,17 +213,8 @@ function _corpses.apply(prototype, corpse)
 	end
 
 	if type(corpse) == "table" then
-		local named_corpse = get_named_corpse(prototype)
-
 		---@type CorpsePrototype
-		local remnants = named_corpse and util.copy(named_corpse) or util.copy(get_remnants_fields(prototype))
-		remnants.type = "corpse"
-		remnants.name = name
-
-		for _, field in pairs(identity_fields) do
-			remnants[field] = nil
-		end
-
+		local remnants = { type = "corpse", name = name }
 		_corpses.apply_corpse_sprite_set(remnants, corpse)
 
 		local width, height = get_tile_size(prototype)
@@ -333,17 +229,13 @@ function _corpses.apply(prototype, corpse)
 
 		remnants.localised_name = { "remnant-name", get_entity_localised_name(prototype) }
 
-		-- A corpse with the `placeable-neutral` flag requires an icon. An entity with no icon gives its corpse the icon
-		-- of the corpse it names, or the icon of the generic remnants of the base game.
+		-- A corpse with the `placeable-neutral` flag requires an icon. An entity with no icon gives its corpse the icon of
+		-- the generic remnants of the base game.
 		if prototype.icons then
 			remnants.icons = util.copy(prototype.icons)
 		elseif prototype.icon then
 			remnants.icon = prototype.icon
 			remnants.icon_size = prototype.icon_size
-		elseif named_corpse and (named_corpse.icons or named_corpse.icon) then
-			remnants.icons = named_corpse.icons and util.copy(named_corpse.icons) or nil
-			remnants.icon = named_corpse.icon
-			remnants.icon_size = named_corpse.icon_size
 		else
 			remnants.icon = "__base__/graphics/icons/remnants.png"
 		end

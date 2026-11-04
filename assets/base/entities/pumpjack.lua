@@ -13,6 +13,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local PumpjackExplosion = require("assets.base.explosions.pumpjack")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -413,7 +414,10 @@ local function get_definition(params, corpse_base_layer)
 					["pumpjack-metal-particle-small"] = params.tint or params.accent_tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(corpse_base_layer, params.tint) },
+			corpse = Remnants.get_corpse(
+				"pumpjack-remnants",
+				{ animation = get_corpse_animation(corpse_base_layer, params.tint) }
+			),
 			water_reflection = nil,
 			drawing_box_vertical_extension = 1,
 			nominal_width = 3,

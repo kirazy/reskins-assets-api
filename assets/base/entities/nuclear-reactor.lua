@@ -10,6 +10,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local NuclearReactorExplosion = require("assets.base.explosions.nuclear-reactor")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -331,7 +332,10 @@ function M.get_sprite_set(params)
 					["nuclear-reactor-metal-particle-medium"] = params.tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.tint, pipe_material) },
+			corpse = Remnants.get_corpse(
+				"nuclear-reactor-remnants",
+				{ animation = get_corpse_animation(params.tint, pipe_material) }
+			),
 			circuit_connector = get_circuit_connector(),
 			water_reflection = get_water_reflection(),
 			light_flicker = get_light_flicker(),

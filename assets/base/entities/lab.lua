@@ -12,6 +12,7 @@ local _sprite_utils = { sprites = require("__reskins-sprite-utils__.sprites") }
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local LabExplosion = require("assets.base.explosions.lab")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -277,7 +278,7 @@ function M.get_sprite_set(params)
 			dying_explosion = LabExplosion.get_explosion({
 				tints = params.tint and { ["lab-metal-particle-big"] = params.tint },
 			}),
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("lab-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,

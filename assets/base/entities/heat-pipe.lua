@@ -11,6 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local HeatPipeExplosion = require("assets.base.explosions.heat-pipe")
+local Remnants = require("assets.base.remnants")
 
 local VANILLA_PATH = "__base__/graphics/entity/heat-pipe/"
 local ASSETS_BASE_PATH = "__reskins-assets-base__/graphics/entity/heat-pipe/"
@@ -341,7 +342,7 @@ function M.get_sprite_set(params)
 			dying_explosion = HeatPipeExplosion.get_explosion({
 				tints = params.pipe_material and util.copy(particle_tints[params.pipe_material]),
 			}),
-			corpse = { animation = corpse_animation },
+			corpse = Remnants.get_corpse("heat-pipe-remnants", { animation = corpse_animation }),
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,

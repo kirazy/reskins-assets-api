@@ -10,6 +10,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local RoboportExplosion = require("assets.base.explosions.roboport")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -294,7 +295,7 @@ function M.get_sprite_set(params)
 			dying_explosion = RoboportExplosion.get_explosion({
 				tints = params.tint and { ["roboport-metal-particle-medium"] = params.tint },
 			}),
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("roboport-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			nominal_width = 4,
 			nominal_height = 4,

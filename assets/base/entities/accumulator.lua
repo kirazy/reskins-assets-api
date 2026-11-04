@@ -11,6 +11,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
 local AccumulatorExplosion = require("assets.base.explosions.accumulator")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -268,7 +269,10 @@ function M.get_sprite_set(params)
 					["accumulator-metal-particle-small"] = params.tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.sprite_set, params.tint) },
+			corpse = Remnants.get_corpse(
+				"accumulator-remnants",
+				{ animation = get_corpse_animation(params.sprite_set, params.tint) }
+			),
 			water_reflection = get_accumulator_reflection(),
 			drawing_box_vertical_extension = 0.5,
 			nominal_width = 2,

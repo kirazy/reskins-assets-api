@@ -11,6 +11,7 @@ local _pipes = require("assets.base.entities.pipe-pictures")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local Pipe = require("assets.base.entities.pipe")
 local PipeToGroundExplosion = require("assets.base.explosions.pipe-to-ground")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -205,7 +206,10 @@ function M.get_sprite_set(params)
 					["pipe-to-ground-metal-particle-small"] = particle_tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.pipe_material) },
+			corpse = Remnants.get_corpse(
+				"pipe-to-ground-remnants",
+				{ animation = get_corpse_animation(params.pipe_material) }
+			),
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,

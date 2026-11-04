@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local ConstructionRobotExplosion = require("assets.base.explosions.construction-robot")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -276,7 +277,7 @@ function M.get_sprite_set(params)
 			dying_explosion = ConstructionRobotExplosion.get_explosion({
 				tints = params.tint and { ["construction-robot-metal-particle-medium"] = params.tint },
 			}),
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("construction-robot-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,
 			nominal_height = 1,

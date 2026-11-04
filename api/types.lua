@@ -112,6 +112,14 @@
 ---
 ---See [CorpsePrototype::animation_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_render_layer).
 ---@field animation_render_layer? RenderLayer
+---Specification of the entity collision boundaries. Empty collision box means no collision and is used for smoke, projectiles, particles, explosions etc.
+---
+---The `{0,0}` coordinate in the collision box will match the entity position. It should be near the center of the collision box, to keep correct entity drawing order. The bounding box must include the `{0,0}` coordinate.
+---
+---Note, that for buildings, it is customary to leave 0.1 wide border between the edge of the tile and the edge of the building, this lets the player move between the building and electric poles/inserters etc.
+---
+---See [EntityPrototype::collision_box](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#collision_box).
+---@field collision_box? BoundingBox
 ---The animation of the corpse as it decays.
 ---
 ---See [CorpsePrototype::decay_animation](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#decay_animation).

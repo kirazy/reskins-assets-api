@@ -1,6 +1,7 @@
 ---@using data
 ---@using Reskins.Assets
 ---@using Reskins.Assets.Applicators
+---@using Reskins.Assets.Base
 ---@using Reskins.SpriteUtils
 
 ---@namespace Reskins.Assets.Base.Entities
@@ -12,6 +13,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local BulkInserterExplosion = require("assets.base.explosions.bulk-inserter")
 local InserterExplosion = require("assets.base.explosions.inserter")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -39,6 +41,24 @@ local long_capable_presets = {
 local particle_tints = {
 	["inserter-express"] = util.color("30d79c"),
 	["inserter-express-bulk"] = util.color("2dcd3f"),
+}
+
+-- The vanilla remnants that give the corpse of each preset its fields other than the artwork. A preset drawn from a
+-- vanilla inserter takes the remnants of that inserter, a bulk preset takes the bulk inserter remnants, and any other
+-- preset takes the inserter remnants.
+---@type table<InserterPreset, BaseRemnantsID>
+local remnants_names = {
+	["inserter"] = "inserter-remnants",
+	["inserter-burner"] = "burner-inserter-remnants",
+	["inserter-fast"] = "fast-inserter-remnants",
+	["inserter-express"] = "inserter-remnants",
+	["inserter-filter"] = "inserter-remnants",
+	["inserter-express-filter"] = "inserter-remnants",
+	["inserter-long-handed"] = "long-handed-inserter-remnants",
+	["inserter-bulk"] = "bulk-inserter-remnants",
+	["inserter-express-bulk"] = "bulk-inserter-remnants",
+	["inserter-bulk-filter"] = "bulk-inserter-remnants",
+	["inserter-express-bulk-filter"] = "bulk-inserter-remnants",
 }
 
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/inserters/"
@@ -267,6 +287,14 @@ local function get_dying_explosion(preset)
 	return InserterExplosion.get_explosion({ tints = { ["inserter-metal-particle-medium"] = util.copy(tint) } })
 end
 
+---Gets the corpse of the inserter for the given `preset`, with the other fields of the vanilla remnants in
+---`remnants_names`.
+---@param preset InserterPreset
+---@return CorpseSpriteSet
+local function get_corpse(preset)
+	return Remnants.get_corpse(remnants_names[preset], { animation = get_corpse_animation(preset) })
+end
+
 ---Gets the light flicker of the burner or fluid energy source of the inserter, which shows no light.
 ---@return LightFlickeringDefinition
 local function get_light_flicker()
@@ -346,7 +374,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = get_dying_explosion(preset),
-			corpse = { animation = get_corpse_animation(preset) },
+			corpse = get_corpse(preset),
 			water_reflection = nil,
 			nominal_width = 0.8,
 			nominal_height = 0.8,

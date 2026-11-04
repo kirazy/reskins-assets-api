@@ -14,6 +14,7 @@ local _sprite_utils = {
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local CentrifugeExplosion = require("assets.base.explosions.centrifuge")
+local Remnants = require("assets.base.remnants")
 
 local BASE_PATH = "__base__/graphics/entity/centrifuge/"
 local ASSETS_BASE_PATH = "__reskins-assets-base__/graphics/entity/centrifuge/"
@@ -242,7 +243,7 @@ function M.get_sprite_set(params)
 					["centrifuge-metal-particle-medium"] = params.tint,
 				},
 			}),
-			corpse = { animation = get_corpse_animation(params.tint) },
+			corpse = Remnants.get_corpse("centrifuge-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.7,
 			nominal_width = 3,

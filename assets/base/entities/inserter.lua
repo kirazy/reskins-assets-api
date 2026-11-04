@@ -13,6 +13,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local BulkInserterExplosion = require("assets.base.explosions.bulk-inserter")
 local InserterExplosion = require("assets.base.explosions.inserter")
+local Remnants = require("assets.base.remnants")
 
 local M = {}
 
@@ -466,6 +467,18 @@ local function get_dying_explosion(tint, variant)
 	return InserterExplosion.get_explosion({ tints = tint and { ["inserter-metal-particle-medium"] = tint } })
 end
 
+---Gets the corpse of the inserter for the given `variant`, with the other fields of the vanilla bulk inserter remnants
+---for a bulk variant, and of the vanilla inserter remnants for any other variant.
+---@param tint? Color
+---@param variant InserterVariants
+---@return CorpseSpriteSet
+local function get_corpse(tint, variant)
+	local is_bulk = (variant == "inserter-bulk" or variant == "inserter-bulk-filter")
+	local name = is_bulk and "bulk-inserter-remnants" or "inserter-remnants"
+
+	return Remnants.get_corpse(name, { animation = get_corpse_animation(tint, variant) })
+end
+
 ---The variant of the inserter artwork.
 ---@alias InserterVariants
 ---| "inserter"
@@ -537,7 +550,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = get_dying_explosion(tint, variant),
-			corpse = { animation = get_corpse_animation(tint, variant) },
+			corpse = get_corpse(tint, variant),
 			water_reflection = nil,
 			nominal_width = 0.8,
 			nominal_height = 0.8,
