@@ -17,4 +17,10 @@ registry.register(
 	require("converters.boiler-to-crafting-machine-sprite-set-transformer")
 )
 
+registry.register(
+	_defines.sprite_set_type.valve_sprite_set,
+	_defines.sprite_set_type.storage_tank_sprite_set,
+	require("converters.valve-to-storage-tank-sprite-set-transformer")
+)
+
 return registry
