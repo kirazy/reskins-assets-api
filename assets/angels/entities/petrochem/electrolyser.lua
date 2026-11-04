@@ -7,57 +7,36 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local PETROCHEM_GRAPHICS_PATH = "__angelspetrochemgraphics__/graphics/entity/electrolyser/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/electrolyser/"
 
 local M = {}
 
-local entity_horizontal_base = {
-	filename = "__angelspetrochemgraphics__/graphics/entity/electrolyser/electrolyser-east.png",
-	width = 224,
-	height = 224,
-	frame_count = 36,
-	line_length = 6,
-	shift = { 0, 0 },
-	animation_speed = 0.5,
-}
-
-local entity_vertical_base = {
-	filename = "__angelspetrochemgraphics__/graphics/entity/electrolyser/electrolyser-north.png",
-	priority = "extra-high",
-	width = 224,
-	height = 224,
-	frame_count = 36,
-	line_length = 6,
-	shift = { 0, 0 },
-	animation_speed = 0.5,
-}
-
-local pipe_pictures = {
-	north = util.empty_sprite(),
-	east = util.empty_sprite(),
-	south = {
-		filename = "__angelspetrochemgraphics__/graphics/entity/electrolyser/pipe-south.png",
-		priority = "extra-high",
-		width = 41,
-		height = 40,
-		shift = util.by_pixel(5, -8),
-	},
-	west = util.empty_sprite(),
-}
-
+---Gets the animation of Angel's electrolyser for the given `direction`.
+---@param direction "north"|"east"
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
-	local animation = {
-		north = { layers = { entity_vertical_base } },
-		east = { layers = { entity_horizontal_base } },
-		south = { layers = { entity_vertical_base } },
-		west = { layers = { entity_horizontal_base } },
+---@return Animation
+local function get_direction_animation(direction, tint)
+	local layers = {
+		{
+			filename = PETROCHEM_GRAPHICS_PATH .. "electrolyser-" .. direction .. ".png",
+			width = 224,
+			height = 224,
+			frame_count = 36,
+			line_length = 6,
+			shift = { 0, 0 },
+			animation_speed = 0.5,
+		},
 	}
 
 	if tint then
-		local entity_mask = {
-			filename = "__reskins-assets-angels__/graphics/entity/electrolyser/electrolyser-mask.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "electrolyser-mask.png",
 			priority = "extra-high",
 			width = 224,
 			height = 224,
@@ -67,8 +46,8 @@ local function get_graphics_set(tint)
 			animation_speed = 0.5,
 			tint = tint,
 		}
-		local entity_highlights = {
-			filename = "__reskins-assets-angels__/graphics/entity/electrolyser/electrolyser-highlights.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "electrolyser-highlights.png",
 			priority = "extra-high",
 			width = 224,
 			height = 224,
@@ -78,23 +57,41 @@ local function get_graphics_set(tint)
 			animation_speed = 0.5,
 			blend_mode = "additive",
 		}
-		table.insert(animation.north.layers--[[@cast -?]], entity_mask)
-		table.insert(animation.north.layers--[[@cast -?]], entity_highlights)
-		table.insert(animation.east.layers--[[@cast -?]], entity_mask)
-		table.insert(animation.east.layers--[[@cast -?]], entity_highlights)
-		table.insert(animation.south.layers--[[@cast -?]], entity_mask)
-		table.insert(animation.south.layers--[[@cast -?]], entity_highlights)
-		table.insert(animation.west.layers--[[@cast -?]], entity_mask)
-		table.insert(animation.west.layers--[[@cast -?]], entity_highlights)
 	end
 
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = animation,
-		working_visualisations = {},
-	}
+	return { layers = layers }
+end
 
-	return graphics_set
+---Gets the animation of Angel's electrolyser.
+---@param tint? Color
+---@return Animation4Way
+local function get_animation(tint)
+	-- The south and west directions draw the artwork of the north and east directions.
+	return {
+		north = get_direction_animation("north", tint),
+		east = get_direction_animation("east", tint),
+		south = get_direction_animation("north", tint),
+		west = get_direction_animation("east", tint),
+	}
+end
+
+---Gets the graphics of the fluid boxes of Angel's electrolyser.
+---@return FluidBoxGraphics
+local function get_fluid_box_graphics()
+	return {
+		pipe_picture = {
+			north = util.empty_sprite(),
+			east = util.empty_sprite(),
+			south = {
+				filename = PETROCHEM_GRAPHICS_PATH .. "pipe-south.png",
+				priority = "extra-high",
+				width = 41,
+				height = 40,
+				shift = util.by_pixel(5, -8),
+			},
+			west = util.empty_sprite(),
+		},
+	}
 end
 
 ---Gets the circuit connector of Angel's electrolyser for each direction.
@@ -134,6 +131,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("ElectrolyserSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's electrolyser.
 ---@param params ElectrolyserSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's electrolyser.
@@ -146,26 +152,30 @@ end
 ---local sprite_set = electrolyser.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
-	---@type FluidBoxGraphics
-	local fluid_box = {
-		pipe_picture = pipe_pictures,
-	}
+	check_get_sprite_set(params)
 
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
-			fluid_boxes = { fluid_box },
+			graphics_set = { animation = get_animation(params.tint) },
+			circuit_connector = get_circuit_connector(),
+			fluid_boxes = { get_fluid_box_graphics() },
 			fluid_boxes_off_when_no_fluid_recipe = false,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.3,
 			nominal_width = 5,
 			nominal_height = 5,
