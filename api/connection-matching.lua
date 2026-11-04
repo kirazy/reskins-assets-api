@@ -13,6 +13,7 @@
 local _connection_matching = {}
 
 local V = require("__reskins-sprite-utils__.validation")
+local _sprite_utils = { utils = require("__reskins-sprite-utils__.utils") }
 
 -- The greatest distance, in tiles, between the position of a connection and the position given by its graphics.
 local position_tolerance = 0.5
@@ -22,14 +23,6 @@ local position_tolerance = 0.5
 
 ---Defines the fields of `PipeConnectionDefinition` and `HeatConnectionDefinition` by which graphics are matched.
 ---@alias MatchableConnection PipeConnectionDefinition|HeatConnectionDefinition
-
----Gets the x and y coordinates of the given `position`, in either the named or the array form.
----@param position MapPosition
----@return double x
----@return double y
-local function get_coordinates(position)
-	return position.x or position[1] or 0, position.y or position[2] or 0
-end
 
 ---Gets the rank of the match between the given `connection_graphics` and the given `connection`.
 ---
@@ -51,8 +44,8 @@ local function rank_connection(connection_graphics, connection)
 		return 0
 	end
 
-	local graphics_x, graphics_y = get_coordinates(connection_graphics.position)
-	local x, y = get_coordinates(connection.position)
+	local graphics_x, graphics_y = _sprite_utils.utils.unpack_vector(connection_graphics.position)
+	local x, y = _sprite_utils.utils.unpack_vector(connection.position)
 	local distance = math.sqrt((x - graphics_x) ^ 2 + (y - graphics_y) ^ 2)
 
 	return distance <= position_tolerance and 2 or 0

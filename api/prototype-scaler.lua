@@ -2,7 +2,10 @@
 
 ---@namespace Reskins.Assets
 
-local _sprite_utils = { sprites = require("__reskins-sprite-utils__.sprites") }
+local _sprite_utils = {
+	sprites = require("__reskins-sprite-utils__.sprites"),
+	utils = require("__reskins-sprite-utils__.utils"),
+}
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
@@ -37,13 +40,11 @@ PrototypeScaler.__index = PrototypeScaler
 ---@return double width
 ---@return double height
 local function get_bounding_box_dimensions(bounding_box)
-	local left_top = bounding_box.left_top or bounding_box[1]
-	local right_bottom = bounding_box.right_bottom or bounding_box[2]
-	---@diagnostic disable-next-line: need-check-nil
-	local width = (right_bottom.x or right_bottom[1]) - (left_top.x or left_top[1])
-	---@diagnostic disable-next-line: need-check-nil
-	local height = (right_bottom.y or right_bottom[2]) - (left_top.y or left_top[2])
-	return width, height
+	local left_top = (bounding_box.left_top or bounding_box[1]) --[[@as MapPosition]]
+	local right_bottom = (bounding_box.right_bottom or bounding_box[2]) --[[@as MapPosition]]
+	local left, top = _sprite_utils.utils.unpack_vector(left_top)
+	local right, bottom = _sprite_utils.utils.unpack_vector(right_bottom)
+	return right - left, bottom - top
 end
 
 ---Defines the options that determine the scaling relationship of a `PrototypeScaler`.
