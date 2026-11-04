@@ -71,6 +71,21 @@ A flat icon has one layer, taken from a single file. The file is named as follow
 
 A flat icon has no subfolder and no role. Every key adds its value to the file name.
 
+## Runtime-tintable icons
+
+A runtime-tintable icon is tinted by the game at runtime, such as the spidertron icons, which take
+the player color. A runtime-tintable icon has no mask or highlights layer. Its files are in the
+subfolder named for the icon, as follows.
+
+```
+{folder}/{name}/{name}.png
+{folder}/{name}/{name}-runtime-base.png
+{folder}/{name}/{name}-runtime-mask.png
+```
+
+The first file is the icon. The `runtime` files are the layers of the `icon_tintables` and
+`icon_tintable_masks` of the item, declared with `stem("{name}-runtime")`.
+
 ## Technology icons
 
 Technology icons follow the same rules. The folder of a factory for technology icons is the
