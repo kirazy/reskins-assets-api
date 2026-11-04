@@ -6,22 +6,40 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local BIOPROCESSING_GRAPHICS_PATH = "__angelsbioprocessinggraphics__/graphics/entity/composter/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/composter/"
 
 local M = {}
 
----@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
-	local working_visualisations = {}
+---Gets the animation of Angel's composter.
+---@return Animation
+local function get_animation()
+	return {
+		filename = BIOPROCESSING_GRAPHICS_PATH .. "composter.png",
+		width = 160,
+		height = 160,
+		frame_count = 1,
+		line_length = 1,
+		shift = { 0, 0 },
+	}
+end
 
-	if tint then
-		table.insert(working_visualisations, {
+---Gets the working visualisations of Angel's composter for the given `tint`.
+---@param tint Color
+---@return WorkingVisualisation[]
+local function get_working_visualisations(tint)
+	return {
+		{
 			always_draw = true,
 			animation = {
 				layers = {
 					{
-						filename = "__reskins-assets-angels__/graphics/entity/composter/composter-mask.png",
+						filename = ASSETS_ANGELS_PATH .. "composter-mask.png",
 						priority = "extra-high",
 						width = 160,
 						height = 160,
@@ -29,7 +47,7 @@ local function get_graphics_set(tint)
 						tint = tint,
 					},
 					{
-						filename = "__reskins-assets-angels__/graphics/entity/composter/composter-highlights.png",
+						filename = ASSETS_ANGELS_PATH .. "composter-highlights.png",
 						priority = "extra-high",
 						width = 160,
 						height = 160,
@@ -38,23 +56,8 @@ local function get_graphics_set(tint)
 					},
 				},
 			},
-		})
-	end
-
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = {
-			filename = "__angelsbioprocessinggraphics__/graphics/entity/composter/composter.png",
-			width = 160,
-			height = 160,
-			frame_count = 1,
-			line_length = 1,
-			shift = { 0, 0 },
 		},
-		working_visualisations = working_visualisations,
 	}
-
-	return graphics_set
 end
 
 ---Gets the circuit connector of Angel's composter for each direction.
@@ -94,6 +97,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("ComposterSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's composter.
 ---@param params ComposterSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's composter.
@@ -106,19 +118,31 @@ end
 ---local sprite_set = composter.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
+			graphics_set = {
+				animation = get_animation(),
+				working_visualisations = params.tint and get_working_visualisations(params.tint),
+			},
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

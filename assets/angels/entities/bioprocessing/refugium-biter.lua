@@ -6,17 +6,25 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local BIOPROCESSING_GRAPHICS_PATH = "__angelsbioprocessinggraphics__/graphics/entity/bio-refugium/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/refugium-biter/"
 
 local M = {}
 
+---Gets the graphics set of Angel's biter refugium.
 ---@param tint? Color
 ---@return CraftingMachineGraphicsSet
 local function get_graphics_set(tint)
+	---@type WorkingVisualisation[]
 	local working_visualisations = {
 		{
 			animation = {
-				filename = "__angelsbioprocessinggraphics__/graphics/entity/bio-refugium/bio-refugium-biter.png",
+				filename = BIOPROCESSING_GRAPHICS_PATH .. "bio-refugium-biter.png",
 				width = 288,
 				height = 288,
 				line_length = 4,
@@ -33,7 +41,7 @@ local function get_graphics_set(tint)
 			animation = {
 				layers = {
 					{
-						filename = "__reskins-assets-angels__/graphics/entity/refugium-biter/refugium-biter-mask.png",
+						filename = ASSETS_ANGELS_PATH .. "refugium-biter-mask.png",
 						priority = "extra-high",
 						width = 288,
 						height = 288,
@@ -41,7 +49,7 @@ local function get_graphics_set(tint)
 						tint = tint,
 					},
 					{
-						filename = "__reskins-assets-angels__/graphics/entity/refugium-biter/refugium-biter-highlights.png",
+						filename = ASSETS_ANGELS_PATH .. "refugium-biter-highlights.png",
 						priority = "extra-high",
 						width = 288,
 						height = 288,
@@ -56,7 +64,7 @@ local function get_graphics_set(tint)
 	---@type CraftingMachineGraphicsSet
 	return {
 		animation = {
-			filename = "__angelsbioprocessinggraphics__/graphics/entity/bio-refugium/bio-refugium-biter-off.png",
+			filename = BIOPROCESSING_GRAPHICS_PATH .. "bio-refugium-biter-off.png",
 			width = 288,
 			height = 288,
 			line_length = 1,
@@ -104,6 +112,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("RefugiumBiterSpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's biter refugium.
 ---@param params RefugiumBiterSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's biter refugium.
@@ -116,19 +133,28 @@ end
 ---local sprite_set = refugium_biter.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
 			graphics_set = get_graphics_set(params.tint),
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			nominal_width = 7,
 			nominal_height = 7,
 		},

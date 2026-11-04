@@ -6,103 +6,59 @@
 ---@namespace Reskins.Assets.Angels.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
+
+local BIOPROCESSING_GRAPHICS_PATH = "__angelsbioprocessinggraphics__/graphics/entity/bio-hatchery/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/hatchery/"
 
 local M = {}
 
+---Gets the animation of Angel's hatchery.
 ---@param tint? Color
----@return CraftingMachineGraphicsSet
-local function get_graphics_set(tint)
-	local animation = {
-		layers = {
-			{
-				filename = "__angelsbioprocessinggraphics__/graphics/entity/bio-hatchery/bio-hatchery-off.png",
-				priority = "extra-high",
-				width = 160,
-				height = 160,
-				shift = { 0, 0 },
-			},
+---@return Animation
+local function get_animation(tint)
+	local layers = {
+		{
+			filename = BIOPROCESSING_GRAPHICS_PATH .. "bio-hatchery-off.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			shift = { 0, 0 },
 		},
 	}
 
 	if tint then
-		table.insert(animation.layers--[[@cast -?]], {
-			filename = "__reskins-assets-angels__/graphics/entity/hatchery/hatchery-idle-mask.png",
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "hatchery-idle-mask.png",
 			priority = "extra-high",
 			width = 160,
 			height = 160,
 			shift = { 0, 0 },
 			tint = tint,
-		})
-		table.insert(animation.layers--[[@cast -?]], {
-			filename = "__reskins-assets-angels__/graphics/entity/hatchery/hatchery-idle-highlights.png",
+		}
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "hatchery-idle-highlights.png",
 			priority = "extra-high",
 			width = 160,
 			height = 160,
 			shift = { 0, 0 },
 			blend_mode = "additive",
-		})
+		}
 	end
 
-	local working_visualisations = {}
+	return { layers = layers }
+end
 
-	if tint then
-		table.insert(working_visualisations, {
-			animation = {
-				layers = {
-					{
-						filename = "__angelsbioprocessinggraphics__/graphics/entity/bio-hatchery/bio-hatchery-animation.png",
-						priority = "extra-high",
-						width = 160,
-						height = 160,
-						frame_count = 25,
-						line_length = 5,
-						shift = { 0, 0 },
-						animation_speed = 0.35,
-					},
-					{
-						filename = "__reskins-assets-angels__/graphics/entity/hatchery/hatchery-working-mask.png",
-						priority = "extra-high",
-						width = 160,
-						height = 160,
-						frame_count = 25,
-						line_length = 5,
-						shift = { 0, 0 },
-						animation_speed = 0.35,
-						tint = tint,
-					},
-					{
-						filename = "__reskins-assets-angels__/graphics/entity/hatchery/hatchery-working-highlights.png",
-						priority = "extra-high",
-						width = 160,
-						height = 160,
-						frame_count = 25,
-						line_length = 5,
-						shift = { 0, 0 },
-						animation_speed = 0.35,
-						blend_mode = "additive",
-					},
-				},
-			},
-		})
-	end
-
-	-- The shadow layer is always drawn and is always required.
-	table.insert(working_visualisations, {
-		always_draw = true,
-		animation = {
-			filename = "__reskins-assets-angels__/graphics/entity/hatchery/hatchery-shadow.png",
-			width = 160,
-			height = 160,
-			shift = { 0, 0 },
-			draw_as_shadow = true,
-		},
-	})
-
-	table.insert(working_visualisations, {
-		fadeout = true,
-		animation = {
-			filename = "__reskins-assets-angels__/graphics/entity/hatchery/hatchery-working-light.png",
+---Gets the working animation of Angel's hatchery.
+---@param tint? Color
+---@return Animation
+local function get_working_animation(tint)
+	local layers = {
+		{
+			filename = BIOPROCESSING_GRAPHICS_PATH .. "bio-hatchery-animation.png",
 			priority = "extra-high",
 			width = 160,
 			height = 160,
@@ -110,17 +66,71 @@ local function get_graphics_set(tint)
 			line_length = 5,
 			shift = { 0, 0 },
 			animation_speed = 0.35,
-			draw_as_light = true,
 		},
-	})
-
-	---@type CraftingMachineGraphicsSet
-	local graphics_set = {
-		animation = animation,
-		working_visualisations = working_visualisations,
 	}
 
-	return graphics_set
+	if tint then
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "hatchery-working-mask.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			frame_count = 25,
+			line_length = 5,
+			shift = { 0, 0 },
+			animation_speed = 0.35,
+			tint = tint,
+		}
+		layers[#layers + 1] = {
+			filename = ASSETS_ANGELS_PATH .. "hatchery-working-highlights.png",
+			priority = "extra-high",
+			width = 160,
+			height = 160,
+			frame_count = 25,
+			line_length = 5,
+			shift = { 0, 0 },
+			animation_speed = 0.35,
+			blend_mode = "additive",
+		}
+	end
+
+	return { layers = layers }
+end
+
+---Gets the working visualisations of Angel's hatchery.
+---@param tint? Color
+---@return WorkingVisualisation[]
+local function get_working_visualisations(tint)
+	return {
+		{
+			animation = get_working_animation(tint),
+		},
+		-- The shadow layer is always drawn and is always required.
+		{
+			always_draw = true,
+			animation = {
+				filename = ASSETS_ANGELS_PATH .. "hatchery-shadow.png",
+				width = 160,
+				height = 160,
+				shift = { 0, 0 },
+				draw_as_shadow = true,
+			},
+		},
+		{
+			fadeout = true,
+			animation = {
+				filename = ASSETS_ANGELS_PATH .. "hatchery-working-light.png",
+				priority = "extra-high",
+				width = 160,
+				height = 160,
+				frame_count = 25,
+				line_length = 5,
+				shift = { 0, 0 },
+				animation_speed = 0.35,
+				draw_as_light = true,
+			},
+		},
+	}
 end
 
 ---Gets the circuit connector of Angel's hatchery for each direction.
@@ -160,6 +170,15 @@ end
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("HatcherySpriteSetParams", {
+			tint = Common.color:optional(),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for Angel's hatchery.
 ---@param params HatcherySpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Angel's hatchery.
@@ -172,19 +191,31 @@ end
 ---local sprite_set = hatchery.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
 	---@type SpriteSetDefinition<CraftingMachineSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.crafting_machine_sprite_set,
 		set = {
-			graphics_set = get_graphics_set(params.tint),
+			graphics_set = {
+				animation = get_animation(params.tint),
+				working_visualisations = get_working_visualisations(params.tint),
+			},
+			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
-			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.25,
 			nominal_width = 3,
 			nominal_height = 3,

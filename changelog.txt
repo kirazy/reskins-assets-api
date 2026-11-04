@@ -10,7 +10,7 @@ Date: ????
     - Applying a sprite set to an entity now creates its corpse, dying explosion, and tinted particles, assigns the generic remnants of the base game by size (`defines.generic_remnants`), and builds the death spiral of a flying robot with the death sounds of the base game.
     - Added the dying explosions and particles of the base game as `assets.base.explosions` and `assets.base.particles`, the fields of its corpses other than their artwork as `assets.base.remnants`, and sprite sets for the dying explosion and remnants of the tank and rolling stock.
     - Added the container sprite set type and applicator, the conversion from valve to storage tank sprite sets, and `use_mirroring` for crafting machine sprite sets.
-    - Added the sprite sets of Angel's big chest and warehouse with their logistic variants, and the icon of Angel's thermal extractor.
+    - Added the sprite sets of Angel's big chest and warehouse with their logistic variants and an optional tier mask for the warehouse, and the icon of Angel's thermal extractor.
   Changes:
     - The sprite sets now include water reflections, circuit connectors, frozen sprites, integration patches, heat pictures and pipe covers, drawing box extensions, light flicker, and the fluid, glass, and wagon connection graphics of the pump wherever the base entity defines them, and their sprite set types have the fields for them.
     - Every sprite set now has `fluid_boxes`, `heat_buffers`, and `pipe_material`, which `apply_sprite_set` applies to every prototype, removing the pipe pictures of a fluid box that matches none of them.

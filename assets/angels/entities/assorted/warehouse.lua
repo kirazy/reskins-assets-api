@@ -7,6 +7,7 @@
 
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local OilRefineryExplosion = require("assets.base.explosions.oil-refinery")
 
@@ -35,66 +36,104 @@ local logistic_mode_tints = {
 	["storage"] = util.color("#ba7713"),
 }
 
+---Adds the mask and highlights of Angel's warehouse to the given `layers` in place, with the mask in the given `tint`.
+---@param layers Sprite[]
+---@param tint Color
+local function add_mask_and_highlights(layers, tint)
+	layers[#layers + 1] = {
+		filename = ASSETS_ANGELS_PATH .. "warehouse/warehouse-mask.png",
+		priority = "extra-high",
+		width = 391,
+		height = 446,
+		shift = util.by_pixel(-0.5, -15),
+		tint = tint,
+		scale = 0.5,
+	}
+	layers[#layers + 1] = {
+		filename = ASSETS_ANGELS_PATH .. "warehouse/warehouse-highlights.png",
+		priority = "extra-high",
+		width = 391,
+		height = 446,
+		shift = util.by_pixel(-0.5, -15),
+		blend_mode = "additive",
+		scale = 0.5,
+	}
+end
+
 ---Gets the picture of Angel's warehouse.
+---@param tint? Color
 ---@return Sprite
-local function get_picture()
-	return {
-		layers = {
-			{
-				filename = ASSETS_ANGELS_PATH .. "warehouse/warehouse.png",
-				priority = "extra-high",
-				width = 391,
-				height = 446,
-				shift = util.by_pixel(-0.5, -15),
-				scale = 0.5,
-			},
-			{
-				filename = ASSETS_ANGELS_PATH .. "warehouse/warehouse-shadow.png",
-				priority = "extra-high",
-				width = 592,
-				height = 276,
-				shift = util.by_pixel(52.5, 30.5),
-				draw_as_shadow = true,
-				scale = 0.5,
-			},
+local function get_picture(tint)
+	---@type Sprite[]
+	local layers = {
+		{
+			filename = ASSETS_ANGELS_PATH .. "warehouse/warehouse.png",
+			priority = "extra-high",
+			width = 391,
+			height = 446,
+			shift = util.by_pixel(-0.5, -15),
+			scale = 0.5,
 		},
 	}
+
+	if tint then
+		add_mask_and_highlights(layers, tint)
+	end
+
+	layers[#layers + 1] = {
+		filename = ASSETS_ANGELS_PATH .. "warehouse/warehouse-shadow.png",
+		priority = "extra-high",
+		width = 592,
+		height = 276,
+		shift = util.by_pixel(52.5, 30.5),
+		draw_as_shadow = true,
+		scale = 0.5,
+	}
+
+	return { layers = layers }
 end
 
 ---Gets the picture of Angel's logistic warehouse for the given `logistic_mode`.
 ---@param logistic_mode WarehouseLogisticMode
+---@param tint? Color
 ---@return Sprite
-local function get_logistic_picture(logistic_mode)
-	return {
-		layers = {
-			{
-				filename = ASSETS_ANGELS_PATH .. "warehouse-logistic/warehouse-logistic-" .. logistic_mode .. ".png",
-				priority = "extra-high",
-				width = 391,
-				height = 446,
-				shift = util.by_pixel(-0.5, -15),
-				scale = 0.5,
-			},
-			{
-				filename = ASSETS_ANGELS_PATH .. "warehouse-logistic/warehouse-logistic-shadow.png",
-				priority = "extra-high",
-				width = 592,
-				height = 276,
-				shift = util.by_pixel(52.5, 30.5),
-				draw_as_shadow = true,
-				scale = 0.5,
-			},
-			{
-				filename = ASSETS_ANGELS_PATH .. "warehouse-logistic/warehouse-logistic-light.png",
-				priority = "extra-high",
-				width = 9,
-				height = 28,
-				shift = util.by_pixel(71.5, -104),
-				draw_as_light = true,
-				scale = 0.5,
-			},
+local function get_logistic_picture(logistic_mode, tint)
+	---@type Sprite[]
+	local layers = {
+		{
+			filename = ASSETS_ANGELS_PATH .. "warehouse-logistic/warehouse-logistic-" .. logistic_mode .. ".png",
+			priority = "extra-high",
+			width = 391,
+			height = 446,
+			shift = util.by_pixel(-0.5, -15),
+			scale = 0.5,
 		},
 	}
+
+	if tint then
+		add_mask_and_highlights(layers, tint)
+	end
+
+	layers[#layers + 1] = {
+		filename = ASSETS_ANGELS_PATH .. "warehouse-logistic/warehouse-logistic-shadow.png",
+		priority = "extra-high",
+		width = 592,
+		height = 276,
+		shift = util.by_pixel(52.5, 30.5),
+		draw_as_shadow = true,
+		scale = 0.5,
+	}
+	layers[#layers + 1] = {
+		filename = ASSETS_ANGELS_PATH .. "warehouse-logistic/warehouse-logistic-light.png",
+		priority = "extra-high",
+		width = 9,
+		height = 28,
+		shift = util.by_pixel(71.5, -104),
+		draw_as_light = true,
+		scale = 0.5,
+	}
+
+	return { layers = layers }
 end
 
 ---Gets the circuit connector of Angel's warehouse.
@@ -124,7 +163,24 @@ local function get_dying_explosion(tint)
 	})
 end
 
+---Defines the options for the Angel's warehouse sprite set.
+---@class WarehouseSpriteSetParams
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
+---@field tint? Color
+
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("WarehouseSpriteSetParams", {
+			tint = Common.color:optional(),
+		})
+			:strict()
+			:optional(),
+	},
+})
+
 ---Gets the sprite set for Angel's warehouse.
+---@param params? WarehouseSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<ContainerSpriteSet> # The sprite set definition for Angel's warehouse.
 ---
 ---#### Examples
@@ -135,13 +191,19 @@ end
 ---local sprite_set = warehouse.get_sprite_set()
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
-function M.get_sprite_set()
+function M.get_sprite_set(params)
+	check_get_sprite_set(params)
+
+	local tint = params and params.tint
+
 	---@type SpriteSetDefinition<ContainerSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.container_sprite_set,
 		set = {
-			picture = get_picture(),
+			picture = get_picture(tint),
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
@@ -161,12 +223,15 @@ end
 ---The logistic mode of the warehouse, which selects the artwork of the warehouse and the tint of the
 ---`metal-particle-big-tint` and `metal-particle-medium` particles in its dying explosion.
 ---@field logistic_mode WarehouseLogisticMode
+---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
+---@field tint? Color
 
 local check_get_logistic_sprite_set = V.signature("get_logistic_sprite_set", {
 	{
 		"params",
 		V.class("WarehouseLogisticSpriteSetParams", {
 			logistic_mode = WarehouseLogisticMode,
+			tint = Common.color:optional(),
 		}):strict(),
 	},
 })
@@ -185,6 +250,7 @@ local check_get_logistic_sprite_set = V.signature("get_logistic_sprite_set", {
 ---```
 ---@throws When `params` defines an unrecognized field.
 ---@throws When `params.logistic_mode` is not a `WarehouseLogisticMode`.
+---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_logistic_sprite_set(params)
 	check_get_logistic_sprite_set(params)
@@ -193,7 +259,7 @@ function M.get_logistic_sprite_set(params)
 	local definition = {
 		set_type = _defines.sprite_set_type.logistic_container_sprite_set,
 		set = {
-			picture = get_logistic_picture(params.logistic_mode),
+			picture = get_logistic_picture(params.logistic_mode, params.tint),
 			robot_door = { animation = nil },
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
@@ -211,11 +277,13 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
----Gets the icon for Angel's warehouse.
-M.get_icon = icons:layers("warehouse"):base():build("get_icon")
+---Gets the icon for Angel's warehouse, in the tints given by `params`.
+M.get_icon = icons:tinted("warehouse"):build("get_icon")
 
----Gets the icon for Angel's logistic warehouse of the `logistic_mode` given by `params`.
-M.get_logistic_icon =
-	icons:layers("warehouse-logistic"):keyed("logistic_mode", WarehouseLogisticMode):base():build("get_logistic_icon")
+---Gets the icon for Angel's logistic warehouse of the `logistic_mode`, in the tints given by `params`.
+M.get_logistic_icon = icons
+	:tinted("warehouse-logistic")
+	:keyed("logistic_mode", WarehouseLogisticMode, { "base" })
+	:build("get_logistic_icon")
 
 return M
