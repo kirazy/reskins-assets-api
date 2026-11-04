@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `inserter_sprite_set` to `prototype`.
 ---@param prototype InserterPrototype
@@ -16,6 +17,14 @@ local function apply_sprite_set_to_inserter(prototype, set)
 	prototype.hand_open_shadow = util.copy(set.hand_open_shadow)
 	prototype.hand_closed_shadow = util.copy(set.hand_closed_shadow)
 	prototype.platform_picture = util.copy(set.platform_picture)
+
+	Assignment.safe_assign(prototype, set, {
+		"hand_base_frozen",
+		"hand_closed_frozen",
+		"hand_open_frozen",
+		"platform_frozen",
+		"circuit_connector",
+	})
 end
 
 ---@type InserterSpriteSetApplicator
@@ -40,6 +49,16 @@ return {
 ---@field hand_closed_shadow Sprite
 ---The prototype's `platform_picture`.
 ---@field platform_picture Sprite4Way
+---When `nil`, the `hand_base_frozen` of the prototype is not modified.
+---@field hand_base_frozen? Sprite
+---When `nil`, the `hand_closed_frozen` of the prototype is not modified.
+---@field hand_closed_frozen? Sprite
+---When `nil`, the `hand_open_frozen` of the prototype is not modified.
+---@field hand_open_frozen? Sprite
+---When `nil`, the `platform_frozen` of the prototype is not modified.
+---@field platform_frozen? Sprite4Way
+---When `nil`, the circuit connector of the prototype is not modified.
+---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 
 ---Applies the `InserterSpriteSet` to `InserterPrototype` instances.
 ---@class (exact) InserterSpriteSetApplicator : SpriteSetApplicator<InserterPrototype, InserterSpriteSet>
