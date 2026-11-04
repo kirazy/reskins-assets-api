@@ -47,6 +47,7 @@ local set_type_by_prototype_type = {
 	["furnace"] = _defines.sprite_set_type.crafting_machine_sprite_set,
 	["boiler"] = _defines.sprite_set_type.boiler_sprite_set,
 	["generator"] = _defines.sprite_set_type.generator_sprite_set,
+	["burner-generator"] = _defines.sprite_set_type.burner_generator_sprite_set,
 	["ammo-turret"] = _defines.sprite_set_type.turret_sprite_set,
 	["electric-turret"] = _defines.sprite_set_type.turret_sprite_set,
 	["fluid-turret"] = _defines.sprite_set_type.turret_sprite_set,
@@ -78,6 +79,8 @@ local set_type_by_prototype_type = {
 	["unit"] = _defines.sprite_set_type.unit_sprite_set,
 	["wall"] = _defines.sprite_set_type.wall_sprite_set,
 	["gate"] = _defines.sprite_set_type.gate_sprite_set,
+	["valve"] = _defines.sprite_set_type.valve_sprite_set,
+	["logistic-container"] = _defines.sprite_set_type.logistic_container_sprite_set,
 }
 
 ---Provides methods for creating applicator registries, which apply sprite sets to prototypes.

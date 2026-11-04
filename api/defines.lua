@@ -173,6 +173,9 @@ _defines.sprite_set_type = {
 	---The sprite set for `GeneratorPrototype`.
 	generator_sprite_set = "GeneratorSpriteSet",
 
+	---The sprite set for `BurnerGeneratorPrototype`.
+	burner_generator_sprite_set = "BurnerGeneratorSpriteSet",
+
 	---The sprite set for `AmmoTurretPrototype`, `ElectricTurretPrototype`, and `FluidTurretPrototype`.
 	turret_sprite_set = "TurretSpriteSet",
 
@@ -251,6 +254,12 @@ _defines.sprite_set_type = {
 
 	---The sprite set for `GatePrototype`.
 	gate_sprite_set = "GateSpriteSet",
+
+	---The sprite set for `ValvePrototype`.
+	valve_sprite_set = "ValveSpriteSet",
+
+	---The sprite set for `LogisticContainerPrototype`.
+	logistic_container_sprite_set = "LogisticContainerSpriteSet",
 }
 
 return _defines
