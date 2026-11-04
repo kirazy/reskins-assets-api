@@ -778,6 +778,130 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(4, animation)
 end
 
+---Gets the waypoints along which the head of the drill moves while the drill mines without fluid.
+---@return ShiftAnimationWaypoints
+local function get_dry_shift_animation_waypoints()
+	return {
+		north = {
+			{ 0, 0 },
+			{ 0, -0.3 },
+			{ 0, 0.1 },
+			{ 0, 0.5 },
+			{ 0, 0.2 },
+			{ 0, -0.1 },
+			{ 0, -0.5 },
+			{ 0, -0.15 },
+			{ 0, 0.25 },
+			{ 0, 0.6 },
+			{ 0, 0.3 },
+		},
+		east = {
+			{ 0, 0 },
+			{ -0.4, 0 },
+			{ -0.1, 0 },
+			{ -0.5, 0 },
+			{ -0.75, 0 },
+			{ -1, 0 },
+			{ -0.65, 0 },
+			{ -0.3, 0 },
+			{ -0.9, 0 },
+			{ -0.6, 0 },
+			{ -0.3, 0 },
+		},
+		south = {
+			{ 0, 0 },
+			{ 0, -0.4 },
+			{ 0, -0.1 },
+			{ 0, -0.5 },
+			{ 0, -0.75 },
+			{ 0, -1 },
+			{ 0, -0.65 },
+			{ 0, -0.3 },
+			{ 0, -0.9 },
+			{ 0, -0.6 },
+			{ 0, -0.3 },
+		},
+		west = {
+			{ 0, 0 },
+			{ 0.4, 0 },
+			{ 0.1, 0 },
+			{ 0.5, 0 },
+			{ 0.75, 0 },
+			{ 1, 0 },
+			{ 0.65, 0 },
+			{ 0.3, 0 },
+			{ 0.9, 0 },
+			{ 0.6, 0 },
+			{ 0.3, 0 },
+		},
+	}
+end
+
+---Gets the waypoints along which the head of the drill moves while the drill mines with fluid.
+---@return ShiftAnimationWaypoints
+local function get_wet_shift_animation_waypoints()
+	return {
+		north = { { 0, 0 }, { 0, -0.4 }, { 0, -0.1 }, { 0, 0.2 } },
+		east = { { 0, 0 }, { -0.3, 0 }, { 0, 0 }, { -0.25, 0 } },
+		south = { { 0, 0 }, { 0, -0.4 }, { 0, -0.7 }, { 0, -0.3 } },
+		west = { { 0, 0 }, { 0.3, 0 }, { 0, 0 }, { 0.25, 0 } },
+	}
+end
+
+---Gets the water reflection of the drill.
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 36,
+			shift = util.by_pixel(5, 60),
+			variation_count = 4,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
+end
+
+---Gets the circuit connector of the drill for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-44, -41),
+			shadow_offset = util.by_pixel(-34, -36),
+			show_shadow = false,
+			secondary_draw_order = 14,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(34, 30),
+			shadow_offset = util.by_pixel(36, 35),
+			show_shadow = false,
+			secondary_draw_order = 48,
+		},
+		{
+			variation = 0,
+			main_offset = util.by_pixel(-35, 24),
+			shadow_offset = util.by_pixel(-34, 31),
+			show_shadow = false,
+			secondary_draw_order = 48,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-34, 37),
+			shadow_offset = util.by_pixel(-40, 49),
+			show_shadow = false,
+			secondary_draw_order = 48,
+		},
+	})
+end
+
 ---Defines the options for the semi-classic electric mining drill sprite set.
 ---@class MiningDrillElectricTallSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -825,6 +949,7 @@ function M.get_sprite_set(params)
 			graphics_set = {
 				animation = get_dry_animation(frame, speed),
 				working_visualisations = get_dry_working_visualisations(params, speed),
+				shift_animation_waypoints = get_dry_shift_animation_waypoints(),
 				status_colors = _constants.get_status_colors(),
 				drilling_vertical_movement_duration = 10 / speed,
 				shift_animation_waypoint_stop_duration = 195 / speed,
@@ -835,6 +960,7 @@ function M.get_sprite_set(params)
 			wet_mining_graphics_set = {
 				animation = get_wet_animation(frame, speed),
 				working_visualisations = get_wet_working_visualisations(params, speed),
+				shift_animation_waypoints = get_wet_shift_animation_waypoints(),
 				status_colors = _constants.get_status_colors(),
 				drilling_vertical_movement_duration = 10 / speed,
 				shift_animation_waypoint_stop_duration = 195 / speed,
@@ -847,7 +973,8 @@ function M.get_sprite_set(params)
 				tints = params.tint and { ["electric-mining-drill-long-metal-particle-medium"] = params.tint },
 			}),
 			corpse = Remnants.get_corpse("electric-mining-drill-remnants", { animation = get_corpse_animation(params.tint) }),
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

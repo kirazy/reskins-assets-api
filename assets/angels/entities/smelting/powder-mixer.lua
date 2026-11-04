@@ -76,6 +76,38 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of Angel's powder mixer for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 32,
+			main_offset = util.by_pixel(-6.375, -39.5),
+			shadow_offset = util.by_pixel(-6.375, -39.5),
+			show_shadow = true,
+		},
+		{
+			variation = 32,
+			main_offset = util.by_pixel(-6.375, -39.5),
+			shadow_offset = util.by_pixel(-6.375, -39.5),
+			show_shadow = true,
+		},
+		{
+			variation = 32,
+			main_offset = util.by_pixel(-6.375, -39.5),
+			shadow_offset = util.by_pixel(-6.375, -39.5),
+			show_shadow = true,
+		},
+		{
+			variation = 32,
+			main_offset = util.by_pixel(-6.375, -39.5),
+			shadow_offset = util.by_pixel(-6.375, -39.5),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's powder mixer sprite set.
 ---@class PowderMixerSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -105,6 +137,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.55,
 			nominal_width = 2,
 			nominal_height = 2,

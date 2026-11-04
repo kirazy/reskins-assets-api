@@ -653,6 +653,110 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 	return pipe_pictures
 end
 
+---Gets the circuit connector of the pipe for each combination of connected neighbors.
+---@return CircuitConnectorDefinition[]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 2,
+			main_offset = util.by_pixel(0, -13),
+			shadow_offset = util.by_pixel(0, -13),
+			show_shadow = false,
+		},
+		{
+			variation = 12,
+			main_offset = util.by_pixel(0.75, -13),
+			shadow_offset = util.by_pixel(0.75, -13),
+			show_shadow = false,
+		},
+		{
+			variation = 26,
+			main_offset = util.by_pixel(3, 4),
+			shadow_offset = util.by_pixel(3, 4),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(2.25, -18),
+			shadow_offset = util.by_pixel(2.25, -18),
+			show_shadow = false,
+		},
+		{
+			variation = 12,
+			main_offset = util.by_pixel(0.75, -2.5),
+			shadow_offset = util.by_pixel(0.75, -2.5),
+			show_shadow = false,
+		},
+		{
+			variation = 12,
+			main_offset = util.by_pixel(0.75, -7),
+			shadow_offset = util.by_pixel(0.75, -7),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(5.25, -6.25),
+			shadow_offset = util.by_pixel(5.25, -6.25),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(1, -9),
+			shadow_offset = util.by_pixel(1, -9),
+			show_shadow = false,
+		},
+		{
+			variation = 26,
+			main_offset = util.by_pixel(-2.25, 4),
+			shadow_offset = util.by_pixel(-2.25, 4),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(-1.25, -18),
+			shadow_offset = util.by_pixel(-1.25, -18),
+			show_shadow = false,
+		},
+		{
+			variation = 26,
+			main_offset = util.by_pixel(0, 4),
+			shadow_offset = util.by_pixel(0, 4),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(0, -13),
+			shadow_offset = util.by_pixel(0, -13),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(-2, -3.5),
+			shadow_offset = util.by_pixel(-2, -3.5),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(-1, -9),
+			shadow_offset = util.by_pixel(-1, -9),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(0, -9),
+			shadow_offset = util.by_pixel(0, -9),
+			show_shadow = false,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(0, -9),
+			shadow_offset = util.by_pixel(0, -9),
+			show_shadow = false,
+		},
+	})
+end
+
 ---Defines the options for the pipes sprite set.
 ---@class PipeSpriteSetParams
 ---The material from which the pipes are built.
@@ -694,6 +798,7 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("pipe-remnants", { animation = get_corpse_animation(params.pipe_material) }),
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 1,
 			nominal_height = 1,
 		},

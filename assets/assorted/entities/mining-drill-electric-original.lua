@@ -229,6 +229,42 @@ local function get_wet_working_visualisations(speed)
 	}
 end
 
+---Gets the circuit connector of the classic electric mining drill for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-3.5, -55.5),
+			shadow_offset = util.by_pixel(-2, -44.5),
+			show_shadow = true,
+			render_layer = "object",
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(42, -12.5),
+			shadow_offset = util.by_pixel(43.5, -0.5),
+			show_shadow = true,
+			render_layer = "object",
+		},
+		{
+			variation = 0,
+			main_offset = util.by_pixel(4.5, 33),
+			shadow_offset = util.by_pixel(8.5, 44.5),
+			show_shadow = true,
+			render_layer = "object",
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(-41.5, -6.5),
+			shadow_offset = util.by_pixel(-33.5, 5),
+			show_shadow = true,
+			render_layer = "object",
+		},
+	})
+end
+
 ---Defines the options for the classic electric mining drill sprite set.
 ---@class MiningDrillElectricOriginalSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -273,12 +309,10 @@ function M.get_sprite_set(params)
 		set = {
 			graphics_set = {
 				animation = get_animation(params, speed),
-				circuit_connector_layer = "object",
 			},
 			graphics_set_flipped = nil,
 			wet_mining_graphics_set = {
 				animation = get_animation(params, speed),
-				circuit_connector_layer = "object",
 				working_visualisations = get_wet_working_visualisations(speed),
 			},
 			wet_mining_graphics_set_flipped = nil,
@@ -288,6 +322,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

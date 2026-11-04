@@ -235,6 +235,18 @@ local function get_corpse_animation(sprite_set, tint)
 	return { animation }
 end
 
+---Gets the circuit connector of the accumulator.
+---@return CircuitConnectorDefinition
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_single(universal_connector_template, {
+		variation = 26,
+		main_offset = util.by_pixel(18.5, 19),
+		shadow_offset = util.by_pixel(20.5, 25.5),
+		show_shadow = true,
+	})
+end
+
 ---Defines the options for the vanilla accumulator sprite set.
 ---@class AccumulatorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -274,6 +286,7 @@ function M.get_sprite_set(params)
 				{ animation = get_corpse_animation(params.sprite_set, params.tint) }
 			),
 			water_reflection = get_accumulator_reflection(),
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.5,
 			nominal_width = 2,
 			nominal_height = 2,

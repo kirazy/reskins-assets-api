@@ -15,6 +15,23 @@ local Remnants = require("assets.base.remnants")
 
 local M = {}
 
+---Gets the frozen patch of the original assembling machine.
+---@return data.Sprite? # The frozen patch, or `nil` when the freezing feature is disabled.
+local function get_frozen_patch()
+	if not feature_flags["freezing"] then
+		return nil
+	end
+
+	return {
+		filename = "__reskins-assets-base__/graphics/entity/assembling-machine-original/assembling-machine-frozen.png",
+		priority = "high",
+		width = 214,
+		height = 237,
+		shift = util.by_pixel(0, -0.75),
+		scale = 0.5,
+	}
+end
+
 local check_get_graphics_set = V.signature("get_graphics_set", {
 	{ "tint", Common.color:optional() },
 	{ "assembly_set", V.one_of({ 1, 2, 3, 4, 5, 6 }) },
@@ -147,7 +164,11 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	end
 
 	---@type data.CraftingMachineGraphicsSet
-	return { animation = animation }
+	return {
+		animation = animation,
+		frozen_patch = get_frozen_patch(),
+		reset_animation_when_frozen = true,
+	}
 end
 
 ---Gets the tinted pipe pictures for the assembling machine and entities with the same layout, such as the oil boiler.
@@ -301,6 +322,52 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 	return pictures
 end
 
+---Gets the frozen pipe pictures of the original assembling machine.
+---@return Sprite4Way? # The frozen pipe pictures, or `nil` when the freezing feature is disabled.
+local function get_pipe_pictures_frozen()
+	if not feature_flags["freezing"] then
+		return nil
+	end
+
+	local path = "__reskins-assets-base__/graphics/entity/assembling-machine-original/pipes/assembling-machine-pipe-"
+
+	---@type Sprite4Way
+	return {
+		north = {
+			filename = path .. "north-frozen.png",
+			priority = "extra-high",
+			width = 71,
+			height = 38,
+			shift = util.by_pixel(2.25, 13.5),
+			scale = 0.5,
+		},
+		east = {
+			filename = path .. "east-frozen.png",
+			priority = "extra-high",
+			width = 42,
+			height = 76,
+			shift = util.by_pixel(-24.5, 1),
+			scale = 0.5,
+		},
+		south = {
+			filename = path .. "south-frozen.png",
+			priority = "extra-high",
+			width = 88,
+			height = 61,
+			shift = util.by_pixel(0, -31.25),
+			scale = 0.5,
+		},
+		west = {
+			filename = path .. "west-frozen.png",
+			priority = "extra-high",
+			width = 39,
+			height = 73,
+			shift = util.by_pixel(25.75, 1.25),
+			scale = 0.5,
+		},
+	}
+end
+
 ---@param tint? data.Color
 ---@param draw_order? int8
 ---@param use_simple_pipe_pictures? boolean
@@ -311,6 +378,8 @@ local function get_fluid_box_graphics(tint, draw_order, use_simple_pipe_pictures
 	---@type FluidBoxGraphics
 	return {
 		pipe_picture = pipe_pictures,
+		-- The frozen pictures are drawn for the standard east pipe and are omitted when `use_simple_pipe_pictures` is `true`.
+		pipe_picture_frozen = not use_simple_pipe_pictures and get_pipe_pictures_frozen() or nil,
 		secondary_draw_orders = {
 			north = -1,
 			east = draw_order,
@@ -377,6 +446,38 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the original assembling machine for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 18,
+			main_offset = util.by_pixel(24, 25),
+			shadow_offset = util.by_pixel(35, 31),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(24, 25),
+			shadow_offset = util.by_pixel(35, 31),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(24, 25),
+			shadow_offset = util.by_pixel(35, 31),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(24, 25),
+			shadow_offset = util.by_pixel(35, 31),
+			show_shadow = true,
+		},
+	})
+end
+
 ---The tier of an assembling machine, which selects its gear.
 ---@alias AssemblingMachineTier 1|2|3|4|5|6
 
@@ -441,6 +542,8 @@ function M.get_sprite_set(params)
 			dying_explosion = nil, -- FIXME: type this and then build it out.
 			corpse = Remnants.get_corpse("assembling-machine-1-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
+			drawing_box_vertical_extension = 0.2,
 			nominal_width = 3,
 			nominal_height = 3,
 		},

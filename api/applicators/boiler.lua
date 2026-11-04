@@ -12,7 +12,11 @@ local Assignment = require("api.assignment")
 local function apply_sprite_set_to_boiler(prototype, sprite_set)
 	prototype.pictures = util.copy(sprite_set.pictures)
 
-	Assignment.safe_assign(prototype, sprite_set, { "fire_flicker_enabled", "fire_glow_flicker_enabled" })
+	Assignment.safe_assign(
+		prototype,
+		sprite_set,
+		{ "fire_flicker_enabled", "fire_glow_flicker_enabled", "circuit_connector" }
+	)
 
 	-- `integration_patch`, `integration_patch_render_layer`, `water_reflection`, `drawing_box_vertical_extension`,
 	-- `fluid_boxes`, `heat_buffers`, and `light_flicker` are applied by `apply_common_fields` in
@@ -41,6 +45,8 @@ return {
 ---@field fire_glow_flicker_enabled? boolean
 ---The boiler's directional sprites.
 ---@field pictures BoilerPictureSet
+---When `nil`, the circuit connector of the prototype is not modified.
+---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 
 ---Applies the `BoilerSpriteSet` to `BoilerPrototype` instances.
 ---@class (exact) BoilerSpriteSetApplicator : SpriteSetApplicator<BoilerPrototype, BoilerSpriteSet>

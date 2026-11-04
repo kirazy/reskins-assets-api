@@ -74,6 +74,38 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of Angel's ore crusher for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 30,
+			main_offset = util.by_pixel(35.875, -31.625),
+			shadow_offset = util.by_pixel(35.875, -31.625),
+			show_shadow = true,
+		},
+		{
+			variation = 30,
+			main_offset = util.by_pixel(35.875, -31.625),
+			shadow_offset = util.by_pixel(35.875, -31.625),
+			show_shadow = true,
+		},
+		{
+			variation = 30,
+			main_offset = util.by_pixel(35.875, -31.625),
+			shadow_offset = util.by_pixel(35.875, -31.625),
+			show_shadow = true,
+		},
+		{
+			variation = 30,
+			main_offset = util.by_pixel(35.875, -31.625),
+			shadow_offset = util.by_pixel(35.875, -31.625),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's ore crusher sprite set.
 ---@class OreCrusherSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -103,6 +135,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

@@ -169,6 +169,38 @@ local function get_pictures(pipe_material)
 	return pipe_to_ground_pictures
 end
 
+---Gets the circuit connector of the underground pipe for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 2,
+			main_offset = util.by_pixel(0, -17.375),
+			shadow_offset = util.by_pixel(0, -17.375),
+			show_shadow = false,
+		},
+		{
+			variation = 8,
+			main_offset = util.by_pixel(7, -6),
+			shadow_offset = util.by_pixel(7, -6),
+			show_shadow = false,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(0, 3.75),
+			shadow_offset = util.by_pixel(0, 3.75),
+			show_shadow = false,
+		},
+		{
+			variation = 12,
+			main_offset = util.by_pixel(-7, -6),
+			shadow_offset = util.by_pixel(-7, -6),
+			show_shadow = false,
+		},
+	})
+end
+
 ---Defines the options for the underground pipes sprite set.
 ---@class PipeToGroundSpriteSetParams
 ---The material from which the pipes are built.
@@ -211,6 +243,7 @@ function M.get_sprite_set(params)
 				{ animation = get_corpse_animation(params.pipe_material) }
 			),
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 1,
 			nominal_height = 1,
 		},

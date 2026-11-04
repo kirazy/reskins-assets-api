@@ -54,17 +54,43 @@ local function get_graphics_set(tint)
 			{
 				fadeout = true,
 				constant_speed = true,
+				north_position = util.by_pixel(-66, -96.0),
+				east_position = util.by_pixel(-66, -96.0),
+				south_position = util.by_pixel(-66, -96.0),
+				west_position = util.by_pixel(-66, -96.0),
 				animation = {
-					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
-					line_length = 10,
-					width = 40,
-					height = 81,
-					frame_count = 60,
+					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-smoke.png",
+					width = 54,
+					height = 144,
+					line_length = 5,
+					frame_count = 20,
 					animation_speed = 0.75,
-					shift = util.by_pixel(-66, -110),
-					draw_as_glow = true,
+					allow_reducing_frames = true,
+					shift = util.by_pixel(1.0, -31.5),
 					scale = 0.5,
 				},
+			},
+			{
+				fadeout = true,
+				constant_speed = true,
+				north_position = util.by_pixel(-66, -96.0),
+				east_position = util.by_pixel(-66, -96.0),
+				south_position = util.by_pixel(-66, -96.0),
+				west_position = util.by_pixel(-66, -96.0),
+				animation = {
+					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-light.png",
+					width = 28,
+					height = 86,
+					line_length = 5,
+					frame_count = 20,
+					animation_speed = 0.75,
+					allow_reducing_frames = true,
+					blend_mode = "additive",
+					draw_as_glow = true,
+					shift = util.by_pixel(0.5, -18.5),
+					scale = 0.5,
+				},
+				light = { intensity = 0.8, size = 6, color = { r = 1.0, g = 1.0, b = 1.0 } },
 			},
 			{
 				animation = {
@@ -82,6 +108,38 @@ local function get_graphics_set(tint)
 	}
 
 	return graphics_set
+end
+
+---Gets the circuit connector of Angel's steam cracker for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 18,
+			main_offset = util.by_pixel(-55.375, 63.375),
+			shadow_offset = util.by_pixel(-55.375, 63.375),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(-55.375, 63.375),
+			shadow_offset = util.by_pixel(-55.375, 63.375),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(-55.375, 63.375),
+			shadow_offset = util.by_pixel(-55.375, 63.375),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(-55.375, 63.375),
+			shadow_offset = util.by_pixel(-55.375, 63.375),
+			show_shadow = true,
+		},
+	})
 end
 
 ---Defines the options for the Angel's steam cracker sprite set.
@@ -113,6 +171,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.6,
 			nominal_width = 5,
 			nominal_height = 5,

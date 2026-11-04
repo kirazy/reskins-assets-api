@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `lab_sprite_set` to `prototype`.
 ---@param prototype LabPrototype
@@ -12,6 +13,8 @@ local function apply_sprite_set_to_lab(prototype, set)
 	prototype.frozen_patch = feature_flags["freezing"] and util.copy(set.frozen_patch) or nil
 	prototype.on_animation = util.copy(set.on_animation)
 	prototype.off_animation = util.copy(set.off_animation)
+
+	Assignment.safe_assign(prototype, set, { "circuit_connector" })
 end
 
 ---@type LabSpriteSetApplicator
@@ -25,6 +28,8 @@ return {
 ---@field frozen_patch? Sprite
 ---@field on_animation? Animation
 ---@field off_animation? Animation
+---When `nil`, the circuit connector of the prototype is not modified.
+---@field circuit_connector? CircuitConnectorDefinition
 
 ---Applies the `LabSpriteSet` to `LabPrototype` instances.
 ---@class (exact) LabSpriteSetApplicator : SpriteSetApplicator<LabPrototype, LabSpriteSet>

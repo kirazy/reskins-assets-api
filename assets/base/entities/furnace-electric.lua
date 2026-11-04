@@ -525,6 +525,38 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the electric furnace for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-1.5, 3),
+			shadow_offset = util.by_pixel(25.5, 30),
+			show_shadow = false,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-1.5, 3),
+			shadow_offset = util.by_pixel(25.5, 30),
+			show_shadow = false,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-1.5, 3),
+			shadow_offset = util.by_pixel(25.5, 30),
+			show_shadow = false,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-1.5, 3),
+			shadow_offset = util.by_pixel(25.5, 30),
+			show_shadow = false,
+		},
+	})
+end
+
 ---Defines the options for the vanilla electric furnace sprite set.
 ---@class FurnaceElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -565,6 +597,7 @@ function M.get_sprite_set(params)
 				{ animation = get_corpse_animation(params.tint, params.variant) }
 			),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

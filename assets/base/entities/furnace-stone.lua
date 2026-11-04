@@ -364,6 +364,38 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the stone furnace for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 18,
+			main_offset = util.by_pixel(0, -7),
+			shadow_offset = util.by_pixel(27.5, 13),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(0, -7),
+			shadow_offset = util.by_pixel(27.5, 13),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(0, -7),
+			shadow_offset = util.by_pixel(27.5, 13),
+			show_shadow = true,
+		},
+		{
+			variation = 18,
+			main_offset = util.by_pixel(0, -7),
+			shadow_offset = util.by_pixel(27.5, 13),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the vanilla stone furnace sprite set.
 ---@class FurnaceStoneSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -408,6 +440,7 @@ function M.get_sprite_set(params)
 				{ animation = get_corpse_animation(params.tint, params.variant) }
 			),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			light_flicker = get_light_flicker(),
 			nominal_width = 1.6,
 			nominal_height = 2,

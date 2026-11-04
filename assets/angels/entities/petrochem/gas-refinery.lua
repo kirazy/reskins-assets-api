@@ -62,18 +62,40 @@ local function get_graphics_set(tint)
 			{
 				fadeout = true,
 				constant_speed = true,
-				north_position = util.by_pixel(-57.5, -152.5),
-				east_position = util.by_pixel(49.5, -189.5),
-				south_position = util.by_pixel(59, -69),
-				west_position = util.by_pixel(-50, -62.5),
+				north_position = util.by_pixel(-57.5, -137.5),
+				east_position = util.by_pixel(49.5, -174.5),
+				south_position = util.by_pixel(59, -54),
+				west_position = util.by_pixel(-50, -47.5),
 				animation = {
-					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
-					line_length = 10,
-					width = 40,
-					height = 81,
-					frame_count = 60,
+					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-smoke.png",
+					width = 54,
+					height = 144,
+					line_length = 5,
+					frame_count = 20,
 					animation_speed = 0.75,
+					allow_reducing_frames = true,
+					shift = util.by_pixel(1.0, -31.5),
+					scale = 0.5,
+				},
+			},
+			{
+				fadeout = true,
+				constant_speed = true,
+				north_position = util.by_pixel(-57.5, -137.5),
+				east_position = util.by_pixel(49.5, -174.5),
+				south_position = util.by_pixel(59, -54),
+				west_position = util.by_pixel(-50, -47.5),
+				animation = {
+					filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire-light.png",
+					width = 28,
+					height = 86,
+					line_length = 5,
+					frame_count = 20,
+					animation_speed = 0.75,
+					allow_reducing_frames = true,
+					blend_mode = "additive",
 					draw_as_glow = true,
+					shift = util.by_pixel(0.5, -18.5),
 					scale = 0.5,
 				},
 			},
@@ -207,6 +229,38 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of Angel's gas refinery for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 25,
+			main_offset = util.by_pixel(29.875, -15.25),
+			shadow_offset = util.by_pixel(29.875, -15.25),
+			show_shadow = true,
+		},
+		{
+			variation = 30,
+			main_offset = util.by_pixel(-35.25, -4.875),
+			shadow_offset = util.by_pixel(-35.25, -4.875),
+			show_shadow = true,
+		},
+		{
+			variation = 25,
+			main_offset = util.by_pixel(-69.75, -88.625),
+			shadow_offset = util.by_pixel(-69.75, -88.625),
+			show_shadow = true,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(56.375, -99.5),
+			shadow_offset = util.by_pixel(56.375, -99.5),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's gas refinery sprite set.
 ---@class GasRefinerySpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -236,6 +290,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 1.6,
 			nominal_width = 5,
 			nominal_height = 5,

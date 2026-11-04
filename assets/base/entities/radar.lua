@@ -80,6 +80,23 @@ local function get_pictures(tint)
 	return pictures
 end
 
+---Gets the frozen patch of the radar.
+---@return RotatedSprite? # The frozen patch, or `nil` when the freezing feature is disabled or Space Age is not loaded.
+local function get_frozen_patch()
+	if not (feature_flags["freezing"] and mods["space-age"]) then
+		return nil
+	end
+
+	return {
+		filename = _defines.assets_source.space_age .. "/graphics/entity/frozen/radar/radar.png",
+		width = 196,
+		height = 254,
+		shift = util.by_pixel(1, -16),
+		scale = 0.5,
+		direction_count = 1,
+	}
+end
+
 ---@return Sprite
 local function get_integration_patch()
 	---@type Sprite
@@ -156,6 +173,18 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the radar.
+---@return CircuitConnectorDefinition
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_single(universal_connector_template, {
+		variation = 24,
+		main_offset = util.by_pixel(-42.5, -10),
+		shadow_offset = util.by_pixel(-42, -7.5),
+		show_shadow = false,
+	})
+end
+
 ---Defines the options for the vanilla radar sprite set.
 ---@class RadarSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -192,6 +221,8 @@ function M.get_sprite_set(params)
 		set_type = _defines.sprite_set_type.radar_sprite_set,
 		set = {
 			pictures = get_pictures(params.tint),
+			frozen_patch = get_frozen_patch(),
+			reset_orientation_when_frozen = true,
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
 			dying_explosion = RadarExplosion.get_explosion({
@@ -199,6 +230,7 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("radar-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

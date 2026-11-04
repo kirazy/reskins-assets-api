@@ -232,6 +232,18 @@ local function get_corpse_animation(tint)
 	return _sprite_utils.sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 end
 
+---Gets the circuit connector of the lab.
+---@return CircuitConnectorDefinition
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_single(universal_connector_template, {
+		variation = 27,
+		main_offset = util.by_pixel(30, 24),
+		shadow_offset = util.by_pixel(35, 32),
+		show_shadow = true,
+	})
+end
+
 ---Defines the options for the vanilla lab sprite set.
 ---@class LabSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -280,6 +292,7 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("lab-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},

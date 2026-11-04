@@ -161,6 +161,74 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(2, { layers = layers })
 end
 
+---Gets the 7 circuit connectors of the transport belt, in the order X, H, V, SE, SW, NE, and NW.
+---@return CircuitConnectorDefinition[]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(belt_connector_template, {
+		{ variation = 0 },
+		{ variation = 1 },
+		{ variation = 2 },
+		{ variation = 3 },
+		{ variation = 4 },
+		{ variation = 5 },
+		{ variation = 6 },
+	})
+end
+
+---Gets the frame drawn around the transport belt when it is connected to the circuit network.
+---@return TransportBeltConnectorFrame
+local function get_connector_frame_sprites()
+	local template = belt_frame_connector_template
+
+	---@type TransportBeltConnectorFrame
+	return {
+		frame_main = util.copy(template.frame_main),
+		frame_shadow = util.copy(template.frame_shadow),
+		frame_back_patch = util.copy(template.back_patch),
+		frame_main_scanner = util.copy(template.frame_main_scanner),
+		frame_main_scanner_movement_speed = 0.032258064516129,
+		frame_main_scanner_horizontal_start_shift = { -0.25, -0.125 + 1 / 32 },
+		frame_main_scanner_horizontal_end_shift = { 0.25, -0.125 + 1 / 32 },
+		frame_main_scanner_horizontal_y_scale = 0.70,
+		frame_main_scanner_horizontal_rotation = 0,
+		frame_main_scanner_vertical_start_shift = { 0, -0.3125 },
+		frame_main_scanner_vertical_end_shift = { 0, 0.1875 },
+		frame_main_scanner_vertical_y_scale = 0.75,
+		frame_main_scanner_vertical_rotation = 0.25,
+		frame_main_scanner_cross_horizontal_start_shift = { -0.3125, -0.0625 },
+		frame_main_scanner_cross_horizontal_end_shift = { 0.3125, -0.0625 },
+		frame_main_scanner_cross_horizontal_y_scale = 0.60,
+		frame_main_scanner_cross_horizontal_rotation = 0,
+		frame_main_scanner_cross_vertical_start_shift = { 0, -0.3125 },
+		frame_main_scanner_cross_vertical_end_shift = { 0, 0.1875 },
+		frame_main_scanner_cross_vertical_y_scale = 0.75,
+		frame_main_scanner_cross_vertical_rotation = 0.25,
+		frame_main_scanner_nw_ne = {
+			filename = "__base__/graphics/entity/transport-belt/connector/transport-belt-connector-frame-main-scanner-nw-ne.png",
+			priority = "low",
+			blend_mode = "additive",
+			draw_as_glow = true,
+			line_length = 8,
+			width = 28,
+			height = 24,
+			frame_count = 32,
+			shift = { -0.03125, -0.0625 },
+		},
+		frame_main_scanner_sw_se = {
+			filename = "__base__/graphics/entity/transport-belt/connector/transport-belt-connector-frame-main-scanner-sw-se.png",
+			priority = "low",
+			blend_mode = "additive",
+			draw_as_glow = true,
+			line_length = 8,
+			width = 29,
+			height = 28,
+			frame_count = 32,
+			shift = { 0.015625, -0.09375 },
+		},
+	}
+end
+
 ---Defines the options for the vanilla transport belt sprite set.
 ---@class TransportBeltSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -212,6 +280,8 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("transport-belt-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
+			connector_frame_sprites = get_connector_frame_sprites(),
 			nominal_width = 1,
 			nominal_height = 1,
 		},

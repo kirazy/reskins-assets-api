@@ -115,6 +115,38 @@ local function get_graphics_set_flipped(tint)
 	return get_graphics_set_internal(tint, true)
 end
 
+---Gets the circuit connector of Angel's casting machine for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-41.125, 35.125),
+			shadow_offset = util.by_pixel(-41.125, 35.125),
+			show_shadow = true,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-41.125, 35.125),
+			shadow_offset = util.by_pixel(-41.125, 35.125),
+			show_shadow = true,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-41.125, 35.125),
+			shadow_offset = util.by_pixel(-41.125, 35.125),
+			show_shadow = true,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-41.125, 35.125),
+			shadow_offset = util.by_pixel(-41.125, 35.125),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's casting machine sprite set.
 ---@class CastingMachineSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -147,6 +179,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.3,
 			nominal_width = 3,
 			nominal_height = 3,

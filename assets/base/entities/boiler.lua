@@ -394,6 +394,38 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the boiler for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 2,
+			main_offset = util.by_pixel(0, -22),
+			shadow_offset = util.by_pixel(0, -22),
+			show_shadow = false,
+		},
+		{
+			variation = 0,
+			main_offset = util.by_pixel(7, -23),
+			shadow_offset = util.by_pixel(7, -23),
+			show_shadow = false,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(0, -12),
+			shadow_offset = util.by_pixel(0, -12),
+			show_shadow = false,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-7, -24),
+			shadow_offset = util.by_pixel(-7, -24),
+			show_shadow = false,
+		},
+	})
+end
+
 ---Defines the options for a standard boiler sprite set.
 ---@class BoilerSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -455,6 +487,7 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("boiler-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			light_flicker = get_light_flicker(),
 			nominal_width = 3,
 			nominal_height = 2,

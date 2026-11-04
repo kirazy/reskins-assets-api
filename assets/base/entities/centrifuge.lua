@@ -108,13 +108,11 @@ local function get_working_visualisations()
 	return {
 		{
 			effect = "uranium-glow",
-			apply_recipe_tint = "primary",
 			fadeout = true,
-			light = { intensity = 0.1, size = 9.9, shift = { 0.0, 0.0 }, color = { r = 0.0, g = 1.0, b = 0.0 } },
+			light = { intensity = 0.2, size = 9.9, shift = { 0.0, 0.0 }, color = { r = 0.0, g = 1.0, b = 0.0 } },
 		},
 		{
 			effect = "uranium-glow",
-			apply_recipe_tint = "primary",
 			fadeout = true,
 			animation = {
 				layers = {
@@ -211,6 +209,38 @@ local function get_water_reflection()
 	}
 end
 
+---Gets the circuit connector of the centrifuge for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 27,
+			main_offset = util.by_pixel(39.5, 31.5),
+			shadow_offset = util.by_pixel(46, 36.5),
+			show_shadow = false,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(39.5, 31.5),
+			shadow_offset = util.by_pixel(46, 36.5),
+			show_shadow = false,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(39.5, 31.5),
+			shadow_offset = util.by_pixel(46, 36.5),
+			show_shadow = false,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(39.5, 31.5),
+			shadow_offset = util.by_pixel(46, 36.5),
+			show_shadow = false,
+		},
+	})
+end
+
 ---Defines the options for the vanilla centrifuge sprite set.
 ---@class CentrifugeSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -245,6 +275,7 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("centrifuge-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = get_water_reflection(),
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 0.7,
 			nominal_width = 3,
 			nominal_height = 3,

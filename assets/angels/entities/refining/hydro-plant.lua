@@ -574,6 +574,38 @@ local function get_graphics_set_flipped(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of Angel's hydro plant for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 25,
+			main_offset = util.by_pixel(50.625, 42),
+			shadow_offset = util.by_pixel(50.625, 42),
+			show_shadow = true,
+		},
+		{
+			variation = 25,
+			main_offset = util.by_pixel(50.625, 42),
+			shadow_offset = util.by_pixel(50.625, 42),
+			show_shadow = true,
+		},
+		{
+			variation = 25,
+			main_offset = util.by_pixel(50.625, 42),
+			shadow_offset = util.by_pixel(50.625, 42),
+			show_shadow = true,
+		},
+		{
+			variation = 25,
+			main_offset = util.by_pixel(50.625, 42),
+			shadow_offset = util.by_pixel(50.625, 42),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's hydro plant sprite set.
 ---@class HydroPlantSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -612,6 +644,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 7,
 			nominal_height = 7,
 		},

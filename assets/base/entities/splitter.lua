@@ -196,6 +196,38 @@ local function get_corpse_animation(tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(1, { layers = layers })
 end
 
+---Gets the circuit connector of the splitter for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 0,
+			main_offset = util.by_pixel(21, -10),
+			shadow_offset = util.by_pixel(21 + 12, -10 + 10),
+			show_shadow = true,
+		},
+		{
+			variation = 6,
+			main_offset = util.by_pixel(7, 9),
+			shadow_offset = util.by_pixel(7 + 12, 9 + 10),
+			show_shadow = false,
+		},
+		{
+			variation = 4,
+			main_offset = util.by_pixel(-21, 0),
+			shadow_offset = util.by_pixel(-21 + 12, 0 + 10),
+			show_shadow = true,
+		},
+		{
+			variation = 2,
+			main_offset = util.by_pixel(-7, -29),
+			shadow_offset = util.by_pixel(-7 + 12, -29 + 10),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the vanilla splitter sprite set.
 ---@class SplitterSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -250,6 +282,7 @@ function M.get_sprite_set(params)
 			}),
 			corpse = Remnants.get_corpse("splitter-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 1.8,
 			nominal_height = 1,
 		},

@@ -259,6 +259,38 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of Angel's ore flotation cell for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 27,
+			main_offset = util.by_pixel(-25.375, 10.875),
+			shadow_offset = util.by_pixel(-25.375, 10.875),
+			show_shadow = true,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(-25.375, 10.875),
+			shadow_offset = util.by_pixel(-25.375, 10.875),
+			show_shadow = true,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(-25.375, 10.875),
+			shadow_offset = util.by_pixel(-25.375, 10.875),
+			show_shadow = true,
+		},
+		{
+			variation = 27,
+			main_offset = util.by_pixel(-25.375, 10.875),
+			shadow_offset = util.by_pixel(-25.375, 10.875),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's ore flotation cell sprite set.
 ---@class OreFlotationCellSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -288,6 +320,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			nominal_width = 5,
 			nominal_height = 5,
 		},

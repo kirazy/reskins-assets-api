@@ -62,6 +62,38 @@ local function get_graphics_set(tint)
 	return graphics_set
 end
 
+---Gets the circuit connector of Angel's seed extractor for each direction.
+---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+local function get_circuit_connector()
+	---@diagnostic disable-next-line: param-type-mismatch
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{
+			variation = 5,
+			main_offset = util.by_pixel(25.5, 33.125),
+			shadow_offset = util.by_pixel(25.5, 33.125),
+			show_shadow = true,
+		},
+		{
+			variation = 5,
+			main_offset = util.by_pixel(25.5, 33.125),
+			shadow_offset = util.by_pixel(25.5, 33.125),
+			show_shadow = true,
+		},
+		{
+			variation = 5,
+			main_offset = util.by_pixel(25.5, 33.125),
+			shadow_offset = util.by_pixel(25.5, 33.125),
+			show_shadow = true,
+		},
+		{
+			variation = 5,
+			main_offset = util.by_pixel(25.5, 33.125),
+			shadow_offset = util.by_pixel(25.5, 33.125),
+			show_shadow = true,
+		},
+	})
+end
+
 ---Defines the options for the Angel's seed extractor sprite set.
 ---@class SeedExtractorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -91,6 +123,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			circuit_connector = get_circuit_connector(),
 			drawing_box_vertical_extension = 1,
 			nominal_width = 3,
 			nominal_height = 3,
