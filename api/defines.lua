@@ -302,6 +302,9 @@ _defines.sprite_set_type = {
 	---The sprite set for `ValvePrototype`.
 	valve_sprite_set = "ValveSpriteSet",
 
+	---The sprite set for `ContainerPrototype`.
+	container_sprite_set = "ContainerSpriteSet",
+
 	---The sprite set for `LogisticContainerPrototype`.
 	logistic_container_sprite_set = "LogisticContainerSpriteSet",
 

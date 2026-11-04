@@ -86,6 +86,7 @@ local set_type_by_prototype_type = {
 	["wall"] = _defines.sprite_set_type.wall_sprite_set,
 	["gate"] = _defines.sprite_set_type.gate_sprite_set,
 	["valve"] = _defines.sprite_set_type.valve_sprite_set,
+	["container"] = _defines.sprite_set_type.container_sprite_set,
 	["logistic-container"] = _defines.sprite_set_type.logistic_container_sprite_set,
 	["locomotive"] = _defines.sprite_set_type.entity_with_health_sprite_set,
 	["cargo-wagon"] = _defines.sprite_set_type.entity_with_health_sprite_set,

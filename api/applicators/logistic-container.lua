@@ -29,25 +29,15 @@ return {
 ---@class (exact) RobotDoorGraphics
 ---Drawn when a robot brings/takes items from this entity.
 ---
+---When `nil`, the robot door animation of the prototype is removed.
+---
 ---See [RobotDoorSpecification::animation](https://lua-api.factorio.com/latest/types/RobotDoorSpecification.html#animation).
----@field animation Animation
+---@field animation? Animation
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `logistic_container_sprite_set`.
----@class (exact) LogisticContainerSpriteSet : EntityWithHealthSpriteSet
----The picture displayed for this entity.
----
----When `nil`, the picture of the prototype is removed.
----
----See [ContainerPrototype::picture](https://lua-api.factorio.com/latest/prototypes/ContainerPrototype.html#picture).
----@field picture? Sprite4Way
+---@class (exact) LogisticContainerSpriteSet : ContainerSpriteSet
 ---The fields of `prototype.robot_door` that `RobotDoorGraphics` does not define are not modified.
 ---@field robot_door RobotDoorGraphics
----If given, there must be exactly `direction_count` elements in the table.
----
----When `nil`, the circuit connector of the prototype is not modified.
----
----See [ContainerPrototype::circuit_connector](https://lua-api.factorio.com/latest/prototypes/ContainerPrototype.html#circuit_connector).
----@field circuit_connector? CircuitConnectorDefinition[]
 
 ---Applies the `LogisticContainerSpriteSet` to `LogisticContainerPrototype` instances.
 ---@class (exact) LogisticContainerSpriteSetApplicator : SpriteSetApplicator<LogisticContainerPrototype, LogisticContainerSpriteSet>
