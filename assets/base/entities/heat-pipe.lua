@@ -39,6 +39,10 @@ local particle_tints = {
 		["heat-pipe-metal-particle-small"] = util.color("dff5ff"),
 		["heat-pipe-metal-particle-medium"] = util.color("a99b84"),
 	},
+	["silver-aluminum"] = {
+		["heat-pipe-metal-particle-small"] = util.color("d4d4d4"),
+		["heat-pipe-metal-particle-medium"] = util.color("ccd1e1"),
+	},
 	["silver-titanium"] = {
 		["heat-pipe-metal-particle-small"] = util.color("d4d4d4"),
 		["heat-pipe-metal-particle-medium"] = util.color("cfd2d4"),

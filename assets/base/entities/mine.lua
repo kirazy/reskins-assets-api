@@ -119,7 +119,7 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = "land-mine-explosion",
 			corpse = "land-mine-remnants",
 			water_reflection = nil,
 			nominal_width = 1,
