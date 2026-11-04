@@ -10,6 +10,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
+local AccumulatorExplosion = require("assets.base.explosions.accumulator")
 
 local M = {}
 
@@ -261,7 +262,12 @@ function M.get_sprite_set(params)
 			chargable_graphics = get_chargable_graphics(params.sprite_set, params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = AccumulatorExplosion.get_explosion({
+				tints = params.tint and {
+					["accumulator-metal-particle-medium"] = params.tint,
+					["accumulator-metal-particle-small"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.sprite_set, params.tint) },
 			water_reflection = get_accumulator_reflection(),
 			drawing_box_vertical_extension = 0.5,

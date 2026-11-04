@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local PumpExplosion = require("assets.base.explosions.pump")
 
 local BASE_PATH = _defines.assets_source.base .. "/graphics/entity/pump/"
 local ASSETS_PATH = _defines.assets_source.base_assets .. "/graphics/entity/pump/"
@@ -310,7 +311,9 @@ function M.get_sprite_set(params)
 			wagon_connection_graphics = get_wagon_connection_graphics(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = PumpExplosion.get_explosion({
+				tints = params.tint and { ["pump-metal-particle-medium"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 1,

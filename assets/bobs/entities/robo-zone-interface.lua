@@ -7,6 +7,7 @@
 
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local RoboportExplosion = require("assets.base.explosions.roboport")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/robo-zone-interface/"
 local ICONS_FOLDER = "__reskins-assets-bobs__/graphics/icons"
@@ -100,8 +101,8 @@ function M.get_sprite_set()
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = RoboportExplosion.get_explosion(),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,

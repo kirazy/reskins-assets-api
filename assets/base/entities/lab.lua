@@ -11,6 +11,7 @@ local _sprite_utils = { sprites = require("__reskins-sprite-utils__.sprites") }
 
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local LabExplosion = require("assets.base.explosions.lab")
 
 local M = {}
 
@@ -273,7 +274,9 @@ function M.get_sprite_set(params)
 			frozen_patch = get_frozen_patch(),
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = LabExplosion.get_explosion({
+				tints = params.tint and { ["lab-metal-particle-big"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,

@@ -13,6 +13,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local HeatExchangerExplosion = require("assets.base.explosions.heat-exchanger")
 
 local M = {}
 
@@ -437,7 +438,9 @@ function M.get_sprite_set(params)
 			},
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = HeatExchangerExplosion.get_explosion({
+				tints = params.tint and { ["heat-exchanger-metal-particle-big"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint, params.pipe_material) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,

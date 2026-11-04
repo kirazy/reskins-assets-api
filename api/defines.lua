@@ -260,6 +260,18 @@ _defines.sprite_set_type = {
 
 	---The sprite set for `LogisticContainerPrototype`.
 	logistic_container_sprite_set = "LogisticContainerSpriteSet",
+
+	---The sprite set for `LocomotivePrototype`, `CargoWagonPrototype`, `FluidWagonPrototype`,
+	---`ArtilleryWagonPrototype`, and `CarPrototype`.
+	entity_with_health_sprite_set = "EntityWithHealthSpriteSet",
 }
+
+---Represents the request for the generic remnants of the base game that match the size of an entity.
+---@alias GenericRemnants "generic-remnants"
+
+---Represents the request for the generic remnants of the base game that match the size of an entity, as the `corpse` of
+---a sprite set. The value is the name of the subgroup of the generic remnants of the base game.
+---@type GenericRemnants
+_defines.generic_remnants = "generic-remnants"
 
 return _defines

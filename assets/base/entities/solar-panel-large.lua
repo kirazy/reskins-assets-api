@@ -11,6 +11,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local SolarPanelExplosion = require("assets.base.explosions.solar-panel")
 
 local M = {}
 
@@ -182,7 +183,9 @@ function M.get_sprite_set(params)
 			overlay = get_overlay(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = SolarPanelExplosion.get_explosion({
+				tints = params.tint and { ["solar-panel-metal-particle-small"] = params.tint },
+			}),
 			-- Use standard panel remnants pending large remnant sprites.
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),

@@ -12,6 +12,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local PumpjackExplosion = require("assets.base.explosions.pumpjack")
 
 local M = {}
 
@@ -405,7 +406,13 @@ local function get_definition(params, corpse_base_layer)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = PumpjackExplosion.get_explosion({
+				tints = {
+					["pumpjack-metal-particle-big"] = params.base_tint,
+					["pumpjack-metal-particle-medium"] = params.base_tint,
+					["pumpjack-metal-particle-small"] = params.tint or params.accent_tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(corpse_base_layer, params.tint) },
 			water_reflection = nil,
 			drawing_box_vertical_extension = 1,

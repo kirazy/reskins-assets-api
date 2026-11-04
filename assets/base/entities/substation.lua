@@ -7,6 +7,7 @@
 
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local SubstationExplosion = require("assets.base.explosions.substation")
 
 local M = {}
 
@@ -154,7 +155,9 @@ function M.get_sprite_set(params)
 			corpse_overlay = nil,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = SubstationExplosion.get_explosion({
+				tints = params.tint and { ["substation-metal-particle-big"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 2,

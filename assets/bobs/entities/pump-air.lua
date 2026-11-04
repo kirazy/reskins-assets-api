@@ -10,6 +10,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ChemicalPlantExplosion = require("assets.base.explosions.chemical-plant")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/pump-air/"
 
@@ -288,8 +289,13 @@ function M.get_sprite_set(params)
 			circuit_connector_flipped = get_circuit_connector_flipped(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = ChemicalPlantExplosion.get_explosion({
+				tints = params.tint and {
+					["chemical-plant-metal-particle-big"] = params.tint,
+					["chemical-plant-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = get_water_reflection(),
 			nominal_width = 2,
 			nominal_height = 2,

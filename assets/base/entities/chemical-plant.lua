@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ChemicalPlantExplosion = require("assets.base.explosions.chemical-plant")
 
 local M = {}
 
@@ -347,7 +348,12 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = ChemicalPlantExplosion.get_explosion({
+				tints = params.tint and {
+					["chemical-plant-metal-particle-big"] = params.tint,
+					["chemical-plant-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.4,

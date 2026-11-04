@@ -7,8 +7,16 @@
 
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local GateExplosion = require("assets.base.explosions.gate")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/reinforced-gate/"
+
+---The tint of the big and medium metal particles of the dying explosion, by the name of the particle.
+---@type table<ParticleID, Color>
+local particle_tints = {
+	["gate-metal-particle-big"] = util.color("#6f647d") --[[@as Color]],
+	["gate-metal-particle-medium"] = util.color("#a695ba") --[[@as Color]],
+}
 
 local M = {}
 
@@ -146,7 +154,7 @@ function M.get_sprite_set()
 			},
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = GateExplosion.get_explosion({ tints = util.copy(particle_tints) }),
 			corpse = { animation = get_corpse_animation() },
 			water_reflection = nil,
 			nominal_width = 1,

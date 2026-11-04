@@ -9,6 +9,8 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local TankExplosion = require("assets.base.explosions.tank")
+local Tank = require("assets.base.entities.tank")
 
 local BASE_PATH = "__base__/graphics/entity/tank/"
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/drone/"
@@ -182,6 +184,16 @@ local function get_corpse_animation(tint)
 	return { layers = layers }
 end
 
+---Gets the corpse of the drone, which takes the drone artwork and the other fields of the vanilla tank remnants.
+---@param tint? Color
+---@return CorpseSpriteSet
+local function get_corpse(tint)
+	local corpse = Tank.get_sprite_set({}).set.corpse --[[@as CorpseSpriteSet]]
+	corpse.animation = get_corpse_animation(tint)
+
+	return corpse
+end
+
 ---Defines the options for the drone sprite set.
 ---@class DroneSpriteSetParams
 ---The color to tint the artwork. When `nil`, the mask and highlights layers are omitted from the set, and the light
@@ -224,8 +236,10 @@ function M.get_sprite_set(params)
 			attack_animation = get_animation(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = { animation = get_corpse_animation(params.tint) },
+			dying_explosion = TankExplosion.get_explosion({
+				tints = params.tint and { ["tank-metal-particle-medium"] = params.tint },
+			}),
+			corpse = get_corpse(params.tint),
 			water_reflection = nil,
 			nominal_width = 1.8,
 			nominal_height = 2.6,

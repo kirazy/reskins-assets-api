@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local GunTurretExplosion = require("assets.base.explosions.gun-turret")
 
 local ASSETS_PATH = "__reskins-assets-bobs__/graphics/entity/turret-sniper/"
 
@@ -279,8 +280,10 @@ function M.get_sprite_set(params)
 			shell_particle = { center = util.by_pixel(4, 0), creation_distance = -2.85, direction = -0.25 },
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = GunTurretExplosion.get_explosion({
+				tints = tint and { ["gun-turret-metal-particle-medium"] = tint },
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.2,
 			nominal_width = 2,

@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local RoboportExplosion = require("assets.base.explosions.roboport")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/robo-zone-expander/"
 local ANTENNAS_PATH = "__reskins-assets-bobs__/graphics/entity/roboport/antennas/"
@@ -158,8 +159,10 @@ function M.get_sprite_set(params)
 			circuit_connector = nil,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = RoboportExplosion.get_explosion({
+				tints = params.tint and { ["roboport-metal-particle-medium"] = params.tint },
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 1.4,
 			nominal_width = 2,

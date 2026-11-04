@@ -10,6 +10,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local BoilerExplosion = require("assets.base.explosions.boiler")
 
 local M = {}
 
@@ -448,7 +449,9 @@ function M.get_sprite_set(params)
 			fluid_boxes = nil,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil, -- FIXME: type this and then build it out.
+			dying_explosion = BoilerExplosion.get_explosion({
+				tints = params.tint and { ["boiler-metal-particle-big"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			light_flicker = get_light_flicker(),

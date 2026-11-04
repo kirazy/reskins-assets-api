@@ -7,8 +7,15 @@
 
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local DefenderRobotExplosion = require("assets.base.explosions.defender-robot")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/robot-laser/"
+
+---The tint of the small metal particles of the dying explosion, by the name of the particle.
+---@type table<ParticleID, Color>
+local particle_tints = {
+	["defender-robot-metal-particle-small"] = util.color("#7f4eca") --[[@as Color]],
+}
 
 local M = {}
 
@@ -94,7 +101,7 @@ function M.get_sprite_set()
 
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = DefenderRobotExplosion.get_explosion({ tints = util.copy(particle_tints) }),
 			corpse = { animation = get_corpse_animation() },
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,

@@ -12,6 +12,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 local AssetsCommon = require("api.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local PipeExplosion = require("assets.base.explosions.pipe")
 
 local M = {}
 
@@ -672,6 +673,8 @@ end
 ---```
 ---@nodiscard
 function M.get_sprite_set(params)
+	local particle_tint = M.get_material_tint({ material = params.pipe_material })
+
 	---@type SpriteSetDefinition<PipeSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.pipe_sprite_set,
@@ -682,7 +685,12 @@ function M.get_sprite_set(params)
 			pipe_material = params.pipe_material,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = PipeExplosion.get_explosion({
+				tints = particle_tint and {
+					["pipe-metal-particle-medium"] = particle_tint,
+					["pipe-metal-particle-small"] = particle_tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.pipe_material) },
 			water_reflection = nil,
 			nominal_width = 1,

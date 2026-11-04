@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local OilRefineryExplosion = require("assets.base.explosions.oil-refinery")
 
 local M = {}
 
@@ -137,7 +138,12 @@ function M.get_sprite_set(params)
 			graphics_set = get_graphics_set(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = OilRefineryExplosion.get_explosion({
+				tints = params.tint and {
+					["oil-refinery-metal-particle-big-tint"] = params.tint,
+					["oil-refinery-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			drawing_box_vertical_extension = 0.3,

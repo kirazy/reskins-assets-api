@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local NuclearReactorExplosion = require("assets.base.explosions.nuclear-reactor")
 
 local M = {}
 
@@ -324,7 +325,12 @@ function M.get_sprite_set(params)
 			},
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = NuclearReactorExplosion.get_explosion({
+				tints = params.tint and {
+					["nuclear-reactor-metal-particle-big"] = params.tint,
+					["nuclear-reactor-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint, pipe_material) },
 			circuit_connector = get_circuit_connector(),
 			water_reflection = get_water_reflection(),

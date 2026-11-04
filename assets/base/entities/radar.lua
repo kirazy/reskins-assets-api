@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local RadarExplosion = require("assets.base.explosions.radar")
 
 local M = {}
 
@@ -192,7 +193,9 @@ function M.get_sprite_set(params)
 			pictures = get_pictures(params.tint),
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = RadarExplosion.get_explosion({
+				tints = params.tint and { ["radar-metal-particle-medium"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,

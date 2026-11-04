@@ -8,6 +8,11 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ActiveProviderChestExplosion = require("assets.base.explosions.active-provider-chest")
+local BufferChestExplosion = require("assets.base.explosions.buffer-chest")
+local PassiveProviderChestExplosion = require("assets.base.explosions.passive-provider-chest")
+local RequesterChestExplosion = require("assets.base.explosions.requester-chest")
+local StorageChestExplosion = require("assets.base.explosions.storage-chest")
 
 local BASE_PATH = "__base__/graphics/entity/logistic-chest/"
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/chest-logistic/"
@@ -22,6 +27,22 @@ local M = {}
 
 local ChestLogisticMode = V.one_of({ "active-provider", "passive-provider", "storage", "buffer", "requester" })
 local ChestLogisticMaterial = V.one_of({ "brass", "titanium" })
+
+---The tint of the medium metal particles in the dying explosion for each material.
+---@type table<ChestLogisticMaterial, Color>
+local material_tints = {
+	["brass"] = util.color("#f9c854"),
+	["titanium"] = util.color("#adadb2"),
+}
+
+-- The module in `assets.base.explosions` for each logistic mode.
+local explosion_modules = {
+	["active-provider"] = ActiveProviderChestExplosion,
+	["passive-provider"] = PassiveProviderChestExplosion,
+	["storage"] = StorageChestExplosion,
+	["buffer"] = BufferChestExplosion,
+	["requester"] = RequesterChestExplosion,
+}
 
 ---Gets the animation of the robot door for the given `logistic_mode` and `material`.
 ---@param logistic_mode ChestLogisticMode
@@ -89,6 +110,19 @@ local function get_corpse_animation(logistic_mode, material)
 			},
 		},
 	}
+end
+
+---Gets the dying explosion for the given `logistic_mode`, with the medium metal particles in the tint of the given
+---`material`.
+---@param logistic_mode ChestLogisticMode
+---@param material ChestLogisticMaterial
+---@return ExplosionSpriteSet
+local function get_dying_explosion(logistic_mode, material)
+	local particle_name = logistic_mode .. "-chest-metal-particle-medium"
+
+	return explosion_modules[logistic_mode].get_explosion({
+		tints = { [particle_name] = util.copy(material_tints[material]) },
+	})
 end
 
 ---Gets the circuit connector of the logistic chest.
@@ -163,7 +197,7 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = get_dying_explosion(params.logistic_mode, params.material),
 			corpse = { animation = get_corpse_animation(params.logistic_mode, params.material) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,

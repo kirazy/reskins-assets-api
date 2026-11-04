@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local RoboportExplosion = require("assets.base.explosions.roboport")
 
 local M = {}
 
@@ -290,7 +291,9 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = RoboportExplosion.get_explosion({
+				tints = params.tint and { ["roboport-metal-particle-medium"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 4,

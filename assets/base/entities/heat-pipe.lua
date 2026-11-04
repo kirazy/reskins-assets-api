@@ -10,6 +10,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local HeatPipeExplosion = require("assets.base.explosions.heat-pipe")
 
 local VANILLA_PATH = "__base__/graphics/entity/heat-pipe/"
 local ASSETS_BASE_PATH = "__reskins-assets-base__/graphics/entity/heat-pipe/"
@@ -28,6 +29,24 @@ local M = {}
 local HEAT_PIPE_MATERIALS = { "base", "aluminum-invar", "silver-aluminum", "silver-titanium", "gold-copper" }
 
 local HeatPipeMaterial = V.one_of(HEAT_PIPE_MATERIALS)
+
+---The tints of the metal particles in the dying explosion of a heat pipe, by the material of the heat pipe and the name
+---of the particle.
+---@type table<HeatPipeMaterial, table<ParticleID, Color>>
+local particle_tints = {
+	["aluminum-invar"] = {
+		["heat-pipe-metal-particle-small"] = util.color("dff5ff"),
+		["heat-pipe-metal-particle-medium"] = util.color("a99b84"),
+	},
+	["silver-titanium"] = {
+		["heat-pipe-metal-particle-small"] = util.color("d4d4d4"),
+		["heat-pipe-metal-particle-medium"] = util.color("cfd2d4"),
+	},
+	["gold-copper"] = {
+		["heat-pipe-metal-particle-small"] = util.color("d6b968"),
+		["heat-pipe-metal-particle-medium"] = util.color("ff7f3f"),
+	},
+}
 
 ---Defines the file name and the number of variations of the artwork of a field of `ConnectableEntityGraphics`.
 ---@class (exact) HeatPipeTile
@@ -319,7 +338,9 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = HeatPipeExplosion.get_explosion({
+				tints = params.pipe_material and util.copy(particle_tints[params.pipe_material]),
+			}),
 			corpse = { animation = corpse_animation },
 			water_reflection = nil,
 			nominal_width = 1,

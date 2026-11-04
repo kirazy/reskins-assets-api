@@ -11,6 +11,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local AssemblingMachineOriginal = require("assets.assorted.entities.assembling-machine-original")
+local NuclearReactorExplosion = require("assets.base.explosions.nuclear-reactor")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/heat-source/"
 
@@ -231,8 +232,13 @@ function M.get_sprite_set(params)
 			fluid_boxes = { get_fluid_box_graphics(params.tint) },
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = NuclearReactorExplosion.get_explosion({
+				tints = params.tint and {
+					["nuclear-reactor-metal-particle-big"] = params.tint,
+					["nuclear-reactor-metal-particle-medium"] = params.tint,
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
 			nominal_width = 3,
 			nominal_height = 3,

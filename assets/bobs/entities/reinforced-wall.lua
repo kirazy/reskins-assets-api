@@ -8,9 +8,18 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local WallExplosion = require("assets.base.explosions.wall")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/reinforced-wall/"
 local BASE_PATH = "__base__/graphics/entity/wall/"
+
+---The tint of the stone particles of the dying explosion, by the name of the particle.
+---@type table<ParticleID, Color>
+local particle_tints = {
+	["wall-stone-particle-medium"] = util.color("#9584ab") --[[@as Color]],
+	["wall-stone-particle-small"] = util.color("#a793bf") --[[@as Color]],
+	["wall-stone-particle-tiny"] = util.color("#a793bf") --[[@as Color]],
+}
 
 local M = {}
 
@@ -269,7 +278,7 @@ function M.get_sprite_set()
 			wall_diode_red_light_left = get_diode_light("red", util.by_pixel(-12, -23)),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = WallExplosion.get_explosion({ tints = util.copy(particle_tints) }),
 			corpse = { animation = get_corpse_animation() },
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,

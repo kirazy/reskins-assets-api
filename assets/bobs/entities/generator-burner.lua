@@ -9,10 +9,15 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local SteamEngineExplosion = require("assets.base.explosions.steam-engine")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/generator-burner/"
 
 local M = {}
+
+---The tint of the big and medium metal particles in the dying explosion of the burner generator.
+---@type Color
+local particle_tint = util.color("#26262660")
 
 ---Gets the base layer of the burner generator.
 ---@return Animation
@@ -137,8 +142,13 @@ function M.get_sprite_set()
 			idle_animation = get_idle_animation(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = SteamEngineExplosion.get_explosion({
+				tints = {
+					["steam-engine-metal-particle-big"] = util.copy(particle_tint),
+					["steam-engine-metal-particle-medium"] = util.copy(particle_tint),
+				},
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.8,
 			light_flicker = get_light_flicker(),

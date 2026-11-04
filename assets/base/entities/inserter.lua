@@ -11,6 +11,8 @@ local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
+local BulkInserterExplosion = require("assets.base.explosions.bulk-inserter")
+local InserterExplosion = require("assets.base.explosions.inserter")
 
 local M = {}
 
@@ -447,6 +449,23 @@ local function get_circuit_connector()
 	})
 end
 
+---Gets the dying explosion for the given `variant`, with the medium metal particles in the given `tint`.
+---
+---The bulk variants use the dying explosion of the bulk inserter, and the other variants use the dying explosion of the
+---inserter.
+---@param tint? Color
+---@param variant InserterVariants
+---@return ExplosionSpriteSet
+local function get_dying_explosion(tint, variant)
+	local is_bulk = (variant == "inserter-bulk" or variant == "inserter-bulk-filter")
+
+	if is_bulk then
+		return BulkInserterExplosion.get_explosion({ tints = tint and { ["bulk-inserter-metal-particle-medium"] = tint } })
+	end
+
+	return InserterExplosion.get_explosion({ tints = tint and { ["inserter-metal-particle-medium"] = tint } })
+end
+
 ---The variant of the inserter artwork.
 ---@alias InserterVariants
 ---| "inserter"
@@ -517,7 +536,7 @@ function M.get_sprite_set(params)
 			light_flicker = get_light_flicker(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = get_dying_explosion(tint, variant),
 			corpse = { animation = get_corpse_animation(tint, variant) },
 			water_reflection = nil,
 			nominal_width = 0.8,

@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local StorageTankExplosion = require("assets.base.explosions.storage-tank")
 
 local ASSETS_BOBS_PATH = _defines.assets_source.bobs_assets .. "/graphics/entity/storage-tank-small/"
 
@@ -18,6 +19,10 @@ local M = {}
 ---@alias StorageTankSmallVariant "standard"|"inline"
 
 local StorageTankSmallVariant = V.one_of({ "standard", "inline" })
+
+---The tint of the big metal particles in the dying explosion of the small storage tank.
+---@type Color
+local particle_tint = util.color("#b29270") --[[@as Color]]
 
 ---Gets the sprite of the small storage tank for the given `variant`.
 ---@param variant StorageTankSmallVariant
@@ -174,8 +179,10 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
+			dying_explosion = StorageTankExplosion.get_explosion({
+				tints = { ["storage-tank-metal-particle-big"] = util.copy(particle_tint) },
+			}),
+			corpse = _defines.generic_remnants,
 			water_reflection = get_water_reflection(),
 			nominal_width = 1,
 			nominal_height = 1,

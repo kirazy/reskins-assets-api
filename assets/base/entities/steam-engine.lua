@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 
 local V = require("__reskins-sprite-utils__.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local SteamEngineExplosion = require("assets.base.explosions.steam-engine")
 
 local M = {}
 
@@ -229,7 +230,12 @@ function M.get_sprite_set(params)
 			pictures = get_generator_pictures(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = SteamEngineExplosion.get_explosion({
+				tints = params.tint and {
+					["steam-engine-metal-particle-big"] = params.tint,
+					["steam-engine-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,

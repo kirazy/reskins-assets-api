@@ -10,34 +10,8 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
 local FluidBoxes = require("api.fluid-boxes")
 local HeatBuffers = require("api.heat-buffers")
-local Assignment = require("api.assignment")
-
--- Each of these fields of a `CorpseSpriteSet` is applied to the field of the same name of the corpse prototype.
-local corpse_fields = {
-	"animation",
-	"animation_overlay",
-	"animation_overlay_render_layer",
-	"animation_render_layer",
-	"decay_animation",
-	"decay_frame_transition_duration",
-	"direction_shuffle",
-	"dying_speed",
-	"final_render_layer",
-	"ground_patch",
-	"ground_patch_decay",
-	"ground_patch_fade_in_delay",
-	"ground_patch_fade_in_speed",
-	"ground_patch_fade_out_duration",
-	"ground_patch_fade_out_start",
-	"ground_patch_higher",
-	"ground_patch_render_layer",
-	"shuffle_directions_at_frame",
-	"splash",
-	"splash_render_layer",
-	"splash_speed",
-	"underwater_layer_offset",
-	"underwater_patch",
-}
+local Corpses = require("api.corpses")
+local Explosions = require("api.explosions")
 
 -- The fields of a prototype that may hold a burner or fluid energy source.
 local light_flicker_energy_source_fields = {
@@ -112,6 +86,11 @@ local set_type_by_prototype_type = {
 	["gate"] = _defines.sprite_set_type.gate_sprite_set,
 	["valve"] = _defines.sprite_set_type.valve_sprite_set,
 	["logistic-container"] = _defines.sprite_set_type.logistic_container_sprite_set,
+	["locomotive"] = _defines.sprite_set_type.entity_with_health_sprite_set,
+	["cargo-wagon"] = _defines.sprite_set_type.entity_with_health_sprite_set,
+	["fluid-wagon"] = _defines.sprite_set_type.entity_with_health_sprite_set,
+	["artillery-wagon"] = _defines.sprite_set_type.entity_with_health_sprite_set,
+	["car"] = _defines.sprite_set_type.entity_with_health_sprite_set,
 }
 
 ---Provides methods for creating applicator registries, which apply sprite sets to prototypes.
@@ -175,7 +154,8 @@ function _factory.new()
 		applicators[applicator.set_type] = applicator
 	end
 
-	---Creates a copy of the given `definition` with its sprite set scaled for the given `prototype`.
+	---Creates a copy of the given `definition` with its sprite set scaled for the given `prototype`, except the
+	---`dying_explosion` of the sprite set.
 	---@generic T extends AnySpriteSetDefinition
 	---@param definition T
 	---@param prototype EntityWithHealthPrototype|CorpsePrototype
@@ -192,7 +172,13 @@ function _factory.new()
 
 		local scaled_set = util.copy(definition.set)
 
+		-- The dying explosions of the base game keep their size on entities of every size.
+		local dying_explosion = scaled_set.dying_explosion
+		scaled_set.dying_explosion = nil
+
 		scaler:rescale(scaled_set)
+
+		scaled_set.dying_explosion = dying_explosion
 
 		-- `rescale` does not scale `fluid_boxes`. Move the positions of the connections that the fluid
 		-- box graphics match with the artwork.
@@ -219,11 +205,11 @@ function _factory.new()
 		local rescaled_definition = rescale_sprite_set_for_prototype(definition, corpse_prototype, params)
 
 		local corpse_set = rescaled_definition.set.corpse
-		if not corpse_set then
+		if type(corpse_set) ~= "table" then
 			return
 		end
 
-		Assignment.safe_assign(corpse_prototype, corpse_set, corpse_fields)
+		Corpses.apply_corpse_sprite_set(corpse_prototype, corpse_set)
 	end
 
 	---Applies the fields common to every applicator from the given `sprite_set` to the given `prototype`.
@@ -256,7 +242,13 @@ function _factory.new()
 		local scaled_source = rescale_sprite_set_for_prototype(definition, prototype, params)
 		local resolved_set = _converters.resolve(scaled_source, applicator.set_type)
 
-		apply_common_fields(prototype, scaled_source.set)
+		-- A set of this type defines no artwork of the entity, so the artwork of the entity is not modified.
+		if set_type ~= _defines.sprite_set_type.entity_with_health_sprite_set then
+			apply_common_fields(prototype, scaled_source.set)
+		end
+
+		Corpses.apply(prototype, scaled_source.set.corpse)
+		Explosions.apply(prototype, scaled_source.set.dying_explosion)
 		applicator.apply_to(prototype, resolved_set)
 	end
 
@@ -329,7 +321,12 @@ function _factory.new()
 	---converted to the sprite set type of `prototype`, when a conversion between the two types exists.
 	---
 	---The sprite set is scaled to the scale that `params` sets, if any. Otherwise, it is scaled when the size of
-	---`prototype` differs from the nominal size of the sprite set.
+	---`prototype` differs from the nominal size of the sprite set. The `dying_explosion` of the sprite set keeps its
+	---size.
+	---
+	---When `prototype` is an entity, the `corpse` and `dying_explosion` of the sprite set are created for it and set on
+	---it, as `Corpses.apply` and `Explosions.apply` describe. When `prototype` is a corpse, it takes the fields of the
+	---`corpse` of the sprite set, when that is a `CorpseSpriteSet`.
 	---
 	---#### Parameters
 	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to which `definition` is applied.
@@ -338,16 +335,19 @@ function _factory.new()
 	---
 	---#### Examples
 	---```lua
-	----- Apply a sprite set to the assembling machine and to its remnants.
+	----- Apply a sprite set to an assembling machine.
 	---local Applicators = require("__reskins-assets-api__.api.applicators")
 	---
-	---Applicators.apply_sprite_set(data.raw["assembling-machine"]["assembling-machine-1"], sprite_set)
-	---Applicators.apply_sprite_set(data.raw["corpse"]["assembling-machine-1-remnants"], sprite_set)
-	----- The corpse takes the fields of sprite_set.set.corpse.
+	---Applicators.apply_sprite_set(data.raw["assembling-machine"]["assembling-machine-2"], sprite_set)
+	----- The assembling machine takes the artwork of the sprite set, and its corpse and dying explosion are
+	----- "ar-assembling-machine-2-remnants" and "ar-assembling-machine-2-explosion", which are created from the
+	----- corpse and dying_explosion of the sprite set.
 	---```
 	---@throws When `prototype` is not a prototype.
 	---@throws When `definition` is not a `SpriteSetDefinition`.
-	---@throws When `definition.set.corpse` defines a field that a `CorpsePrototype` does not have.
+	---@throws When `definition.set.corpse` is not a `CorpseSpriteSet`, a corpse name, or `_defines.generic_remnants`.
+	---@throws When `definition.set.dying_explosion` is not an `ExplosionSpriteSet` or an explosion name.
+	---@throws When an explosion in `definition.set.dying_explosion` replaces a particle or explosion that its `created_effect` does not create.
 	---@throws When `params` defines an unrecognized field, or a `scale` or `scale_factor` that is not a positive number.
 	---@throws When `params` sets both `scale` and `scale_factor`.
 	---@throws When neither `params.scale` nor `params.scale_factor` is given, and `prototype` has no `selection_box` with a positive width and height.

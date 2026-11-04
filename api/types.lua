@@ -40,10 +40,23 @@
 ---
 ---See [EntityWithHealthPrototype::integration_patch_render_layer](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html#integration_patch_render_layer).
 ---@field integration_patch_render_layer? RenderLayer
----The death explosion artwork of the entity, which is not applied by any applicator.
----@field dying_explosion? any
----The remnant artwork of the entity. The artwork is applied when the sprite set is applied to a `CorpsePrototype`.
----@field corpse? CorpseSpriteSet
+---The dying explosion of the entity.
+---
+---When the sprite set is applied to an entity, an `ExplosionSpriteSet` is created as the explosion
+---`ar-<entity name>-explosion`, with its particles, and an `EntityID` names an existing explosion. Either is set as the
+---`dying_explosion` of the entity. When `nil`, the `dying_explosion` of the entity is not modified. The explosion is
+---not scaled with the sprite set.
+---@field dying_explosion? ExplosionSpriteSet|EntityID
+---The corpse of the entity.
+---
+---When the sprite set is applied to an entity, a `CorpseSpriteSet` is created as the corpse
+---`ar-<entity name>-remnants`, scaled with the sprite set and sized to the entity. An `EntityID` names an existing
+---corpse, and `_defines.generic_remnants` requests the generic remnants of the base game for the size of the entity.
+---Each is set as the `corpse` of the entity, except on a flying robot, which creates the corpse when it falls to the
+---ground. When `nil`, the corpse of the entity is not modified.
+---
+---When the sprite set is applied to a `CorpsePrototype`, the fields of a `CorpseSpriteSet` are applied to it.
+---@field corpse? CorpseSpriteSet|EntityID|GenericRemnants
 ---May also be defined inside `graphics_set` instead of directly in the entity prototype. This is useful for entities that use a `graphics_set` property to define their graphics, because then all graphics can be defined in one place.
 ---
 ---[Currently only renders](https://forums.factorio.com/100703) for [EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html) and [CorpsePrototype](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html)..
@@ -76,8 +89,8 @@
 ---no burner or fluid energy source.
 ---@field light_flicker? LightFlickeringDefinition
 
----Defines the remnant artwork of an entity. Each field is copied onto the field of the same name of the
----`CorpsePrototype`.
+---Defines the artwork and the other fields of the corpse of an entity. Each field is copied onto the field of the same
+---name of the `CorpsePrototype`.
 ---@class (exact) CorpseSpriteSet
 ---The dying animation.
 ---
@@ -87,6 +100,10 @@
 ---
 ---See [CorpsePrototype::animation_overlay](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_overlay).
 ---@field animation_overlay? RotatedAnimationVariations
+---The render layer of `animation_overlay` after `animation_overlay` finishes.
+---
+---See [CorpsePrototype::animation_overlay_final_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_overlay_final_render_layer).
+---@field animation_overlay_final_render_layer? RenderLayer
 ---The render layer of `animation_overlay`.
 ---
 ---See [CorpsePrototype::animation_overlay_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#animation_overlay_render_layer).
@@ -117,10 +134,18 @@
 ---
 ---See [CorpsePrototype::dying_speed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#dying_speed).
 ---@field dying_speed? float
+---When `true`, indicates that the corpse is removed when `time_before_removed` ends.
+---
+---See [CorpsePrototype::expires](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#expires).
+---@field expires? boolean
 ---The render layer of the corpse after `animation` finishes.
 ---
 ---See [CorpsePrototype::final_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#final_render_layer).
 ---@field final_render_layer? RenderLayer
+---The flags of the corpse.
+---
+---See [EntityPrototype::flags](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#flags).
+---@field flags? EntityPrototypeFlags
 ---The patch drawn on the ground under the corpse.
 ---
 ---See [CorpsePrototype::ground_patch](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch).
@@ -153,6 +178,26 @@
 ---
 ---See [CorpsePrototype::ground_patch_render_layer](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_render_layer).
 ---@field ground_patch_render_layer? RenderLayer
+---When `true`, indicates that the corpse is hidden in Factoriopedia.
+---
+---See [PrototypeBase::hidden_in_factoriopedia](https://lua-api.factorio.com/latest/prototypes/PrototypeBase.html#hidden_in_factoriopedia).
+---@field hidden_in_factoriopedia? boolean
+---Used to order prototypes in inventory, recipes and GUIs. May not exceed a length of 200 characters.
+---
+---See [PrototypeBase::order](https://lua-api.factorio.com/latest/prototypes/PrototypeBase.html#order).
+---@field order? Order
+---When `true`, indicates that the corpse is removed when an entity is placed over it.
+---
+---See [CorpsePrototype::remove_on_entity_placement](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#remove_on_entity_placement).
+---@field remove_on_entity_placement? boolean
+---When `true`, indicates that the corpse is removed when a tile is placed under it.
+---
+---See [CorpsePrototype::remove_on_tile_placement](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#remove_on_tile_placement).
+---@field remove_on_tile_placement? boolean
+---When `true`, indicates that the corpse can be selected in the game.
+---
+---See [EntityPrototype::selectable_in_game](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#selectable_in_game).
+---@field selectable_in_game? boolean
 ---Defines after which frame in the `animation` the `direction_shuffle` should be applied. Can be set to `0`, frames are 1-indexed.
 ---
 ---See [CorpsePrototype::shuffle_directions_at_frame](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#shuffle_directions_at_frame).
@@ -169,6 +214,18 @@
 ---
 ---See [CorpsePrototype::splash_speed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#splash_speed).
 ---@field splash_speed? float
+---The name of an [ItemSubGroup](https://lua-api.factorio.com/latest/prototypes/ItemSubGroup.html).
+---
+---See [PrototypeBase::subgroup](https://lua-api.factorio.com/latest/prototypes/PrototypeBase.html#subgroup).
+---@field subgroup? ItemSubGroupID
+---Time in ticks this corpse lasts. May not be 0.
+---
+---See [CorpsePrototype::time_before_removed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#time_before_removed).
+---@field time_before_removed? uint32
+---Controls how long the corpse takes to fade, as in how long it takes to get from no transparency to full transparency/removed. This time is *not* added to `time_before_removed`, it is instead subtracted from it. So by default, the corpse starts fading about 15 seconds before it gets removed.
+---
+---See [CorpsePrototype::time_before_shading_off](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#time_before_shading_off).
+---@field time_before_shading_off? uint32
 ---The offset of the render layer of the corpse when it is underwater.
 ---
 ---See [CorpsePrototype::underwater_layer_offset](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#underwater_layer_offset).
@@ -177,6 +234,233 @@
 ---
 ---See [CorpsePrototype::underwater_patch](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#underwater_patch).
 ---@field underwater_patch? RotatedSprite
+---Defines the dying explosion of an entity. Each field other than `particles` and `explosions` is copied onto the field
+---of the same name of the `ExplosionPrototype` that is created for the entity.
+---@class (exact) ExplosionSpriteSet
+---The animation of the explosion.
+---
+---See [ExplosionPrototype::animations](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#animations).
+---@field animations? AnimationVariations
+---When `true`, indicates that the explosion is a beam.
+---
+---See [ExplosionPrototype::beam](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#beam).
+---@field beam? boolean
+---When `true`, indicates that the rotation of the explosion is corrected.
+---
+---See [ExplosionPrototype::correct_rotation](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#correct_rotation).
+---@field correct_rotation? boolean
+---Number of ticks to delay the explosion effects by.
+---
+---See [ExplosionPrototype::delay](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#delay).
+---@field delay? MapTick
+---The maximum number of ticks to randomly delay the explosion effects by. In addition to the number of ticks defined by `delay`, the explosion will be delayed by a random number of ticks between 0 and `delay_deviation` (inclusive).
+---
+---See [ExplosionPrototype::delay_deviation](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#delay_deviation).
+---@field delay_deviation? MapTick
+---The effect/trigger that happens when the explosion effect triggers after the initial delay as defined by `delay` and `delay_deviation`.
+---
+---See [ExplosionPrototype::explosion_effect](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#explosion_effect).
+---@field explosion_effect? Trigger
+---The duration of the fade in of the explosion, in ticks.
+---
+---See [ExplosionPrototype::fade_in_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#fade_in_duration).
+---@field fade_in_duration? uint8
+---The duration of the fade out of the explosion, in ticks.
+---
+---See [ExplosionPrototype::fade_out_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#fade_out_duration).
+---@field fade_out_duration? uint8
+---The height at which the explosion is drawn.
+---
+---See [ExplosionPrototype::height](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#height).
+---@field height? float
+---The light of the explosion.
+---
+---See [ExplosionPrototype::light](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light).
+---@field light? LightDefinition
+---Silently clamped to be between 0 and 1.
+---
+---See [ExplosionPrototype::light_intensity_factor_final](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_intensity_factor_final).
+---@field light_intensity_factor_final? float
+---Silently clamped to be between 0 and 1.
+---
+---See [ExplosionPrototype::light_intensity_factor_initial](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_intensity_factor_initial).
+---@field light_intensity_factor_initial? float
+---The progress of the explosion at which the peak of the light intensity ends.
+---
+---See [ExplosionPrototype::light_intensity_peak_end_progress](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_intensity_peak_end_progress).
+---@field light_intensity_peak_end_progress? float
+---The progress of the explosion at which the peak of the light intensity starts.
+---
+---See [ExplosionPrototype::light_intensity_peak_start_progress](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_intensity_peak_start_progress).
+---@field light_intensity_peak_start_progress? float
+---Silently clamped to be between 0 and 1.
+---
+---See [ExplosionPrototype::light_size_factor_final](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_size_factor_final).
+---@field light_size_factor_final? float
+---Silently clamped to be between 0 and 1.
+---
+---See [ExplosionPrototype::light_size_factor_initial](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_size_factor_initial).
+---@field light_size_factor_initial? float
+---The progress of the explosion at which the peak of the light size ends.
+---
+---See [ExplosionPrototype::light_size_peak_end_progress](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_size_peak_end_progress).
+---@field light_size_peak_end_progress? float
+---The progress of the explosion at which the peak of the light size starts.
+---
+---See [ExplosionPrototype::light_size_peak_start_progress](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#light_size_peak_start_progress).
+---@field light_size_peak_start_progress? float
+---The render layer of the explosion.
+---
+---See [ExplosionPrototype::render_layer](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#render_layer).
+---@field render_layer? RenderLayer
+---When `true`, indicates that the explosion is rotated.
+---
+---See [ExplosionPrototype::rotate](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#rotate).
+---@field rotate? boolean
+---The scale of the explosion.
+---
+---See [ExplosionPrototype::scale](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale).
+---@field scale? float
+---When `true`, indicates that the speed of the animation is scaled with the explosion.
+---
+---See [ExplosionPrototype::scale_animation_speed](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_animation_speed).
+---@field scale_animation_speed? boolean
+---The deviation of `scale`.
+---
+---See [ExplosionPrototype::scale_deviation](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_deviation).
+---@field scale_deviation? float
+---The scale of the explosion at its end.
+---
+---See [ExplosionPrototype::scale_end](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_end).
+---@field scale_end? float
+---The duration of the scale in of the explosion, in ticks.
+---
+---See [ExplosionPrototype::scale_in_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_in_duration).
+---@field scale_in_duration? uint8
+---The increase of the scale of the explosion in each tick.
+---
+---See [ExplosionPrototype::scale_increment_per_tick](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_increment_per_tick).
+---@field scale_increment_per_tick? float
+---The scale of the explosion at its start.
+---
+---See [ExplosionPrototype::scale_initial](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_initial).
+---@field scale_initial? float
+---The deviation of `scale_initial`.
+---
+---See [ExplosionPrototype::scale_initial_deviation](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_initial_deviation).
+---@field scale_initial_deviation? float
+---The duration of the scale out of the explosion, in ticks.
+---
+---See [ExplosionPrototype::scale_out_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_out_duration).
+---@field scale_out_duration? uint8
+---Mandatory if `smoke_count` > 0.
+---
+---See [ExplosionPrototype::smoke](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#smoke).
+---@field smoke? TrivialSmokeID
+---The number of `smoke` particles that the explosion creates.
+---
+---See [ExplosionPrototype::smoke_count](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#smoke_count).
+---@field smoke_count? uint16
+---The factor by which the `smoke` particles slow down.
+---
+---See [ExplosionPrototype::smoke_slow_down_factor](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#smoke_slow_down_factor).
+---@field smoke_slow_down_factor? float
+---The sound of the explosion.
+---
+---See [ExplosionPrototype::sound](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#sound).
+---@field sound? Sound
+---The effect/trigger that happens when the entity is placed.
+---
+---See [EntityPrototype::created_effect](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#created_effect).
+---@field created_effect? Trigger
+---The flags of the explosion.
+---
+---See [EntityPrototype::flags](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#flags).
+---@field flags? EntityPrototypeFlags
+---When `true`, indicates that the explosion is hidden.
+---
+---See [PrototypeBase::hidden](https://lua-api.factorio.com/latest/prototypes/PrototypeBase.html#hidden).
+---@field hidden? boolean
+---The name of an [ItemSubGroup](prototype:ItemSubGroup).
+---
+---See [PrototypeBase::subgroup](https://lua-api.factorio.com/latest/prototypes/PrototypeBase.html#subgroup).
+---@field subgroup? ItemSubGroupID
+---Used to order prototypes in inventory, recipes and GUIs. May not exceed a length of 200 characters.
+---
+---See [PrototypeBase::order](https://lua-api.factorio.com/latest/prototypes/PrototypeBase.html#order).
+---@field order? Order
+---The particles that replace particles that `created_effect` creates, by the name of the particle they replace. Each
+---particle is created as `ar-<entity name>-<particle name>`, and each create-particle effect in `created_effect` that
+---names the replaced particle names the created particle instead.
+---@field particles? table<ParticleID, ParticleSpriteSet>
+---The explosions that replace explosions that `created_effect` creates, by the name of the explosion they replace. Each
+---explosion is created as `ar-<entity name>-<explosion name>`, and each create-explosion effect in `created_effect`
+---that names the replaced explosion names the created explosion instead.
+---@field explosions? table<EntityID, ExplosionSpriteSet>
+
+---Defines a particle of the dying explosion of an entity. Each field is copied onto the field of the same name of the
+---`ParticlePrototype` that is created for the entity.
+---@class (exact) ParticleSpriteSet
+---When `true`, indicates that the shadow of the particle is drawn when the particle is on the ground.
+---
+---See [ParticlePrototype::draw_shadow_when_on_ground](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#draw_shadow_when_on_ground).
+---@field draw_shadow_when_on_ground? boolean
+---The effect that is triggered when the particle lands in water.
+---
+---See [ParticlePrototype::ended_in_water_trigger_effect](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#ended_in_water_trigger_effect).
+---@field ended_in_water_trigger_effect? TriggerEffect
+---The effect that is triggered when the particle lands on the ground.
+---
+---See [ParticlePrototype::ended_on_ground_trigger_effect](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#ended_on_ground_trigger_effect).
+---@field ended_on_ground_trigger_effect? TriggerEffect
+---Defaults to `life_time` / 5, but at most 60. If this is 0, it is silently changed to 1.
+---
+---See [ParticlePrototype::fade_away_duration](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#fade_away_duration).
+---@field fade_away_duration? uint16
+---Can't be 1.
+---
+---See [ParticlePrototype::life_time](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#life_time).
+---@field life_time? uint16
+---The frame speed of the particle when it is a mining particle.
+---
+---See [ParticlePrototype::mining_particle_frame_speed](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#mining_particle_frame_speed).
+---@field mining_particle_frame_speed? float
+---The factor applied to the movement of the particle.
+---
+---See [ParticlePrototype::movement_modifier](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#movement_modifier).
+---@field movement_modifier? float
+---The factor applied to the movement of the particle when it is on the ground.
+---
+---See [ParticlePrototype::movement_modifier_when_on_ground](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#movement_modifier_when_on_ground).
+---@field movement_modifier_when_on_ground? float
+---Picture variation count and individual frame count must be equal to shadow variation count.
+---
+---See [ParticlePrototype::pictures](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#pictures).
+---@field pictures? AnimationVariations
+---The effect that is triggered every `regular_trigger_effect_frequency` ticks while the particle is in the air.
+---
+---See [ParticlePrototype::regular_trigger_effect](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#regular_trigger_effect).
+---@field regular_trigger_effect? TriggerEffect
+---Can't be 1.
+---
+---See [ParticlePrototype::regular_trigger_effect_frequency](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#regular_trigger_effect_frequency).
+---@field regular_trigger_effect_frequency? uint32
+---The render layer of the particle.
+---
+---See [ParticlePrototype::render_layer](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#render_layer).
+---@field render_layer? RenderLayer
+---The render layer of the particle when it is on the ground.
+---
+---See [ParticlePrototype::render_layer_when_on_ground](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#render_layer_when_on_ground).
+---@field render_layer_when_on_ground? RenderLayer
+---Shadow variation variation count and individual frame count must be equal to picture variation count.
+---
+---See [ParticlePrototype::shadows](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#shadows).
+---@field shadows? AnimationVariations
+---Has to be >= -0.01 and <= 0.01.
+---
+---See [ParticlePrototype::vertical_acceleration](https://lua-api.factorio.com/latest/prototypes/ParticlePrototype.html#vertical_acceleration).
+---@field vertical_acceleration? float
 
 ---Defines a sprite set with its `SpriteSetType`, which selects the applicator that applies it.
 ---

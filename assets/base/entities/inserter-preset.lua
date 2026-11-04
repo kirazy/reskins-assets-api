@@ -10,10 +10,12 @@ local _defines = require("api.defines")
 
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local BulkInserterExplosion = require("assets.base.explosions.bulk-inserter")
+local InserterExplosion = require("assets.base.explosions.inserter")
 
 local M = {}
 
--- Presets that use bulk-type hand shadows from `inserter-bulk/shadows/`.
+-- Presets that use bulk-type hand shadows from `inserter-bulk/shadows/` and the dying explosion of the bulk inserter.
 local bulk_presets = {
 	["inserter-bulk"] = true,
 	["inserter-express-bulk"] = true,
@@ -30,6 +32,13 @@ local long_capable_presets = {
 	["inserter-express"] = true,
 	["inserter-filter"] = true,
 	["inserter-express-filter"] = true,
+}
+
+-- The tint of the medium metal particles in the dying explosion for each preset that has one. The dying explosion of an
+-- inserter with any other preset is not modified.
+local particle_tints = {
+	["inserter-express"] = util.color("30d79c"),
+	["inserter-express-bulk"] = util.color("2dcd3f"),
 }
 
 local bobs_path = "__reskins-assets-bobs__/graphics/entity/inserters/"
@@ -240,6 +249,24 @@ local function get_platform_frozen()
 	}
 end
 
+---Gets the dying explosion for the given `preset`, with the medium metal particles in the tint of the preset.
+---@param preset InserterPreset
+---@return ExplosionSpriteSet? # The dying explosion, or `nil` when the preset has no particle tint.
+local function get_dying_explosion(preset)
+	local tint = particle_tints[preset]
+	if not tint then
+		return nil
+	end
+
+	if bulk_presets[preset] then
+		return BulkInserterExplosion.get_explosion({
+			tints = { ["bulk-inserter-metal-particle-medium"] = util.copy(tint) },
+		})
+	end
+
+	return InserterExplosion.get_explosion({ tints = { ["inserter-metal-particle-medium"] = util.copy(tint) } })
+end
+
 ---Gets the light flicker of the burner or fluid energy source of the inserter, which shows no light.
 ---@return LightFlickeringDefinition
 local function get_light_flicker()
@@ -318,7 +345,7 @@ function M.get_sprite_set(params)
 			light_flicker = get_light_flicker(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = get_dying_explosion(preset),
 			corpse = { animation = get_corpse_animation(preset) },
 			water_reflection = nil,
 			nominal_width = 0.8,

@@ -13,6 +13,7 @@ local _sprite_utils = {
 }
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local CentrifugeExplosion = require("assets.base.explosions.centrifuge")
 
 local BASE_PATH = "__base__/graphics/entity/centrifuge/"
 local ASSETS_BASE_PATH = "__reskins-assets-base__/graphics/entity/centrifuge/"
@@ -235,7 +236,12 @@ function M.get_sprite_set(params)
 			graphics_set = get_graphics_set(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = CentrifugeExplosion.get_explosion({
+				tints = params.tint and {
+					["centrifuge-metal-particle-big"] = params.tint,
+					["centrifuge-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = 0.7,

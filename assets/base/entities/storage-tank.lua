@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
+local StorageTankExplosion = require("assets.base.explosions.storage-tank")
 
 local M = {}
 
@@ -235,7 +236,9 @@ function M.get_sprite_set(params)
 			circuit_connector = get_circuit_connector(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = StorageTankExplosion.get_explosion({
+				tints = params.tint and { ["storage-tank-metal-particle-big"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,

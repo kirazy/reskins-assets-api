@@ -10,6 +10,7 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local PipeExplosion = require("assets.base.explosions.pipe")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/pipe-valve/"
 
@@ -82,7 +83,9 @@ function M.get_sprite_set(params)
 			frozen_patch = nil,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = PipeExplosion.get_explosion({
+				tints = params.tint and { ["pipe-metal-particle-small"] = params.tint },
+			}),
 			corpse = nil,
 			water_reflection = nil,
 			nominal_width = 1,

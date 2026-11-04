@@ -77,13 +77,16 @@ _common.sprite_set_transformer = V.func():describe_as("a sprite set transformer"
 _common.corpse_sprite_set = V.class("CorpseSpriteSet", {
 	animation = V.any():optional(),
 	animation_overlay = V.any():optional(),
+	animation_overlay_final_render_layer = V.any():optional(),
 	animation_overlay_render_layer = V.any():optional(),
 	animation_render_layer = V.any():optional(),
 	decay_animation = V.any():optional(),
 	decay_frame_transition_duration = V.any():optional(),
 	direction_shuffle = V.any():optional(),
 	dying_speed = V.any():optional(),
+	expires = V.any():optional(),
 	final_render_layer = V.any():optional(),
+	flags = V.any():optional(),
 	ground_patch = V.any():optional(),
 	ground_patch_decay = V.any():optional(),
 	ground_patch_fade_in_delay = V.any():optional(),
@@ -92,15 +95,106 @@ _common.corpse_sprite_set = V.class("CorpseSpriteSet", {
 	ground_patch_fade_out_start = V.any():optional(),
 	ground_patch_higher = V.any():optional(),
 	ground_patch_render_layer = V.any():optional(),
+	hidden_in_factoriopedia = V.any():optional(),
+	order = V.any():optional(),
+	remove_on_entity_placement = V.any():optional(),
+	remove_on_tile_placement = V.any():optional(),
+	selectable_in_game = V.any():optional(),
 	shuffle_directions_at_frame = V.any():optional(),
 	splash = V.any():optional(),
 	splash_render_layer = V.any():optional(),
 	splash_speed = V.any():optional(),
+	subgroup = V.any():optional(),
+	time_before_removed = V.any():optional(),
+	time_before_shading_off = V.any():optional(),
 	underwater_layer_offset = V.any():optional(),
 	underwater_patch = V.any():optional(),
 })
 	:strict()
 	:describe_as("a CorpseSpriteSet")
+
+---A validator that checks that a value is a `ParticleSpriteSet` with no other fields.
+_common.particle_sprite_set = V.class("ParticleSpriteSet", {
+	draw_shadow_when_on_ground = V.any():optional(),
+	ended_in_water_trigger_effect = V.any():optional(),
+	ended_on_ground_trigger_effect = V.any():optional(),
+	fade_away_duration = V.any():optional(),
+	life_time = V.any():optional(),
+	mining_particle_frame_speed = V.any():optional(),
+	movement_modifier = V.any():optional(),
+	movement_modifier_when_on_ground = V.any():optional(),
+	pictures = V.any():optional(),
+	regular_trigger_effect = V.any():optional(),
+	regular_trigger_effect_frequency = V.any():optional(),
+	render_layer = V.any():optional(),
+	render_layer_when_on_ground = V.any():optional(),
+	shadows = V.any():optional(),
+	vertical_acceleration = V.any():optional(),
+})
+	:strict()
+	:describe_as("a ParticleSpriteSet")
+
+---A validator that checks that a value is an `ExplosionSpriteSet` with no other fields.
+---@type Validator<ExplosionSpriteSet>
+_common.explosion_sprite_set = V.class("ExplosionSpriteSet", {
+	animations = V.any():optional(),
+	beam = V.any():optional(),
+	correct_rotation = V.any():optional(),
+	delay = V.any():optional(),
+	delay_deviation = V.any():optional(),
+	explosion_effect = V.any():optional(),
+	fade_in_duration = V.any():optional(),
+	fade_out_duration = V.any():optional(),
+	height = V.any():optional(),
+	light = V.any():optional(),
+	light_intensity_factor_final = V.any():optional(),
+	light_intensity_factor_initial = V.any():optional(),
+	light_intensity_peak_end_progress = V.any():optional(),
+	light_intensity_peak_start_progress = V.any():optional(),
+	light_size_factor_final = V.any():optional(),
+	light_size_factor_initial = V.any():optional(),
+	light_size_peak_end_progress = V.any():optional(),
+	light_size_peak_start_progress = V.any():optional(),
+	render_layer = V.any():optional(),
+	rotate = V.any():optional(),
+	scale = V.any():optional(),
+	scale_animation_speed = V.any():optional(),
+	scale_deviation = V.any():optional(),
+	scale_end = V.any():optional(),
+	scale_in_duration = V.any():optional(),
+	scale_increment_per_tick = V.any():optional(),
+	scale_initial = V.any():optional(),
+	scale_initial_deviation = V.any():optional(),
+	scale_out_duration = V.any():optional(),
+	smoke = V.any():optional(),
+	smoke_count = V.any():optional(),
+	smoke_slow_down_factor = V.any():optional(),
+	sound = V.any():optional(),
+	created_effect = V.any():optional(),
+	flags = V.any():optional(),
+	hidden = V.any():optional(),
+	subgroup = V.any():optional(),
+	order = V.any():optional(),
+	particles = V.map(Common.prototype_name, _common.particle_sprite_set):optional(),
+	explosions = V.map(
+		Common.prototype_name,
+		V.lazy(function()
+			return _common.explosion_sprite_set
+		end)
+	):optional(),
+})
+	:strict()
+	:describe_as("an ExplosionSpriteSet")
+
+---A validator that checks that a value is the `corpse` of a sprite set: a `CorpseSpriteSet`, the name of a corpse, or
+---`_defines.generic_remnants`.
+_common.corpse = V.any_of(_common.corpse_sprite_set, V.literal(_defines.generic_remnants), Common.prototype_name)
+	:describe_as("a CorpseSpriteSet, a corpse name, or 'generic-remnants'")
+
+---A validator that checks that a value is the `dying_explosion` of a sprite set: an `ExplosionSpriteSet` or the name of
+---an explosion.
+_common.dying_explosion = V.any_of(_common.explosion_sprite_set, Common.prototype_name)
+	:describe_as("an ExplosionSpriteSet or an explosion name")
 
 ---A validator that checks that a value is an applicator function.
 ---@type Validator<fun(prototype: table, set: table)>
@@ -137,12 +231,14 @@ _common.heat_buffer_graphics = V.class("HeatBufferGraphics", {
 	:describe_as("a HeatBufferGraphics")
 
 ---A validator that checks that a value is a sprite set with nominal dimensions. Unknown fields are permitted; a
----`corpse` field, a `fluid_boxes` field, a `heat_buffers` field, and a `pipe_material` field are validated.
+---`corpse` field, a `dying_explosion` field, a `fluid_boxes` field, a `heat_buffers` field, and a `pipe_material` field
+---are validated.
 ---@type StructValidator<SpriteSetBase>
 _common.sprite_set = V.struct({
 	nominal_width = Common.positive_number,
 	nominal_height = Common.positive_number,
-	corpse = _common.corpse_sprite_set:optional(),
+	corpse = _common.corpse:optional(),
+	dying_explosion = _common.dying_explosion:optional(),
 	fluid_boxes = V.array(_common.fluid_box_graphics):optional(),
 	heat_buffers = V.array(_common.heat_buffer_graphics):optional(),
 	pipe_material = _common.pipe_material:optional(),

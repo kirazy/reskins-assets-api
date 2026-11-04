@@ -9,6 +9,8 @@ local _defines = require("api.defines")
 local _pipes = require("assets.base.entities.pipe-pictures")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
+local Pipe = require("assets.base.entities.pipe")
+local PipeToGroundExplosion = require("assets.base.explosions.pipe-to-ground")
 
 local M = {}
 
@@ -187,6 +189,8 @@ end
 ---```
 ---@nodiscard
 function M.get_sprite_set(params)
+	local particle_tint = Pipe.get_material_tint({ material = params.pipe_material })
+
 	---@type SpriteSetDefinition<PipeToGroundSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.pipe_to_ground_sprite_set,
@@ -195,7 +199,12 @@ function M.get_sprite_set(params)
 			pipe_material = params.pipe_material,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = PipeToGroundExplosion.get_explosion({
+				tints = particle_tint and {
+					["pipe-to-ground-metal-particle-medium"] = particle_tint,
+					["pipe-to-ground-metal-particle-small"] = particle_tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.pipe_material) },
 			water_reflection = nil,
 			nominal_width = 1,

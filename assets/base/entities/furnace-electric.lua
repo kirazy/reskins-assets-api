@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ElectricFurnaceExplosion = require("assets.base.explosions.electric-furnace")
 
 local M = {}
 
@@ -552,7 +553,12 @@ function M.get_sprite_set(params)
 			fluid_boxes = get_electric_furnace_fluid_box_graphics(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = ElectricFurnaceExplosion.get_explosion({
+				tints = params.tint and {
+					["electric-furnace-metal-particle-big"] = params.tint,
+					["electric-furnace-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = get_water_reflection(),
 			nominal_width = 3,

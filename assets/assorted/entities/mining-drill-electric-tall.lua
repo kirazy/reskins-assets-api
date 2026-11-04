@@ -13,6 +13,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ElectricMiningDrillExplosion = require("assets.base.explosions.electric-mining-drill")
 
 local ENTITY_FOLDER = "__reskins-assets-assorted__/graphics/entity/mining-drill-electric-tall/"
 local FOLDER = ENTITY_FOLDER .. "mining-drill-electric-tall-"
@@ -843,7 +844,9 @@ function M.get_sprite_set(params)
 			wet_mining_graphics_set_flipped = nil,
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = ElectricMiningDrillExplosion.get_explosion({
+				tints = params.tint and { ["electric-mining-drill-long-metal-particle-medium"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = nil,
 			nominal_width = 3,

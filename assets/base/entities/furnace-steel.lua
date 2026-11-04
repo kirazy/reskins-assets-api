@@ -9,6 +9,7 @@ local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
+local SteelFurnaceExplosion = require("assets.base.explosions.steel-furnace")
 
 local M = {}
 
@@ -609,7 +610,9 @@ function M.get_sprite_set(params)
 			fluid_boxes_off_when_no_fluid_recipe = false,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = SteelFurnaceExplosion.get_explosion({
+				tints = params.tint and { ["steel-furnace-metal-particle-medium"] = params.tint },
+			}),
 			corpse = { animation = get_corpse_animation(params.tint, params.variant) },
 			water_reflection = get_water_reflection(),
 			light_flicker = get_light_flicker(),

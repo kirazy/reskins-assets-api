@@ -10,6 +10,7 @@ local _pipes = require("assets.base.entities.pipe-pictures")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local Lab = require("assets.base.entities.lab")
+local LabExplosion = require("assets.base.explosions.lab")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/greenhouse/"
 local BASE_LAB_PATH = "__base__/graphics/entity/lab/"
@@ -183,7 +184,7 @@ function M.get_sprite_set()
 			fluid_boxes = { get_fluid_box_graphics() },
 			integration_patch = get_integration_patch(),
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = LabExplosion.get_explosion(),
 			corpse = Lab.get_sprite_set({}).set.corpse,
 			water_reflection = nil,
 			nominal_width = 3,

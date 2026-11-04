@@ -15,6 +15,7 @@ local V = require("__reskins-sprite-utils__.validation")
 
 local IconBuilderFactory = require("api.icon-builder-factory")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local AssemblingMachine1Explosion = require("assets.base.explosions.assembling-machine-1")
 
 local M = {}
 
@@ -429,7 +430,12 @@ function M.get_sprite_set(params)
 			fluid_boxes = { fluid_box },
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil, -- FIXME: type this and then build it out.
+			dying_explosion = AssemblingMachine1Explosion.get_explosion({
+				tints = params.tint and {
+					["assembling-machine-1-metal-particle-big"] = params.tint,
+					["assembling-machine-1-metal-particle-medium"] = params.tint,
+				},
+			}),
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
 			drawing_box_vertical_extension = tier == 3 and 0.2 or nil,

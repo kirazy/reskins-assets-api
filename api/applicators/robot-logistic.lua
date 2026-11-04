@@ -4,8 +4,12 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local FlyingRobots = require("api.flying-robots")
 
 ---Applies a `set` of type `logistic_robot_sprite_set` to `prototype`.
+---
+---When the sprite set has a `corpse`, the robot falls to the ground in a death spiral when it dies, as
+---`FlyingRobots.apply_death_spiral` describes.
 ---@param prototype LogisticRobotPrototype
 ---@param set LogisticRobotSpriteSet
 local function apply_sprite_set_to_logistic_robot(prototype, set)
@@ -18,6 +22,8 @@ local function apply_sprite_set_to_logistic_robot(prototype, set)
 	prototype.in_motion_with_cargo = util.copy(set.in_motion_with_cargo)
 	prototype.shadow_idle_with_cargo = util.copy(set.shadow_idle_with_cargo)
 	prototype.shadow_in_motion_with_cargo = util.copy(set.shadow_in_motion_with_cargo)
+
+	FlyingRobots.apply_death_spiral(prototype, set)
 end
 
 ---@type LogisticRobotSpriteSetApplicator
