@@ -70,6 +70,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = pipe_valve.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
@@ -86,7 +87,7 @@ function M.get_sprite_set(params)
 			dying_explosion = PipeExplosion.get_explosion({
 				tints = params.tint and { ["pipe-metal-particle-small"] = params.tint },
 			}),
-			corpse = nil,
+			corpse = _defines.generic_remnants,
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,
