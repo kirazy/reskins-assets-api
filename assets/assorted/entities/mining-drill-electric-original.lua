@@ -16,9 +16,9 @@ local M = {}
 local FOLDER = "__reskins-assets-assorted__/graphics/entity/mining-drill-electric-original/"
 	.. "mining-drill-electric-original-"
 
----The belt onto which the drill unloads.
+---The color of the belt output on the mining drill frame.
 ---@alias MiningDrillElectricOriginalBeltOutput
----| "blue" # The blue belt Bob's area drills unload onto.
+---| "blue"
 
 local DIRECTIONS = { "north", "east", "south", "west" }
 

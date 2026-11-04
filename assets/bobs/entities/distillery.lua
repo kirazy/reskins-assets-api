@@ -184,17 +184,17 @@ local function get_water_reflection()
 	}
 end
 
----Defines the options for the Bob's distillery sprite set.
+---Defines the options for the distillery sprite set.
 ---@class DistillerySpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 
----Gets the sprite set for Bob's distillery.
+---Gets the sprite set for the distillery.
 ---
 ---The set defines its nominal dimensions only. Its `graphics_set` is empty, and no artwork is drawn for the
 ---distillery yet.
 ---@param params DistillerySpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Bob's distillery.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the distillery.
 ---
 ---#### Examples
 ---```lua
@@ -227,7 +227,7 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for Bob's distillery, in the tints given by `params`.
+---Gets the icon for the distillery, in the tints given by `params`.
 M.get_icon = icons:tinted("distillery"):build("get_icon")
 
 return M

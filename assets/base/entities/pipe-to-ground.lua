@@ -166,16 +166,16 @@ local function get_pictures(pipe_material)
 	return pipe_to_ground_pictures
 end
 
----Defines the options for the vanilla and Bob's underground pipes sprite set.
+---Defines the options for the underground pipes sprite set.
 ---@class PipeToGroundSpriteSetParams
 ---The material from which the pipes are built.
 ---@field pipe_material PipeMaterial
 
----Gets the sprite set for the vanilla and Bob's underground pipes.
+---Gets the sprite set for the underground pipes.
 ---
 ---Window bounding boxes are the base game's.
 ---@param params PipeToGroundSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<PipeToGroundSpriteSet> # The sprite set definition for the vanilla and Bob's underground pipes.
+---@return SpriteSetDefinition<PipeToGroundSpriteSet> # The sprite set definition for the underground pipes.
 ---
 ---#### Examples
 ---```lua

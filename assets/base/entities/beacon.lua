@@ -492,7 +492,7 @@ local check_get_god_module_creators = V.signature("get_god_module_creators", {
 	{ "variant", V.one_of({ "base", "productivity", "quality" }) },
 })
 
----Gets the creators for module slots that contain one of Bob's god modules.
+---Gets the creators for module slots that contain one of the god modules.
 ---@param variant "base"|"productivity"|"quality" The god module in the slot.
 ---@return BeaconModuleSlotCreators # The creators.
 ---@nodiscard

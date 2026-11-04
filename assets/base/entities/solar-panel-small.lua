@@ -147,7 +147,7 @@ local function get_water_reflection()
 	}
 end
 
----Defines the options for the Bob's small solar panel sprite set.
+---Defines the options for the small solar panel sprite set.
 ---@class SolarPanelSmallSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
@@ -156,9 +156,9 @@ local check_params = V.signature("get_sprite_set", {
 	{ "params", V.struct({ tint = Common.color:optional() }) },
 })
 
----Gets the sprite set for Bob's small solar panel.
+---Gets the sprite set for the small solar panel.
 ---@param params SolarPanelSmallSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<SolarPanelSpriteSet> # The sprite set definition for Bob's small solar panel.
+---@return SpriteSetDefinition<SolarPanelSpriteSet> # The sprite set definition for the small solar panel.
 ---
 ---#### Examples
 ---```lua
@@ -194,7 +194,7 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for Bob's small solar panel, in the tints given by `params`.
+---Gets the icon for the small solar panel, in the tints given by `params`.
 M.get_icon = icons:tinted("solar-panel-small"):build("get_icon")
 
 return M

@@ -395,16 +395,16 @@ end
 ---The inserter variant.
 ---@field variant InserterVariants
 
----Defines the options for the vanilla and Bob's tinted inserters sprite set.
+---Defines the options for the tinted inserters sprite set.
 ---@class InserterSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
 ---The variant to use.
 ---@field variant InserterVariants
 
----Gets the sprite set for the vanilla and Bob's tinted inserters.
+---Gets the sprite set for the tinted inserters.
 ---@param params InserterSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<InserterSpriteSet> # The sprite set definition for the vanilla and Bob's tinted inserters.
+---@return SpriteSetDefinition<InserterSpriteSet> # The sprite set definition for the tinted inserters.
 ---
 ---#### Examples
 ---```lua

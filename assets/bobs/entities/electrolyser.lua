@@ -119,7 +119,7 @@ local function get_water_reflection()
 	}
 end
 
----Defines the options for the Bob's electrolyser sprite set.
+---Defines the options for the electrolyser sprite set.
 ---@class ElectrolyserSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
@@ -136,9 +136,9 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 	},
 })
 
----Gets the sprite set for Bob's electrolyser.
+---Gets the sprite set for the electrolyser.
 ---@param params ElectrolyserSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for Bob's electrolyser.
+---@return SpriteSetDefinition<CraftingMachineSpriteSet> # The sprite set definition for the electrolyser.
 ---
 ---#### Examples
 ---```lua
@@ -175,7 +175,7 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for Bob's electrolyser of the `tier`, in the tints given by `params`.
+---Gets the icon for the electrolyser of the `tier`, in the tints given by `params`.
 M.get_icon = IconBuilderFactory.dispatch("tier", { 1, 2, 3, 4, 5 }, "get_icon", function(tier)
 	return icons:tinted("electrolyser-" .. tier)
 end)

@@ -278,13 +278,13 @@ local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__
 ---Gets the icon for the vanilla accumulator, in the tints given by `params`.
 M.get_icon = base_icons:tinted("accumulator"):build("get_icon")
 
----Gets the icon for Bob's fast accumulator, in the tints given by `params`.
+---Gets the icon for the fast accumulator, in the tints given by `params`.
 M.get_fast_icon = bobs_icons:tinted("accumulator-fast"):build("get_fast_icon")
 
----Gets the icon for Bob's high-capacity accumulator, in the tints given by `params`.
+---Gets the icon for the high-capacity accumulator, in the tints given by `params`.
 M.get_high_capacity_icon = bobs_icons:tinted("accumulator-high-capacity"):build("get_high_capacity_icon")
 
----Gets the icon for Bob's slow accumulator, in the tints given by `params`.
+---Gets the icon for the slow accumulator, in the tints given by `params`.
 M.get_slow_icon = bobs_icons:tinted("accumulator-slow"):build("get_slow_icon")
 
 return M

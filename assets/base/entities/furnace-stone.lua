@@ -407,7 +407,7 @@ local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__
 
 ---Gets the icon for a stone furnace of the `variant` and in the tints given by `params`.
 M.get_icon = IconBuilderFactory.dispatch("variant", { "standard", "chemical" }, "get_icon", function(variant)
-	-- The standard furnace uses vanilla artwork; the rest are Bob's.
+	-- The standard furnace uses vanilla artwork; the rest are in `__reskins-assets-bobs__`.
 	local name = variant == "standard" and "furnace-stone" or "furnace-stone-" .. variant
 	local factory = variant == "standard" and base_icons or bobs_icons
 

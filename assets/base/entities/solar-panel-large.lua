@@ -148,7 +148,7 @@ local function get_water_reflection()
 	}
 end
 
----Defines the options for the Bob's large solar panel sprite set.
+---Defines the options for the large solar panel sprite set.
 ---@class SolarPanelLargeSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
@@ -157,9 +157,9 @@ local check_params = V.signature("get_sprite_set", {
 	{ "params", V.struct({ tint = Common.color:optional() }) },
 })
 
----Gets the sprite set for Bob's large solar panel.
+---Gets the sprite set for the large solar panel.
 ---@param params SolarPanelLargeSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<SolarPanelSpriteSet> # The sprite set definition for Bob's large solar panel.
+---@return SpriteSetDefinition<SolarPanelSpriteSet> # The sprite set definition for the large solar panel.
 ---
 ---#### Examples
 ---```lua
@@ -196,7 +196,7 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for Bob's large solar panel, in the tints given by `params`.
+---Gets the icon for the large solar panel, in the tints given by `params`.
 M.get_icon = icons:tinted("solar-panel-large"):build("get_icon")
 
 return M

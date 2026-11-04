@@ -651,16 +651,16 @@ local function get_pictures(pipe_material, include_frozen_pictures)
 	return pipe_pictures
 end
 
----Defines the options for the vanilla and Bob's pipes sprite set.
+---Defines the options for the pipes sprite set.
 ---@class PipeSpriteSetParams
 ---The material from which the pipes are built.
 ---@field pipe_material PipeMaterial
 
----Gets the sprite set for the vanilla and Bob's pipes.
+---Gets the sprite set for the pipes.
 ---
 ---Window bounding boxes are the base game's.
 ---@param params PipeSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<PipeSpriteSet> # The sprite set definition for the vanilla and Bob's pipes.
+---@return SpriteSetDefinition<PipeSpriteSet> # The sprite set definition for the pipes.
 ---
 ---#### Examples
 ---```lua

@@ -572,7 +572,7 @@ M.get_icon = IconBuilderFactory.dispatch(
 	{ "standard", "mixing", "chemical", "chemical-mixing" },
 	"get_icon",
 	function(variant)
-		-- The standard furnace uses vanilla artwork; the rest are Bob's.
+		-- The standard furnace uses vanilla artwork; the rest are in `__reskins-assets-bobs__`.
 		local name = variant == "standard" and "furnace-electric" or "furnace-electric-" .. variant
 		local factory = variant == "standard" and base_icons or bobs_icons
 

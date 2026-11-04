@@ -260,9 +260,9 @@ end
 ---@class RoboportSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
----The antenna variant. The variants between 1 and 4 are Bob's. When `nil`, the base game's antenna is used.
+---The antenna variant. When `nil`, the base game's antenna is used.
 ---@field antenna_variant? 1|2|3|4
----The door variant. The variants between 1 and 4 are Bob's. When `nil`, the base game's door is used.
+---The door variant. When `nil`, the base game's door is used.
 ---@field door_variant? 1|2|3|4
 
 ---Gets the sprite set for the vanilla roboport.

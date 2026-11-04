@@ -186,7 +186,7 @@ local function get_corpse_animation(preset)
 	})
 end
 
----Defines the options for the Bob's preset (untinted) inserters sprite set.
+---Defines the options for the preset (untinted) inserters sprite set.
 ---@class InserterPresetSpriteSetParams
 ---The preset to use.
 ---@field preset InserterPreset
@@ -194,9 +194,9 @@ end
 ---`"inserter-long-handed"` have them.
 ---@field is_long? boolean
 
----Gets the sprite set for Bob's preset (untinted) inserters.
+---Gets the sprite set for the preset (untinted) inserters.
 ---@param params InserterPresetSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<InserterSpriteSet> # The sprite set definition for Bob's preset (untinted) inserters.
+---@return SpriteSetDefinition<InserterSpriteSet> # The sprite set definition for the preset (untinted) inserters.
 ---
 ---#### Examples
 ---```lua

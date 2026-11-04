@@ -20,10 +20,10 @@ local BASE_FOLDER = "__base__/graphics/entity/electric-mining-drill/electric-min
 local BLUE_FOLDER = "__reskins-assets-bobs__/graphics/entity/mining-drill-electric/frame-blue/mining-drill-electric-"
 local DRILL_FOLDER = "__reskins-assets-base__/graphics/entity/mining-drill-electric/mining-drill-electric-"
 
----The housing into which the drill is built.
+---The color of the frame of the drill.
 ---@alias MiningDrillElectricFrame
----| "base" # The base game's own housing.
----| "blue" # The blue housing Bob's area drills are built into.
+---| "base" # The yellow frame of the base game.
+---| "blue" # The hue-shifted blue frame of the base game.
 
 local BLUE_PARTS = {
 	["north"] = true,
@@ -43,7 +43,7 @@ local BLUE_PARTS = {
 
 local BASE_DIRECTION = { north = "N", east = "E", south = "S", west = "W" }
 
----@param frame MiningDrillElectricFrame The housing of the part.
+---@param frame MiningDrillElectricFrame The color of the frame.
 ---@param part string The part, named for its direction and role, as `"north-wet-front"`.
 ---@return FileName
 ---@nodiscard
@@ -1245,7 +1245,7 @@ end
 ---@class MiningDrillElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
----The housing into which the drill is built. Default `"base"`.
+---The color of the frame of the drill. Default `"base"`.
 ---@field frame? MiningDrillElectricFrame
 ---The speed at which the head of the drill strokes. Default `0.4`.
 ---@field animation_speed? double
