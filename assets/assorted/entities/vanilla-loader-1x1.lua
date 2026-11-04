@@ -11,7 +11,6 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local TransportBelt = require("assets.base.entities.transport-belt")
 local UndergroundBelt = require("assets.base.entities.underground-belt")
-local SplitterExplosion = require("assets.base.explosions.splitter")
 
 local M = {}
 
@@ -80,9 +79,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 
 ---Gets the sprite set for the 1 x 1 vanilla loader.
 ---
----The loader takes the belt animation set of the transport belt for the given `params`, the corpse of the vanilla
----underground belt, and the dying explosion of the vanilla splitter with its medium and big metal particles in
----`params.tint`.
+---The loader takes the belt animation set of the transport belt for the given `params`, and the corpse and the dying
+---explosion of the vanilla underground belt for the same `params`.
 ---@param params VanillaLoader1x1SpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<LoaderSpriteSet> # The sprite set definition for the 1 x 1 vanilla loader.
 ---
@@ -104,6 +102,7 @@ function M.get_sprite_set(params)
 	check_get_sprite_set(params)
 
 	local is_filter = params.is_filter == true
+	local underground_belt = UndergroundBelt.get_sprite_set({ tint = params.tint, belt_sprite = params.belt_sprite }).set
 
 	---@type SpriteSetDefinition<LoaderSpriteSet>
 	local definition = {
@@ -117,13 +116,8 @@ function M.get_sprite_set(params)
 			structure_render_layer = "object",
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = SplitterExplosion.get_explosion({
-				tints = params.tint and {
-					["splitter-metal-particle-medium"] = params.tint,
-					["splitter-metal-particle-big"] = params.tint,
-				},
-			}),
-			corpse = UndergroundBelt.get_sprite_set({ tint = params.tint, belt_sprite = params.belt_sprite }).set.corpse,
+			dying_explosion = underground_belt.dying_explosion,
+			corpse = underground_belt.corpse,
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,
