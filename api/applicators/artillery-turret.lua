@@ -54,7 +54,7 @@ return {
 ---@class (exact) ArtilleryTurretSpriteSet : EntityWithHealthSpriteSet
 ---When `nil`, the circuit connector of the prototype is not modified.
 ---@field circuit_connector? CircuitConnectorDefinition
----The sprites of the artillery turret. Each field is copied onto the field of the same name of the prototype.
+---The sprites of the artillery turret. Each field is copied onto the prototype field of the same name.
 ---@field graphics_set ArtilleryTurretGraphicsSet
 
 ---Applies the `ArtilleryTurretSpriteSet` to `ArtilleryTurretPrototype` instances.
