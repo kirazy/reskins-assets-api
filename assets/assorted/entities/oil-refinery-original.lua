@@ -76,7 +76,8 @@ local function get_frozen_patch()
 
 	---@type Sprite
 	local sheet = {
-		filename = _defines.assets_source.assorted_assets .. "/graphics/entity/oil-refinery-original/oil-refinery-frozen.png",
+		filename = _defines.assets_source.assorted_assets
+			.. "/graphics/entity/oil-refinery-original/oil-refinery-frozen.png",
 		priority = "high",
 		width = 386,
 		height = 430,
