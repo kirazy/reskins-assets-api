@@ -89,6 +89,10 @@
 ---no burner or fluid energy source.
 ---@field light_flicker? LightFlickeringDefinition
 
+---Defines the fields of a sprite set that apply to every `TransportBeltConnectablePrototype`.
+---@class (exact) TransportBeltConnectableSpriteSet : EntityWithHealthSpriteSet
+---@field belt_animation_set TransportBeltAnimationSet
+
 ---Defines the artwork and the other fields of the corpse of an entity. Each field is copied onto the field of the same
 ---name of the `CorpsePrototype`.
 ---@class (exact) CorpseSpriteSet

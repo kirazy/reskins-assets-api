@@ -61,9 +61,10 @@ local set_type_by_prototype_type = {
 	["offshore-pump"] = _defines.sprite_set_type.offshore_pump_sprite_set,
 	["beacon"] = _defines.sprite_set_type.beacon_sprite_set,
 	["transport-belt"] = _defines.sprite_set_type.transport_belt_sprite_set,
-	["underground-belt"] = _defines.sprite_set_type.transport_belt_sprite_set,
-	["linked-belt"] = _defines.sprite_set_type.transport_belt_sprite_set,
-	["splitter"] = _defines.sprite_set_type.transport_belt_sprite_set,
+	["underground-belt"] = _defines.sprite_set_type.underground_belt_sprite_set,
+	["splitter"] = _defines.sprite_set_type.splitter_sprite_set,
+	["loader"] = _defines.sprite_set_type.loader_sprite_set,
+	["loader-1x1"] = _defines.sprite_set_type.loader_sprite_set,
 	["electric-pole"] = _defines.sprite_set_type.electric_pole_sprite_set,
 	["pipe"] = _defines.sprite_set_type.pipe_sprite_set,
 	["pipe-to-ground"] = _defines.sprite_set_type.pipe_to_ground_sprite_set,
@@ -155,7 +156,7 @@ function _factory.new()
 	end
 
 	---Creates a copy of the given `definition` with its sprite set scaled for the given `prototype`, except the
-	---`dying_explosion` of the sprite set.
+	---`dying_explosion` and the `belt_animation_set` of the sprite set.
 	---@generic T extends AnySpriteSetDefinition
 	---@param definition T
 	---@param prototype EntityWithHealthPrototype|CorpsePrototype
@@ -172,13 +173,17 @@ function _factory.new()
 
 		local scaled_set = util.copy(definition.set)
 
-		-- The dying explosions of the base game keep their size on entities of every size.
+		-- The dying explosions of the base game keep their size on entities of every size, and a belt animation set
+		-- is drawn on each tile at the same size.
 		local dying_explosion = scaled_set.dying_explosion
+		local belt_animation_set = scaled_set.belt_animation_set
 		scaled_set.dying_explosion = nil
+		scaled_set.belt_animation_set = nil
 
 		scaler:rescale(scaled_set)
 
 		scaled_set.dying_explosion = dying_explosion
+		scaled_set.belt_animation_set = belt_animation_set
 
 		-- `rescale` does not scale `fluid_boxes`. Move the positions of the connections that the fluid
 		-- box graphics match with the artwork.
@@ -321,8 +326,8 @@ function _factory.new()
 	---converted to the sprite set type of `prototype`, when a conversion between the two types exists.
 	---
 	---The sprite set is scaled to the scale that `params` sets, if any. Otherwise, it is scaled when the size of
-	---`prototype` differs from the nominal size of the sprite set. The `dying_explosion` of the sprite set keeps its
-	---size.
+	---`prototype` differs from the nominal size of the sprite set. The `dying_explosion` and the `belt_animation_set` of
+	---the sprite set keep their size.
 	---
 	---When `prototype` is an entity, the `corpse` and `dying_explosion` of the sprite set are created for it and set on
 	---it, as `Corpses.apply` and `Explosions.apply` describe. When `prototype` is a corpse, it takes the fields of the

@@ -6,10 +6,13 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local _belts = require("assets.base.entities.transport-belt")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local SplitterExplosion = require("assets.base.explosions.splitter")
 local Remnants = require("assets.base.remnants")
 
 local M = {}
@@ -136,6 +139,23 @@ local function get_structure_patch(tint)
 	}
 end
 
+---Gets the frozen patch of the splitter, or `nil` when the freezing feature is not active.
+---@return Sprite4Way?
+local function get_frozen_patch()
+	if not (feature_flags["freezing"] and mods["space-age"]) then
+		return nil
+	end
+
+	local filename = "__space-age__/graphics/entity/frozen/splitter/splitter.png"
+
+	return {
+		north = { filename = filename, priority = "extra-high", width = 192, height = 128, scale = 0.5 },
+		east = { filename = filename, priority = "extra-high", x = 192, width = 128, height = 192, scale = 0.5 },
+		south = { filename = filename, priority = "extra-high", x = 192 + 128, width = 192, height = 128, scale = 0.5 },
+		west = { filename = filename, priority = "extra-high", x = 192 * 2 + 128, width = 128, height = 192, scale = 0.5 },
+	}
+end
+
 ---@param tint? Color
 ---@return RotatedAnimationVariations
 local function get_corpse_animation(tint)
@@ -183,9 +203,19 @@ end
 ---The belt artwork to use.
 ---@field belt_sprite BeltSprites
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("SplitterSpriteSetParams", {
+			tint = Common.color:optional(),
+			belt_sprite = V.one_of(_defines.belt_sprites),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for the vanilla splitter.
 ---@param params SplitterSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<TransportBeltSpriteSet> # The sprite set definition for the vanilla splitter.
+---@return SpriteSetDefinition<SplitterSpriteSet> # The sprite set definition for the vanilla splitter.
 ---
 ---#### Examples
 ---```lua
@@ -195,18 +225,29 @@ end
 ---local sprite_set = splitter.get_sprite_set({ tint = tint, belt_sprite = belt_sprite })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
+---@throws When `params.belt_sprite` is not a `BeltSprites`.
 ---@nodiscard
 function M.get_sprite_set(params)
-	---@type SpriteSetDefinition<TransportBeltSpriteSet>
+	check_get_sprite_set(params)
+
+	---@type SpriteSetDefinition<SplitterSpriteSet>
 	local definition = {
-		set_type = _defines.sprite_set_type.transport_belt_sprite_set,
+		set_type = _defines.sprite_set_type.splitter_sprite_set,
 		set = {
 			belt_animation_set = _belts.get_belt_animation_set(params.tint, params.belt_sprite),
 			structure = get_structure(params.tint),
 			structure_patch = get_structure_patch(params.tint),
+			frozen_patch = get_frozen_patch(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = SplitterExplosion.get_explosion({
+				tints = params.tint and {
+					["splitter-metal-particle-medium"] = params.tint,
+					["splitter-metal-particle-big"] = params.tint,
+				},
+			}),
 			corpse = Remnants.get_corpse("splitter-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = nil,
 			nominal_width = 1.8,

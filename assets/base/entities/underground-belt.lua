@@ -6,13 +6,37 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 local _belts = require("assets.base.entities.transport-belt")
 
 local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local UndergroundBeltExplosion = require("assets.base.explosions.underground-belt")
 local Remnants = require("assets.base.remnants")
 
 local M = {}
+
+---Gets one frozen patch of the underground belt structure, from the row of the sheet at the given `y`, or `nil` when
+---the freezing feature is not active.
+---@param y integer
+---@return Sprite4Way?
+local function get_frozen_patch(y)
+	if not (feature_flags["freezing"] and mods["space-age"]) then
+		return nil
+	end
+
+	return {
+		sheet = {
+			filename = "__space-age__/graphics/entity/frozen/underground-belt/underground-belt-structure.png",
+			priority = "extra-high",
+			width = 192,
+			height = 192,
+			y = y,
+			scale = 0.5,
+		},
+	}
+end
 
 ---@param tint? Color
 ---@return table
@@ -82,6 +106,8 @@ local function get_structure(tint)
 				scale = 0.5,
 			},
 		},
+		frozen_patch_in = get_frozen_patch(192),
+		frozen_patch_out = get_frozen_patch(0),
 	}
 end
 
@@ -132,9 +158,19 @@ end
 ---The belt artwork to use.
 ---@field belt_sprite BeltSprites
 
+local check_get_sprite_set = V.signature("get_sprite_set", {
+	{
+		"params",
+		V.class("UndergroundBeltSpriteSetParams", {
+			tint = Common.color:optional(),
+			belt_sprite = V.one_of(_defines.belt_sprites),
+		}):strict(),
+	},
+})
+
 ---Gets the sprite set for the vanilla underground belt.
 ---@param params UndergroundBeltSpriteSetParams The options for the sprite set.
----@return SpriteSetDefinition<TransportBeltSpriteSet> # The sprite set definition for the vanilla underground belt.
+---@return SpriteSetDefinition<UndergroundBeltSpriteSet> # The sprite set definition for the vanilla underground belt.
 ---
 ---#### Examples
 ---```lua
@@ -144,17 +180,27 @@ end
 ---local sprite_set = underground_belt.get_sprite_set({ tint = tint, belt_sprite = belt_sprite })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
+---@throws When `params.tint` is not a `Color`.
+---@throws When `params.belt_sprite` is not a `BeltSprites`.
 ---@nodiscard
 function M.get_sprite_set(params)
-	---@type SpriteSetDefinition<TransportBeltSpriteSet>
+	check_get_sprite_set(params)
+
+	---@type SpriteSetDefinition<UndergroundBeltSpriteSet>
 	local definition = {
-		set_type = _defines.sprite_set_type.transport_belt_sprite_set,
+		set_type = _defines.sprite_set_type.underground_belt_sprite_set,
 		set = {
 			belt_animation_set = _belts.get_belt_animation_set(params.tint, params.belt_sprite),
 			structure = get_structure(params.tint),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
+			dying_explosion = UndergroundBeltExplosion.get_explosion({
+				tints = params.tint and {
+					["underground-belt-metal-particle-small"] = params.tint,
+					["underground-belt-metal-particle-medium-yellow"] = params.tint,
+				},
+			}),
 			corpse = Remnants.get_corpse("underground-belt-remnants", { animation = get_corpse_animation(params.tint) }),
 			water_reflection = nil,
 			nominal_width = 1,

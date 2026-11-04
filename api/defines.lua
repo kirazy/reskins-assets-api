@@ -9,6 +9,9 @@
 ---@class Defines
 local _defines = {}
 
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
+
 ---Represents the different types of animated transport belt sprite sheets.
 ---@enum BeltSprites
 _defines.belt_sprites = {
@@ -29,6 +32,39 @@ _defines.belt_sprites = {
 	---Has twice as many frames as `defines.belt_sprites.fast` and larger spacing between arrows. Used for fastest belt speeds.
 	turbo = 3,
 }
+
+local check_get_belt_sprites = V.signature("get_belt_sprites", {
+	{ "speed", Common.positive_number },
+})
+
+---Gets the belt sprites for the given transport belt `speed`.
+---
+---A speed below 30 items/s takes `belt_sprites.standard`, a speed below 60 items/s takes `belt_sprites.fast`, and any
+---other speed takes `belt_sprites.turbo`.
+---@param speed double The speed of the transport belt, in tiles per tick.
+---@return BeltSprites # The belt sprites.
+---
+---#### Examples
+---```lua
+----- Get the belt sprites for the speed of a transport belt.
+---local belt_sprites = _defines.get_belt_sprites(data.raw["transport-belt"]["fast-transport-belt"].speed)
+----- `belt_sprites` is `_defines.belt_sprites.fast`.
+---```
+---@throws When `speed` is not a number greater than 0.
+---@nodiscard
+function _defines.get_belt_sprites(speed)
+	check_get_belt_sprites(speed)
+
+	-- A transport belt moves 480 items per second on its two lanes at a speed of 1 tile per tick.
+	local items_per_second = speed * 480
+	if items_per_second < 30 then
+		return _defines.belt_sprites.standard
+	elseif items_per_second < 60 then
+		return _defines.belt_sprites.fast
+	end
+
+	return _defines.belt_sprites.turbo
+end
 
 ---Represents the different asset mods used to build the various graphics packs.
 ---@enum AssetsSource
@@ -191,9 +227,17 @@ _defines.sprite_set_type = {
 	---The sprite set for `BeaconPrototype`.
 	beacon_sprite_set = "BeaconSpriteSet",
 
-	---The sprite set for `TransportBeltPrototype`, `UndergroundBeltPrototype`, `LinkedBeltPrototype`, and
-	---`SplitterPrototype`.
+	---The sprite set for `TransportBeltPrototype`.
 	transport_belt_sprite_set = "TransportBeltSpriteSet",
+
+	---The sprite set for `UndergroundBeltPrototype`.
+	underground_belt_sprite_set = "UndergroundBeltSpriteSet",
+
+	---The sprite set for `SplitterPrototype`.
+	splitter_sprite_set = "SplitterSpriteSet",
+
+	---The sprite set for `Loader1x2Prototype` and `Loader1x1Prototype`.
+	loader_sprite_set = "LoaderSpriteSet",
 
 	---The sprite set for `ElectricPolePrototype`.
 	electric_pole_sprite_set = "ElectricPoleSpriteSet",

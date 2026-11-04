@@ -6,36 +6,21 @@
 local _defines = require("api.defines")
 
 ---Applies a `set` of type `transport_belt_sprite_set` to `prototype`.
----
----`set.belt_animation_set` is not applied by this applicator. Applies `structure` and `structure_patch` for a splitter,
----and `structure` for an underground belt.
----@param prototype TransportBeltConnectablePrototype
+---@param prototype TransportBeltPrototype
 ---@param set TransportBeltSpriteSet
-local function apply_sprite_set_to_transport_belt_connectable(prototype, set)
-	if prototype.type == "underground-belt" then
-		---@cast prototype UndergroundBeltPrototype
-		prototype.structure = util.copy(set.structure)
-	elseif prototype.type == "splitter" then
-		---@cast prototype SplitterPrototype
-		prototype.structure = util.copy(set.structure)
-		prototype.structure_patch = util.copy(set.structure_patch)
-	end
+local function apply_sprite_set_to_transport_belt(prototype, set)
+	prototype.belt_animation_set = util.copy(set.belt_animation_set)
 end
 
 ---@type TransportBeltSpriteSetApplicator
 return {
 	set_type = _defines.sprite_set_type.transport_belt_sprite_set,
-	apply_to = apply_sprite_set_to_transport_belt_connectable,
+	apply_to = apply_sprite_set_to_transport_belt,
 }
 
 ---Defines the sprite data of a `SpriteSetDefinition` of type `transport_belt_sprite_set`.
----@class (exact) TransportBeltSpriteSet : EntityWithHealthSpriteSet
----The prototype's `belt_animation_set`.
----@field belt_animation_set TransportBeltAnimationSet
----The prototype's `structure`, for a splitter or an underground belt.
----@field structure? Animation4Way
----The prototype's `structure_patch`, for a splitter.
----@field structure_patch? Animation4Way
+---@class (exact) TransportBeltSpriteSet : TransportBeltConnectableSpriteSet
+---@field belt_animation_set TransportBeltAnimationSetWithCorners
 
----Applies the `TransportBeltSpriteSet` to `TransportBeltConnectablePrototype` instances.
----@class (exact) TransportBeltSpriteSetApplicator : SpriteSetApplicator<TransportBeltConnectablePrototype, TransportBeltSpriteSet>
+---Applies the `TransportBeltSpriteSet` to `TransportBeltPrototype` instances.
+---@class (exact) TransportBeltSpriteSetApplicator : SpriteSetApplicator<TransportBeltPrototype, TransportBeltSpriteSet>
