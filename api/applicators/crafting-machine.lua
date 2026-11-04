@@ -207,7 +207,7 @@ local function apply_sprite_set_to_crafting_machine(prototype, sprite_set)
 		prototype.fluid_boxes_off_when_no_fluid_recipe = sprite_set.fluid_boxes_off_when_no_fluid_recipe
 	end
 
-	Assignment.safe_assign(prototype, sprite_set, { "circuit_connector" })
+	Assignment.safe_assign(prototype, sprite_set, { "circuit_connector", "circuit_connector_flipped" })
 end
 
 ---@type CraftingMachineSpriteSetApplicator
@@ -242,6 +242,8 @@ return {
 ---Defines the sprite data of a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
 ---@class (exact) CraftingMachineSpriteSet : EntityWithHealthSpriteSet
 ---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
+---When `nil`, the flipped circuit connector of the prototype is not modified.
+---@field circuit_connector_flipped? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 ---The prototype's `graphics_set`.
 ---@field graphics_set CraftingMachineGraphicsSet
 ---The prototype's `graphics_set_flipped`, for a crafting machine that supports flipping.
