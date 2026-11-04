@@ -131,12 +131,18 @@ function M.get_sprite_set(params)
 end
 
 ---Gets the icon for the land mine of the `variant` given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("variant", { "base", "distractor", "poison", "slowdown" }, "get_icon", function(variant)
-	if variant == "base" then
-		return IconBuilderFactory:create({ folder = "__base__/graphics/icons" }):flat("land-mine")
-	end
+M.get_icon = IconBuilderFactory.dispatch(
+	"variant",
+	{ "base", "distractor", "poison", "slowdown" },
+	"get_icon",
+	function(variant)
+		if variant == "base" then
+			return IconBuilderFactory:create({ folder = "__base__/graphics/icons" }):flat("land-mine")
+		end
 
-	return IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons/mines" }):flat(variant .. "-mine")
-end)
+		return IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons/mines" })
+			:flat(variant .. "-mine")
+	end
+)
 
 return M
