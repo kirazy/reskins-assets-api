@@ -195,6 +195,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = chest_logistic.get_sprite_set({ logistic_mode = "requester", material = "brass" })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.logistic_mode` is not a `ChestLogisticMode`.
 ---@throws When `params.material` is not a `ChestLogisticMaterial`.
 ---@nodiscard
