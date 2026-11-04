@@ -4,6 +4,7 @@
 ---@namespace Reskins.Assets.Applicators
 
 local _defines = require("api.defines")
+local Assignment = require("api.assignment")
 
 ---Applies a `set` of type `loader_sprite_set` to `prototype`.
 ---@param prototype LoaderPrototype
@@ -11,7 +12,7 @@ local _defines = require("api.defines")
 local function apply_sprite_set_to_loader(prototype, set)
 	prototype.belt_animation_set = util.copy(set.belt_animation_set)
 	prototype.structure = util.copy(set.structure)
-	prototype.structure_render_layer = set.structure_render_layer
+	Assignment.safe_assign(prototype, set, { "structure_render_layer" })
 end
 
 ---@type LoaderSpriteSetApplicator
@@ -23,6 +24,7 @@ return {
 ---Defines the sprite data of a `SpriteSetDefinition` of type `loader_sprite_set`.
 ---@class (exact) LoaderSpriteSet : TransportBeltConnectableSpriteSet
 ---@field structure LoaderStructure
+---When `nil`, the structure render layer of the prototype is not modified.
 ---@field structure_render_layer? RenderLayer
 
 ---Applies the `LoaderSpriteSet` to `LoaderPrototype` instances.
