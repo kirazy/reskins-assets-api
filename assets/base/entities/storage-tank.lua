@@ -65,7 +65,7 @@ local function get_pictures(tint)
 	})
 
 	---@type StorageTankPictures
-	return {
+	local pictures = {
 		picture = { sheets = sheets },
 		fluid_background = {
 			filename = base_path .. "fluid-background.png",
@@ -97,6 +97,24 @@ local function get_pictures(tint)
 			scale = 0.5,
 		},
 	}
+
+	if feature_flags["freezing"] and mods["space-age"] then
+		pictures.frozen_patch = {
+			sheets = {
+				{
+					filename = "__space-age__/graphics/entity/frozen/storage-tank/storage-tank.png",
+					priority = "extra-high",
+					frames = 2,
+					width = 219,
+					height = 215,
+					shift = util.by_pixel(-0.25, 3.75),
+					scale = 0.5,
+				},
+			},
+		}
+	end
+
+	return pictures
 end
 
 ---@param tint? Color
@@ -140,6 +158,23 @@ local function get_corpse_animation(tint)
 	return animation
 end
 
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/storage-tank/storage-tank-reflection.png",
+			priority = "extra-high",
+			width = 24,
+			height = 24,
+			shift = util.by_pixel(5, 35),
+			variation_count = 1,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = false,
+	}
+end
+
 ---Defines the options for the vanilla storage tank sprite set.
 ---@class StorageTankSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -168,7 +203,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			water_reflection = get_water_reflection(),
 			nominal_width = 3,
 			nominal_height = 3,
 		},
@@ -178,12 +213,8 @@ function M.get_sprite_set(params)
 end
 
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
-local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
 ---Gets the icon for the vanilla storage tank, in the tints given by `params`.
 M.get_icon = base_icons:tinted("storage-tank"):build("get_icon")
-
----Gets the icon for a storage tank with a connection on every corner, in the tints given by `params`.
-M.get_all_corners_icon = bobs_icons:tinted("storage-tank-all-corners"):build("get_all_corners_icon")
 
 return M
