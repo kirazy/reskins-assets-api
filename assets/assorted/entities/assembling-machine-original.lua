@@ -23,7 +23,7 @@ local function get_frozen_patch()
 	end
 
 	return {
-		filename = "__reskins-assets-base__/graphics/entity/assembling-machine-original/assembling-machine-frozen.png",
+		filename = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/assembling-machine-frozen.png",
 		priority = "high",
 		width = 214,
 		height = 237,
@@ -329,7 +329,7 @@ local function get_pipe_pictures_frozen()
 		return nil
 	end
 
-	local path = "__reskins-assets-base__/graphics/entity/assembling-machine-original/pipes/assembling-machine-pipe-"
+	local path = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/pipes/assembling-machine-pipe-"
 
 	---@type Sprite4Way
 	return {
