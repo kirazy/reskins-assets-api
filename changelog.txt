@@ -3,6 +3,7 @@ Version: 0.2.1
 Date: ????
   Features:
     - Completed the distillery sprite set.
+    - Added the Bob's electrolyser sprite set.
     - Added method `get_pipe_pictures` to the original assembling machine sprite set.
     - Added `HeatBufferGraphics` and `HeatConnectionGraphics`, the graphics of a heat energy source or heat buffer.
     - Added `api.fluid-boxes`, which applies `FluidBoxGraphics` to the fluid boxes of a prototype.
