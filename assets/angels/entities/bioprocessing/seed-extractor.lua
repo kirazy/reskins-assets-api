@@ -91,6 +91,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil,
 			corpse = nil,
 			water_reflection = nil,
+			drawing_box_vertical_extension = 1,
 			nominal_width = 3,
 			nominal_height = 3,
 		},

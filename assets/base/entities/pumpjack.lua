@@ -352,6 +352,7 @@ local function get_definition(params, corpse_base_layer)
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(corpse_base_layer, params.tint) },
 			water_reflection = nil,
+			drawing_box_vertical_extension = 1,
 			nominal_width = 3,
 			nominal_height = 3,
 		},

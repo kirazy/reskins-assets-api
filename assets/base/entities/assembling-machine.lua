@@ -426,6 +426,7 @@ function M.get_sprite_set(params)
 			dying_explosion = nil, -- FIXME: type this and then build it out.
 			corpse = { animation = get_corpse_animation(params.tint) },
 			water_reflection = get_water_reflection(),
+			drawing_box_vertical_extension = tier == 3 and 0.2 or nil,
 			nominal_width = 3,
 			nominal_height = 3,
 		},

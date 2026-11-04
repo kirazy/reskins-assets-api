@@ -202,6 +202,7 @@ function M.get_sprite_set(params)
 				animation_overlay = get_corpse_animation_overlay(params.tint),
 			},
 			water_reflection = get_water_reflection(),
+			drawing_box_vertical_extension = 3,
 			nominal_width = 2,
 			nominal_height = 2,
 		},

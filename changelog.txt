@@ -44,6 +44,7 @@ Date: ????
     - The nuclear reactor sprite set now includes the heat picture.
     - The radar sprite set now includes the water reflection.
     - The working visualisations of a `PipeConnectionGraphics` are now enabled on the matching pipe connection of the prototype.
+    - `EntityWithHealthSpriteSet` now has `drawing_box_vertical_extension`, and the sprite sets now include it wherever the source entity defines it.
   Bugfixes:
     - Fixed that two of the four fluid boxes of the filtration unit took the wrong pipe pictures.
     - Corrected the generator applicator and sprite set to correctly reflect the parameters required for Factorio 2.1.

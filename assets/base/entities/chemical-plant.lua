@@ -272,7 +272,7 @@ function M.get_sprite_set(params)
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
 			corpse = { animation = get_corpse_animation(params.tint) },
-			water_reflection = nil,
+			drawing_box_vertical_extension = 0.4,
 			nominal_width = 3,
 			nominal_height = 3,
 		},
