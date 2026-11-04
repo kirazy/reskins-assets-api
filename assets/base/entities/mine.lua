@@ -81,17 +81,6 @@ local function get_circuit_connector()
 	}
 end
 
----Gets the corpse of the land mine for the given `variant`.
----@param variant MineVariant
----@return GenericRemnants? # The request for the generic remnants of the base game, or `nil` for the variant `"base"`, for which the corpse of the land mine is not modified.
-local function get_corpse(variant)
-	if variant == "base" then
-		return nil
-	end
-
-	return _defines.generic_remnants
-end
-
 ---Defines the options for the land mine sprite set.
 ---@class MineSpriteSetParams
 ---The variant of the land mine, which selects its artwork.
@@ -131,7 +120,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = nil,
-			corpse = get_corpse(params.variant),
+			corpse = "land-mine-remnants",
 			water_reflection = nil,
 			nominal_width = 1,
 			nominal_height = 1,
