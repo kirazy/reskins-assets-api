@@ -145,6 +145,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = robo_zone_expander.get_sprite_set({ tint = tint, tier = 2 })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tier` is not an integer between 1 and 4.
 ---@throws When `params.tint` is not a `Color`.
 ---@nodiscard

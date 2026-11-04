@@ -189,6 +189,7 @@ local check_get_smoke = V.signature("get_smoke", {
 ---entity.burner = util.copy(entity.burner)
 ---entity.burner.smoke = generator_burner.get_smoke({})
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.name` is not a string, or is an empty string.
 ---@throws When `params.frequency` is not a non-negative number.
 ---@nodiscard

@@ -290,6 +290,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = turret_laser.get_sprite_set({ tint = tint, lens = "sapphire" })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tint` is not a `Color`.
 ---@throws When `params.lens` is not one of `"amethyst"`, `"diamond"`, `"emerald"`, `"glass"`, `"ruby"`, `"sapphire"`, or `"topaz"`.
 ---@nodiscard

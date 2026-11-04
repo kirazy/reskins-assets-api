@@ -55,6 +55,7 @@ local check_get_projectile_graphics = V.signature("get_projectile_graphics", {
 ---projectile.animation = graphics.animation
 ---projectile.shadow = graphics.shadow
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.robot` is not one of `"defender"`, `"distractor"`, `"destroyer"`, or `"laser-robot"`.
 ---@nodiscard
 function M.get_projectile_graphics(params)

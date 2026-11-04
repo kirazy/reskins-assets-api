@@ -213,6 +213,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = heat_source.get_sprite_set({ tint = tint, variant = "fluid", pipe_material = "aluminum-invar" })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.variant` is not a `HeatSourceVariant`.
 ---@throws When `params.pipe_material` is not a `HeatPipeMaterial`.
 ---@throws When `params.tint` is not a `Color`.

@@ -165,6 +165,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = storage_tank_small.get_sprite_set({ variant = "inline" })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.variant` is not one of `"standard"` or `"inline"`.
 ---@nodiscard
 function M.get_sprite_set(params)

@@ -293,6 +293,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = turret_plasma.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)

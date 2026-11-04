@@ -122,6 +122,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = generator_fluid.get_sprite_set({ tint = tint })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tint` is not a `Color`.
 ---@nodiscard
 function M.get_sprite_set(params)
@@ -179,6 +180,7 @@ local check_get_smoke = V.signature("get_smoke", {
 ---
 ---entity.smoke = generator_fluid.get_smoke({ name = "light-smoke", frequency = 5 / 16 })
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.name` is not a string, or is an empty string.
 ---@throws When `params.frequency` is not a non-negative number.
 ---@nodiscard

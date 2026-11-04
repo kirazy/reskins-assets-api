@@ -164,6 +164,7 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 ---
 ---data.raw["beam"]["bob-laser-beam-sapphire"].graphics_set = laser_beam.get_graphics_set({ lens = "sapphire" })
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.lens` is not one of `"amethyst"`, `"diamond"`, `"emerald"`, `"glass"`, `"ruby"`, `"sapphire"`, or `"topaz"`.
 ---@nodiscard
 function M.get_graphics_set(params)

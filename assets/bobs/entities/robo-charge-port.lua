@@ -225,6 +225,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---})
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tier` is not an integer between 1 and 4.
 ---@throws When `params.pad_positions` is not a non-empty array of `Vector`.
 ---@throws When `params.pad_scale` is not a positive number.

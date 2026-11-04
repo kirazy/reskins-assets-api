@@ -104,6 +104,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---local sprite_set = mine.get_sprite_set({ variant = "poison" })
 ---applicators.apply_sprite_set(entity, sprite_set)
 ---```
+---@throws When `params` defines an unrecognized field.
 ---@throws When `params.variant` is not one of `"base"`, `"distractor"`, `"poison"`, or `"slowdown"`.
 ---@nodiscard
 function M.get_sprite_set(params)
