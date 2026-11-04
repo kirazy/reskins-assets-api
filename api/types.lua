@@ -227,6 +227,15 @@
 ---See [CombatRobotPrototype::shadow_in_motion](https://lua-api.factorio.com/latest/prototypes/CombatRobotPrototype.html#shadow_in_motion).
 ---@field shadow_in_motion RotatedAnimation
 
+---Defines the fields of a [CircularParticleCreationSpecification](https://lua-api.factorio.com/latest/types/CircularParticleCreationSpecification.html)
+---that place the shell particle on the artwork of a turret.
+---@class (exact) ShellParticlePlacement
+---@field center? Vector
+---@field creation_distance? double
+---@field creation_distance_orientation? double
+---@field direction? float
+---@field height? float
+
 ---Defines the sprite data of a `SpriteSetDefinition` of type `turret_sprite_set`.
 ---
 ---The fields that belong to `FluidTurretPrototype` are applied to a fluid turret only.
@@ -288,7 +297,7 @@
 ---of the `shell_particle` of the prototype are not modified.
 ---
 ---See [ProjectileAttackParameters::shell_particle](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#shell_particle).
----@field shell_particle? CircularParticleCreationSpecification
+---@field shell_particle? ShellParticlePlacement
 ---@field muzzle_animation? Animation
 ---@field muzzle_light? LightDefinition
 ---@field enough_fuel_indicator_picture? Sprite8Way

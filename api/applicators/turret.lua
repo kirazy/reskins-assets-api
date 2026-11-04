@@ -62,7 +62,9 @@ local function apply_attack_parameters(prototype, set)
 			attack_parameters.shell_particle,
 			"The prototype has no shell_particle to which the sprite set can be applied."
 		)
-		attack_parameters.shell_particle = util.merge({ attack_parameters.shell_particle, set.shell_particle })
+		for key, value in pairs(set.shell_particle) do
+			attack_parameters.shell_particle[key] = util.copy(value)
+		end
 	end
 end
 
