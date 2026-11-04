@@ -275,6 +275,23 @@ local function get_tinted_corpse_animation(tint, plate_tint)
 	return _sprites.make_rotated_animation_variations_from_spritesheet(6, { layers = layers })
 end
 
+---Gets the tints of the metal particles in the dying explosion of the heat pipe for the given `params`.
+---
+---The particles take the fixed colors of `params.pipe_material` when it is given. Otherwise, the small particles take
+---`params.tint`, the color of the pipes, and the medium particles take `params.plate_tint`, the color of the plates.
+---@param params HeatPipeSpriteSetParams
+---@return table<ParticleID, Color>?
+local function get_particle_tints(params)
+	if params.pipe_material then
+		return util.copy(particle_tints[params.pipe_material])
+	end
+
+	return {
+		["heat-pipe-metal-particle-small"] = params.tint,
+		["heat-pipe-metal-particle-medium"] = params.plate_tint,
+	}
+end
+
 ---Defines the options for the heat pipe sprite set.
 ---
 ---The heat pipe is drawn in the fixed colors of `pipe_material` when it is given. Otherwise, the tintable heat pipe is
@@ -344,7 +361,7 @@ function M.get_sprite_set(params)
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = HeatPipeExplosion.get_explosion({
-				tints = params.pipe_material and util.copy(particle_tints[params.pipe_material]),
+				tints = get_particle_tints(params),
 			}),
 			corpse = Remnants.get_corpse("heat-pipe-remnants", { animation = corpse_animation }),
 			water_reflection = nil,
