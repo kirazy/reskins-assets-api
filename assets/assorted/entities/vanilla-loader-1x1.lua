@@ -78,8 +78,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 
 ---Gets the sprite set for the 1 x 1 vanilla loader.
 ---
----The loader takes the belt animation set of the transport belt for the given `params`. The corpse of the loader is not
----modified.
+---The loader takes the belt animation set of the transport belt for the given `params`. The corpse and the dying
+---explosion of the loader are not modified.
 ---@param params VanillaLoader1x1SpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<LoaderSpriteSet> # The sprite set definition for the 1 x 1 vanilla loader.
 ---
