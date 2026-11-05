@@ -182,9 +182,20 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for the electrolyser of the `tier`, in the tints given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("tier", { 1, 2, 3, 4, 5 }, "get_icon", function(tier)
+local TIERS = { 1, 2, 3, 4, 5 }
+
+---Gets the builder of the icon of the electrolyser of the given `tier`.
+---@param tier ElectrolyserTier
+---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
+local function get_icon_builder(tier)
 	return icons:tinted("electrolyser-" .. tier)
-end)
+end
+
+---Gets the icon for the electrolyser of the `tier`, in the tints given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("tier", TIERS, "get_icon", get_icon_builder)
+
+---Gets the icon for the electrolyser of the `tier` as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("tier", TIERS, "get_icon_composition", get_icon_builder)
 
 return M

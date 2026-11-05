@@ -13,10 +13,11 @@ Date: ????
     - Added the container sprite set type and applicator, the conversion from valve to storage tank sprite sets, and `use_mirroring` for crafting machine sprite sets.
     - Added the sprite sets of Angel's big chest and warehouse with their logistic variants and an optional tier mask for the warehouse, and the icon of Angel's thermal extractor.
     - Added `IconBuilderFactory:collection`, which declares a folder with one subfolder for each value of a parameter, `variations` on the icon builders, which declares picture variations that `build_composition` returns as content with variations, and mipmap counts through `mipmaps` on the icon builders and the `mipmap_count` of the factory, which defaults to 4.
-    - Added `IconBuilderFactory.dispatch_composition`, and a `get_*icon_composition` creator beside each `get_*icon` creator of the sprite set modules that is built from one builder.
-    - Added `icons.get_technology_constant` with `defines.technology_constant`, `icons.get_technology_equipment_overlay` with `defines.equipment_overlay`, `icons.get_minified_technology_underlay` and `icons.get_minified_technology_overlay`, and `icons.equipment_background_group`.
+    - Added `IconBuilderFactory.dispatch_composition`, and a `get_*icon_composition` creator beside each `get_*icon` creator of the sprite set modules.
+    - Added `icons.get_technology_constant` with `defines.technology_constant`, `icons.get_technology_equipment_overlay` with `defines.equipment_overlay`, `icons.get_minified_technology_underlay` and `icons.get_minified_technology_overlay`, and `icons.equipment_background_group` with `icons.get_equipment_background_layer`.
     - Added the catalog modules of the Angel's items in `assets.angels.items`: plates and alloys, sheet coils, wires, gears, armor, the icons at the root of the icon folder, and the ingots and powders with their picture variations.
     - Added the catalog modules of the bearings and bearing balls in `assets.bobs.items`, with the icons in the colors of Angel's materials.
+    - Added the catalog modules of the items and technologies of the base game in `assets.base.items` and `assets.base.technologies`, one module for each folder of artwork, and of the modular roboport and fission reactor equipment technologies in `assets.bobs.technologies`.
   Changes:
     - The sprite sets now include water reflections, circuit connectors, frozen sprites, integration patches, heat pictures and pipe covers, drawing box extensions, light flicker, and the fluid, glass, and wagon connection graphics of the pump wherever the base entity defines them, and their sprite set types have the fields for them.
     - Every sprite set now has `fluid_boxes`, `heat_buffers`, and `pipe_material`, which `apply_sprite_set` applies to every prototype, removing the pipe pictures of a fluid box that matches none of them.
@@ -33,6 +34,7 @@ Date: ????
     - Renamed `defines.sprite_set_type.flying_robot_sprite_set` to `combat_robot_sprite_set`, and removed `apply_to_explosion` from `SpriteSetApplicator`, the `include_frozen_pictures` parameter and `fluid_box` field of the pipe sprite sets, and the radius visualisation from the beacon and mining drill sprite sets.
     - The sprite sets of Angel's machines, valves, and chests now validate their parameters and define their dying explosions, remnants, mirroring, and pipe pictures, and no longer set `fluid_boxes_off_when_no_fluid_recipe`.
     - The pipe connectors of a crafting machine sprite set are now its first working visualisations, and `LogisticContainerSpriteSet` now extends `ContainerSpriteSet`.
+    - Removed `assets.base.items.icons` and `assets.base.technologies.icons`; their icons are now in the sprite set modules and in the catalog module of each folder.
   Bugfixes:
     - Fixed the pipe pictures of the filtration unit, the remnant variations of the beacon, the shadow of the pump, and the position and frozen patch of the lab.
     - Fixed that the generator sprite set and applicator did not match Factorio 2.1, and that the boiler applicator did not set the fire flicker.

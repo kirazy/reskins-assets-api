@@ -256,8 +256,10 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----Gets the icon for a pipe to ground built from the `material` given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("material", _defines.pipe_material, "get_icon", function(pipe_material)
+---Gets the builder of the icon of the pipe to ground built from the given `pipe_material`.
+---@param pipe_material PipeMaterial
+---@return FlatIconBuilder<{}>
+local function get_icon_builder(pipe_material)
 	-- The iron pipe-to-ground icon comes from the base game.
 	if pipe_material == _defines.pipe_material.iron then
 		return IconBuilderFactory:create({ folder = "__base__/graphics/icons" }):flat("pipe-to-ground")
@@ -267,6 +269,13 @@ M.get_icon = IconBuilderFactory.dispatch("material", _defines.pipe_material, "ge
 	local name = _pipes.name_from_material(pipe_material)
 
 	return IconBuilderFactory:create({ folder = folder }):flat(name .. "-pipe-to-ground")
-end)
+end
+
+---Gets the icon for a pipe to ground built from the `material` given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("material", _defines.pipe_material, "get_icon", get_icon_builder)
+
+---Gets the icon for a pipe to ground built from the `material` given by `params`, as an `IconComposition`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("material", _defines.pipe_material, "get_icon_composition", get_icon_builder)
 
 return M

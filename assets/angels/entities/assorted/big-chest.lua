@@ -213,8 +213,12 @@ M.get_icon = icon_builder:build("get_icon")
 ---Gets the icon for Angel's big chest as an `IconComposition`.
 M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
+local logistic_icon_builder = icons:layers("big-chest-logistic"):keyed("logistic_mode", BigChestLogisticMode):base()
+
 ---Gets the icon for Angel's logistic big chest of the `logistic_mode` given by `params`.
-M.get_logistic_icon =
-	icons:layers("big-chest-logistic"):keyed("logistic_mode", BigChestLogisticMode):base():build("get_logistic_icon")
+M.get_logistic_icon = logistic_icon_builder:build("get_logistic_icon")
+
+---Gets the icon for Angel's logistic big chest of the `logistic_mode` given by `params`, as an `IconComposition`.
+M.get_logistic_icon_composition = logistic_icon_builder:build_composition("get_logistic_icon_composition")
 
 return M

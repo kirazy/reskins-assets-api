@@ -203,15 +203,21 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
+local VARIANTS = { "basic", "temperate", "desert", "swamp" }
+
+---Gets the builder of the icon of the crop farm of the given `variant`.
+---@param variant CropFarmVariant
+---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
+local function get_icon_builder(variant)
+	-- The basic farm's artwork is filed under the bare field name.
+	return icons:tinted(variant == "basic" and "field" or "field-" .. variant)
+end
+
 ---Gets the icon for Angel's crop farm of the given `variant` and in the tints given by `params`.
-M.get_icon = IconBuilderFactory.dispatch(
-	"variant",
-	{ "basic", "temperate", "desert", "swamp" },
-	"get_icon",
-	function(key)
-		-- The basic farm's artwork is filed under the bare field name.
-		return icons:tinted(key == "basic" and "field" or "field-" .. key)
-	end
-)
+M.get_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_icon", get_icon_builder)
+
+---Gets the icon for Angel's crop farm of the given `variant` as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("variant", VARIANTS, "get_icon_composition", get_icon_builder)
 
 return M

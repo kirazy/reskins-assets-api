@@ -195,13 +195,24 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for the small storage tank of the `variant` given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("variant", { "standard", "inline" }, "get_icon", function(variant)
+local VARIANTS = { "standard", "inline" }
+
+---Gets the builder of the icon of the small storage tank of the given `variant`.
+---@param variant StorageTankSmallVariant
+---@return IconBuilder<{ base_tint?: Color }>
+local function get_icon_builder(variant)
 	if variant == "inline" then
 		return icons:layers("storage-tank-small"):stem("storage-tank-small-inline"):base()
 	end
 
 	return icons:layers("storage-tank-small"):base()
-end)
+end
+
+---Gets the icon for the small storage tank of the `variant` given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_icon", get_icon_builder)
+
+---Gets the icon for the small storage tank of the `variant` given by `params`, as an `IconComposition`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("variant", VARIANTS, "get_icon_composition", get_icon_builder)
 
 return M

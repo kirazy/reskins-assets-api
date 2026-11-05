@@ -27,7 +27,8 @@ local ANGELS_FILES = {
 	["titanium"] = "titanium-bearing-ball-pink",
 }
 
----Provides the icons of the bearing-balls folder, `bearing-balls/{material}-bearing-ball[-{color}].png`.
+---Provides methods for getting the icons of the bearing-balls folder,
+---`bearing-balls/{material}-bearing-ball[-{color}].png`.
 ---
 ---#### Examples
 ---```lua

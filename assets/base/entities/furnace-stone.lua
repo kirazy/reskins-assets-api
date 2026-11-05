@@ -453,13 +453,24 @@ end
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a stone furnace of the `variant` and in the tints given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("variant", { "standard", "chemical" }, "get_icon", function(variant)
+local VARIANTS = { "standard", "chemical" }
+
+---Gets the builder of the icon of the stone furnace of the given `variant`.
+---@param variant string
+---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
+local function get_icon_builder(variant)
 	-- The standard furnace uses vanilla artwork; the rest are in `__reskins-assets-bobs__`.
 	local name = variant == "standard" and "furnace-stone" or "furnace-stone-" .. variant
 	local factory = variant == "standard" and base_icons or bobs_icons
 
 	return factory:tinted(name)
-end)
+end
+
+---Gets the icon for a stone furnace of the `variant` and in the tints given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_icon", get_icon_builder)
+
+---Gets the icon for a stone furnace of the `variant` as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("variant", VARIANTS, "get_icon_composition", get_icon_builder)
 
 return M

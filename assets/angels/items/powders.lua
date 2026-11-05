@@ -38,8 +38,8 @@ local MATERIALS = {
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons" })
 
----Provides the icons of the powders collection of Angel's items, `powders/{material}/powder-{material}.png`, with
----their picture variations.
+---Provides methods for getting the icons of the powders collection of Angel's items,
+---`powders/{material}/powder-{material}.png`, with their picture variations.
 ---
 ---#### Examples
 ---```lua

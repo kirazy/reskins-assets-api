@@ -342,6 +342,33 @@ function _icons.get_icon_background_layer(tint)
 	return icon_data
 end
 
+local check_get_equipment_background_layer = V.signature("get_equipment_background_layer", {
+	{ "category", AssetsCommon.equipment_category },
+})
+
+---Gets the icon layer of the background of the given equipment `category`, in the color of the category.
+---@param category EquipmentCategory The category of the equipment.
+---@return SafeIconData background The background layer.
+---
+---#### Examples
+---```lua
+----- Compose the icon of a vehicle battery on the background of energy equipment.
+---local composition = EquipmentBattery2.get_icon_composition({ tint = tint })
+---    :add(icons_api.equipment_background_group, icons_api.get_equipment_background_layer("energy"))
+---    :outline()
+---
+---local icon_data, pictures = composition:build()
+----- The icon has the green background beneath the artwork, and the pictures have the artwork alone.
+---```
+---@throws When `category` is not an `EquipmentCategory`.
+---@see Reskins.Assets.Icons.equipment_background_group
+---@nodiscard
+function _icons.get_equipment_background_layer(category)
+	check_get_equipment_background_layer(category)
+
+	return _icons.get_icon_background_layer(equipment_background_tints[category])
+end
+
 ---Gets an icon layer with a symbol in the top-right corner that indicates a miniature entity.
 ---@return SafeIconData overlay The overlay layer.
 ---

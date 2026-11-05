@@ -32,6 +32,10 @@ _common.technology_constant = V.one_of(_defines.technology_constant):describe_as
 ---A validator that checks that a value is an equipment overlay.
 _common.equipment_overlay = V.one_of(_defines.equipment_overlay):describe_as("an equipment overlay")
 
+---A validator that checks that a value is an equipment category.
+_common.equipment_category =
+	V.one_of({ "defense", "energy", "offense", "utility" }):describe_as("an equipment category")
+
 ---A validator that checks that a value is a pipe material.
 _common.pipe_material = V.one_of(_defines.pipe_material):describe_as("a pipe material")
 

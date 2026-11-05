@@ -14,7 +14,7 @@ local MATERIALS = {
 	"tungsten",
 }
 
----Provides the icons of the gears folder of Angel's items, `gears/{material}-gear-wheel.png`.
+---Provides methods for getting the icons of the gears folder of Angel's items, `gears/{material}-gear-wheel.png`.
 ---
 ---#### Examples
 ---```lua

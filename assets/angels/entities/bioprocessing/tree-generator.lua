@@ -197,9 +197,20 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
----Gets the icon for Angel's tree generator of the `variant` and in the tints given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("variant", { "temperate", "desert", "swamp" }, "get_icon", function(variant)
+local VARIANTS = { "temperate", "desert", "swamp" }
+
+---Gets the builder of the icon of the tree generator of the given `variant`.
+---@param variant TreeGeneratorVariant
+---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
+local function get_icon_builder(variant)
 	return icons:tinted("tree-generator-" .. variant)
-end)
+end
+
+---Gets the icon for Angel's tree generator of the `variant` and in the tints given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_icon", get_icon_builder)
+
+---Gets the icon for Angel's tree generator of the `variant` as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("variant", VARIANTS, "get_icon_composition", get_icon_builder)
 
 return M

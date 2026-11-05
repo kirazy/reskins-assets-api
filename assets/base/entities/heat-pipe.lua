@@ -377,15 +377,28 @@ local vanilla_icons = IconBuilderFactory:create({ folder = "__base__/graphics/ic
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a heat pipe built from the `pipe_material` given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("pipe_material", HEAT_PIPE_MATERIALS, "get_icon", function(pipe_material)
+---Gets the builder of the icon of the heat pipe built from the given `pipe_material`.
+---@param pipe_material HeatPipeMaterial
+---@return FlatIconBuilder<{}>|IconBuilder<{ base_tint?: Color }>
+local function get_icon_builder(pipe_material)
 	-- The icon of the heat pipe of the base material comes from the base game.
 	if pipe_material == "base" then
 		return vanilla_icons:flat("heat-pipe")
 	end
 
 	return bobs_icons:layers("heat-pipe"):stem("heat-pipe-" .. pipe_material):base()
-end)
+end
+
+---Gets the icon for a heat pipe built from the `pipe_material` given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("pipe_material", HEAT_PIPE_MATERIALS, "get_icon", get_icon_builder)
+
+---Gets the icon for a heat pipe built from the `pipe_material` given by `params`, as an `IconComposition`.
+M.get_icon_composition = IconBuilderFactory.dispatch_composition(
+	"pipe_material",
+	HEAT_PIPE_MATERIALS,
+	"get_icon_composition",
+	get_icon_builder
+)
 
 local tinted_icon_builder = base_icons
 	:layers("heat-pipe")

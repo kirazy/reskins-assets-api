@@ -12,40 +12,36 @@ local M = {}
 
 local icons = IconBuilderFactory:create({ folder = ICONS_FOLDER })
 
----Gets the spidertron icon for the given `variant`.
-M.get_icon = IconBuilderFactory.dispatch(
-	"variant",
-	{ "antron", "tankotron", "logistic", "heavy" },
-	"get_icon",
-	function(variant)
-		local name = "spidertron-" .. variant
+local VARIANTS = { "antron", "tankotron", "logistic", "heavy" }
 
-		return icons:flat(name):folder(ICONS_FOLDER .. "/" .. name)
-	end
-)
+---Gets the builder of the icon of the spidertron of the given `variant`.
+---@param variant string
+---@return FlatIconBuilder<{}>
+local function get_icon_builder(variant)
+	local name = "spidertron-" .. variant
+
+	return icons:flat(name):folder(ICONS_FOLDER .. "/" .. name)
+end
+
+---Gets the spidertron icon for the given `variant`.
+M.get_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_icon", get_icon_builder)
+
+---Gets the spidertron icon for the given `variant` as an `IconComposition`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("variant", VARIANTS, "get_icon_composition", get_icon_builder)
 
 ---Gets the `icon_tintables` of a spidertron item for the given `variant`.
-M.get_tintable_icon = IconBuilderFactory.dispatch(
-	"variant",
-	{ "antron", "tankotron", "logistic", "heavy" },
-	"get_tintable_icon",
-	function(variant)
-		local name = "spidertron-" .. variant
+M.get_tintable_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_tintable_icon", function(variant)
+	local name = "spidertron-" .. variant
 
-		return icons:layers(name):stem(name .. "-runtime"):base()
-	end
-)
+	return icons:layers(name):stem(name .. "-runtime"):base()
+end)
 
 ---Gets the `icon_tintable_masks` of a spidertron item for the given `variant`.
-M.get_tintable_mask_icon = IconBuilderFactory.dispatch(
-	"variant",
-	{ "antron", "tankotron", "logistic", "heavy" },
-	"get_tintable_mask_icon",
-	function(variant)
-		local name = "spidertron-" .. variant
+M.get_tintable_mask_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_tintable_mask_icon", function(variant)
+	local name = "spidertron-" .. variant
 
-		return icons:layers(name):stem(name .. "-runtime"):layer(IconBuilderFactory.role.mask)
-	end
-)
+	return icons:layers(name):stem(name .. "-runtime"):layer(IconBuilderFactory.role.mask)
+end)
 
 return M

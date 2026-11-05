@@ -251,9 +251,20 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a heat source of the `variant` and in the tints given by `params`.
-M.get_icon = IconBuilderFactory.dispatch("variant", { "burner", "fluid" }, "get_icon", function(variant)
+local VARIANTS = { "burner", "fluid" }
+
+---Gets the builder of the icon of the heat source of the given `variant`.
+---@param variant HeatSourceVariant
+---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
+local function get_icon_builder(variant)
 	return icons:tinted("heat-source-" .. variant)
-end)
+end
+
+---Gets the icon for a heat source of the `variant` and in the tints given by `params`.
+M.get_icon = IconBuilderFactory.dispatch("variant", VARIANTS, "get_icon", get_icon_builder)
+
+---Gets the icon for a heat source of the `variant` as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition =
+	IconBuilderFactory.dispatch_composition("variant", VARIANTS, "get_icon_composition", get_icon_builder)
 
 return M
