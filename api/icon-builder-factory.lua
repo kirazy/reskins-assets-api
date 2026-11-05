@@ -175,8 +175,8 @@ local check_collection = V.signature("collection", {
 ---    :build_composition("get_icon_composition")
 ---
 ---local icon_data, pictures = get_icon_composition({ material = "iron" }):build()
------ The icon is powders/iron/powder-iron.png, and the pictures are powder-iron.png and powder-iron-1.png to
------ powder-iron-6.png.
+----- The icon is powders/iron/powder-iron.png, and the pictures are powder-iron.png and powder-iron-{i}.png for i
+----- between 1 and 6.
 ---```
 ---@throws When `name` or `param` is `nil` or an empty string.
 ---@throws When `validator` is not a validator.
@@ -310,7 +310,9 @@ local check_dispatch_composition = V.signature("dispatch_composition", {
 ---Creates a function that returns the icon selected by the value of the parameter named `field`, as an
 ---`IconComposition`.
 ---
----The function is created as by `dispatch`, and the builder of each icon is built with `build_composition`.
+---The builder of each icon is created and built with `build_composition` when `dispatch_composition` is called, so an
+---error in the declaration of any icon is raised at that time. The other parameters are passed to the function of the
+---selected icon.
 ---
 ---#### Parameters
 ---@generic const N : string, K, const V, P

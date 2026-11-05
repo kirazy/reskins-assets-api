@@ -110,7 +110,8 @@ local check_variations = V.signature("variations", {
 ---    :build_composition("get_icon_composition")
 ---
 ---local icon_data, pictures = get_icon_composition({ ore = "gold-ore" }):build()
------ The icon is ores/gold-ore/gold-ore.png, and the pictures are gold-ore.png and gold-ore-1.png to gold-ore-3.png.
+----- The icon is ores/gold-ore/gold-ore.png, and the pictures are gold-ore.png and gold-ore-{i}.png for i between 1
+----- and 3.
 ---```
 ---@throws When `count` is not an integer of at least 2.
 ---@throws When `counts` is not a table of positive integers.

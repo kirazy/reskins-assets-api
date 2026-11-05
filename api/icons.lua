@@ -371,16 +371,17 @@ function _icons.get_minified_symbol_overlay()
 	return icon_data
 end
 
----Gets a technology icon layer that is the frame beneath a miniature entity in a technology icon.
+---Gets a transparent technology icon layer that is placed beneath a miniature entity in a technology icon.
 ---@return SafeIconData underlay The underlay layer, in the icon defaults of a technology.
 ---
 ---#### Examples
 ---```lua
------ Compose the technology icon of a miniature furnace from the icon of the furnace, scaled down between the
------ underlay and the overlay.
+----- Compose the technology icon of a miniature furnace from the icon of the advanced material processing technology,
+----- scaled down between the underlay and the overlay.
 ---local composition = IconComposition:from_icon(icons_api.get_minified_technology_underlay(), nil, "technology")
 ---    :add_canvas(data.raw.technology["advanced-material-processing"], { scale = 0.8 })
 ---    :add_symbol(icons_api.get_minified_technology_overlay())
+----- The composition has the underlay, the icon of the technology at a scale of 0.8, and the overlay, in that order.
 ---```
 ---@see Reskins.Assets.Icons.get_minified_technology_overlay
 ---@nodiscard
@@ -394,7 +395,7 @@ function _icons.get_minified_technology_underlay()
 	return icon_data
 end
 
----Gets a technology icon layer that is the frame over a miniature entity in a technology icon.
+---Gets a technology icon layer with a symbol in the top-right corner that indicates a miniature entity.
 ---@return SafeIconData overlay The overlay layer, in the icon defaults of a technology.
 ---@see Reskins.Assets.Icons.get_minified_technology_underlay
 ---@nodiscard

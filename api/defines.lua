@@ -121,8 +121,9 @@ _defines.letter = {
 	S = "S",
 }
 
----Represents the constant icons of the base game that `Icons.get_technology_constant` places on a technology icon. Each
----value names the file `__core__/graphics/icons/technology/constants/constant-{value}.png`.
+---Represents the constant icons of the base game that `Icons.get_technology_constant` places on a technology icon.
+---
+---Each value names the file `__core__/graphics/icons/technology/constants/constant-{value}.png`.
 ---@enum TechnologyConstant
 _defines.technology_constant = {
 	battery = "battery",

@@ -87,7 +87,7 @@ parameter. The files of a value are in its subfolder, as follows.
 | `value` (subfolder)       | The parameter named in `collection`   | The value of the parameter, converted with `tostring`.                                   |
 | `stem`                    | `stem` on the builder                 | The first segment of the file name, followed by the value. When no stem is set, the file name starts with the value. |
 | `value` (further keys)    | `keyed` on the builder                | The values of the other parameters, in order.                                            |
-| `part`, `role`            | The methods that add layers           | As in a layered icon. A collection to which no layer is added has one flat file.         |
+| `part`, `role`            | The methods that add layers           | The part and the role of each layer, as in a layered icon. A collection to which no layer is added has one flat file. |
 
 | Declaration                                                         | Files                                                                         |
 | ------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -110,7 +110,7 @@ number of the picture appended, as follows.
 
 `{file}` is the file name of the icon without its extension, and `i` is between 1 and `count - 1`.
 For example, the 9 pictures of the iron ingot are `ingots/iron/ingot-iron.png` and
-`ingot-iron-1.png` to `ingot-iron-8.png`. A value of a collection with another number of pictures
+`ingot-iron-{i}.png` for `i` between 1 and 8. A value of a collection with another number of pictures
 is given in the second argument of `variations`, such as `variations(4, { ["bauxite-ore"] = 8 })`.
 
 ## Mipmaps

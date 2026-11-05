@@ -410,9 +410,9 @@ local function describe_selector(selector)
 end
 
 ---Gets the file name of the given `layer` for the given `params`.
----@param state IconBuilderState
----@param layer IconBuilderLayer
----@param params table<string, any>
+---@param state IconBuilderState The state of the builder.
+---@param layer IconBuilderLayer The layer for which the file name is resolved.
+---@param params table<string, any> The parameters given to the creator.
 ---@param variation? integer The number of the picture variation, between 1 and the number of variations minus 1. When `nil`, the file of the icon is named.
 ---@return FileName
 ---@nodiscard
@@ -552,8 +552,10 @@ local function get_variation_count(state, params)
 end
 
 ---Creates a composition with the given `icon_data` in the canvas group, with the icon defaults type and the mipmap
----count of the given `state`. When the state has picture variations, the icon is the first variation, and the other
----variations are created for the given `params`.
+---count of the given `state`.
+---
+---When the state has picture variations, the icon is the first variation, and the other variations are created for the
+---given `params`.
 ---@param icon_data SafeIconData[] The icon to add.
 ---@param state IconBuilderState The state from which the icon was created.
 ---@param params table<string, any> The parameters given to the creator.
