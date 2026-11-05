@@ -24,7 +24,8 @@ local ORES = {
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.bobs_assets .. "/graphics/icons" })
 
----Provides methods for getting the icons of the ores collection, `ores/{ore}/{ore}.png`, with their picture variations.
+---Provides methods for getting the icons of the ores collection, `ores/{ore}/{ore}.png`, with their picture variations,
+---and of the fluid resources at the root of the ores folder, such as `ores/lithia-water.png`.
 ---
 ---#### Examples
 ---```lua
@@ -58,5 +59,17 @@ M.get_thorium_ore_icon_composition = icons
 	:variations(4)
 	:glow()
 	:build_composition("get_thorium_ore_icon_composition")
+
+---Gets the icon for the ground water resource as an `IconComposition`.
+M.get_ground_water_icon_composition = icons
+	:flat("ground-water")
+	:folder(_defines.assets_source.bobs_assets .. "/graphics/icons/ores")
+	:build_composition("get_ground_water_icon_composition")
+
+---Gets the icon for the lithia water resource as an `IconComposition`.
+M.get_lithia_water_icon_composition = icons
+	:flat("lithia-water")
+	:folder(_defines.assets_source.bobs_assets .. "/graphics/icons/ores")
+	:build_composition("get_lithia_water_icon_composition")
 
 return M

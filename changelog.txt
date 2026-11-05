@@ -16,11 +16,11 @@ Date: ????
     - Added `IconBuilderFactory.dispatch_composition`, and a `get_*icon_composition` creator beside each `get_*icon` creator of the sprite set modules.
     - Added `icons.get_technology_constant` with `defines.technology_constant`, `icons.get_technology_equipment_overlay` with `defines.equipment_overlay`, `icons.get_minified_technology_underlay` and `icons.get_minified_technology_overlay`, and `icons.equipment_background_group` with `icons.get_equipment_background_layer`.
     - Added the catalog modules of the Angel's items in `assets.angels.items`: plates and alloys, sheet coils, wires, gears, armor, pellets, fuel cells, nuclear fuels, molten metals, the icons at the root of the icon folder, and the ingots, powders, ores, and isotopes with their pictures.
-    - Added the catalog modules of the Angel's technologies in `assets.angels.technologies`, and of the ores in `assets.bobs.items`.
-    - Added the catalog modules of the machine, furnace, turret, power, ammunition, armor, spidertron, equipment, and material processing technologies in `assets.bobs.technologies`, with the lights layers of the boilers and electric furnaces.
-    - Added `glow` to the icon builders, which draws the pictures of an icon a second time as a light, as the pictures of uranium ore are drawn.
-    - Added the catalog modules of the bearings and bearing balls in `assets.bobs.items`, with the icons in the colors of Angel's materials.
-    - Added the catalog modules of the items and technologies of the base game in `assets.base.items` and `assets.base.technologies`, one module for each folder of artwork, and of the modular roboport and fission reactor equipment technologies in `assets.bobs.technologies`.
+    - Added the catalog modules of the Angel's technologies in `assets.angels.technologies`.
+    - Added the catalog modules of the Bob's items in `assets.bobs.items`: plates and alloys, gears, bearings and bearing balls (also in the colors of Angel's materials), wires, ores, fluids, fuel cells, isotopes, gems, ammunition, armor, capsules, alien artifacts and science packs, equipment, robot tools, roboport parts, the shotgun pellets with their pictures, and the icons at the root of the icon folder.
+    - Added the catalog modules of the Bob's technologies in `assets.bobs.technologies`: machines, furnaces, turrets, power, ammunition, armor, spidertrons, equipment, and material processing, with the lights layers of the boilers and electric furnaces.
+    - Added `glow` to the icon builders, which draws the pictures of an icon a second time as a light.
+    - Added the catalog modules of the items and technologies of the base game in `assets.base.items` and `assets.base.technologies`, one module for each folder of artwork.
   Changes:
     - The sprite sets now include water reflections, circuit connectors, frozen sprites, integration patches, heat pictures and pipe covers, drawing box extensions, light flicker, and the fluid, glass, and wagon connection graphics of the pump wherever the base entity defines them, and their sprite set types have the fields for them.
     - Every sprite set now has `fluid_boxes`, `heat_buffers`, and `pipe_material`, which `apply_sprite_set` applies to every prototype, removing the pipe pictures of a fluid box that matches none of them.
