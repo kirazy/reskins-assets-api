@@ -490,12 +490,18 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
+local icon_builder =
+	icons:tinted("heat-exchanger-original"):keyed("pipe_material", heat_pipe_material, { IconBuilderFactory.role.base })
+
 ---Gets the icon for an original heat exchanger with the given `pipe_material` and in the tints given by `params`.
 ---
 ---Every heat exchanger shares one mask and one highlights layer, only the base layer differs by material.
-M.get_icon = icons
-	:tinted("heat-exchanger-original")
-	:keyed("pipe_material", heat_pipe_material, { IconBuilderFactory.role.base })
-	:build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for an original heat exchanger with the given `pipe_material` and in the tints given by `params` as an
+---`IconComposition`.
+---
+---Every heat exchanger shares one mask and one highlights layer, only the base layer differs by material.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

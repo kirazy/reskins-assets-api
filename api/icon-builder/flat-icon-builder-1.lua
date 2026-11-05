@@ -23,6 +23,7 @@ setmetatable(FlatIconBuilder1, IconBuilderBase)
 ---@param rules? IconParamsRule[] The rules that check several parameters together, such as a rule that rejects a value for which no artwork exists.
 ---@return fun(params: P & { [K in N1]: V1 }): SafeIconData[] # A function that returns the icon for the given parameters.
 ---@throws When `creator_name` is an empty string.
+---@throws When the builder has picture variations.
 ---@throws When `rules` is not an array of valid `IconParamsRule` objects.
 ---@throws When a rule has a `field` or `fields` entry that is not the name of a parameter.
 ---@nodiscard
@@ -38,6 +39,9 @@ end
 ---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
 ---the function is assigned. The icon is added to the canvas group of a composition with the icon defaults type of the
 ---factory.
+---
+---The content has the mipmap count of the builder. An icon with picture variations is added as content with
+---variations, with the icon as the first variation.
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
 ---@param rules? IconParamsRule[] The rules that check several parameters together, such as a rule that rejects a value for which no artwork exists.
 ---@return fun(params: P & { [K in N1]: V1 }): IconComposition # A function that returns a composition with the icon for the given parameters.

@@ -115,7 +115,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = icons:flat("laser-robot")
+
 ---Gets the icon for the laser robot.
-M.get_icon = icons:flat("laser-robot"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the laser robot as an `IconComposition`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

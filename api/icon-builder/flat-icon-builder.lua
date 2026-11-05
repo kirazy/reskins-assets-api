@@ -57,6 +57,7 @@ end
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
 ---@return fun(params?: P): SafeIconData[] # A function that returns the icon.
 ---@throws When `creator_name` is an empty string.
+---@throws When the builder has picture variations.
 ---@nodiscard
 function FlatIconBuilder:build(creator_name)
 	_assembly.check_build(creator_name, nil)
@@ -68,6 +69,9 @@ end
 ---
 ---The function takes one table of parameters, or none. An error is raised when the function is given a parameter.
 ---The icon is added to the canvas group of a composition with the icon defaults type of the factory.
+---
+---The content has the mipmap count of the builder. An icon with picture variations is added as content with
+---variations, with the icon as the first variation.
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
 ---@return fun(params?: P): IconComposition # A function that returns a composition with the icon.
 ---@throws When `creator_name` is an empty string.

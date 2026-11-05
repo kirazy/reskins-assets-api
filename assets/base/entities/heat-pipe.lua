@@ -387,13 +387,17 @@ M.get_icon = IconBuilderFactory.dispatch("pipe_material", HEAT_PIPE_MATERIALS, "
 	return bobs_icons:layers("heat-pipe"):stem("heat-pipe-" .. pipe_material):base()
 end)
 
----Gets the icon for the tintable heat pipe, in the tints given by `params`.
-M.get_tinted_icon = base_icons
+local tinted_icon_builder = base_icons
 	:layers("heat-pipe")
 	:base()
 	:mask()
 	:tinted_layer("plate-mask", "plate_tint")
 	:highlights({ requires = "tint" })
-	:build("get_tinted_icon")
+
+---Gets the icon for the tintable heat pipe, in the tints given by `params`.
+M.get_tinted_icon = tinted_icon_builder:build("get_tinted_icon")
+
+---Gets the icon for the tintable heat pipe as an `IconComposition`, in the tints given by `params`.
+M.get_tinted_icon_composition = tinted_icon_builder:build_composition("get_tinted_icon_composition")
 
 return M

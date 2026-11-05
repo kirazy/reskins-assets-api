@@ -168,7 +168,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = icons:flat("reinforced-gate")
+
 ---Gets the icon for the reinforced gate.
-M.get_icon = icons:flat("reinforced-gate"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the reinforced gate as an `IconComposition`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

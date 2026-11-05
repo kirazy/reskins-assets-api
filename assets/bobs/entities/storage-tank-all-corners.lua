@@ -253,7 +253,13 @@ end
 
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = bobs_icons:tinted("storage-tank-all-corners")
+
 ---Gets the icon for a storage tank with a connection on every corner, in the tints given by `params`.
-M.get_icon = bobs_icons:tinted("storage-tank-all-corners"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for a storage tank with a connection on every corner as an `IconComposition`, in the tints given by
+---`params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

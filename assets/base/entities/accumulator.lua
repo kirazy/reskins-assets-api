@@ -299,16 +299,37 @@ end
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = base_icons:tinted("accumulator")
+
 ---Gets the icon for the vanilla accumulator, in the tints given by `params`.
-M.get_icon = base_icons:tinted("accumulator"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the vanilla accumulator as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local fast_icon_builder = bobs_icons:tinted("accumulator-fast")
 
 ---Gets the icon for the fast accumulator, in the tints given by `params`.
-M.get_fast_icon = bobs_icons:tinted("accumulator-fast"):build("get_fast_icon")
+M.get_fast_icon = fast_icon_builder:build("get_fast_icon")
+
+---Gets the icon for the fast accumulator as an `IconComposition`, in the tints given by `params`.
+M.get_fast_icon_composition = fast_icon_builder:build_composition("get_fast_icon_composition")
+
+local high_capacity_icon_builder = bobs_icons:tinted("accumulator-high-capacity")
 
 ---Gets the icon for the high-capacity accumulator, in the tints given by `params`.
-M.get_high_capacity_icon = bobs_icons:tinted("accumulator-high-capacity"):build("get_high_capacity_icon")
+M.get_high_capacity_icon = high_capacity_icon_builder:build("get_high_capacity_icon")
+
+---Gets the icon for the high-capacity accumulator as an `IconComposition`, in the tints given by `params`.
+M.get_high_capacity_icon_composition =
+	high_capacity_icon_builder:build_composition("get_high_capacity_icon_composition")
+
+local slow_icon_builder = bobs_icons:tinted("accumulator-slow")
 
 ---Gets the icon for the slow accumulator, in the tints given by `params`.
-M.get_slow_icon = bobs_icons:tinted("accumulator-slow"):build("get_slow_icon")
+M.get_slow_icon = slow_icon_builder:build("get_slow_icon")
+
+---Gets the icon for the slow accumulator as an `IconComposition`, in the tints given by `params`.
+M.get_slow_icon_composition = slow_icon_builder:build_composition("get_slow_icon_composition")
 
 return M

@@ -234,7 +234,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
+local icon_builder = icons:tinted("robot-logistic")
+
 ---Gets the icon for the vanilla logistic robot, in the tints given by `params`.
-M.get_icon = icons:tinted("robot-logistic"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the vanilla logistic robot as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

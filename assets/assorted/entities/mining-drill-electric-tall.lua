@@ -985,15 +985,21 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
+local icon_builder = icons:tinted("mining-drill-electric-tall")
+
 ---Gets the icon for the semi-classic electric mining drill, in the tints given by `params`.
-M.get_icon = icons:tinted("mining-drill-electric-tall"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the semi-classic electric mining drill as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local area_icon_builder =
+	icons:layers("mining-drill-electric-tall"):base({ part = "area" }):mask():highlights({ requires = "tint" })
 
 ---Gets the icon for the semi-classic area mining drill, in the tints given by `params`.
-M.get_area_icon = icons
-	:layers("mining-drill-electric-tall")
-	:base({ part = "area" })
-	:mask()
-	:highlights({ requires = "tint" })
-	:build("get_area_icon")
+M.get_area_icon = area_icon_builder:build("get_area_icon")
+
+---Gets the icon for the semi-classic area mining drill as an `IconComposition`, in the tints given by `params`.
+M.get_area_icon_composition = area_icon_builder:build_composition("get_area_icon_composition")
 
 return M

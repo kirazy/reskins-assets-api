@@ -179,7 +179,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
+local icon_builder = icons:tinted("refugium-fish")
+
 ---Gets the icon for Angel's fish refugium, in the tints given by `params`.
-M.get_icon = icons:tinted("refugium-fish"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for Angel's fish refugium as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

@@ -224,13 +224,17 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for a logistic chest of the `logistic_mode` and `material` given by `params`.
-M.get_icon = icons
+local icon_builder = icons
 	:layers("chest-logistic")
 	:keyed("logistic_mode", ChestLogisticMode, { IconBuilderFactory.role.base })
 	:keyed("material", ChestLogisticMaterial, { IconBuilderFactory.role.mask })
 	:base()
 	:layer(IconBuilderFactory.role.mask)
-	:build("get_icon")
+
+---Gets the icon for a logistic chest of the `logistic_mode` and `material` given by `params`.
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for a logistic chest of the `logistic_mode` and `material` given by `params` as an `IconComposition`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

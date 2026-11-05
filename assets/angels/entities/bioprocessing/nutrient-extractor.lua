@@ -150,7 +150,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
+local icon_builder = icons:tinted("nutrient-extractor")
+
 ---Gets the icon for Angel's nutrient extractor, in the tints given by `params`.
-M.get_icon = icons:tinted("nutrient-extractor"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for Angel's nutrient extractor as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

@@ -312,15 +312,25 @@ end
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = base_icons:tinted("roboport")
+
 ---Gets the icon for the vanilla roboport, in the tints given by `params`.
-M.get_icon = base_icons:tinted("roboport"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the vanilla roboport as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local tier_icon_builder =
+	bobs_icons:tinted("roboport"):keyed("tier", V.one_of({ 1, 2, 3, 4 }), { IconBuilderFactory.role.base })
 
 ---Gets the icon for a roboport of the `tier` and in the tints given by `params`.
 ---
 ---Every tier shares one mask and one highlights layer, only the base layer differs by tier.
-M.get_tier_icon = bobs_icons
-	:tinted("roboport")
-	:keyed("tier", V.one_of({ 1, 2, 3, 4 }), { IconBuilderFactory.role.base })
-	:build("get_tier_icon")
+M.get_tier_icon = tier_icon_builder:build("get_tier_icon")
+
+---Gets the icon for a roboport of the `tier` and in the tints given by `params` as an `IconComposition`.
+---
+---Every tier shares one mask and one highlights layer, only the base layer differs by tier.
+M.get_tier_icon_composition = tier_icon_builder:build_composition("get_tier_icon_composition")
 
 return M

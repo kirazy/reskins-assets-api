@@ -277,13 +277,22 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
+local icon_builder = icons:tinted("warehouse")
+
 ---Gets the icon for Angel's warehouse, in the tints given by `params`.
-M.get_icon = icons:tinted("warehouse"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for Angel's warehouse as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local logistic_icon_builder =
+	icons:tinted("warehouse-logistic"):keyed("logistic_mode", WarehouseLogisticMode, { "base" })
 
 ---Gets the icon for Angel's logistic warehouse of the `logistic_mode`, in the tints given by `params`.
-M.get_logistic_icon = icons
-	:tinted("warehouse-logistic")
-	:keyed("logistic_mode", WarehouseLogisticMode, { "base" })
-	:build("get_logistic_icon")
+M.get_logistic_icon = logistic_icon_builder:build("get_logistic_icon")
+
+---Gets the icon for Angel's logistic warehouse of the `logistic_mode` as an `IconComposition`, in the tints given by
+---`params`.
+M.get_logistic_icon_composition = logistic_icon_builder:build_composition("get_logistic_icon_composition")
 
 return M

@@ -121,6 +121,40 @@ _defines.letter = {
 	S = "S",
 }
 
+---Represents the constant icons of the base game that `Icons.get_technology_constant` places on a technology icon. Each
+---value names the file `__core__/graphics/icons/technology/constants/constant-{value}.png`.
+---@enum TechnologyConstant
+_defines.technology_constant = {
+	battery = "battery",
+	braking_force = "braking-force",
+	capacity = "capacity",
+	count = "count",
+	damage = "damage",
+	equipment = "equipment",
+	equipment_white = "equipment-white",
+	follower_count = "follower-count",
+	health = "health",
+	logistic_slot = "logistic-slot",
+	map_zoom = "map-zoom",
+	mining = "mining",
+	mining_productivity = "mining-productivity",
+	movement_speed = "movement-speed",
+	planet = "planet",
+	range = "range",
+	recipe_productivity = "recipe-productivity",
+	speed = "speed",
+	time_to_live_ghosts = "time-to-live-ghosts",
+}
+
+---Represents the equipment overlays that `Icons.get_technology_equipment_overlay` places on a technology icon.
+---@enum EquipmentOverlay
+_defines.equipment_overlay = {
+	---The overlay of a technology that unlocks personal equipment.
+	personal = "personal",
+	---The overlay of a technology that unlocks vehicle equipment.
+	vehicle = "vehicle",
+}
+
 ---Represents the light sprites available for composition with icons.
 ---@enum Light
 _defines.light = {

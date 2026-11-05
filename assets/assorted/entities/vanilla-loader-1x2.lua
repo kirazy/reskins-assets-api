@@ -136,7 +136,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
+local icon_builder = icons:tinted("vanilla-loader-1x2")
+
 ---Gets the icon for the 1 x 2 vanilla loader, in the tints given by `params`.
-M.get_icon = icons:tinted("vanilla-loader-1x2"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the 1 x 2 vanilla loader as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

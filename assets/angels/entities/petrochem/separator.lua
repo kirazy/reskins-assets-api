@@ -205,7 +205,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
+local icon_builder = icons:tinted("separator")
+
 ---Gets the icon for Angel's separator, in the tints given by `params`.
-M.get_icon = icons:tinted("separator"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for Angel's separator as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

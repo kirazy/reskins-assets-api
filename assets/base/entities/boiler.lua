@@ -500,12 +500,24 @@ end
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = base_icons:tinted("boiler"):tinted_part("fire", "fire_tint")
+
 ---Gets the icon for a standard boiler, in the tints given by `params`. Without `fire_tint`, the fire of the base layer
 ---shows through.
-M.get_icon = base_icons:tinted("boiler"):tinted_part("fire", "fire_tint"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for a standard boiler as an `IconComposition`, in the tints given by `params`. Without `fire_tint`, the
+---fire of the base layer shows through.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local fluid_icon_builder = bobs_icons:tinted("boiler-oil"):tinted_part("fire", "fire_tint")
 
 ---Gets the icon for a fluid-burning boiler, in the tints given by `params`. Without `fire_tint`, the fire of the base
 ---layer shows through.
-M.get_fluid_icon = bobs_icons:tinted("boiler-oil"):tinted_part("fire", "fire_tint"):build("get_fluid_icon")
+M.get_fluid_icon = fluid_icon_builder:build("get_fluid_icon")
+
+---Gets the icon for a fluid-burning boiler as an `IconComposition`, in the tints given by `params`. Without
+---`fire_tint`, the fire of the base layer shows through.
+M.get_fluid_icon_composition = fluid_icon_builder:build_composition("get_fluid_icon_composition")
 
 return M

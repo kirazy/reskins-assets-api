@@ -264,10 +264,13 @@ local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/grap
 M.get_icon =
 	icons:tinted("robo-charge-port"):keyed("tier", RoboChargePortTier, { IconBuilderFactory.role.base }):build("get_icon")
 
+local large_icon_builder =
+	icons:tinted("robo-charge-port-large"):keyed("tier", RoboChargePortTier, { IconBuilderFactory.role.base })
+
 ---Gets the icon for a large robot charge port of the `tier`, in the tints given by `params`.
-M.get_large_icon = icons
-	:tinted("robo-charge-port-large")
-	:keyed("tier", RoboChargePortTier, { IconBuilderFactory.role.base })
-	:build("get_large_icon")
+M.get_large_icon = large_icon_builder:build("get_large_icon")
+
+---Gets the icon for a large robot charge port of the `tier` as an `IconComposition`, in the tints given by `params`.
+M.get_large_icon_composition = large_icon_builder:build_composition("get_large_icon_composition")
 
 return M

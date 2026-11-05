@@ -114,7 +114,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = ICONS_FOLDER })
 
+local icon_builder = icons:flat("robo-zone-interface")
+
 ---Gets the icon for the logistic zone interface.
-M.get_icon = icons:flat("robo-zone-interface"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the logistic zone interface as an `IconComposition`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

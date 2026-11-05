@@ -205,8 +205,13 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/graphics/icons" })
 
+local icon_builder = icons:layers("big-chest"):base()
+
 ---Gets the icon for Angel's big chest.
-M.get_icon = icons:layers("big-chest"):base():build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for Angel's big chest as an `IconComposition`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 ---Gets the icon for Angel's logistic big chest of the `logistic_mode` given by `params`.
 M.get_logistic_icon =

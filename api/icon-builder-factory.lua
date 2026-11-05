@@ -9,6 +9,7 @@ local Common = require("__reskins-sprite-utils__.validation.common")
 
 local _assembly = require("api.icon-builder.assembly")
 local IconBuilder = require("api.icon-builder.icon-builder")
+local IconBuilder1 = require("api.icon-builder.icon-builder-1")
 local FlatIconBuilder = require("api.icon-builder.flat-icon-builder")
 
 ---Defines the defaults applied to every icon built from a factory.
@@ -19,6 +20,8 @@ local FlatIconBuilder = require("api.icon-builder.flat-icon-builder")
 ---@field defaults_type? IconDefaultsType
 ---The size of the icon files, in pixels. When `nil`, the expected icon size of `defaults_type` is used.
 ---@field icon_size? SpriteSizeType
+---The number of mipmaps in the icon files. Default `4`.
+---@field mipmap_count? integer
 
 ---A validator that checks that a value is an `IconBuilderFactoryParams` object.
 ---@type StructValidator<IconBuilderFactoryParams>
@@ -26,6 +29,7 @@ local FactoryParams = V.struct({
 	folder = Common.non_empty_string,
 	defaults_type = Common.icon_defaults_type:optional(),
 	icon_size = Common.sprite_size:optional(),
+	mipmap_count = Common.mipmap_count:optional(),
 }):describe_as("an IconBuilderFactoryParams")
 
 ---Represents a factory of icon builders for a root folder of icon artwork, such as the icon folder of an asset mod.
@@ -43,6 +47,8 @@ local FactoryParams = V.struct({
 ---@field defaults_type? IconDefaultsType
 ---The size of the icon files, in pixels.
 ---@field icon_size? SpriteSizeType
+---The number of mipmaps in the icon files.
+---@field mipmap_count integer
 local IconBuilderFactory = {}
 IconBuilderFactory.__index = IconBuilderFactory
 
@@ -76,6 +82,7 @@ function IconBuilderFactory:create(params)
 		folder = params.folder,
 		defaults_type = params.defaults_type,
 		icon_size = params.icon_size,
+		mipmap_count = params.mipmap_count or 4,
 	}, self)
 end
 
@@ -92,6 +99,7 @@ local function new_state(self, name, flat)
 		name = name,
 		defaults_type = self.defaults_type,
 		icon_size = self.icon_size,
+		mipmap_count = self.mipmap_count,
 		flat = flat,
 		layers = {},
 		keys = {},
@@ -133,6 +141,55 @@ function IconBuilderFactory:layers(name)
 	return setmetatable({ state = new_state(self, name, false) }, IconBuilder)
 end
 
+local check_collection = V.signature("collection", {
+	{ "name", _assembly.IconName },
+	{ "param", _assembly.ParamName },
+	{ "validator", V.table():describe_as("a validator") },
+})
+
+---Creates a builder for an icon in a collection, a folder `{folder}/{name}` with one subfolder for each value of the
+---parameter named `param`, such as each material or each ore.
+---
+---The files of a value are in the subfolder `{folder}/{name}/{value}`. The first segment of each file name is
+---`{stem}-{value}` when the builder has a stem, and `{value}` when it has none. Keys, parts, roles, and the numbers of
+---picture variations follow as in a file name outside a collection. A collection to which no layer is added has one
+---flat file for each value, as `{folder}/{name}/{value}/{value}.png`.
+---
+---#### Parameters
+---@generic const N : string, const V
+---@param name string The name of the collection, which names its folder.
+---@param param N The name of the parameter that selects the subfolder.
+---@param validator Validator<V> The validator for the values of the parameter.
+---
+---#### Returns
+---@return IconBuilder1<{}, N, V> # A builder with the parameter added.
+---
+---#### Examples
+---```lua
+----- Create the powder of each material from powders/{material}/powder-{material}.png, with the icon and 6 other
+----- pictures.
+---local get_icon_composition = icons
+---    :collection("powders", "material", V.one_of({ "aluminium", "iron" }))
+---    :stem("powder")
+---    :variations(7)
+---    :build_composition("get_icon_composition")
+---
+---local icon_data, pictures = get_icon_composition({ material = "iron" }):build()
+----- The icon is powders/iron/powder-iron.png, and the pictures are powder-iron.png and powder-iron-1.png to
+----- powder-iron-6.png.
+---```
+---@throws When `name` or `param` is `nil` or an empty string.
+---@throws When `validator` is not a validator.
+---@nodiscard
+function IconBuilderFactory:collection(name, param, validator)
+	check_collection(name, param, validator)
+
+	local state = new_state(self, name, false)
+	state.collection = param
+
+	return _assembly.with_key({ state = state }, param, validator, nil, IconBuilder1)
+end
+
 local check_tinted = V.signature("tinted", {
 	{ "name", _assembly.IconName },
 })
@@ -160,6 +217,41 @@ function IconBuilderFactory:tinted(name)
 	check_tinted(name)
 
 	return self:layers(name):base():mask():highlights({ requires = "tint" })
+end
+
+---Creates a function that calls the creator of the icon selected by the value of the parameter named `field`, with the
+---other parameters.
+---@param field string The name of the parameter that selects the icon.
+---@param values table The values that the parameter can take.
+---@param name string The name of the function in error messages.
+---@param builder_factory fun(value: any): table The function that returns the builder for the icon selected by a value.
+---@param method "build"|"build_composition" The method with which each builder is built.
+---@return fun(params: table<string, any>): any
+---@nodiscard
+local function make_dispatcher(field, values, name, builder_factory, method)
+	---@type table<any, fun(params?: table<string, any>): any>
+	local creators = {}
+	for _, value in pairs(values) do
+		local builder = builder_factory(value)
+		creators[value] = builder[method](builder, name)
+	end
+
+	local check = V.signature(name, {
+		{ "params", V.struct({ [field] = V.one_of(values) }):describe_as("the parameters of the icon") },
+	})
+
+	return function(params)
+		check(params)
+
+		local rest = {}
+		for key, value in pairs(params) do
+			if key ~= field then
+				rest[key] = value
+			end
+		end
+
+		return creators[params[field]](rest)
+	end
 end
 
 local check_dispatch = V.signature("dispatch", {
@@ -205,30 +297,40 @@ local check_dispatch = V.signature("dispatch", {
 function IconBuilderFactory.dispatch(field, values, creator_name, builder_factory)
 	check_dispatch(field, values, creator_name, builder_factory)
 
-	local name = creator_name or "icon_creator"
+	return make_dispatcher(field, values, creator_name or "icon_creator", builder_factory, "build")
+end
 
-	---@type table<any, fun(params?: table<string, any>): SafeIconData[]>
-	local creators = {}
-	for _, value in pairs(values) do
-		creators[value] = builder_factory(value):build(name)
-	end
+local check_dispatch_composition = V.signature("dispatch_composition", {
+	{ "field", _assembly.ParamName },
+	{ "values", V.table() },
+	{ "creator_name", Common.non_empty_string:optional() },
+	{ "builder_factory", V.func():describe_as("a function that returns an icon builder") },
+})
 
-	local check = V.signature(name, {
-		{ "params", V.struct({ [field] = V.one_of(values) }):describe_as("the parameters of the icon") },
-	})
+---Creates a function that returns the icon selected by the value of the parameter named `field`, as an
+---`IconComposition`.
+---
+---The function is created as by `dispatch`, and the builder of each icon is built with `build_composition`.
+---
+---#### Parameters
+---@generic const N : string, K, const V, P
+---@param field N The name of the parameter that selects the icon.
+---@param values table<K, V> The values that the parameter can take, as an array or as a table of names to values.
+---@param creator_name? string The name of the function in error messages. Default `"icon_creator"`.
+---@param builder_factory fun(value: V): IconBuilder<P>|FlatIconBuilder<P> A function that returns the builder for the icon selected by the given value.
+---
+---#### Returns
+---@return fun(params: P & { [K in N]: V }): IconComposition # A function that returns a composition with the icon selected by the parameter, for the given parameters.
+---@throws When `field` is `nil` or an empty string.
+---@throws When `values` is not a table.
+---@throws When `creator_name` is an empty string.
+---@throws When `builder_factory` is not a function.
+---@see IconBuilderFactory.dispatch
+---@nodiscard
+function IconBuilderFactory.dispatch_composition(field, values, creator_name, builder_factory)
+	check_dispatch_composition(field, values, creator_name, builder_factory)
 
-	return function(params)
-		check(params)
-
-		local rest = {}
-		for key, value in pairs(params) do
-			if key ~= field then
-				rest[key] = value
-			end
-		end
-
-		return creators[params[field]](rest)
-	end
+	return make_dispatcher(field, values, creator_name or "icon_creator", builder_factory, "build_composition")
 end
 
 return IconBuilderFactory

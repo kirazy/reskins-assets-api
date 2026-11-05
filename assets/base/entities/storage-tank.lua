@@ -252,7 +252,12 @@ end
 
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 
+local icon_builder = base_icons:tinted("storage-tank")
+
 ---Gets the icon for the vanilla storage tank, in the tints given by `params`.
-M.get_icon = base_icons:tinted("storage-tank"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the vanilla storage tank as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

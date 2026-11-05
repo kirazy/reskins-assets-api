@@ -71,6 +71,54 @@ A flat icon has one layer, taken from a single file. The file is named as follow
 
 A flat icon has no subfolder and no role. Every key adds its value to the file name.
 
+## Collections
+
+A collection is a folder with one subfolder for each value of a parameter, such as each material,
+ore, or color. It is declared with `collection` on the factory, which names the folder and the
+parameter. The files of a value are in its subfolder, as follows.
+
+```
+{folder}/{name}/{value}/[{stem}-]{value}[-{value}...][-{part}-{role}].png
+```
+
+| Segment                   | Set by                                | Contents                                                                                 |
+| ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `name`                    | `collection` on the factory           | The name of the collection, which names its folder.                                      |
+| `value` (subfolder)       | The parameter named in `collection`   | The value of the parameter, converted with `tostring`.                                   |
+| `stem`                    | `stem` on the builder                 | The first segment of the file name, followed by the value. When no stem is set, the file name starts with the value. |
+| `value` (further keys)    | `keyed` on the builder                | The values of the other parameters, in order.                                            |
+| `part`, `role`            | The methods that add layers           | As in a layered icon. A collection to which no layer is added has one flat file.         |
+
+| Declaration                                                         | Files                                                                         |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `collection("powders", "material", ...):stem("powder")`             | `powders/{material}/powder-{material}.png`, such as `powders/iron/powder-iron.png` |
+| `collection("ores", "ore", ...)`                                    | `ores/{ore}/{ore}.png`, such as `ores/gold-ore/gold-ore.png`                  |
+| `collection("module-intermediates", "color", ...):keyed("level", ...)` | `module-intermediates/{color}/{color}-{level}.png`                         |
+| `collection("circuits-tintable", "board", ...):mask():highlights()` | `circuits-tintable/{board}/{board}-mask.png`, `{board}-highlights.png`        |
+
+## Picture variations
+
+An icon with picture variations has several pictures, which the game draws in the world for an
+item, such as the ores and the ingots. Variations are declared with `variations(count)` on the
+builder. The file of the icon is the first picture, and the files of the other pictures have the
+number of the picture appended, as follows.
+
+```
+{file}.png
+{file}-{i}.png
+```
+
+`{file}` is the file name of the icon without its extension, and `i` is between 1 and `count - 1`.
+For example, the 9 pictures of the iron ingot are `ingots/iron/ingot-iron.png` and
+`ingot-iron-1.png` to `ingot-iron-8.png`. A value of a collection with another number of pictures
+is given in the second argument of `variations`, such as `variations(4, { ["bauxite-ore"] = 8 })`.
+
+## Mipmaps
+
+Every icon file has 4 mipmaps, unless its declaration states another count with `mipmaps` on the
+builder or `mipmap_count` on the factory. The count is set on the sprites of the pictures of an
+item, which do not infer it from the file.
+
 ## Runtime-tintable icons
 
 A runtime-tintable icon is tinted by the game at runtime, such as the spidertron icons, which take

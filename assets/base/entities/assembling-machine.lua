@@ -446,26 +446,48 @@ end
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the icon for an assembling machine with the gear of the `machine_tier`, in the tints given by `params`.
-M.get_icon = base_icons
+local icon_builder = base_icons
 	:tinted("assembling-machine")
 	:keyed("machine_tier", V.one_of({ 1, 2, 3, 4, 5, 6 }), { "gear" })
 	:layer("gear")
-	:build("get_icon")
 
----Gets the icon for an electronics assembling machine with the indicator lights of the `electronics_tier`, in the
----tints given by `params`.
-M.get_electronics_icon = bobs_icons
+---Gets the icon for an assembling machine with the gear of the `machine_tier`, in the tints given by `params`.
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for an assembling machine with the gear of the `machine_tier` as an `IconComposition`, in the tints
+---given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local electronics_icon_builder = bobs_icons
 	:tinted("assembling-machine-electronics")
 	:keyed("electronics_tier", V.one_of({ 1, 2, 3 }), { "lights" })
 	:layer("lights")
-	:build("get_electronics_icon")
+
+---Gets the icon for an electronics assembling machine with the indicator lights of the `electronics_tier`, in the
+---tints given by `params`.
+M.get_electronics_icon = electronics_icon_builder:build("get_electronics_icon")
+
+---Gets the icon for an electronics assembling machine with the indicator lights of the `electronics_tier` as an
+---`IconComposition`, in the tints given by `params`.
+M.get_electronics_icon_composition = electronics_icon_builder:build_composition("get_electronics_icon_composition")
+
+local burner_icon_builder = bobs_icons:tinted("assembling-machine-burner"):layer("smoke-stack")
 
 ---Gets the icon for a burner assembling machine, with its smoke stack, in the tints given by `params`.
-M.get_burner_icon = bobs_icons:tinted("assembling-machine-burner"):layer("smoke-stack"):build("get_burner_icon")
+M.get_burner_icon = burner_icon_builder:build("get_burner_icon")
+
+---Gets the icon for a burner assembling machine as an `IconComposition`, with its smoke stack, in the tints given by
+---`params`.
+M.get_burner_icon_composition = burner_icon_builder:build_composition("get_burner_icon_composition")
+
+local steam_icon_builder = bobs_icons:tinted("assembling-machine-steam"):tinted("smoke-stack")
 
 ---Gets the icon for a steam assembling machine, with its smoke stack, in the tints given by `params`. The smoke stack
 ---is tinted with the body.
-M.get_steam_icon = bobs_icons:tinted("assembling-machine-steam"):tinted("smoke-stack"):build("get_steam_icon")
+M.get_steam_icon = steam_icon_builder:build("get_steam_icon")
+
+---Gets the icon for a steam assembling machine as an `IconComposition`, with its smoke stack, in the tints given by
+---`params`. The smoke stack is tinted with the body.
+M.get_steam_icon_composition = steam_icon_builder:build_composition("get_steam_icon_composition")
 
 return M

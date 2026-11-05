@@ -105,6 +105,13 @@ _assembly.role = {
 ---appended for every layer.
 ---@field layers? IconBuilderSelector[]
 
+---Defines the picture variations of an icon, as recorded by a builder.
+---@class IconBuilderVariations
+---The number of pictures, including the icon.
+---@field count integer
+---The number of pictures for each value of the collection parameter that has another count.
+---@field counts? table<any, integer>
+
 ---Defines the state of an icon builder.
 ---@class IconBuilderState
 ---The path of the folder containing the artwork.
@@ -119,6 +126,13 @@ _assembly.role = {
 ---@field defaults_type? IconDefaultsType
 ---The size of the square files of the layers, in pixels, if set.
 ---@field icon_size? SpriteSizeType
+---The number of mipmaps in the files of the layers, if set.
+---@field mipmap_count? integer
+---The name of the parameter that selects the subfolder of a collection. The field is `nil` when the icon is not part of
+---a collection.
+---@field collection? string
+---The picture variations of the icon. The field is `nil` when the icon has none.
+---@field variations? IconBuilderVariations
 ---The layers of the icon, in draw order.
 ---@field layers IconBuilderLayer[]
 ---The parameters that select the artwork, in the order in which their values are appended to the file name.
@@ -234,6 +248,9 @@ function _assembly.copy_state(state)
 		flat = state.flat,
 		defaults_type = state.defaults_type,
 		icon_size = state.icon_size,
+		mipmap_count = state.mipmap_count,
+		collection = state.collection,
+		variations = state.variations and util.copy(state.variations) or nil,
 		layers = util.copy(state.layers),
 		keys = util.copy(state.keys),
 	}
@@ -396,27 +413,38 @@ end
 ---@param state IconBuilderState
 ---@param layer IconBuilderLayer
 ---@param params table<string, any>
+---@param variation? integer The number of the picture variation, between 1 and the number of variations minus 1. When `nil`, the file of the icon is named.
 ---@return FileName
 ---@nodiscard
-local function resolve_file_name(state, layer, params)
+local function resolve_file_name(state, layer, params, variation)
+	local folder = state.flat and state.folder or (state.folder .. "/" .. state.name)
 	local stem = state.stem or state.name
+
+	if state.collection then
+		local value = tostring(params[state.collection])
+		folder = state.folder .. "/" .. state.name .. "/" .. value
+		stem = state.stem and (state.stem .. "-" .. value) or value
+	end
+
 	for _, key in pairs(state.keys) do
-		if is_keyed(key, layer) then
+		if key.name ~= state.collection and is_keyed(key, layer) then
 			stem = stem .. "-" .. tostring(params[key.name])
 		end
 	end
 
-	if state.flat then
-		return state.folder .. "/" .. stem .. ".png"
-	end
-
 	local segments = { stem }
-	if layer.part then
-		segments[#segments + 1] = layer.part
+	if layer.role then
+		if layer.part then
+			segments[#segments + 1] = layer.part
+		end
+		segments[#segments + 1] = layer.role
 	end
-	segments[#segments + 1] = layer.role
 
-	return state.folder .. "/" .. state.name .. "/" .. table.concat(segments, "-") .. ".png"
+	if variation then
+		segments[#segments + 1] = tostring(variation)
+	end
+
+	return folder .. "/" .. table.concat(segments, "-") .. ".png"
 end
 
 ---Indicates whether the given `layer` is included for the given `params`.
@@ -437,9 +465,10 @@ end
 ---Creates the icon described by the given `state` for the given `params`.
 ---@param state IconBuilderState The state of the builder.
 ---@param params table<string, any> The parameters given to the creator.
+---@param variation? integer The number of the picture variation, between 1 and the number of variations minus 1. When `nil`, the icon is created.
 ---@return SafeIconData[]
 ---@nodiscard
-function _assembly.assemble(state, params)
+function _assembly.assemble(state, params, variation)
 	---@type IconData[]
 	local icon_data = {}
 
@@ -451,7 +480,7 @@ function _assembly.assemble(state, params)
 			end
 
 			icon_data[#icon_data + 1] = {
-				icon = resolve_file_name(state, layer, params),
+				icon = resolve_file_name(state, layer, params, variation),
 				icon_size = layer.icon_size or state.icon_size,
 				tint = tint,
 			}
@@ -507,14 +536,40 @@ local function rules_rule(rules, fields)
 	}
 end
 
----Creates a composition with the given `icon_data` in the canvas group, with the icon defaults type of the given
----`state`.
+---Gets the number of picture variations of the icon described by the given `state` for the given `params`.
+---@param state IconBuilderState The state of the builder.
+---@param params table<string, any> The parameters given to the creator.
+---@return integer
+---@nodiscard
+local function get_variation_count(state, params)
+	local variations = state.variations --[[@as IconBuilderVariations]]
+	local counts = variations.counts
+	if counts and state.collection and counts[params[state.collection]] then
+		return counts[params[state.collection]]
+	end
+
+	return variations.count
+end
+
+---Creates a composition with the given `icon_data` in the canvas group, with the icon defaults type and the mipmap
+---count of the given `state`. When the state has picture variations, the icon is the first variation, and the other
+---variations are created for the given `params`.
 ---@param icon_data SafeIconData[] The icon to add.
 ---@param state IconBuilderState The state from which the icon was created.
+---@param params table<string, any> The parameters given to the creator.
 ---@return IconComposition
 ---@nodiscard
-function _assembly.as_composition(icon_data, state)
-	return IconComposition:from_icons(icon_data, nil, state.defaults_type)
+function _assembly.as_composition(icon_data, state, params)
+	if not state.variations then
+		return IconComposition:from_icons(icon_data, nil, state.defaults_type, state.mipmap_count)
+	end
+
+	local variations = { icon_data }
+	for variation = 1, get_variation_count(state, params) - 1 do
+		variations[#variations + 1] = _assembly.assemble(state, params, variation)
+	end
+
+	return IconComposition:from_variations(variations, nil, state.defaults_type, state.mipmap_count)
 end
 
 ---Creates a function that returns the icon described by the given `state`.
@@ -525,14 +580,34 @@ end
 ---@param creator_name? string The name of the creator in error messages. If `nil`, the name of the icon is used.
 ---@param rules? IconParamsRule[] The rules that check several parameters together.
 ---@param optional boolean When `true`, indicates that the creator can be called without parameters.
----@param finish? fun(icon_data: SafeIconData[], state: IconBuilderState): any The function that converts the icon to the result of the creator. If `nil`, the creator returns the icon.
+---@param finish? fun(icon_data: SafeIconData[], state: IconBuilderState, params: table<string, any>): any The function that converts the icon to the result of the creator. If `nil`, the creator returns the icon.
 ---@return fun(params?: table<string, any>): any
 ---@nodiscard
 function _assembly.make_creator(state, creator_name, rules, optional, finish)
 	local name = creator_name or state.name
 
+	-- A collection with no layers is flat, with one file in the subfolder of each value.
+	if state.collection and not state.layers[1] then
+		state = _assembly.copy_state(state)
+		state.layers[1] = _assembly.new_layer(nil, nil, nil, nil)
+	end
+
 	if not state.layers[1] then
 		error(string.format("The icon '%s' has no layers.", state.name), 3)
+	end
+
+	if state.variations and not finish then
+		error(
+			string.format("The icon '%s' has picture variations, which only `build_composition` can return.", state.name),
+			3
+		)
+	end
+
+	if state.variations and state.variations.counts and not state.collection then
+		error(
+			string.format("The icon '%s' gives variation counts for values, but is not part of a collection.", state.name),
+			3
+		)
 	end
 
 	---@type table<string, Validator<any>>
@@ -632,7 +707,7 @@ function _assembly.make_creator(state, creator_name, rules, optional, finish)
 
 		local icon_data = _assembly.assemble(state, params or {})
 		if finish then
-			return finish(icon_data, state)
+			return finish(icon_data, state, params or {})
 		end
 
 		return icon_data

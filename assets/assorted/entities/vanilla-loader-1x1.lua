@@ -129,15 +129,21 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
+local icon_builder = icons:tinted("vanilla-loader-1x1")
+
 ---Gets the icon for the 1 x 1 vanilla loader, in the tints given by `params`.
-M.get_icon = icons:tinted("vanilla-loader-1x1"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the 1 x 1 vanilla loader as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local filter_icon_builder =
+	icons:layers("vanilla-loader-1x1"):base({ part = "filter" }):mask():highlights({ requires = "tint" })
 
 ---Gets the icon for the 1 x 1 vanilla filter loader, in the tints given by `params`.
-M.get_filter_icon = icons
-	:layers("vanilla-loader-1x1")
-	:base({ part = "filter" })
-	:mask()
-	:highlights({ requires = "tint" })
-	:build("get_filter_icon")
+M.get_filter_icon = filter_icon_builder:build("get_filter_icon")
+
+---Gets the icon for the 1 x 1 vanilla filter loader as an `IconComposition`, in the tints given by `params`.
+M.get_filter_icon_composition = filter_icon_builder:build_composition("get_filter_icon_composition")
 
 return M

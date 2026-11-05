@@ -314,7 +314,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = icons:tinted("pump-water")
+
 ---Gets the icon for the water pump, in the tints given by `params`.
-M.get_icon = icons:tinted("pump-water"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the water pump as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

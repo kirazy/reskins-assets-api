@@ -281,6 +281,29 @@ local equipment_background_tints = {
 	["utility"] = util.color("#cccccc"),
 }
 
+---The group of the equipment background in an icon composition, in the `backdrop` stratum.
+---
+---- The group is not tintable. The background takes its tint from `get_icon_background_layer`.
+---- The group is not included in the `pictures` projection, so the item is drawn in the world without the background.
+---
+---#### Examples
+---```lua
+----- Compose the icon of an equipment item on the background of its category.
+---local composition = get_icon_composition({ tint = tint })
+---    :add(icons_api.equipment_background_group, icons_api.get_icon_background_layer(util.color("#e62c2c")))
+---    :outline()
+---
+---local icon_data, pictures = composition:build()
+----- The icon has the background beneath the artwork, and the pictures have the artwork alone.
+---```
+---@type IconCompositionGroup
+_icons.equipment_background_group = {
+	name = "equipment-background",
+	stratum = "backdrop",
+	tintable = false,
+	projections = { pictures = false },
+}
+
 local check_get_icon_background_layer = V.signature("get_icon_background_layer", {
 	{ "tint", Common.color:optional() },
 })
@@ -343,6 +366,112 @@ function _icons.get_minified_symbol_overlay()
 		icon = "__reskins-assets-api__/graphics/icons/mini-machine-overlay.png",
 		icon_size = 64,
 		scale = 0.5,
+	}
+
+	return icon_data
+end
+
+---Gets a technology icon layer that is the frame beneath a miniature entity in a technology icon.
+---@return SafeIconData underlay The underlay layer, in the icon defaults of a technology.
+---
+---#### Examples
+---```lua
+----- Compose the technology icon of a miniature furnace from the icon of the furnace, scaled down between the
+----- underlay and the overlay.
+---local composition = IconComposition:from_icon(icons_api.get_minified_technology_underlay(), nil, "technology")
+---    :add_canvas(data.raw.technology["advanced-material-processing"], { scale = 0.8 })
+---    :add_symbol(icons_api.get_minified_technology_overlay())
+---```
+---@see Reskins.Assets.Icons.get_minified_technology_overlay
+---@nodiscard
+function _icons.get_minified_technology_underlay()
+	local icon_data = {
+		icon = "__reskins-assets-api__/graphics/technology/mini-machine-underlay.png",
+		icon_size = 256,
+		scale = 0.5,
+	}
+
+	return icon_data
+end
+
+---Gets a technology icon layer that is the frame over a miniature entity in a technology icon.
+---@return SafeIconData overlay The overlay layer, in the icon defaults of a technology.
+---@see Reskins.Assets.Icons.get_minified_technology_underlay
+---@nodiscard
+function _icons.get_minified_technology_overlay()
+	local icon_data = {
+		icon = "__reskins-assets-api__/graphics/technology/mini-machine-overlay.png",
+		icon_size = 256,
+		scale = 0.5,
+	}
+
+	return icon_data
+end
+
+local check_get_technology_constant = V.signature("get_technology_constant", {
+	{ "constant", AssetsCommon.technology_constant },
+})
+
+---Gets a technology icon layer with the given constant icon of the base game, placed in the lower-right corner as the
+---`util.technology_icon_constant_*` functions of the base game place it.
+---@param constant TechnologyConstant The constant.
+---@return SafeIconData constant_layer The layer, in the icon defaults of a technology, with `floating` set.
+---
+---#### Examples
+---```lua
+----- Add the damage constant to a technology icon.
+---local _defines = require("__reskins-assets-api__.api.defines")
+---
+---local composition = get_technology_icon_composition({ tint = tint })
+---    :add_symbol(icons_api.get_technology_constant(_defines.technology_constant.damage))
+----- The constant is drawn at half size in the lower-right corner, outside the bounds of the GUI slot.
+---```
+---@throws When `constant` is not a `TechnologyConstant`.
+---@see Reskins.Assets.TechnologyConstant
+---@nodiscard
+function _icons.get_technology_constant(constant)
+	check_get_technology_constant(constant)
+
+	local icon_data = {
+		icon = "__core__/graphics/icons/technology/constants/constant-" .. constant .. ".png",
+		icon_size = 128,
+		scale = 0.5,
+		shift = { 50, 50 },
+		floating = true,
+	}
+
+	return icon_data
+end
+
+local check_get_technology_equipment_overlay = V.signature("get_technology_equipment_overlay", {
+	{ "equipment", AssetsCommon.equipment_overlay },
+})
+
+---Gets a technology icon layer with the overlay of the given `equipment`, placed at the bottom of the icon.
+---@param equipment EquipmentOverlay The equipment of the overlay.
+---@return SafeIconData overlay The overlay layer, in the icon defaults of a technology, with `floating` set.
+---
+---#### Examples
+---```lua
+----- Add the personal equipment overlay to a technology icon.
+---local _defines = require("__reskins-assets-api__.api.defines")
+---
+---local composition = get_technology_icon_composition({ tint = tint })
+---    :add_symbol(icons_api.get_technology_equipment_overlay(_defines.equipment_overlay.personal))
+----- The overlay is drawn at half size at the bottom of the icon, outside the bounds of the GUI slot.
+---```
+---@throws When `equipment` is not an `EquipmentOverlay`.
+---@see Reskins.Assets.EquipmentOverlay
+---@nodiscard
+function _icons.get_technology_equipment_overlay(equipment)
+	check_get_technology_equipment_overlay(equipment)
+
+	local icon_data = {
+		icon = "__reskins-assets-api__/graphics/technology/" .. equipment .. "-equipment-overlay.png",
+		icon_size = 128,
+		scale = 0.5,
+		shift = { 32, 50 },
+		floating = true,
 	}
 
 	return icon_data

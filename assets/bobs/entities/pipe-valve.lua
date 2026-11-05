@@ -99,7 +99,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = icons:layers("pipe-valve"):base():mask()
+
 ---Gets the icon for the valve, in the tint given by `params`.
-M.get_icon = icons:layers("pipe-valve"):base():mask():build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the valve as an `IconComposition`, in the tint given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

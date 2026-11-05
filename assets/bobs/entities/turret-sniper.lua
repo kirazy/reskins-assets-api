@@ -297,7 +297,12 @@ end
 
 local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
+local icon_builder = icons:tinted("turret-sniper")
+
 ---Gets the icon for the sniper turret, in the tints given by `params`.
-M.get_icon = icons:tinted("turret-sniper"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the sniper turret as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
 return M

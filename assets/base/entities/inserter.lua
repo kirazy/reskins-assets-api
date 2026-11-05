@@ -570,22 +570,53 @@ end
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons/inserters" })
 
+local icon_builder = base_icons:tinted("inserter")
+
 ---Gets the icon for a standard inserter, in the tints given by `params`.
-M.get_icon = base_icons:tinted("inserter"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for a standard inserter as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local filter_icon_builder = bobs_icons:tinted("inserter-filter")
 
 ---Gets the icon for a filter inserter, in the tints given by `params`.
-M.get_filter_icon = bobs_icons:tinted("inserter-filter"):build("get_filter_icon")
+M.get_filter_icon = filter_icon_builder:build("get_filter_icon")
+
+---Gets the icon for a filter inserter as an `IconComposition`, in the tints given by `params`.
+M.get_filter_icon_composition = filter_icon_builder:build_composition("get_filter_icon_composition")
+
+local bulk_icon_builder = bobs_icons:tinted("inserter-bulk")
 
 ---Gets the icon for a bulk inserter, in the tints given by `params`.
-M.get_bulk_icon = bobs_icons:tinted("inserter-bulk"):build("get_bulk_icon")
+M.get_bulk_icon = bulk_icon_builder:build("get_bulk_icon")
+
+---Gets the icon for a bulk inserter as an `IconComposition`, in the tints given by `params`.
+M.get_bulk_icon_composition = bulk_icon_builder:build_composition("get_bulk_icon_composition")
+
+local flipped_bulk_icon_builder = bobs_icons:tinted("inserter-bulk-flipped")
 
 ---Gets the icon for a bulk inserter, mirrored, in the tints given by `params`.
-M.get_flipped_bulk_icon = bobs_icons:tinted("inserter-bulk-flipped"):build("get_flipped_bulk_icon")
+M.get_flipped_bulk_icon = flipped_bulk_icon_builder:build("get_flipped_bulk_icon")
+
+---Gets the icon for a bulk inserter as an `IconComposition`, mirrored, in the tints given by `params`.
+M.get_flipped_bulk_icon_composition = flipped_bulk_icon_builder:build_composition("get_flipped_bulk_icon_composition")
+
+local bulk_filter_icon_builder = bobs_icons:tinted("inserter-bulk-filter")
 
 ---Gets the icon for a bulk filter inserter, in the tints given by `params`.
-M.get_bulk_filter_icon = bobs_icons:tinted("inserter-bulk-filter"):build("get_bulk_filter_icon")
+M.get_bulk_filter_icon = bulk_filter_icon_builder:build("get_bulk_filter_icon")
+
+---Gets the icon for a bulk filter inserter as an `IconComposition`, in the tints given by `params`.
+M.get_bulk_filter_icon_composition = bulk_filter_icon_builder:build_composition("get_bulk_filter_icon_composition")
+
+local flipped_bulk_filter_icon_builder = bobs_icons:tinted("inserter-bulk-filter-flipped")
 
 ---Gets the icon for a bulk filter inserter, mirrored, in the tints given by `params`.
-M.get_flipped_bulk_filter_icon = bobs_icons:tinted("inserter-bulk-filter-flipped"):build("get_flipped_bulk_filter_icon")
+M.get_flipped_bulk_filter_icon = flipped_bulk_filter_icon_builder:build("get_flipped_bulk_filter_icon")
+
+---Gets the icon for a bulk filter inserter as an `IconComposition`, mirrored, in the tints given by `params`.
+M.get_flipped_bulk_filter_icon_composition =
+	flipped_bulk_filter_icon_builder:build_composition("get_flipped_bulk_filter_icon_composition")
 
 return M

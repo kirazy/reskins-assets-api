@@ -392,33 +392,57 @@ local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 local assorted_icons = IconBuilderFactory:create({ folder = "__reskins-assets-assorted__/graphics/icons" })
 
+local icon_builder = base_icons:tinted("nuclear-reactor")
+
 ---Gets the icon for the vanilla nuclear reactor, in the tints given by `params`.
-M.get_icon = base_icons:tinted("nuclear-reactor"):build("get_icon")
+M.get_icon = icon_builder:build("get_icon")
+
+---Gets the icon for the vanilla nuclear reactor as an `IconComposition`, in the tints given by `params`.
+M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local fuel_icon_builder =
+	bobs_icons:tinted("nuclear-reactor"):keyed("fuel", FUEL, BASE_LAYER):keyed("material", MATERIAL, BASE_LAYER)
 
 ---Gets the icon for a reactor burning the `fuel`, built from the `material`, and in the tints given by `params`.
 ---
 ---Not every fuel has artwork in every material.
-M.get_fuel_icon = bobs_icons
-	:tinted("nuclear-reactor")
-	:keyed("fuel", FUEL, BASE_LAYER)
-	:keyed("material", MATERIAL, BASE_LAYER)
-	:build("get_fuel_icon", {
-		{
-			field = "material",
-			fields = { "fuel", "material" },
-			check = function(fuel, material)
-				return FUEL_MATERIALS[fuel][material] == true
-			end,
-			message = "a material for which the reactor of the given fuel has artwork",
-		},
-	})
+M.get_fuel_icon = fuel_icon_builder:build("get_fuel_icon", {
+	{
+		field = "material",
+		fields = { "fuel", "material" },
+		check = function(fuel, material)
+			return FUEL_MATERIALS[fuel][material] == true
+		end,
+		message = "a material for which the reactor of the given fuel has artwork",
+	},
+})
 
----Gets the icon for a reactor glowing in the `glow_color`, built from the `material`, and in the tints given by
----`params`.
-M.get_realistic_icon = assorted_icons
+---Gets the icon for a reactor burning the `fuel` as an `IconComposition`, built from the `material`, and in the tints
+---given by `params`.
+---
+---Not every fuel has artwork in every material.
+M.get_fuel_icon_composition = fuel_icon_builder:build_composition("get_fuel_icon_composition", {
+	{
+		field = "material",
+		fields = { "fuel", "material" },
+		check = function(fuel, material)
+			return FUEL_MATERIALS[fuel][material] == true
+		end,
+		message = "a material for which the reactor of the given fuel has artwork",
+	},
+})
+
+local realistic_icon_builder = assorted_icons
 	:tinted("realistic-nuclear-reactor")
 	:keyed("glow_color", GLOW_COLOR, BASE_LAYER)
 	:keyed("material", MATERIAL, BASE_LAYER)
-	:build("get_realistic_icon")
+
+---Gets the icon for a reactor glowing in the `glow_color`, built from the `material`, and in the tints given by
+---`params`.
+M.get_realistic_icon = realistic_icon_builder:build("get_realistic_icon")
+
+---Gets the icon for a reactor glowing in the `glow_color` as an `IconComposition`, built from the `material`, and in
+---the tints given by `params`.
+M.get_realistic_icon_composition = realistic_icon_builder:build_composition("get_realistic_icon_composition")
 
 return M

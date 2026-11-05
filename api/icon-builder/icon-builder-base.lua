@@ -61,6 +61,69 @@ function IconBuilderBase:folder(folder)
 	return setmetatable({ state = state }, getmetatable(self))
 end
 
+local check_mipmaps = V.signature("mipmaps", {
+	{ "mipmap_count", Common.mipmap_count },
+})
+
+---Sets the number of mipmaps in the files of the icon to the given `mipmap_count`.
+---
+---`build_composition` adds the icon to the composition with the count, which is set on each sprite of the pictures
+---lowered from it. The mipmap count of the factory is used when no count is set.
+---@param mipmap_count integer The number of mipmaps in the files, between 0 and 255.
+---@return self # A copy of the builder with the given `mipmap_count`.
+---@throws When `mipmap_count` is not an integer between 0 and 255.
+---@nodiscard
+function IconBuilderBase:mipmaps(mipmap_count)
+	check_mipmaps(mipmap_count)
+
+	local state = _assembly.copy_state(self.state)
+	state.mipmap_count = mipmap_count
+
+	return setmetatable({ state = state }, getmetatable(self))
+end
+
+local check_variations = V.signature("variations", {
+	{ "count", V.integer():at_least(2) },
+	{ "counts", V.map(V.any(), V.integer():positive()):optional() },
+})
+
+---Sets the number of pictures of the icon, including the icon, to the given `count`.
+---
+---The file of the icon is the first picture, and the files of the other pictures have the number of the picture
+---appended, as `{file}-{i}.png` for `i` between 1 and `count - 1`. For example, the pictures of `powder-aluminium.png`
+---with a `count` of 3 are `powder-aluminium.png`, `powder-aluminium-1.png`, and `powder-aluminium-2.png`. A builder with
+---variations is built with `build_composition`, and `build` raises an error.
+---
+---#### Parameters
+---@param count integer The number of pictures, at least 2.
+---@param counts? table<any, integer> The number of pictures for each value of the collection parameter that has another count, at least 1.
+---
+---#### Returns
+---@return self # A copy of the builder with the variations set.
+---
+---#### Examples
+---```lua
+----- Create the ores of a collection with 4 pictures, and 8 pictures for bauxite.
+---local get_icon_composition = icons
+---    :collection("ores", "ore", V.one_of({ "bauxite-ore", "gold-ore" }))
+---    :variations(4, { ["bauxite-ore"] = 8 })
+---    :build_composition("get_icon_composition")
+---
+---local icon_data, pictures = get_icon_composition({ ore = "gold-ore" }):build()
+----- The icon is ores/gold-ore/gold-ore.png, and the pictures are gold-ore.png and gold-ore-1.png to gold-ore-3.png.
+---```
+---@throws When `count` is not an integer of at least 2.
+---@throws When `counts` is not a table of positive integers.
+---@nodiscard
+function IconBuilderBase:variations(count, counts)
+	check_variations(count, counts)
+
+	local state = _assembly.copy_state(self.state)
+	state.variations = { count = count, counts = counts and util.copy(counts) or nil }
+
+	return setmetatable({ state = state }, getmetatable(self))
+end
+
 local check_size = V.signature("size", {
 	{ "icon_size", Common.sprite_size },
 })
