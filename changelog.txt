@@ -32,6 +32,7 @@ Date: ????
     - Fixed that the generator sprite set and applicator did not match Factorio 2.1, and that the boiler applicator did not set the fire flicker.
     - Fixed that the Angel's gas refinery, advanced gas refinery, and steam cracker sprite sets drew a fire sprite that Factorio 2.1 removed.
     - Fixed the pipe pictures of Angel's hydro plant, the artwork paths of Angel's valve, big chest, and warehouse sprite sets, and that Angel's ore leaching plant drew smoke.
+    - Fixed that the remnants of the big and medium electric poles, the roboport, and the construction and logistic robots always drew their first variation.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2026-11-01

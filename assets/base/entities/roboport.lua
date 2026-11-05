@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local RoboportExplosion = require("assets.base.explosions.roboport")
 local Remnants = require("assets.base.remnants")
@@ -227,7 +228,7 @@ local function get_corpse_animation(tint)
 		})
 	end
 
-	return { animation, util.copy(animation) }
+	return _sprites.make_rotated_animation_variations_from_spritesheet(2, animation)
 end
 
 ---@return WaterReflectionDefinition

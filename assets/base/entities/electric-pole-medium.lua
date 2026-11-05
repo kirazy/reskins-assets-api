@@ -6,6 +6,7 @@
 ---@namespace Reskins.Assets.Base.Entities
 
 local _defines = require("api.defines")
+local _sprites = require("__reskins-sprite-utils__.sprites")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local MediumElectricPoleExplosion = require("assets.base.explosions.medium-electric-pole")
 local Remnants = require("assets.base.remnants")
@@ -111,7 +112,7 @@ local function get_corpse_animation(tint)
 		})
 	end
 
-	return { animation, util.copy(animation), util.copy(animation) }
+	return _sprites.make_rotated_animation_variations_from_spritesheet(3, animation)
 end
 
 ---@param tint? Color
@@ -155,7 +156,7 @@ local function get_corpse_animation_overlay(tint)
 		})
 	end
 
-	return { animation, util.copy(animation), util.copy(animation) }
+	return _sprites.make_rotated_animation_variations_from_spritesheet(3, animation)
 end
 
 ---@return WaterReflectionDefinition
