@@ -104,6 +104,33 @@ local set_type_by_prototype_type = {
 ---@class ApplicatorRegistryFactory
 local _factory = {}
 
+---Indicates whether the given `prototype` is an entity.
+---@param prototype EntityWithHealthPrototype|CorpsePrototype
+---@return boolean
+---@return string?
+local function is_entity(prototype)
+	if prototype.type == "corpse" then
+		return false, "must be an entity, got type 'corpse'"
+	end
+
+	return true
+end
+
+local check_apply_corpse_and_explosion = V.signature("apply_corpse_and_explosion", {
+	{ "prototype", AssetsCommon.prototype },
+	{
+		"definition",
+		V.struct({
+			corpse = AssetsCommon.corpse:optional(),
+			dying_explosion = AssetsCommon.dying_explosion:optional(),
+		})
+			:strict()
+			:describe_as("a CorpseAndExplosionDefinition"),
+	},
+}, {
+	{ parameter = "prototype", arguments = { "prototype" }, check = is_entity },
+})
+
 local check_register = V.signature("register", {
 	{
 		"applicator",
@@ -372,6 +399,43 @@ function _factory.new()
 		else
 			apply_sprite_set_to_entity(prototype --[[@as EntityWithHealthPrototype]], definition, params)
 		end
+	end
+
+	---Sets the corpse and the dying explosion of the given entity `prototype` to those of the given `definition`, in
+	---place.
+	---
+	---The corpse and the dying explosion are created and set as `Corpses.apply` and `Explosions.apply` describe. A
+	---`CorpseSpriteSet` is not scaled. The artwork of `prototype` is not modified.
+	---
+	---#### Parameters
+	---@param prototype EntityWithHealthPrototype The entity to which `definition` is applied.
+	---@param definition CorpseAndExplosionDefinition The corpse and the dying explosion of the entity.
+	---
+	---#### Examples
+	---```lua
+	----- Give the oil refinery the generic remnants for its size and the dying explosion of the storage tank.
+	---local Applicators = require("__reskins-assets-api__.api.applicators")
+	---local StorageTankExplosion = require("__reskins-assets-api__.assets.base.explosions.storage-tank")
+	---local _defines = require("__reskins-assets-api__.api.defines")
+	---
+	---Applicators.apply_corpse_and_explosion(data.raw["assembling-machine"]["oil-refinery"], {
+	---    corpse = _defines.generic_remnants,
+	---    dying_explosion = StorageTankExplosion.get_explosion({}),
+	---})
+	----- The oil refinery is 5 x 5 tiles, so its corpse is "ar-oil-refinery-remnants", which repeats the artwork of
+	----- "medium-remnants" in a grid, and its dying explosion is "ar-oil-refinery-explosion".
+	---```
+	---@throws When `prototype` is not a prototype, or is a corpse.
+	---@throws When `definition` defines an unrecognized field.
+	---@throws When `definition.corpse` is not a `CorpseSpriteSet`, a corpse name, or `_defines.generic_remnants`.
+	---@throws When `definition.dying_explosion` is not an `ExplosionSpriteSet` or an explosion name.
+	---@throws When an explosion in `definition.dying_explosion` replaces a particle or explosion that its `created_effect` does not create.
+	---@see Corpses.get_generic_remnants
+	function registry.apply_corpse_and_explosion(prototype, definition)
+		check_apply_corpse_and_explosion(prototype, definition)
+
+		Corpses.apply(prototype, definition.corpse)
+		Explosions.apply(prototype, definition.dying_explosion)
 	end
 
 	return registry

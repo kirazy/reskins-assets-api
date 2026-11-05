@@ -21,6 +21,15 @@
 ---A multiplier applied to the scale of the sprites, which overrides automatic scaling.
 ---@field scale_factor? double
 
+---Defines the corpse and the dying explosion that `ApplicatorRegistry.apply_corpse_and_explosion` gives an entity.
+---@class (exact) CorpseAndExplosionDefinition
+---The corpse of the entity, in any form that the `corpse` of a sprite set takes. When `nil`, the corpse of the entity
+---is not modified.
+---@field corpse? CorpseSpriteSet|EntityID|GenericRemnants
+---The dying explosion of the entity, in any form that the `dying_explosion` of a sprite set takes. When `nil`, the
+---`dying_explosion` of the entity is not modified.
+---@field dying_explosion? ExplosionSpriteSet|EntityID
+
 ---Defines the fields that every sprite set has.
 ---@class (exact) SpriteSetBase
 ---The width of the `selection_box` of the entity for which the artwork is designed.
