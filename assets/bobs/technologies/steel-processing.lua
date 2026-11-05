@@ -39,6 +39,15 @@ M.get_titanium_processing_icon = titanium_processing:build("get_titanium_process
 M.get_titanium_processing_icon_composition =
 	titanium_processing:build_composition("get_titanium_processing_icon_composition")
 
+local tungsten_alloy_processing = technologies:flat("tungsten-alloy-processing")
+
+---Gets the technology icon for tungsten alloy processing.
+M.get_tungsten_alloy_processing_icon = tungsten_alloy_processing:build("get_tungsten_alloy_processing_icon")
+
+---Gets the technology icon for tungsten alloy processing as an `IconComposition`.
+M.get_tungsten_alloy_processing_icon_composition =
+	tungsten_alloy_processing:build_composition("get_tungsten_alloy_processing_icon_composition")
+
 local tungsten_processing = technologies:flat("tungsten-processing")
 
 ---Gets the technology icon for tungsten processing.

@@ -510,6 +510,21 @@ M.get_icon = icon_builder:build("get_icon")
 ---fire of the base layer shows through.
 M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
 
+local blue_flame_icon_builder = base_icons
+	:layers("boiler")
+	:base({ part = "blue-flame" })
+	:mask()
+	:highlights({ requires = "tint" })
+	:tinted_part("fire", "fire_tint")
+
+---Gets the icon for a standard boiler with a blue flame, in the tints given by `params`. Without `fire_tint`, the blue
+---fire of the base layer shows through.
+M.get_blue_flame_icon = blue_flame_icon_builder:build("get_blue_flame_icon")
+
+---Gets the icon for a standard boiler with a blue flame as an `IconComposition`, in the tints given by `params`.
+---Without `fire_tint`, the blue fire of the base layer shows through.
+M.get_blue_flame_icon_composition = blue_flame_icon_builder:build_composition("get_blue_flame_icon_composition")
+
 local fluid_icon_builder = bobs_icons:tinted("boiler-oil"):tinted_part("fire", "fire_tint")
 
 ---Gets the icon for a fluid-burning boiler, in the tints given by `params`. Without `fire_tint`, the fire of the base

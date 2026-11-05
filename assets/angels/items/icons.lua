@@ -18,8 +18,30 @@ local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels
 ---@class Icons
 local M = {}
 
+---Gets the icon for Angel's clarifier as an `IconComposition`.
+M.get_clarifier_icon_composition = icons:flat("clarifier"):build_composition("get_clarifier_icon_composition")
+
+---Gets the icon for Angel's cooling tower as an `IconComposition`.
+M.get_cooling_tower_icon_composition =
+	icons:flat("cooling-tower"):build_composition("get_cooling_tower_icon_composition")
+
+---Gets the icon for Angel's flare stack as an `IconComposition`.
+M.get_flare_stack_icon_composition = icons:flat("flare-stack"):build_composition("get_flare_stack_icon_composition")
+
 ---Gets the icon for glass as an `IconComposition`.
 M.get_glass_icon_composition = icons:flat("glass"):build_composition("get_glass_icon_composition")
+
+---Gets the icon for Angel's gas tank as an `IconComposition`.
+M.get_petrochem_gas_tank_icon_composition =
+	icons:flat("petrochem-gas-tank"):build_composition("get_petrochem_gas_tank_icon_composition")
+
+---Gets the icon for Angel's inline tank as an `IconComposition`.
+M.get_petrochem_inline_tank_icon_composition =
+	icons:flat("petrochem-inline-tank"):build_composition("get_petrochem_inline_tank_icon_composition")
+
+---Gets the icon for Angel's oil tank as an `IconComposition`.
+M.get_petrochem_oil_tank_icon_composition =
+	icons:flat("petrochem-oil-tank"):build_composition("get_petrochem_oil_tank_icon_composition")
 
 ---Gets the icon for the quartz crucible as an `IconComposition`.
 M.get_quartz_crucible_icon_composition =

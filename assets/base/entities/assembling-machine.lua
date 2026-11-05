@@ -480,6 +480,15 @@ M.get_burner_icon = burner_icon_builder:build("get_burner_icon")
 ---`params`.
 M.get_burner_icon_composition = burner_icon_builder:build_composition("get_burner_icon_composition")
 
+local burner_small_icon_builder = bobs_icons:tinted("assembling-machine-burner-small"):layer("smoke-stack")
+
+---Gets the icon for a small burner assembling machine, with its smoke stack, in the tints given by `params`.
+M.get_burner_small_icon = burner_small_icon_builder:build("get_burner_small_icon")
+
+---Gets the icon for a small burner assembling machine as an `IconComposition`, with its smoke stack, in the tints given
+---by `params`.
+M.get_burner_small_icon_composition = burner_small_icon_builder:build_composition("get_burner_small_icon_composition")
+
 local steam_icon_builder = bobs_icons:tinted("assembling-machine-steam"):tinted("smoke-stack")
 
 ---Gets the icon for a steam assembling machine, with its smoke stack, in the tints given by `params`. The smoke stack

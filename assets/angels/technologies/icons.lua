@@ -31,6 +31,22 @@ M.get_logistic_warehouses_icon = logistic_warehouses:build("get_logistic_warehou
 M.get_logistic_warehouses_icon_composition =
 	logistic_warehouses:build_composition("get_logistic_warehouses_icon_composition")
 
+local modules_2 = technologies:flat("modules-2")
+
+---Gets the technology icon for modules 2.
+M.get_modules_2_icon = modules_2:build("get_modules_2_icon")
+
+---Gets the technology icon for modules 2 as an `IconComposition`.
+M.get_modules_2_icon_composition = modules_2:build_composition("get_modules_2_icon_composition")
+
+local modules_3 = technologies:flat("modules-3")
+
+---Gets the technology icon for modules 3.
+M.get_modules_3_icon = modules_3:build("get_modules_3_icon")
+
+---Gets the technology icon for modules 3 as an `IconComposition`.
+M.get_modules_3_icon_composition = modules_3:build_composition("get_modules_3_icon_composition")
+
 local thorium_power = technologies:flat("thorium-power")
 
 ---Gets the technology icon for thorium power.

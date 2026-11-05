@@ -74,6 +74,15 @@ M.get_alloy_processing_icon = alloy_processing:build("get_alloy_processing_icon"
 ---Gets the technology icon for alloy processing as an `IconComposition`.
 M.get_alloy_processing_icon_composition = alloy_processing:build_composition("get_alloy_processing_icon_composition")
 
+local alloy_processing_1 = technologies:flat("alloy-processing-1"):size(128)
+
+---Gets the technology icon for alloy processing 1.
+M.get_alloy_processing_1_icon = alloy_processing_1:build("get_alloy_processing_1_icon")
+
+---Gets the technology icon for alloy processing 1 as an `IconComposition`.
+M.get_alloy_processing_1_icon_composition =
+	alloy_processing_1:build_composition("get_alloy_processing_1_icon_composition")
+
 local aluminium_processing = technologies:flat("aluminium-processing")
 
 ---Gets the technology icon for aluminium processing.
@@ -161,6 +170,32 @@ M.get_deuterium_fuel_cell_2_icon = deuterium_fuel_cell_2:build("get_deuterium_fu
 M.get_deuterium_fuel_cell_2_icon_composition =
 	deuterium_fuel_cell_2:build_composition("get_deuterium_fuel_cell_2_icon_composition")
 
+local deuterium_fuel_reprocessing_alternate_blue =
+	technologies:flat("deuterium-fuel-reprocessing-alternate-blue"):size(128)
+
+---Gets the technology icon for alternate deuterium fuel reprocessing, with blue deuterium.
+M.get_deuterium_fuel_reprocessing_alternate_blue_icon =
+	deuterium_fuel_reprocessing_alternate_blue:build("get_deuterium_fuel_reprocessing_alternate_blue_icon")
+
+---Gets the technology icon for alternate deuterium fuel reprocessing as an `IconComposition`, with blue deuterium.
+M.get_deuterium_fuel_reprocessing_alternate_blue_icon_composition =
+	deuterium_fuel_reprocessing_alternate_blue:build_composition(
+		"get_deuterium_fuel_reprocessing_alternate_blue_icon_composition"
+	)
+
+local deuterium_fuel_reprocessing_alternate_pink =
+	technologies:flat("deuterium-fuel-reprocessing-alternate-pink"):size(128)
+
+---Gets the technology icon for alternate deuterium fuel reprocessing, with pink deuterium.
+M.get_deuterium_fuel_reprocessing_alternate_pink_icon =
+	deuterium_fuel_reprocessing_alternate_pink:build("get_deuterium_fuel_reprocessing_alternate_pink_icon")
+
+---Gets the technology icon for alternate deuterium fuel reprocessing as an `IconComposition`, with pink deuterium.
+M.get_deuterium_fuel_reprocessing_alternate_pink_icon_composition =
+	deuterium_fuel_reprocessing_alternate_pink:build_composition(
+		"get_deuterium_fuel_reprocessing_alternate_pink_icon_composition"
+	)
+
 local deuterium_fuel_reprocessing_blue = technologies:flat("deuterium-fuel-reprocessing-blue"):size(128)
 
 ---Gets the technology icon for deuterium fuel reprocessing, with blue deuterium.
@@ -213,6 +248,14 @@ M.get_fluid_chemical_furnace_icon = fluid_chemical_furnace:build("get_fluid_chem
 ---Gets the technology icon for the fluid chemical furnace as an `IconComposition`.
 M.get_fluid_chemical_furnace_icon_composition =
 	fluid_chemical_furnace:build_composition("get_fluid_chemical_furnace_icon_composition")
+
+local fluid_furnace = technologies:flat("fluid-furnace"):size(128)
+
+---Gets the technology icon for the fluid furnace.
+M.get_fluid_furnace_icon = fluid_furnace:build("get_fluid_furnace_icon")
+
+---Gets the technology icon for the fluid furnace as an `IconComposition`.
+M.get_fluid_furnace_icon_composition = fluid_furnace:build_composition("get_fluid_furnace_icon_composition")
 
 local fluid_mixing_furnace = technologies:flat("fluid-mixing-furnace"):size(128)
 
@@ -413,6 +456,14 @@ M.get_silicon_processing_icon = silicon_processing:build("get_silicon_processing
 M.get_silicon_processing_icon_composition =
 	silicon_processing:build_composition("get_silicon_processing_icon_composition")
 
+local solid_fuel = technologies:flat("solid-fuel")
+
+---Gets the technology icon for solid fuel.
+M.get_solid_fuel_icon = solid_fuel:build("get_solid_fuel_icon")
+
+---Gets the technology icon for solid fuel as an `IconComposition`.
+M.get_solid_fuel_icon_composition = solid_fuel:build_composition("get_solid_fuel_icon_composition")
+
 local steel_chemical_furnace = technologies:flat("steel-chemical-furnace"):size(128)
 
 ---Gets the technology icon for the steel chemical furnace.
@@ -440,6 +491,16 @@ M.get_thorium_fuel_reprocessing_icon = thorium_fuel_reprocessing:build("get_thor
 M.get_thorium_fuel_reprocessing_icon_composition =
 	thorium_fuel_reprocessing:build_composition("get_thorium_fuel_reprocessing_icon_composition")
 
+local thorium_fuel_reprocessing_alternate = technologies:flat("thorium-fuel-reprocessing-alternate"):size(128)
+
+---Gets the technology icon for alternate thorium fuel reprocessing.
+M.get_thorium_fuel_reprocessing_alternate_icon =
+	thorium_fuel_reprocessing_alternate:build("get_thorium_fuel_reprocessing_alternate_icon")
+
+---Gets the technology icon for alternate thorium fuel reprocessing as an `IconComposition`.
+M.get_thorium_fuel_reprocessing_alternate_icon_composition =
+	thorium_fuel_reprocessing_alternate:build_composition("get_thorium_fuel_reprocessing_alternate_icon_composition")
+
 local thorium_plutonium_fuel_cell = technologies:flat("thorium-plutonium-fuel-cell"):size(128)
 
 ---Gets the technology icon for the thorium plutonium fuel cell.
@@ -448,6 +509,15 @@ M.get_thorium_plutonium_fuel_cell_icon = thorium_plutonium_fuel_cell:build("get_
 ---Gets the technology icon for the thorium plutonium fuel cell as an `IconComposition`.
 M.get_thorium_plutonium_fuel_cell_icon_composition =
 	thorium_plutonium_fuel_cell:build_composition("get_thorium_plutonium_fuel_cell_icon_composition")
+
+local thorium_processing = technologies:flat("thorium-processing")
+
+---Gets the technology icon for thorium processing.
+M.get_thorium_processing_icon = thorium_processing:build("get_thorium_processing_icon")
+
+---Gets the technology icon for thorium processing as an `IconComposition`.
+M.get_thorium_processing_icon_composition =
+	thorium_processing:build_composition("get_thorium_processing_icon_composition")
 
 local void_fluid = technologies:flat("void-fluid")
 

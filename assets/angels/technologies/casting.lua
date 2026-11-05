@@ -46,7 +46,7 @@ local technologies = IconBuilderFactory:create({
 })
 
 ---Provides methods for getting the technology icons of the casting folder of Angel's technologies,
----`casting/casting-{material}.png`.
+---`casting/casting-{material}.png` and `casting/casting-alloy-{tier}.png`.
 ---
 ---#### Examples
 ---```lua
@@ -69,5 +69,13 @@ M.get_icon = icon_builder:build("get_icon")
 
 ---Gets the technology icon for the casting of the given `material` as an `IconComposition`.
 M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local alloy_icon_builder = technologies:flat("casting-alloy"):keyed("tier", V.one_of({ 1, 2, 3 }))
+
+---Gets the technology icon for the casting of alloys of the given `tier`.
+M.get_alloy_icon = alloy_icon_builder:build("get_alloy_icon")
+
+---Gets the technology icon for the casting of alloys of the given `tier` as an `IconComposition`.
+M.get_alloy_icon_composition = alloy_icon_builder:build_composition("get_alloy_icon_composition")
 
 return M

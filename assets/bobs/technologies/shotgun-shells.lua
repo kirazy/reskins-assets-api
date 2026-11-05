@@ -92,4 +92,13 @@ M.get_shotgun_shells_icon = shotgun_shells:build("get_shotgun_shells_icon")
 ---Gets the technology icon for shotgun shells as an `IconComposition`.
 M.get_shotgun_shells_icon_composition = shotgun_shells:build_composition("get_shotgun_shells_icon_composition")
 
+local uranium_shotgun_shells = technologies:flat("uranium-shotgun-shells")
+
+---Gets the technology icon for uranium shotgun shells.
+M.get_uranium_shotgun_shells_icon = uranium_shotgun_shells:build("get_uranium_shotgun_shells_icon")
+
+---Gets the technology icon for uranium shotgun shells as an `IconComposition`.
+M.get_uranium_shotgun_shells_icon_composition =
+	uranium_shotgun_shells:build_composition("get_uranium_shotgun_shells_icon_composition")
+
 return M
