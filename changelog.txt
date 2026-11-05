@@ -39,6 +39,7 @@ Date: ????
     - The sprite sets of Angel's machines, valves, and chests now validate their parameters and define their dying explosions, remnants, mirroring, and pipe pictures, and no longer set `fluid_boxes_off_when_no_fluid_recipe`.
     - The pipe connectors of a crafting machine sprite set are now its first working visualisations, and `LogisticContainerSpriteSet` now extends `ContainerSpriteSet`.
     - Removed `assets.base.items.icons` and `assets.base.technologies.icons`; their icons are now in the sprite set modules and in the catalog module of each folder.
+    - Removed the Factorio 2.0 graphics set of the pumpjack sprite set, and the mining drill applicator now always applies the flipped graphics sets.
   Bugfixes:
     - Fixed the pipe pictures of the filtration unit, the remnant variations of the beacon, the shadow of the pump, and the position and frozen patch of the lab.
     - Fixed that the generator sprite set and applicator did not match Factorio 2.1, and that the boiler applicator did not set the fire flicker.

@@ -264,36 +264,6 @@ local function get_graphics_set(params, is_flipped)
 	return graphics_set
 end
 
----@param params PumpjackSpriteSetParams
----@return MiningDrillGraphicsSet
-local function translate_graphics_set_to_legacy(params)
-	local standard = get_graphics_set(params, false)
-	local flipped = get_graphics_set(params, true)
-
-	---@type MiningDrillGraphicsSet
-	local graphics_set = {
-		animation = standard.animation,
-		working_visualisations = {
-			{
-				always_draw = true,
-				secondary_draw_order = -1,
-				---@diagnostic disable-next-line: need-check-nil
-				north_animation = standard.working_visualisations[1].north_animation,
-				---@diagnostic disable-next-line: need-check-nil
-				east_animation = flipped.working_visualisations[1].east_animation,
-				---@diagnostic disable-next-line: need-check-nil
-				south_animation = standard.working_visualisations[1].south_animation,
-				---@diagnostic disable-next-line: need-check-nil
-				west_animation = flipped.working_visualisations[1].west_animation,
-			},
-		},
-		frozen_patch = standard.frozen_patch,
-		reset_animation_when_frozen = standard.reset_animation_when_frozen,
-	}
-
-	return graphics_set
-end
-
 ---Gets the circuit connector of the pumpjack for each direction.
 ---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 ---@nodiscard
@@ -425,12 +395,8 @@ local function get_definition(params, corpse_base_layer)
 		},
 	}
 
-	if helpers.compare_versions(mods["base"], "2.1.0") >= 0 then
-		definition.set.graphics_set = get_graphics_set(params, false)
-		definition.set.graphics_set_flipped = get_graphics_set(params, true)
-	else
-		definition.set.graphics_set = translate_graphics_set_to_legacy(params)
-	end
+	definition.set.graphics_set = get_graphics_set(params, false)
+	definition.set.graphics_set_flipped = get_graphics_set(params, true)
 
 	return definition
 end

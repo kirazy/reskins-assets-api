@@ -15,13 +15,10 @@ local function apply_sprite_set_to_mining_drill(prototype, set)
 
 	Assignment.safe_assign(prototype, set, { "circuit_connector", "circuit_connector_flipped" })
 
-	-- Flipped graphics sets exist in Factorio 2.1 and later.
-	if helpers.compare_versions(mods["base"], "2.1.0") >= 0 then
-		---@diagnostic disable-next-line: inject-field
-		prototype.graphics_set_flipped = util.copy(set.graphics_set_flipped)
-		---@diagnostic disable-next-line: inject-field
-		prototype.wet_mining_graphics_set_flipped = util.copy(set.wet_mining_graphics_set_flipped)
-	end
+	---@diagnostic disable-next-line: inject-field
+	prototype.graphics_set_flipped = util.copy(set.graphics_set_flipped)
+	---@diagnostic disable-next-line: inject-field
+	prototype.wet_mining_graphics_set_flipped = util.copy(set.wet_mining_graphics_set_flipped)
 end
 
 ---@type MiningDrillSpriteSetApplicator
@@ -34,11 +31,11 @@ return {
 ---@class (exact) MiningDrillSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set? MiningDrillGraphicsSet
----The prototype's `graphics_set_flipped`, in Factorio 2.1 and later.
+---The prototype's `graphics_set_flipped`.
 ---@field graphics_set_flipped? MiningDrillGraphicsSet
 ---The prototype's `wet_mining_graphics_set`.
 ---@field wet_mining_graphics_set? MiningDrillGraphicsSet
----The prototype's `wet_mining_graphics_set_flipped`, in Factorio 2.1 and later.
+---The prototype's `wet_mining_graphics_set_flipped`.
 ---@field wet_mining_graphics_set_flipped? MiningDrillGraphicsSet
 ---When `nil`, the circuit connector of the prototype is not modified.
 ---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
