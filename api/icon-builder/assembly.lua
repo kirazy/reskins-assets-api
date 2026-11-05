@@ -133,6 +133,8 @@ _assembly.role = {
 ---@field collection? string
 ---The picture variations of the icon. The field is `nil` when the icon has none.
 ---@field variations? IconBuilderVariations
+---When `true`, indicates that the pictures of the icon draw it a second time as a light.
+---@field glow? boolean
 ---The layers of the icon, in draw order.
 ---@field layers IconBuilderLayer[]
 ---The parameters that select the artwork, in the order in which their values are appended to the file name.
@@ -251,6 +253,7 @@ function _assembly.copy_state(state)
 		mipmap_count = state.mipmap_count,
 		collection = state.collection,
 		variations = state.variations and util.copy(state.variations) or nil,
+		glow = state.glow,
 		layers = util.copy(state.layers),
 		keys = util.copy(state.keys),
 	}
@@ -555,15 +558,17 @@ end
 ---count of the given `state`.
 ---
 ---When the state has picture variations, the icon is the first variation, and the other variations are created for the
----given `params`.
+---given `params`. When the state glows, the icon is in `IconComposition.glow_group` instead of the canvas group.
 ---@param icon_data SafeIconData[] The icon to add.
 ---@param state IconBuilderState The state from which the icon was created.
 ---@param params table<string, any> The parameters given to the creator.
 ---@return IconComposition
 ---@nodiscard
 function _assembly.as_composition(icon_data, state, params)
+	local group = state.glow and IconComposition.glow_group or nil
+
 	if not state.variations then
-		return IconComposition:from_icons(icon_data, nil, state.defaults_type, state.mipmap_count)
+		return IconComposition:from_icons(icon_data, group, state.defaults_type, state.mipmap_count)
 	end
 
 	local variations = { icon_data }
@@ -571,7 +576,7 @@ function _assembly.as_composition(icon_data, state, params)
 		variations[#variations + 1] = _assembly.assemble(state, params, variation)
 	end
 
-	return IconComposition:from_variations(variations, nil, state.defaults_type, state.mipmap_count)
+	return IconComposition:from_variations(variations, group, state.defaults_type, state.mipmap_count)
 end
 
 ---Creates a function that returns the icon described by the given `state`.
@@ -601,6 +606,16 @@ function _assembly.make_creator(state, creator_name, rules, optional, finish)
 	if state.variations and not finish then
 		error(
 			string.format("The icon '%s' has picture variations, which only `build_composition` can return.", state.name),
+			3
+		)
+	end
+
+	if state.glow and not finish then
+		error(
+			string.format(
+				"The icon '%s' is drawn as a light in its pictures, which only `build_composition` can return.",
+				state.name
+			),
 			3
 		)
 	end

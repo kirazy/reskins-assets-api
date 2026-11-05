@@ -18,6 +18,9 @@ local icons = IconBuilderFactory:create({ folder = _defines.assets_source.bobs_a
 ---@class Icons
 local M = {}
 
+---Gets the icon for resin as an `IconComposition`.
+M.get_resin_icon_composition = icons:flat("resin"):build_composition("get_resin_icon_composition")
+
 ---Gets the icon for the vehicle engine equipment as an `IconComposition`.
 M.get_vehicle_engine_icon_composition =
 	icons:flat("vehicle-engine"):build_composition("get_vehicle_engine_icon_composition")

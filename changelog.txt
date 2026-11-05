@@ -15,7 +15,9 @@ Date: ????
     - Added `IconBuilderFactory:collection`, which declares a folder with one subfolder for each value of a parameter, `variations` on the icon builders, which declares picture variations that `build_composition` returns as content with variations, and mipmap counts through `mipmaps` on the icon builders and the `mipmap_count` of the factory, which defaults to 4.
     - Added `IconBuilderFactory.dispatch_composition`, and a `get_*icon_composition` creator beside each `get_*icon` creator of the sprite set modules.
     - Added `icons.get_technology_constant` with `defines.technology_constant`, `icons.get_technology_equipment_overlay` with `defines.equipment_overlay`, `icons.get_minified_technology_underlay` and `icons.get_minified_technology_overlay`, and `icons.equipment_background_group` with `icons.get_equipment_background_layer`.
-    - Added the catalog modules of the Angel's items in `assets.angels.items`: plates and alloys, sheet coils, wires, gears, armor, the icons at the root of the icon folder, and the ingots and powders with their picture variations.
+    - Added the catalog modules of the Angel's items in `assets.angels.items`: plates and alloys, sheet coils, wires, gears, armor, pellets, fuel cells, nuclear fuels, the icons at the root of the icon folder, and the ingots, powders, ores, and isotopes with their pictures.
+    - Added the catalog modules of the Angel's technologies in `assets.angels.technologies`, and of the ores in `assets.bobs.items`.
+    - Added `glow` to the icon builders, which draws the pictures of an icon a second time as a light, as the pictures of uranium ore are drawn.
     - Added the catalog modules of the bearings and bearing balls in `assets.bobs.items`, with the icons in the colors of Angel's materials.
     - Added the catalog modules of the items and technologies of the base game in `assets.base.items` and `assets.base.technologies`, one module for each folder of artwork, and of the modular roboport and fission reactor equipment technologies in `assets.bobs.technologies`.
   Changes:

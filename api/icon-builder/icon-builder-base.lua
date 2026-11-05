@@ -125,6 +125,36 @@ function IconBuilderBase:variations(count, counts)
 	return setmetatable({ state = state }, getmetatable(self))
 end
 
+---Sets the pictures of the icon to draw it a second time as a light.
+---
+---`glow` is for artwork that is drawn again as a light in the pictures, such as uranium ore in the base game.
+---`build_composition` adds the icon to `IconComposition.glow_group` instead of the canvas group, and `build` raises an
+---error.
+---
+---#### Returns
+---@return self # A copy of the builder that draws the icon as a light in its pictures.
+---
+---#### Examples
+---```lua
+----- Create the thorium ore, which glows in the world.
+---local get_thorium_ore_icon_composition = icons
+---    :flat("thorium-ore")
+---    :variations(4)
+---    :glow()
+---    :build_composition("get_thorium_ore_icon_composition")
+---
+---local icon_data, pictures = get_thorium_ore_icon_composition():build()
+----- Each picture has the layers of its variation, then a copy of them drawn as a light.
+---```
+---@see Reskins.SpriteUtils.IconComposition.glow_group
+---@nodiscard
+function IconBuilderBase:glow()
+	local state = _assembly.copy_state(self.state)
+	state.glow = true
+
+	return setmetatable({ state = state }, getmetatable(self))
+end
+
 local check_size = V.signature("size", {
 	{ "icon_size", Common.sprite_size },
 })
