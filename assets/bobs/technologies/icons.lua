@@ -31,6 +31,25 @@ M.get_advanced_material_processing_icon = advanced_material_processing:build("ge
 M.get_advanced_material_processing_icon_composition =
 	advanced_material_processing:build_composition("get_advanced_material_processing_icon_composition")
 
+local advanced_processing_unit = technologies:flat("advanced-processing-unit")
+
+---Gets the technology icon for the advanced processing unit.
+M.get_advanced_processing_unit_icon = advanced_processing_unit:build("get_advanced_processing_unit_icon")
+
+---Gets the technology icon for the advanced processing unit as an `IconComposition`.
+M.get_advanced_processing_unit_icon_composition =
+	advanced_processing_unit:build_composition("get_advanced_processing_unit_icon_composition")
+
+local advanced_processing_unit_legacy = technologies:flat("advanced-processing-unit-legacy")
+
+---Gets the legacy technology icon for the advanced processing unit.
+M.get_advanced_processing_unit_legacy_icon =
+	advanced_processing_unit_legacy:build("get_advanced_processing_unit_legacy_icon")
+
+---Gets the legacy technology icon for the advanced processing unit as an `IconComposition`.
+M.get_advanced_processing_unit_legacy_icon_composition =
+	advanced_processing_unit_legacy:build_composition("get_advanced_processing_unit_legacy_icon_composition")
+
 local advanced_research = technologies:flat("advanced-research")
 
 ---Gets the technology icon for advanced research.
