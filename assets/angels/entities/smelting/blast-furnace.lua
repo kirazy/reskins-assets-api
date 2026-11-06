@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local EnergySources = require("api.energy-sources")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local OilRefineryExplosion = require("assets.base.explosions.oil-refinery")
 
@@ -126,16 +127,6 @@ local function get_working_visualisations()
 	}
 end
 
----Gets the light flicker of Angel's blast furnace energy source, which shows no light.
----@return LightFlickeringDefinition
-local function get_light_flicker()
-	return {
-		color = { 0, 0, 0 },
-		minimum_light_size = 0,
-		light_intensity_to_size_coefficient = 0,
-	}
-end
-
 ---Gets the circuit connector of Angel's blast furnace for each direction.
 ---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 local function get_circuit_connector()
@@ -209,7 +200,7 @@ function M.get_sprite_set(params)
 				working_visualisations = get_working_visualisations(),
 			},
 			circuit_connector = get_circuit_connector(),
-			light_flicker = get_light_flicker(),
+			light_flicker = EnergySources.get_zeroed_light_flicker(),
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
 			dying_explosion = OilRefineryExplosion.get_explosion({

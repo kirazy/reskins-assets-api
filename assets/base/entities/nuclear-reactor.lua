@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local EnergySources = require("api.energy-sources")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local NuclearReactorExplosion = require("assets.base.explosions.nuclear-reactor")
 local Remnants = require("assets.base.remnants")
@@ -272,16 +273,6 @@ local function get_water_reflection()
 	}
 end
 
----Gets the light flicker of the nuclear reactor energy source, which shows no light.
----@return LightFlickeringDefinition
-local function get_light_flicker()
-	return {
-		color = { 0, 0, 0 },
-		minimum_light_size = 0,
-		light_intensity_to_size_coefficient = 0,
-	}
-end
-
 ---Defines the options for the vanilla nuclear reactor sprite set.
 ---@class NuclearReactorSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -338,7 +329,7 @@ function M.get_sprite_set(params)
 			),
 			circuit_connector = get_circuit_connector(),
 			water_reflection = get_water_reflection(),
-			light_flicker = get_light_flicker(),
+			light_flicker = EnergySources.get_zeroed_light_flicker(),
 			nominal_width = 5,
 			nominal_height = 5,
 		},

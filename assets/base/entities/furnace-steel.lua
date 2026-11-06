@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local _sprites = require("__reskins-sprite-utils__.sprites")
 
+local EnergySources = require("api.energy-sources")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local SteelFurnaceExplosion = require("assets.base.explosions.steel-furnace")
 local Remnants = require("assets.base.remnants")
@@ -547,16 +548,6 @@ local function get_corpse_animation(tint, variant)
 	return animation
 end
 
----Gets the light flicker of the steel furnace energy source, which shows no light.
----@return LightFlickeringDefinition
-local function get_light_flicker()
-	return {
-		color = { 0, 0, 0 },
-		minimum_light_size = 0,
-		light_intensity_to_size_coefficient = 0,
-	}
-end
-
 ---@return WaterReflectionDefinition
 local function get_water_reflection()
 	return {
@@ -652,7 +643,7 @@ function M.get_sprite_set(params)
 			),
 			water_reflection = get_water_reflection(),
 			circuit_connector = get_circuit_connector(),
-			light_flicker = get_light_flicker(),
+			light_flicker = EnergySources.get_zeroed_light_flicker(),
 			nominal_width = 1.6,
 			nominal_height = 2,
 		},

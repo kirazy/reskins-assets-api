@@ -9,6 +9,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local EnergySources = require("api.energy-sources")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local AssemblingMachineOriginal = require("assets.assorted.entities.assembling-machine-original")
 local NuclearReactorExplosion = require("assets.base.explosions.nuclear-reactor")
@@ -171,16 +172,6 @@ local function get_circuit_connector()
 	})
 end
 
----Gets the light flicker of the heat source energy source, which shows no light.
----@return LightFlickeringDefinition
-local function get_light_flicker()
-	return {
-		color = { 0, 0, 0 },
-		minimum_light_size = 0,
-		light_intensity_to_size_coefficient = 0,
-	}
-end
-
 ---Defines the options for the heat source sprite set.
 ---@class HeatSourceSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
@@ -228,7 +219,7 @@ function M.get_sprite_set(params)
 			graphics_set = get_graphics_set(params.tint, params.variant, params.pipe_material),
 			use_fuel_glow_color = false,
 			light = nil,
-			light_flicker = get_light_flicker(),
+			light_flicker = EnergySources.get_zeroed_light_flicker(),
 			circuit_connector = get_circuit_connector(),
 			fluid_boxes = { get_fluid_box_graphics(params.tint) },
 			integration_patch = nil,

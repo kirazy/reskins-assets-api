@@ -6,6 +6,7 @@ Date: ????
     - Added the laser beam and combat robot capsule graphics, and icons for the spidertron, the tank, rolling stock, the area mining drill, and the logistic chests.
     - Added methods for the pipe pictures of the original assembling machine, the frozen patch of the lab, and the smoke of the fluid and burner generators.
     - Added fluid box and heat buffer graphics to sprite sets, applied by `api.fluid-boxes` and `api.heat-buffers` through `api.connection-matching`, and added `api.assignment`.
+    - Added `api.energy-sources`, with `zero_out_light_flicker`, which sets the light flicker of a burner or fluid energy source to one that shows no light, and `get_zeroed_light_flicker`, which gets that light flicker.
     - Added the sprite set and icon of the classic beacon.
     - The tall electric mining drill sprite set now moves the head of the drill along the waypoints for which its artwork was drawn, draws its north wet window in the order of its artwork, casts the shadow of its head once, and takes the circuit connector and the wet dust positions of the release of Factorio from which its artwork is taken, and the original electric mining drill sprite set now defines its dying explosion, remnants, and water reflection.
     - Added the 1 x 1 and 1 x 2 vanilla loader sprite sets, the `underground_belt_sprite_set`, `splitter_sprite_set`, and `loader_sprite_set` sprite set types with their applicators, and `defines.get_belt_sprites`, which gets the belt sprites for a belt speed.
