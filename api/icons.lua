@@ -13,6 +13,7 @@
 local _icons = {}
 
 local _sprite_utils = { icons = require("__reskins-sprite-utils__.icons") }
+local IconComposition = require("__reskins-sprite-utils__.icon-composition")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local AssetsCommon = require("api.validation")
@@ -23,6 +24,22 @@ local AssetsCommon = require("api.validation")
 ---@nodiscard
 local function is_icon_using_reskins_images(icon_datum)
 	return icon_datum.icon:find("^__reskins%-") ~= nil
+end
+
+---Indicates whether the given `icon_datum` is a layer of a symbol from `get_symbol`.
+---@param icon_datum IconData
+---@return boolean
+---@nodiscard
+local function is_symbol_layer(icon_datum)
+	return is_icon_using_reskins_images(icon_datum) and icon_datum.icon:find("%-symbol.png") ~= nil
+end
+
+---Indicates whether the given `icon_datum` is a layer of a letter from `get_letter`.
+---@param icon_datum IconData
+---@return boolean
+---@nodiscard
+local function is_letter_layer(icon_datum)
+	return is_icon_using_reskins_images(icon_datum) and icon_datum.icon:find("letter%-.%.png") ~= nil
 end
 
 local check_is_icons_using_reskins_images = V.signature("is_icons_using_reskins_images", {
@@ -168,7 +185,7 @@ function _icons.remove_symbols_from_icons(icon_data)
 	local removed_layers = {}
 
 	for _, icon_datum in pairs(util.copy(icon_data)) do
-		if is_icon_using_reskins_images(icon_datum) and icon_datum.icon:find("%-symbol.png") then
+		if is_symbol_layer(icon_datum) then
 			removed_layers[#removed_layers + 1] = icon_datum
 		else
 			stripped_icon_data[#stripped_icon_data + 1] = icon_datum
@@ -255,7 +272,7 @@ function _icons.remove_letters_from_icons(icon_data)
 	local removed_layers = {}
 
 	for _, icon_datum in pairs(util.copy(icon_data)) do
-		if is_icon_using_reskins_images(icon_datum) and icon_datum.icon:find("letter%-.%.png") then
+		if is_letter_layer(icon_datum) then
 			removed_layers[#removed_layers + 1] = icon_datum
 		else
 			stripped_icon_data[#stripped_icon_data + 1] = icon_datum
@@ -263,6 +280,47 @@ function _icons.remove_letters_from_icons(icon_data)
 	end
 
 	return stripped_icon_data, #removed_layers > 0 and removed_layers or nil
+end
+
+local check_classify_symbol_layers = V.signature("classify_symbol_layers", {
+	{ "icon_datum", Common.icon_datum },
+})
+
+---Gets the group of the given `icon_datum` for the classification of an icon, which is `IconComposition.symbol_group`
+---for a layer of a symbol from `get_symbol` or of a letter from `get_letter`, and `IconComposition.canvas_group` for
+---any other layer.
+---
+---The symbols and letters in the symbol group keep their size and position when the composition is minified.
+---
+---#### Parameters
+---@param icon_datum IconData The layer.
+---
+---#### Returns
+---@return IconCompositionGroup # The group of the layer.
+---
+---#### Examples
+---```lua
+----- Minify the icon of the small solar panel.
+---local icons_api = require("__reskins-assets-api__.api.icons")
+---local sprite_utils_icons = require("__reskins-sprite-utils__.icons")
+---local IconComposition = require("__reskins-sprite-utils__.icon-composition")
+---
+---local icon_data = sprite_utils_icons.get_icon_from_named_prototype("bob-solar-panel-small", "solar-panel")
+---local composition = IconComposition:from_classified_icons(icon_data, icons_api.classify_symbol_layers, "item")
+---    :minify(0.8)
+----- The solar panel is drawn smaller, and its letter keeps its size and position.
+---```
+---@throws When `icon_datum` is not an `IconData`.
+---@see Reskins.SpriteUtils.IconComposition.from_classified_icons
+---@nodiscard
+function _icons.classify_symbol_layers(icon_datum)
+	check_classify_symbol_layers(icon_datum)
+
+	if is_symbol_layer(icon_datum) or is_letter_layer(icon_datum) then
+		return IconComposition.symbol_group
+	end
+
+	return IconComposition.canvas_group
 end
 
 -- FIXME: Move to reskins-framework/reskins-bobs.
