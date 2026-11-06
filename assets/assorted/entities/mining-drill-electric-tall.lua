@@ -204,7 +204,11 @@ local function get_horizontal_drill_animation(tint, speed, is_front)
 		})
 	end
 
-	-- Shadows are always appended last. Both halves of the head cast the one shadow.
+	-- The back half of the head casts the shadow of the whole head.
+	if is_front then
+		return animation
+	end
+
 	table.insert(animation.layers--[[@cast -?]], {
 		priority = "high",
 		filename = FOLDER .. "horizontal-shadow.png",
