@@ -46,5 +46,6 @@ registry.register(require("applicators.logistic-container"))
 registry.register(require("applicators.artillery-turret"))
 registry.register(require("applicators.turret"))
 registry.register(require("applicators.entity-with-health"))
+registry.register(require("applicators.equipment"))
 
 return registry

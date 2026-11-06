@@ -93,7 +93,32 @@ local set_type_by_prototype_type = {
 	["fluid-wagon"] = _defines.sprite_set_type.entity_with_health_sprite_set,
 	["artillery-wagon"] = _defines.sprite_set_type.entity_with_health_sprite_set,
 	["car"] = _defines.sprite_set_type.entity_with_health_sprite_set,
+	["active-defense-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["battery-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["belt-immunity-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["electric-energy-interface-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["energy-shield-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["generator-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["inventory-bonus-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["movement-bonus-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["night-vision-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["roboport-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
+	["solar-panel-equipment"] = _defines.sprite_set_type.equipment_sprite_set,
 }
+
+---Indicates whether the given `prototype` is equipment.
+---@param prototype PrototypeBase
+---@return TypeGuard<EquipmentPrototype>
+local function is_equipment(prototype)
+	return set_type_by_prototype_type[prototype.type] == _defines.sprite_set_type.equipment_sprite_set
+end
+
+---Indicates whether the given `prototype` is a corpse.
+---@param prototype PrototypeBase
+---@return TypeGuard<CorpsePrototype>
+local function is_corpse(prototype)
+	return prototype.type == "corpse"
+end
 
 ---Provides methods for creating applicator registries, which apply sprite sets to prototypes.
 ---
@@ -106,10 +131,10 @@ local _factory = {}
 
 ---Indicates whether the given `prototype` is an entity.
 ---@param prototype EntityWithHealthPrototype|CorpsePrototype
----@return boolean
+---@return TypeGuard<EntityWithHealthPrototype>
 ---@return string?
 local function is_entity(prototype)
-	if prototype.type == "corpse" then
+	if is_corpse(prototype) then
 		return false, "must be an entity, got type 'corpse'"
 	end
 
@@ -285,13 +310,23 @@ function _factory.new()
 		applicator.apply_to(prototype, resolved_set)
 	end
 
+	---Applies the given `definition` to the given equipment `prototype` in place, without scaling the sprite set.
+	---@param prototype EquipmentPrototype
+	---@param definition AnySpriteSetDefinition
+	local function apply_sprite_set_to_equipment(prototype, definition)
+		local applicator = applicators[set_type_by_prototype_type[prototype.type]]
+		local resolved_set = _converters.resolve(definition, applicator.set_type)
+
+		applicator.apply_to(prototype, resolved_set)
+	end
+
 	---Indicates whether a sprite set can be applied to the given `prototype`. A sprite set can be applied to a corpse,
-	---or to an entity with a type that maps to a `SpriteSetType` with a registered applicator.
-	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to which a sprite set is applied.
+	---or to an entity or equipment with a type that maps to a `SpriteSetType` with a registered applicator.
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype|EquipmentPrototype The prototype to which a sprite set is applied.
 	---@return boolean # `true` when a sprite set can be applied to the prototype; otherwise, `false`.
 	---@return string? # A description of the fault, when a sprite set cannot be applied.
 	local function is_routable(prototype)
-		if prototype.type == "corpse" then
+		if is_corpse(prototype) then
 			return true
 		end
 
@@ -310,13 +345,21 @@ function _factory.new()
 
 	---Indicates whether the sprite set of the given `definition` can be scaled for the given `prototype` with the given
 	---`params`.
-	---@param prototype EntityWithHealthPrototype|CorpsePrototype
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype|EquipmentPrototype
 	---@param definition AnySpriteSetDefinition
 	---@param params? ApplySpriteSetParams
 	---@return boolean
 	---@return string?
 	local function can_scale(prototype, definition, params)
 		params = params or {}
+
+		if is_equipment(prototype) then
+			if params.scale or params.scale_factor then
+				return false, string.format("is equipment of type '%s', which is not scaled", prototype.type)
+			end
+
+			return true
+		end
 
 		return PrototypeScaler.can_resolve(prototype, {
 			nominal_width = definition.set.nominal_width,
@@ -361,8 +404,11 @@ function _factory.new()
 	---it, as `Corpses.apply` and `Explosions.apply` describe. When `prototype` is a corpse, it uses the fields of the
 	---`corpse` in the sprite set, when that is a `CorpseSpriteSet`.
 	---
+	---When `prototype` is equipment, the sprite set is applied without scaling, and its fields other than the artwork of
+	---the equipment are not used.
+	---
 	---#### Parameters
-	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to which `definition` is applied.
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype|EquipmentPrototype The prototype to which `definition` is applied.
 	---@param definition AnySpriteSetDefinition The sprite set definition to apply.
 	---@param params? ApplySpriteSetParams Scaling options.
 	---
@@ -383,7 +429,8 @@ function _factory.new()
 	---@throws When an explosion in `definition.set.dying_explosion` replaces a particle or explosion that its `created_effect` does not create.
 	---@throws When `params` defines an unrecognized field, or a `scale` or `scale_factor` that is not a positive number.
 	---@throws When `params` sets both `scale` and `scale_factor`.
-	---@throws When neither `params.scale` nor `params.scale_factor` is given, and `prototype` has no `selection_box` with a positive width and height.
+	---@throws When neither `params.scale` nor `params.scale_factor` is given, and `prototype` is not equipment and has no `selection_box` with a positive width and height.
+	---@throws When `prototype` is equipment, and `params.scale` or `params.scale_factor` is given.
 	---@throws When `prototype.type` has no known `SpriteSetType`.
 	---@throws When no applicator is registered for the `SpriteSetType` of `prototype.type`.
 	---@throws When `definition.set_type` does not match the sprite set type of the applicator and neither `definition.converters` nor a registered conversion connects them.
@@ -394,10 +441,12 @@ function _factory.new()
 
 		params = params or {}
 
-		if prototype.type == "corpse" then
-			apply_sprite_set_to_corpse(prototype --[[@as CorpsePrototype]], definition, params)
+		if is_corpse(prototype) then
+			apply_sprite_set_to_corpse(prototype, definition, params)
+		elseif is_equipment(prototype) then
+			apply_sprite_set_to_equipment(prototype, definition)
 		else
-			apply_sprite_set_to_entity(prototype --[[@as EntityWithHealthPrototype]], definition, params)
+			apply_sprite_set_to_entity(prototype, definition, params)
 		end
 	end
 

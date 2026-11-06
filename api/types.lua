@@ -3,7 +3,8 @@
 ---@namespace Reskins.Assets
 
 ---Represents the type name of an
----[EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html).
+---[EntityWithHealthPrototype](https://lua-api.factorio.com/latest/prototypes/EntityWithHealthPrototype.html) or an
+---[EquipmentPrototype](https://lua-api.factorio.com/latest/prototypes/EquipmentPrototype.html).
 ---@alias PrototypeType string
 
 ---Represents a function that converts a sprite set of type `TIn` to a new sprite set of type `TOut`.
@@ -513,13 +514,13 @@
 ---
 ---Corpses are not handled by applicators; `apply_sprite_set` copies the `corpse` field of the sprite set onto a
 ---`CorpsePrototype` directly.
----@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype, U: EntityWithHealthSpriteSet>
+---@class (exact) SpriteSetApplicator<T: EntityWithHealthPrototype|EquipmentPrototype, U: SpriteSetBase>
 ---The `SpriteSetType` accepted by `apply_to`.
 ---@field set_type SpriteSetType
----Applies the given `set` to the given entity `prototype`.
+---Applies the given `set` to the given entity or equipment `prototype`.
 ---
----Applies the fields that belong to this prototype type. The fields of `EntityWithHealthSpriteSet` are applied by
----`ApplicatorRegistry.apply_sprite_set` before this is called.
+---Applies the fields that belong to this prototype type. For an entity, the fields of `EntityWithHealthSpriteSet` are
+---applied by `ApplicatorRegistry.apply_sprite_set` before this is called.
 ---@field apply_to fun(prototype: T, set: U)
 
 ---Defines a `SpriteSetApplicator` of any prototype and sprite set type.

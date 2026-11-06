@@ -346,6 +346,9 @@ _defines.sprite_set_type = {
 	---The sprite set for `LocomotivePrototype`, `CargoWagonPrototype`, `FluidWagonPrototype`,
 	---`ArtilleryWagonPrototype`, and `CarPrototype`.
 	entity_with_health_sprite_set = "EntityWithHealthSpriteSet",
+
+	---The sprite set for `EquipmentPrototype`, such as `BatteryEquipmentPrototype` and `RoboportEquipmentPrototype`.
+	equipment_sprite_set = "EquipmentSpriteSet",
 }
 
 ---Represents the request for the generic remnants of the base game that match the size of an entity.
