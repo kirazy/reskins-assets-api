@@ -92,6 +92,24 @@ local function get_base_animation_element(slot_count, tint)
 end
 
 ---@param slot_count BeaconSlotCount
+---@return Sprite? # The frozen patch, or `nil` when the freezing feature is disabled.
+---@nodiscard
+local function get_frozen_patch(slot_count)
+	if not feature_flags["freezing"] then
+		return nil
+	end
+
+	---@type Sprite
+	return {
+		filename = ASSETS_FOLDER .. slot_count .. "-slots/beacon-" .. slot_count .. "-slots-frozen.png",
+		width = 212,
+		height = 192,
+		shift = util.by_pixel(0.5, 1),
+		scale = 0.5,
+	}
+end
+
+---@param slot_count BeaconSlotCount
 ---@return AnimationElement
 ---@nodiscard
 local function get_antenna_top_animation_element(slot_count)
@@ -842,6 +860,7 @@ function M.get_sprite_set(params)
 		set = {
 			graphics_set = {
 				animation_list = animation_list,
+				frozen_patch = get_frozen_patch(slot_count),
 				module_visualisations = get_module_visualisations(slot_count, params.module_art_styles),
 				animation_progress = 1,
 				apply_module_tint = "secondary",
