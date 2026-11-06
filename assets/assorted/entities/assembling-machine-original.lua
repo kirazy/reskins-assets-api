@@ -15,15 +15,21 @@ local Remnants = require("assets.base.remnants")
 
 local M = {}
 
+local ASSETS_PATH = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/"
+local PIPES_PATH = ASSETS_PATH .. "pipes/"
+local REMNANTS_PATH = ASSETS_PATH .. "remnants/"
+local ELECTRONICS_PATH = "__reskins-assets-assorted__/graphics/entity/assembling-machine-electronics-original/"
+
 ---Gets the frozen patch of the original assembling machine.
+---@param assembly_set 1|2|3|4|5|6
 ---@return data.Sprite? # The frozen patch, or `nil` when the freezing feature is disabled.
-local function get_frozen_patch()
+local function get_frozen_patch(assembly_set)
 	if not feature_flags["freezing"] then
 		return nil
 	end
 
 	return {
-		filename = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/assembling-machine-frozen.png",
+		filename = ASSETS_PATH .. "assembling-machine-" .. assembly_set .. "-frozen.png",
 		priority = "high",
 		width = 214,
 		height = 237,
@@ -45,17 +51,14 @@ local check_get_graphics_set = V.signature("get_graphics_set", {
 local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	check_get_graphics_set(tint, assembly_set, use_electronics_set)
 
-	-- Animations and shadows are 0-based.
-	local animation_index = assembly_set - 1
-	local shadow_index = math.min(4, animation_index)
-
-	local assembly_path = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/"
+	-- The fifth and sixth sets share a shadow.
+	local shadow_set = math.min(5, assembly_set)
 
 	---@type data.Animation
 	local animation = {
 		layers = {
 			{
-				filename = assembly_path .. "assembling-machine-base.png",
+				filename = ASSETS_PATH .. "assembling-machine-base.png",
 				priority = "high",
 				width = 214,
 				height = 237,
@@ -71,7 +74,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 
 	if tint then
 		table.insert(animation.layers--[[@cast-?]], {
-			filename = assembly_path .. "assembling-machine-base-mask.png",
+			filename = ASSETS_PATH .. "assembling-machine-base-mask.png",
 			priority = "high",
 			width = 214,
 			height = 237,
@@ -81,7 +84,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 			scale = 0.5,
 		})
 		table.insert(animation.layers--[[@cast-?]], {
-			filename = assembly_path .. "assembling-machine-base-highlights.png",
+			filename = ASSETS_PATH .. "assembling-machine-base-highlights.png",
 			priority = "high",
 			width = 214,
 			height = 237,
@@ -94,7 +97,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	end
 
 	table.insert(animation.layers--[[@cast-?]], {
-		filename = assembly_path .. "animations/assembling-machine-animation-" .. animation_index .. ".png",
+		filename = ASSETS_PATH .. "animations/assembling-machine-animation-" .. assembly_set .. ".png",
 		priority = "high",
 		width = 214,
 		height = 237,
@@ -105,7 +108,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	})
 
 	table.insert(animation.layers--[[@cast-?]], {
-		filename = assembly_path .. "shadows/assembling-machine-" .. shadow_index .. "-shadow.png",
+		filename = ASSETS_PATH .. "shadows/assembling-machine-" .. shadow_set .. "-shadow.png",
 		priority = "high",
 		width = 264,
 		height = 165,
@@ -117,9 +120,8 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	})
 
 	if use_electronics_set then
-		local electronics_path = "__reskins-assets-assorted__/graphics/entity/assembling-machine-electronics-original/"
 		table.insert(animation.layers--[[@cast-?]], {
-			filename = electronics_path .. "assembling-machine-electronics-base.png",
+			filename = ELECTRONICS_PATH .. "assembling-machine-electronics-base.png",
 			priority = "high",
 			width = 214,
 			height = 237,
@@ -130,7 +132,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 		draw_order = draw_order + 1
 		if tint then
 			table.insert(animation.layers--[[@cast-?]], {
-				filename = electronics_path .. "assembling-machine-electronics-mask.png",
+				filename = ELECTRONICS_PATH .. "assembling-machine-electronics-mask.png",
 				priority = "high",
 				width = 214,
 				height = 237,
@@ -140,7 +142,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 				scale = 0.5,
 			})
 			table.insert(animation.layers--[[@cast-?]], {
-				filename = electronics_path .. "assembling-machine-electronics-highlights.png",
+				filename = ELECTRONICS_PATH .. "assembling-machine-electronics-highlights.png",
 				priority = "high",
 				width = 214,
 				height = 237,
@@ -152,7 +154,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 			draw_order = draw_order + 2
 		end
 		table.insert(animation.layers--[[@cast-?]], {
-			filename = electronics_path .. "assembling-machine-electronics-shadow.png",
+			filename = ELECTRONICS_PATH .. "assembling-machine-electronics-shadow.png",
 			priority = "high",
 			width = 264,
 			height = 165,
@@ -166,7 +168,7 @@ local function get_graphics_set(tint, assembly_set, use_electronics_set)
 	---@type data.CraftingMachineGraphicsSet
 	return {
 		animation = animation,
-		frozen_patch = get_frozen_patch(),
+		frozen_patch = get_frozen_patch(assembly_set),
 		reset_animation_when_frozen = true,
 	}
 end
@@ -181,12 +183,11 @@ end
 ---@nodiscard
 local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 	local simple = use_simple_pipe_pictures and "-simple" or ""
-	local assets_base_path = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/pipes/"
 
 	---@type Sprite4Way
 	local pictures = {
 		north = {
-			filename = assets_base_path .. "assembling-machine-pipe-north-base.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-north-base.png",
 			priority = "extra-high",
 			width = 71,
 			height = 38,
@@ -194,7 +195,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 			scale = 0.5,
 		},
 		east = {
-			filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-base.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-east" .. simple .. "-base.png",
 			priority = "extra-high",
 			width = 42,
 			height = 76,
@@ -202,7 +203,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 			scale = 0.5,
 		},
 		south = {
-			filename = assets_base_path .. "assembling-machine-pipe-south-base.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-south-base.png",
 			priority = "extra-high",
 			width = 88,
 			height = 61,
@@ -210,7 +211,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 			scale = 0.5,
 		},
 		west = {
-			filename = assets_base_path .. "assembling-machine-pipe-west-base.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-west-base.png",
 			priority = "extra-high",
 			width = 39,
 			height = 73,
@@ -225,7 +226,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 				layers = {
 					pictures.north,
 					{
-						filename = assets_base_path .. "assembling-machine-pipe-north-mask.png",
+						filename = PIPES_PATH .. "assembling-machine-pipe-north-mask.png",
 						priority = "extra-high",
 						width = 71,
 						height = 38,
@@ -234,7 +235,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 						scale = 0.5,
 					},
 					{
-						filename = assets_base_path .. "assembling-machine-pipe-north-highlights.png",
+						filename = PIPES_PATH .. "assembling-machine-pipe-north-highlights.png",
 						priority = "extra-high",
 						width = 71,
 						height = 38,
@@ -250,7 +251,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 			layers = {
 				pictures.east,
 				{
-					filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-mask.png",
+					filename = PIPES_PATH .. "assembling-machine-pipe-east" .. simple .. "-mask.png",
 					priority = "extra-high",
 					width = 42,
 					height = 76,
@@ -259,7 +260,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 					scale = 0.5,
 				},
 				{
-					filename = assets_base_path .. "assembling-machine-pipe-east" .. simple .. "-highlights.png",
+					filename = PIPES_PATH .. "assembling-machine-pipe-east" .. simple .. "-highlights.png",
 					priority = "extra-high",
 					width = 42,
 					height = 76,
@@ -274,7 +275,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 			layers = {
 				pictures.south,
 				{
-					filename = assets_base_path .. "assembling-machine-pipe-south-mask.png",
+					filename = PIPES_PATH .. "assembling-machine-pipe-south-mask.png",
 					priority = "extra-high",
 					width = 88,
 					height = 61,
@@ -283,7 +284,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 					scale = 0.5,
 				},
 				{
-					filename = assets_base_path .. "assembling-machine-pipe-south-highlights.png",
+					filename = PIPES_PATH .. "assembling-machine-pipe-south-highlights.png",
 					priority = "extra-high",
 					width = 88,
 					height = 61,
@@ -298,7 +299,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 			layers = {
 				pictures.west,
 				{
-					filename = assets_base_path .. "assembling-machine-pipe-west-mask.png",
+					filename = PIPES_PATH .. "assembling-machine-pipe-west-mask.png",
 					priority = "extra-high",
 					width = 39,
 					height = 73,
@@ -307,7 +308,7 @@ local function assembling_machine_pipe_pictures(tint, use_simple_pipe_pictures)
 					scale = 0.5,
 				},
 				{
-					filename = assets_base_path .. "assembling-machine-pipe-west-highlights.png",
+					filename = PIPES_PATH .. "assembling-machine-pipe-west-highlights.png",
 					priority = "extra-high",
 					width = 39,
 					height = 73,
@@ -329,12 +330,10 @@ local function get_pipe_pictures_frozen()
 		return nil
 	end
 
-	local path = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/pipes/assembling-machine-pipe-"
-
 	---@type Sprite4Way
 	return {
 		north = {
-			filename = path .. "north-frozen.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-north-frozen.png",
 			priority = "extra-high",
 			width = 71,
 			height = 38,
@@ -342,7 +341,7 @@ local function get_pipe_pictures_frozen()
 			scale = 0.5,
 		},
 		east = {
-			filename = path .. "east-frozen.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-east-frozen.png",
 			priority = "extra-high",
 			width = 42,
 			height = 76,
@@ -350,7 +349,7 @@ local function get_pipe_pictures_frozen()
 			scale = 0.5,
 		},
 		south = {
-			filename = path .. "south-frozen.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-south-frozen.png",
 			priority = "extra-high",
 			width = 88,
 			height = 61,
@@ -358,7 +357,7 @@ local function get_pipe_pictures_frozen()
 			scale = 0.5,
 		},
 		west = {
-			filename = path .. "west-frozen.png",
+			filename = PIPES_PATH .. "assembling-machine-pipe-west-frozen.png",
 			priority = "extra-high",
 			width = 39,
 			height = 73,
@@ -395,7 +394,7 @@ local function get_corpse_animation(tint)
 	local sheet = {
 		layers = {
 			{
-				filename = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/remnants/assembling-machine-remnants-base.png",
+				filename = REMNANTS_PATH .. "assembling-machine-remnants-base.png",
 				width = 328,
 				height = 282,
 				direction_count = 1,
@@ -407,7 +406,7 @@ local function get_corpse_animation(tint)
 
 	if tint then
 		table.insert(sheet.layers, {
-			filename = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/remnants/assembling-machine-remnants-mask.png",
+			filename = REMNANTS_PATH .. "assembling-machine-remnants-mask.png",
 			width = 328,
 			height = 282,
 			direction_count = 1,
@@ -416,7 +415,7 @@ local function get_corpse_animation(tint)
 			scale = 0.5,
 		})
 		table.insert(sheet.layers, {
-			filename = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/remnants/assembling-machine-remnants-highlights.png",
+			filename = REMNANTS_PATH .. "assembling-machine-remnants-highlights.png",
 			width = 328,
 			height = 282,
 			direction_count = 1,
@@ -433,7 +432,7 @@ end
 local function get_water_reflection()
 	return {
 		pictures = {
-			filename = "__reskins-assets-assorted__/graphics/entity/assembling-machine-original/assembling-machine-reflection.png",
+			filename = ASSETS_PATH .. "assembling-machine-reflection.png",
 			priority = "extra-high",
 			width = 24,
 			height = 24,
