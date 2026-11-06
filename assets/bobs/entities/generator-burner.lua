@@ -162,7 +162,7 @@ end
 
 ---Defines the options for the burner generator smoke.
 ---@class GeneratorBurnerSmokeParams
----The name of the `TrivialSmokePrototype` of the smoke. Default `"smoke"`.
+---The name of the `TrivialSmokePrototype` for the smoke. Default `"smoke"`.
 ---@field name? string
 ---The `frequency` of the smoke. Default `15`.
 ---@field frequency? double

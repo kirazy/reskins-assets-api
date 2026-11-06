@@ -611,7 +611,7 @@ local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__
 
 local VARIANTS = { "standard", "mixing", "chemical", "chemical-mixing" }
 
----Gets the builder of the icon of the electric furnace of the given `variant`.
+---Gets the builder for the icon of the electric furnace for the given `variant`.
 ---@param variant string
 ---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
 local function get_icon_builder(variant)

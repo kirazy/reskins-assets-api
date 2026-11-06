@@ -23,7 +23,7 @@ return {
 	apply_to = apply_sprite_set_to_land_mine,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `land_mine_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `land_mine_sprite_set`.
 ---@class (exact) LandMineSpriteSet : EntityWithHealthSpriteSet
 ---The sprite of the landmine before it is armed (just after placing).
 ---

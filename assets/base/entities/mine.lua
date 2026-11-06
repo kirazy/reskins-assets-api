@@ -58,7 +58,7 @@ local function get_picture_set(variant)
 	}
 end
 
----Gets the sprite of an armed land mine of an enemy force.
+---Gets the sprite for an armed land mine of an enemy force.
 ---@return Sprite
 local function get_picture_set_enemy()
 	return {
@@ -133,7 +133,7 @@ end
 
 local VARIANTS = { "base", "distractor", "poison", "slowdown" }
 
----Gets the builder of the icon of the land mine of the given `variant`.
+---Gets the builder for the icon of the land mine for the given `variant`.
 ---@param variant MineVariant
 ---@return FlatIconBuilder<{}>
 local function get_icon_builder(variant)

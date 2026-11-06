@@ -197,7 +197,7 @@ local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/grap
 
 local VARIANTS = { "standard", "inline" }
 
----Gets the builder of the icon of the small storage tank of the given `variant`.
+---Gets the builder for the icon of the small storage tank for the given `variant`.
 ---@param variant StorageTankSmallVariant
 ---@return IconBuilder<{ base_tint?: Color }>
 local function get_icon_builder(variant)

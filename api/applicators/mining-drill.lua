@@ -27,7 +27,7 @@ return {
 	apply_to = apply_sprite_set_to_mining_drill,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `mining_drill_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `mining_drill_sprite_set`.
 ---@class (exact) MiningDrillSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set? MiningDrillGraphicsSet

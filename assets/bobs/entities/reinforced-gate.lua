@@ -12,7 +12,7 @@ local Remnants = require("assets.base.remnants")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/reinforced-gate/"
 
----The tint of the big and medium metal particles of the dying explosion, by the name of the particle.
+---The tint of the big and medium metal particles in the dying explosion, by the name of the particle.
 ---@type table<ParticleID, Color>
 local particle_tints = {
 	["gate-metal-particle-big"] = util.color("#6f647d") --[[@as Color]],

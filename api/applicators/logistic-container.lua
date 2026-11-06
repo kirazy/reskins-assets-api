@@ -34,7 +34,7 @@ return {
 ---See [RobotDoorSpecification::animation](https://lua-api.factorio.com/latest/types/RobotDoorSpecification.html#animation).
 ---@field animation? Animation
 
----Defines the sprite data of a `SpriteSetDefinition` of type `logistic_container_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `logistic_container_sprite_set`.
 ---@class (exact) LogisticContainerSpriteSet : ContainerSpriteSet
 ---The fields of `prototype.robot_door` that `RobotDoorGraphics` does not define are not modified.
 ---@field robot_door RobotDoorGraphics

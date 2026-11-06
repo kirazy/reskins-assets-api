@@ -25,7 +25,7 @@ local light_flicker_energy_source_types = {
 	["fluid"] = true,
 }
 
----Sets the `light_flicker` of each burner or fluid energy source of the given `prototype` to a copy of the given
+---Sets the `light_flicker` of each burner or fluid energy source in the given `prototype` to a copy of the given
 ---`light_flicker`, in place.
 ---
 ---Each energy source is replaced with a copy before it is modified.
@@ -358,8 +358,8 @@ function _factory.new()
 	---the sprite set keep their size.
 	---
 	---When `prototype` is an entity, the `corpse` and `dying_explosion` of the sprite set are created for it and set on
-	---it, as `Corpses.apply` and `Explosions.apply` describe. When `prototype` is a corpse, it takes the fields of the
-	---`corpse` of the sprite set, when that is a `CorpseSpriteSet`.
+	---it, as `Corpses.apply` and `Explosions.apply` describe. When `prototype` is a corpse, it uses the fields of the
+	---`corpse` in the sprite set, when that is a `CorpseSpriteSet`.
 	---
 	---#### Parameters
 	---@param prototype EntityWithHealthPrototype|CorpsePrototype The prototype to which `definition` is applied.
@@ -372,7 +372,7 @@ function _factory.new()
 	---local Applicators = require("__reskins-assets-api__.api.applicators")
 	---
 	---Applicators.apply_sprite_set(data.raw["assembling-machine"]["assembling-machine-2"], sprite_set)
-	----- The assembling machine takes the artwork of the sprite set, and its corpse and dying explosion are
+	----- The assembling machine uses the artwork of the sprite set, and its corpse and dying explosion are
 	----- "ar-assembling-machine-2-remnants" and "ar-assembling-machine-2-explosion", which are created from the
 	----- corpse and dying_explosion of the sprite set.
 	---```

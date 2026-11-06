@@ -144,7 +144,7 @@ local function get_empty_pipe_pictures()
 	}
 end
 
----Gets the graphics of the fluid boxes of Angel's steam cracker.
+---Gets the graphics for the fluid boxes of Angel's steam cracker.
 ---@return FluidBoxGraphics[]
 local function get_fluid_box_graphics()
 	-- The pipe on the north side is drawn at the left connection only. When the steam cracker is flipped, the fluid box

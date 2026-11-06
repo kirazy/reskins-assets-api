@@ -26,7 +26,7 @@ local COLORS = {
 	"yellow",
 }
 
----Gets a function that returns the builder of the icon of the given `board` in a color.
+---Gets a function that returns the builder for the icon of the given `board` in a color.
 ---@param board string
 ---@return fun(color: string): FlatIconBuilder<{}>
 local function get_icon_builder(board)

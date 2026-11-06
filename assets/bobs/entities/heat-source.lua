@@ -26,7 +26,7 @@ local HeatPipeMaterial = V.one_of({ "base", "aluminum-invar", "silver-aluminum",
 
 local HeatSourceVariant = V.one_of({ "burner", "fluid" })
 
----Gets one layer of the picture of the heat source, from the file with the given `filename`.
+---Gets one layer of the picture for the heat source, from the file with the given `filename`.
 ---@param filename string
 ---@return Sprite
 local function get_picture_layer(filename)
@@ -148,7 +148,7 @@ local function get_graphics_set(tint, variant, pipe_material)
 	return graphics_set
 end
 
----Gets the graphics of the fluid box of a fluid energy source.
+---Gets the graphics for the fluid box of a fluid energy source.
 ---@param tint? Color
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics(tint)
@@ -244,7 +244,7 @@ local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/grap
 
 local VARIANTS = { "burner", "fluid" }
 
----Gets the builder of the icon of the heat source of the given `variant`.
+---Gets the builder for the icon of the heat source for the given `variant`.
 ---@param variant HeatSourceVariant
 ---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
 local function get_icon_builder(variant)

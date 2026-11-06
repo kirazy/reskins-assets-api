@@ -30,7 +30,7 @@ return {
 	apply_to = apply_sprite_set_to_construction_robot,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `construction_robot_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `construction_robot_sprite_set`.
 ---@class (exact) ConstructionRobotSpriteSet : FlyingRobotSpriteSet
 ---The prototype's `working`.
 ---@field working RotatedAnimation

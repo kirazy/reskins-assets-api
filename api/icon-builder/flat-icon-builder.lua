@@ -10,7 +10,7 @@ local _assembly = require("api.icon-builder.assembly")
 local IconBuilderBase = require("api.icon-builder.icon-builder-base")
 local FlatIconBuilder1 = require("api.icon-builder.flat-icon-builder-1")
 
----Represents a builder for an icon with one layer, taken from the file `{folder}/{stem}[-{value}].png`.
+---Represents a builder for an icon with one layer, which uses the file `{folder}/{stem}[-{value}].png`.
 ---
 ---The name of the icon is used as the stem when no stem is set. `{value}` is the value of the parameter added by
 ---`keyed`, if any.
@@ -52,7 +52,7 @@ end
 
 ---Builds a function that returns the icon for the given parameters.
 ---
----The function takes one table of parameters, or none. An error is raised when the function is given a parameter.
+---The function accepts one table of parameters, or none. An error is raised when the function is given a parameter.
 ---`creator_name` is recommended to be the name of the field to which the function is assigned.
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
 ---@return fun(params?: P): SafeIconData[] # A function that returns the icon.
@@ -67,8 +67,8 @@ end
 
 ---Builds a function that returns the icon as an `IconComposition`.
 ---
----The function takes one table of parameters, or none. An error is raised when the function is given a parameter.
----The icon is added to the canvas group of a composition with the icon defaults type of the factory.
+---The function accepts one table of parameters, or none. An error is raised when the function is given a parameter. The
+---icon is added to the canvas group of a composition with the icon defaults type of the factory.
 ---
 ---The content has the mipmap count of the builder. An icon with picture variations is added as content with
 ---variations, with the icon as the first variation.

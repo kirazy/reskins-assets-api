@@ -22,9 +22,9 @@ local check_stem = V.signature("stem", {
 	{ "stem", Common.non_empty_string },
 })
 
----Sets the stem of the file names of the icon to the given `stem`.
+---Sets the stem of the file names for the icon to the given `stem`.
 ---
----The stem is the first segment of the file name of each layer, as `{stem}[-{value}...][-{part}]-{role}.png` for a
+---The stem is the first segment of the file name for each layer, as `{stem}[-{value}...][-{part}]-{role}.png` for a
 ---layered icon and `{stem}[-{value}].png` for a flat icon. The name of the icon is used as the stem when no stem is
 ---set.
 ---@param stem string The stem, such as the `spidertron-heavy-runtime` in `spidertron-heavy-runtime-base.png`.
@@ -87,7 +87,7 @@ local check_variations = V.signature("variations", {
 	{ "counts", V.map(V.any(), V.integer():positive()):optional() },
 })
 
----Sets the number of pictures of the icon, including the icon, to the given `count`.
+---Sets the number of pictures for the icon, including the icon, to the given `count`.
 ---
 ---The file of the icon is the first picture, and the files of the other pictures have the number of the picture
 ---appended, as `{file}-{i}.png` for `i` between 1 and `count - 1`. For example, the pictures of `powder-aluminium.png`
@@ -159,7 +159,7 @@ local check_size = V.signature("size", {
 	{ "icon_size", Common.sprite_size },
 })
 
----Sets the `icon_size` of the layers of the icon to the given `icon_size`.
+---Sets the `icon_size` of the layers in the icon to the given `icon_size`.
 ---
 ---The icon size of the factory is used when no size is set. A layer with an `icon_size` in its options keeps that size.
 ---@param icon_size SpriteSizeType The size of the icon files, in pixels.

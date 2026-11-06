@@ -72,7 +72,7 @@ return {
 	apply_to = apply_sprite_set_to_beacon,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `beacon_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `beacon_sprite_set`.
 ---@class (exact) BeaconSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `graphics_set`.
 ---@field graphics_set? BeaconGraphicsSet

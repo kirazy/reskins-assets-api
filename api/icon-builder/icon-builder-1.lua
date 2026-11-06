@@ -97,7 +97,7 @@ end
 
 ---Adds a required parameter with the given `name` that selects the artwork of the icon.
 ---
----The value of the parameter is converted with `tostring` and appended to the stem of the file name of each of the
+---The value of the parameter is converted with `tostring` and appended to the stem of the file name for each of the
 ---given `layers`, after the value of any parameter added before it by `keyed`, as
 ---`{stem}-{value1}-{value2}[-{part}]-{role}.png` for a layer with both keys. For example, the base layer of
 ---`nuclear-reactor` keyed by `fuel` and then by `material` is `nuclear-reactor-uranium-gold-copper-base.png` when
@@ -169,7 +169,7 @@ end
 
 ---Builds a function that returns the icon for the given parameters.
 ---
----The function takes one table of parameters. A parameter added by `keyed` is required, and a tint is optional. An
+---The function accepts one table of parameters. A parameter added by `keyed` is required, and a tint is optional. An
 ---error is raised when the function is given an unknown parameter. `creator_name` is recommended to be the name of the
 ---field to which the function is assigned.
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
@@ -191,7 +191,7 @@ end
 
 ---Builds a function that returns the icon as an `IconComposition`.
 ---
----The function takes one table of parameters. A parameter added by `keyed` is required, and a tint is optional. An
+---The function accepts one table of parameters. A parameter added by `keyed` is required, and a tint is optional. An
 ---error is raised when the function is given an unknown parameter. `creator_name` is recommended to be the name of the
 ---field to which the function is assigned. The icon is added to the canvas group of a composition with the icon
 ---defaults type of the factory.

@@ -687,7 +687,7 @@ local definitions = {
 ---Gets the corpse of a sprite set with the given `artwork` and the other fields of the vanilla corpse with the given
 ---`name`.
 ---
----The corpse takes each field of the vanilla corpse other than its name, icon, size, and artwork, such as its flags,
+---The corpse is given each field of the vanilla corpse other than its name, icon, size, and artwork, such as its flags,
 ---subgroup, and lifetime, and then each field of `artwork`.
 ---@param name BaseRemnantsID The name of the vanilla corpse.
 ---@param artwork CorpseSpriteSet The artwork of the corpse.

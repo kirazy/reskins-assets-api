@@ -9,7 +9,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/armor" })
 
----Provides methods for getting the icons of the armor folder of Angel's items, in the colors of Angel's materials.
+---Provides methods for getting the icons in the armor folder of Angel's items, in the colors of Angel's materials.
 ---
 ---#### Examples
 ---```lua

@@ -85,7 +85,7 @@ local function get_pipe_connectors()
 	}
 end
 
----Gets the animation of the body of Angel's induction furnace.
+---Gets the animation for the body of Angel's induction furnace.
 ---@param is_flipped? boolean
 ---@return Animation
 local function get_base_animation(is_flipped)

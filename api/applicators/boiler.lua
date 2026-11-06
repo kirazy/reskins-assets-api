@@ -31,7 +31,7 @@ return {
 	apply_to = apply_sprite_set_to_boiler,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `boiler_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `boiler_sprite_set`.
 ---@class (exact) BoilerSpriteSet : EntityWithHealthSpriteSet
 ---When `true`, indicates that the light intensity of the energy source controls the alpha of `fire`. When `false`, the
 ---alpha is always 1.

@@ -23,18 +23,18 @@
 
 ---Defines the corpse and the dying explosion that `ApplicatorRegistry.apply_corpse_and_explosion` gives an entity.
 ---@class (exact) CorpseAndExplosionDefinition
----The corpse of the entity, in any form that the `corpse` of a sprite set takes. When `nil`, the corpse of the entity
+---The corpse of the entity, in any form that the `corpse` of a sprite set accepts. When `nil`, the corpse of the entity
 ---is not modified.
 ---@field corpse? CorpseSpriteSet|EntityID|GenericRemnants
----The dying explosion of the entity, in any form that the `dying_explosion` of a sprite set takes. When `nil`, the
+---The dying explosion of the entity, in any form that the `dying_explosion` of a sprite set accepts. When `nil`, the
 ---`dying_explosion` of the entity is not modified.
 ---@field dying_explosion? ExplosionSpriteSet|EntityID
 
 ---Defines the fields that every sprite set has.
 ---@class (exact) SpriteSetBase
----The width of the `selection_box` of the entity for which the artwork is designed.
+---The width of the `selection_box` on the entity for which the artwork is designed.
 ---@field nominal_width double
----The height of the `selection_box` of the entity for which the artwork is designed.
+---The height of the `selection_box` on the entity for which the artwork is designed.
 ---@field nominal_height double
 
 ---Defines the fields of a sprite set that apply to every `EntityWithHealthPrototype`.
@@ -77,20 +77,20 @@
 ---
 ---See [EntityPrototype::drawing_box_vertical_extension](https://lua-api.factorio.com/latest/prototypes/EntityPrototype.html#drawing_box_vertical_extension).
 ---@field drawing_box_vertical_extension? double
----The graphics of the fluid boxes of the prototype, including the fluid box of a fluid energy source. Each fluid box is
----matched to a `FluidBoxGraphics` by the directions and positions of its pipe connections.
+---The graphics for the fluid boxes of the prototype, including the fluid box of a fluid energy source. Each fluid box
+---is matched to a `FluidBoxGraphics` by the directions and positions of its pipe connections.
 ---
----A fluid box that matches no `FluidBoxGraphics` has its pipe pictures removed, and takes the pipe covers of
+---A fluid box that matches no `FluidBoxGraphics` has its pipe pictures removed, and uses the pipe covers of
 ---`pipe_material`.
 ---@field fluid_boxes? FluidBoxGraphics[]
----The graphics of the heat energy source and the heat buffer of the prototype. Each is matched to a
+---The graphics for the heat energy source and the heat buffer of the prototype. Each is matched to a
 ---`HeatBufferGraphics` by the directions and positions of its connections. A heat energy source or heat buffer that
 ---matches no `HeatBufferGraphics` is not modified.
 ---@field heat_buffers? HeatBufferGraphics[]
 ---The material of the pipes in the artwork. The pipe covers of a fluid box are created in this material when its
 ---`FluidBoxGraphics` does not define `pipe_covers`. Default `"iron"`.
 ---@field pipe_material? PipeMaterial
----The light flicker of the burner or fluid energy source of the prototype. The light flicker is set on the
+---The light flicker of the burner or fluid energy source in the prototype. The light flicker is set on the
 ---`energy_source` of the prototype when it is a burner or fluid energy source, and on the `burner` of the prototype
 ---when it has one.
 ---
@@ -102,8 +102,8 @@
 ---@class (exact) TransportBeltConnectableSpriteSet : EntityWithHealthSpriteSet
 ---@field belt_animation_set TransportBeltAnimationSet
 
----Defines the artwork and the other fields of the corpse of an entity. Each field is copied onto the field of the same
----name of the `CorpsePrototype`.
+---Defines the artwork and the other fields of the corpse for an entity. Each field is copied onto the field of the same
+---name on the `CorpsePrototype`.
 ---@class (exact) CorpseSpriteSet
 ---The dying animation.
 ---
@@ -183,7 +183,7 @@
 ---
 ---See [CorpsePrototype::ground_patch_fade_in_speed](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_fade_in_speed).
 ---@field ground_patch_fade_in_speed? float
----The duration of the fade out of `ground_patch`.
+---The duration of the fade out for `ground_patch`.
 ---
 ---See [CorpsePrototype::ground_patch_fade_out_duration](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#ground_patch_fade_out_duration).
 ---@field ground_patch_fade_out_duration? float
@@ -247,7 +247,7 @@
 ---
 ---See [CorpsePrototype::time_before_shading_off](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#time_before_shading_off).
 ---@field time_before_shading_off? uint32
----The offset of the render layer of the corpse when it is underwater.
+---The offset of the render layer for the corpse when it is underwater.
 ---
 ---See [CorpsePrototype::underwater_layer_offset](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#underwater_layer_offset).
 ---@field underwater_layer_offset? int8
@@ -256,7 +256,7 @@
 ---See [CorpsePrototype::underwater_patch](https://lua-api.factorio.com/latest/prototypes/CorpsePrototype.html#underwater_patch).
 ---@field underwater_patch? RotatedSprite
 ---Defines the dying explosion of an entity. Each field other than `particles` and `explosions` is copied onto the field
----of the same name of the `ExplosionPrototype` that is created for the entity.
+---of the same name on the `ExplosionPrototype` that is created for the entity.
 ---@class (exact) ExplosionSpriteSet
 ---The animation of the explosion.
 ---
@@ -282,11 +282,11 @@
 ---
 ---See [ExplosionPrototype::explosion_effect](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#explosion_effect).
 ---@field explosion_effect? Trigger
----The duration of the fade in of the explosion, in ticks.
+---The duration of the fade in for the explosion, in ticks.
 ---
 ---See [ExplosionPrototype::fade_in_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#fade_in_duration).
 ---@field fade_in_duration? uint8
----The duration of the fade out of the explosion, in ticks.
+---The duration of the fade out for the explosion, in ticks.
 ---
 ---See [ExplosionPrototype::fade_out_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#fade_out_duration).
 ---@field fade_out_duration? uint8
@@ -354,11 +354,11 @@
 ---
 ---See [ExplosionPrototype::scale_end](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_end).
 ---@field scale_end? float
----The duration of the scale in of the explosion, in ticks.
+---The duration of the scale in for the explosion, in ticks.
 ---
 ---See [ExplosionPrototype::scale_in_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_in_duration).
 ---@field scale_in_duration? uint8
----The increase of the scale of the explosion in each tick.
+---The increase in the scale of the explosion in each tick.
 ---
 ---See [ExplosionPrototype::scale_increment_per_tick](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_increment_per_tick).
 ---@field scale_increment_per_tick? float
@@ -370,7 +370,7 @@
 ---
 ---See [ExplosionPrototype::scale_initial_deviation](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_initial_deviation).
 ---@field scale_initial_deviation? float
----The duration of the scale out of the explosion, in ticks.
+---The duration of the scale out for the explosion, in ticks.
 ---
 ---See [ExplosionPrototype::scale_out_duration](https://lua-api.factorio.com/latest/prototypes/ExplosionPrototype.html#scale_out_duration).
 ---@field scale_out_duration? uint8
@@ -419,7 +419,7 @@
 ---that names the replaced explosion names the created explosion instead.
 ---@field explosions? table<EntityID, ExplosionSpriteSet>
 
----Defines a particle of the dying explosion of an entity. Each field is copied onto the field of the same name of the
+---Defines a particle in the dying explosion of an entity. Each field is copied onto the field of the same name on the
 ---`ParticlePrototype` that is created for the entity.
 ---@class (exact) ParticleSpriteSet
 ---When `true`, indicates that the shadow of the particle is drawn when the particle is on the ground.
@@ -553,7 +553,7 @@
 ---@field direction? float
 ---@field height? float
 
----Defines the sprite data of a `SpriteSetDefinition` of type `turret_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `turret_sprite_set`.
 ---
 ---The fields that belong to `FluidTurretPrototype` are applied to a fluid turret only.
 ---@class (exact) TurretSpriteSet : EntityWithHealthSpriteSet
@@ -590,28 +590,28 @@
 ---
 ---See [TurretPrototype::circuit_connector](https://lua-api.factorio.com/latest/prototypes/TurretPrototype.html#circuit_connector).
 ---@field circuit_connector? CircuitConnectorDefinition[]
----The `source_offset` of the `attack_parameters` of the prototype. When `nil`, the `source_offset` of the prototype is
----not modified.
+---The `attack_parameters.source_offset` of the prototype. When `nil`, the `source_offset` of the prototype is not
+---modified.
 ---
 ---See [BeamAttackParameters::source_offset](https://lua-api.factorio.com/latest/types/BeamAttackParameters.html#source_offset).
 ---@field source_offset? Vector
----The `source_direction_count` of the `attack_parameters` of the prototype. When `nil`, the `source_direction_count` of
----the prototype is not modified.
+---The `attack_parameters.source_direction_count` of the prototype. When `nil`, the `source_direction_count` of the
+---prototype is not modified.
 ---
 ---See [BeamAttackParameters::source_direction_count](https://lua-api.factorio.com/latest/types/BeamAttackParameters.html#source_direction_count).
 ---@field source_direction_count? uint32
----The `projectile_center` of the `attack_parameters` of the prototype. When `nil`, the `projectile_center` of the
----prototype is not modified.
+---The `attack_parameters.projectile_center` of the prototype. When `nil`, the `projectile_center` of the prototype is
+---not modified.
 ---
 ---See [ProjectileAttackParameters::projectile_center](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#projectile_center).
 ---@field projectile_center? Vector
----The `projectile_creation_distance` of the `attack_parameters` of the prototype. When `nil`, the
----`projectile_creation_distance` of the prototype is not modified.
+---The `attack_parameters.projectile_creation_distance` of the prototype. When `nil`, the `projectile_creation_distance`
+---of the prototype is not modified.
 ---
 ---See [ProjectileAttackParameters::projectile_creation_distance](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#projectile_creation_distance).
 ---@field projectile_creation_distance? float
----The fields of the `shell_particle` of the `attack_parameters` of the prototype that the set defines. The other fields
----of the `shell_particle` of the prototype are not modified.
+---The fields in `attack_parameters.shell_particle` of the prototype that the set defines. The other fields in the
+---`shell_particle` of the prototype are not modified.
 ---
 ---See [ProjectileAttackParameters::shell_particle](https://lua-api.factorio.com/latest/types/ProjectileAttackParameters.html#shell_particle).
 ---@field shell_particle? ShellParticlePlacement
@@ -659,16 +659,16 @@
 
 ---Defines the graphics fields of a fluid box.
 ---
----A fluid box takes the `FluidBoxGraphics` with a pipe connection that matches one of its own by direction and
----position. When none matches, it takes the `FluidBoxGraphics` with a pipe connection that matches by direction, then
+---A fluid box uses the `FluidBoxGraphics` with a pipe connection that matches one of its own by direction and
+---position. When none matches, it uses the `FluidBoxGraphics` with a pipe connection that matches by direction, then
 ---the first `FluidBoxGraphics` with no `pipe_connections`.
 ---
 ---Every field of the fluid box defined by this type is set, except `pipe_covers` and `pipe_covers_frozen`.
 ---@class (exact) FluidBoxGraphics
----The graphics fields of each pipe connection of the fluid box, which also select the fluid boxes to which the graphics
----apply. When `nil`, the graphics apply to any fluid box that no other `FluidBoxGraphics` matches.
+---The graphics fields for each pipe connection of the fluid box, which also select the fluid boxes to which the
+---graphics apply. When `nil`, the graphics apply to any fluid box that no other `FluidBoxGraphics` matches.
 ---@field pipe_connections? PipeConnectionGraphics[]
----The render layer of the graphics of the fluid box.
+---The render layer for the graphics of the fluid box.
 ---
 ---See [FluidBox::render_layer](https://lua-api.factorio.com/latest/types/FluidBox.html#render_layer).
 ---@field render_layer? RenderLayer
@@ -682,13 +682,13 @@
 ---@field always_draw_covers? boolean
 ---The pictures to show when no fluid box is connected to this one.
 ---
----When `nil`, the fluid box takes the pipe covers of the `pipe_material` of the sprite set.
+---When `nil`, the fluid box uses the pipe covers for the `pipe_material` of the sprite set.
 ---
 ---See [FluidBox::pipe_covers](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_covers).
 ---@field pipe_covers? Sprite4Way
 ---The frozen form of `pipe_covers`.
 ---
----When `nil` and the freezing feature is enabled, the fluid box takes the frozen pipe covers.
+---When `nil` and the freezing feature is enabled, the fluid box uses the frozen pipe covers.
 ---
 ---See [FluidBox::pipe_covers_frozen](https://lua-api.factorio.com/latest/types/FluidBox.html#pipe_covers_frozen).
 ---@field pipe_covers_frozen? Sprite4Way
@@ -741,8 +741,8 @@
 
 ---Defines the graphics fields of a heat energy source or a heat buffer.
 ---
----A heat energy source or heat buffer takes the `HeatBufferGraphics` with a connection that matches one of its own by
----direction and position. When none matches, it takes the `HeatBufferGraphics` with a connection that matches by
+---A heat energy source or heat buffer uses the `HeatBufferGraphics` with a connection that matches one of its own by
+---direction and position. When none matches, it uses the `HeatBufferGraphics` with a connection that matches by
 ---direction, then the first `HeatBufferGraphics` with no `connections`. Only the fields that the `HeatBufferGraphics`
 ---defines are set.
 ---

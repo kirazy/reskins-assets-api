@@ -33,7 +33,7 @@ local MATERIALS = {
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons" })
 
----Provides methods for getting the icons of the ingots collection of Angel's items,
+---Provides methods for getting the icons in the ingots collection of Angel's items,
 ---`ingots/{material}/ingot-{material}.png`, with their picture variations.
 ---
 ---#### Examples

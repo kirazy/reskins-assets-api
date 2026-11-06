@@ -6,7 +6,7 @@
 local _defines = require("api.defines")
 local Assignment = require("api.assignment")
 
----Applies the fields of a `set` of type `turret_sprite_set` that belong to `FluidTurretPrototype` to `prototype`.
+---Applies the fields in a `set` of type `turret_sprite_set` that belong to `FluidTurretPrototype` to `prototype`.
 ---@param prototype FluidTurretPrototype
 ---@param set TurretSpriteSet
 local function apply_sprite_set_to_fluid_turret(prototype, set)
@@ -27,7 +27,7 @@ local function apply_sprite_set_to_fluid_turret(prototype, set)
 	prototype.folding_muzzle_animation_shift = util.copy(set.folding_muzzle_animation_shift)
 end
 
--- Each of these fields of a `TurretSpriteSet` is applied to the field of the same name of the `attack_parameters` of
+-- Each of these fields in a `TurretSpriteSet` is applied to the field of the same name in the `attack_parameters` of
 -- the prototype.
 local attack_parameter_fields = {
 	"source_offset",
@@ -36,8 +36,8 @@ local attack_parameter_fields = {
 	"projectile_creation_distance",
 }
 
--- Each of these fields of a `ShellParticlePlacement` is applied to the field of the same name of the `shell_particle`
--- of the `attack_parameters` of the prototype.
+-- Each of these fields in a `ShellParticlePlacement` is applied to the field of the same name in
+-- `attack_parameters.shell_particle` of the prototype.
 local shell_particle_fields = {
 	"center",
 	"creation_distance",
@@ -46,7 +46,7 @@ local shell_particle_fields = {
 	"height",
 }
 
----Applies the fields of a `set` of type `turret_sprite_set` that belong to the `attack_parameters` of `prototype`.
+---Applies the fields in a `set` of type `turret_sprite_set` that belong to the `attack_parameters` of `prototype`.
 ---@param prototype TurretPrototype
 ---@param set TurretSpriteSet
 local function apply_attack_parameters(prototype, set)

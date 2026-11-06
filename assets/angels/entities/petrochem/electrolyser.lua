@@ -75,7 +75,7 @@ local function get_animation(tint)
 	}
 end
 
----Gets the graphics of the fluid boxes of Angel's electrolyser.
+---Gets the graphics for the fluid boxes of Angel's electrolyser.
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics()
 	return {

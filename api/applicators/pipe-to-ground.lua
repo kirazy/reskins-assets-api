@@ -24,7 +24,7 @@ return {
 	apply_to = apply_sprite_set_to_pipe_to_ground,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `pipe_to_ground_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `pipe_to_ground_sprite_set`.
 ---@class (exact) PipeToGroundSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `pictures`.
 ---@field pictures Sprite4Way

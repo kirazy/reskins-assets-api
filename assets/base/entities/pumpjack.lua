@@ -297,7 +297,7 @@ local function get_circuit_connector()
 	})
 end
 
--- The remnants take one tint where the entity takes three; no artwork exists for the body and
+-- The remnants use one tint where the entity uses three; no artwork exists for the body and
 -- accent colors yet.
 ---@param base_layer FileName The file of the remnants' base layer.
 ---@param tint? Color The color to tint the mask.

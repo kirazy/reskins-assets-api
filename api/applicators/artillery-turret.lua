@@ -50,7 +50,7 @@ return {
 ---See [ArtilleryTurretPrototype::cannon_barrel_light_direction](https://lua-api.factorio.com/latest/prototypes/ArtilleryTurretPrototype.html#cannon_barrel_light_direction).
 ---@field cannon_barrel_light_direction? Vector3D
 
----Defines the sprite data of a `SpriteSetDefinition` of type `artillery_turret_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `artillery_turret_sprite_set`.
 ---@class (exact) ArtilleryTurretSpriteSet : EntityWithHealthSpriteSet
 ---When `nil`, the circuit connector of the prototype is not modified.
 ---@field circuit_connector? CircuitConnectorDefinition

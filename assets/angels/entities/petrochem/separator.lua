@@ -83,7 +83,7 @@ local function get_empty_pipe_pictures()
 	}
 end
 
----Gets the graphics of the fluid boxes of Angel's separator.
+---Gets the graphics for the fluid boxes of Angel's separator.
 ---@return FluidBoxGraphics[]
 local function get_fluid_box_graphics()
 	-- The pipe at the north corners is drawn at the left corner only. When the separator is flipped, the fluid box at

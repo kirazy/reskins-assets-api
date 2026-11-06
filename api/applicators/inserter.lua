@@ -33,7 +33,7 @@ return {
 	apply_to = apply_sprite_set_to_inserter,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `inserter_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `inserter_sprite_set`.
 ---@class (exact) InserterSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `hand_base_picture`.
 ---@field hand_base_picture Sprite

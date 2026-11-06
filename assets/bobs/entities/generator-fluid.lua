@@ -154,7 +154,7 @@ end
 
 ---Defines the options for the fluid generator smoke.
 ---@class GeneratorFluidSmokeParams
----The name of the `TrivialSmokePrototype` of the smoke. Default `"smoke"`.
+---The name of the `TrivialSmokePrototype` for the smoke. Default `"smoke"`.
 ---@field name? string
 ---The `frequency` of the smoke. Default `0.125`.
 ---@field frequency? double

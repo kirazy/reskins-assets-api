@@ -10,7 +10,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/rolls" })
 
----Provides methods for getting the icons of the rolls folder of Angel's items, `rolls/roll-{material}.png`.
+---Provides methods for getting the icons in the rolls folder of Angel's items, `rolls/roll-{material}.png`.
 ---
 ---#### Examples
 ---```lua

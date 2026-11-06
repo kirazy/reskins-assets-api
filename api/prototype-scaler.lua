@@ -49,9 +49,9 @@ end
 
 ---Defines the options that determine the scaling relationship of a `PrototypeScaler`.
 ---@class PrototypeScalerParams
----The width of the `selection_box` of the entity for which the artwork is designed.
+---The width of the `selection_box` on the entity for which the artwork is designed.
 ---@field nominal_width? double
----The height of the `selection_box` of the entity for which the artwork is designed.
+---The height of the `selection_box` on the entity for which the artwork is designed.
 ---@field nominal_height? double
 ---The desired resulting scale, relative to the baseline of 0.5. `scale` overrides the nominal size.
 ---@field scale? double

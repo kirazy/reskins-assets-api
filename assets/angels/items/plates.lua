@@ -28,7 +28,7 @@ local MATERIALS = {
 	"zinc",
 }
 
----Provides methods for getting the icons of the plates folder of Angel's items, `plates/{material}-plate.png`.
+---Provides methods for getting the icons in the plates folder of Angel's items, `plates/{material}-plate.png`.
 ---
 ---#### Examples
 ---```lua

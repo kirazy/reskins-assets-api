@@ -16,7 +16,7 @@ local ORES = {
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons" })
 
----Provides methods for getting the icons of the ores collection of Angel's items, `ores/{ore}/{ore}.png`, with their
+---Provides methods for getting the icons in the ores collection of Angel's items, `ores/{ore}/{ore}.png`, with their
 ---picture variations.
 ---
 ---#### Examples

@@ -32,7 +32,7 @@ return {
 	apply_to = apply_sprite_set_to_logistic_robot,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `logistic_robot_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `logistic_robot_sprite_set`.
 ---@class (exact) LogisticRobotSpriteSet : FlyingRobotSpriteSet
 ---The prototype's `in_motion_with_cargo`.
 ---@field in_motion_with_cargo? RotatedAnimation

@@ -17,7 +17,7 @@ local GenericRemnants = require("assets.base.generic-remnants")
 ---@class Corpses
 local _corpses = {}
 
--- Each of these fields of a `CorpseSpriteSet` is applied to the field of the same name of the corpse prototype.
+-- Each of these fields in a `CorpseSpriteSet` is applied to the field of the same name on the corpse prototype.
 local corpse_fields = {
 	"animation",
 	"animation_overlay",
@@ -56,7 +56,7 @@ local corpse_fields = {
 	"underwater_patch",
 }
 
--- The generic remnants of the base game for an entity with a shorter side of each number of tiles.
+-- The generic remnants of the base game for each number of tiles on the shorter side of an entity.
 ---@type table<integer, EntityID>
 local generic_remnants_by_side = {
 	[1] = "small-remnants",
@@ -121,8 +121,8 @@ local function round_up_to_tiles(length)
 	return math.max(1, math.ceil(length - 1e-6))
 end
 
----Gets the size of the given `prototype` in tiles. An entity on the tile grid takes its `tile_width` and `tile_height`,
----each of which defaults to the side of its collision box rounded up. An entity off the tile grid takes its selection
+---Gets the size of the given `prototype` in tiles. An entity on the tile grid uses its `tile_width` and `tile_height`,
+---each of which defaults to the side of its collision box rounded up. An entity off the tile grid uses its selection
 ---box rounded up. Each side is at least 1.
 ---@param prototype EntityWithHealthPrototype
 ---@return integer width
@@ -161,9 +161,9 @@ end
 
 ---Applies the fields of the given `corpse_sprite_set` to the given `corpse`, in place.
 ---
----Each field that `corpse_sprite_set` defines is copied onto the field of the same name of `corpse`. A field that it
+---Each field that `corpse_sprite_set` defines is copied onto the field of the same name on `corpse`. A field that it
 ---does not define is not modified.
----@param corpse CorpsePrototype|CorpseSpriteSet The corpse, or the corpse of a sprite set, that takes the fields.
+---@param corpse CorpsePrototype|CorpseSpriteSet The corpse, or the corpse of a sprite set, that is given the fields.
 ---@param corpse_sprite_set CorpseSpriteSet The artwork and the other fields of the corpse.
 function _corpses.apply_corpse_sprite_set(corpse, corpse_sprite_set)
 	Assignment.safe_assign(corpse, corpse_sprite_set, corpse_fields)
@@ -195,10 +195,10 @@ local function get_generic_remnants_size(prototype)
 	return get_tile_size(prototype)
 end
 
----Gets the position of each copy of `medium-remnants` in a grid along a side of the given number of `tiles`, in tiles
----from the center of the side. The outer copies meet the ends of the side, and neighboring copies overlap by at least
----`MEDIUM_REMNANTS_OVERLAP` tiles.
----@param tiles integer The number of tiles of the side, which is more than `MEDIUM_REMNANTS_SIDE`.
+---Gets the position for each copy of `medium-remnants` in a grid along a side with the given number of `tiles`, in
+---tiles from the center of the side. The outer copies meet the ends of the side, and neighboring copies overlap by at
+---least `MEDIUM_REMNANTS_OVERLAP` tiles.
+---@param tiles integer The number of tiles on the side, which is more than `MEDIUM_REMNANTS_SIDE`.
 ---@return double[]
 local function get_grid_positions(tiles)
 	local count = math.ceil((tiles - MEDIUM_REMNANTS_OVERLAP) / (MEDIUM_REMNANTS_SIDE - MEDIUM_REMNANTS_OVERLAP))
@@ -212,10 +212,10 @@ local function get_grid_positions(tiles)
 	return positions
 end
 
----Gets a corpse that repeats the artwork of `medium-remnants` in a grid across a square of the given number of `tiles`
----on each side.
+---Gets a corpse that repeats the artwork of `medium-remnants` in a grid across a square with the given number of
+---`tiles` on each side.
 ---
----Each variation of the corpse draws a copy of a variation of `medium-remnants` at each position of the grid. The
+---Each variation of the corpse draws a copy of a variation from `medium-remnants` at each position of the grid. The
 ---copies next to each other in a row, a column, or a diagonal draw different variations of `medium-remnants`.
 ---@param tiles integer The number of tiles on each side of the square, which is more than `MEDIUM_REMNANTS_SIDE`.
 ---@return CorpseSpriteSet
@@ -252,13 +252,13 @@ end
 ---Gets the generic remnants for the size of the given `prototype`.
 ---
 ---The size of `prototype` is its selection box rounded to the nearest whole number of tiles, or its tile size when it
----has no selection box. An entity of 1 x 2 or 2 x 1 tiles takes `1x2-remnants`. Any other entity takes the generic
+---has no selection box. An entity of 1 x 2 or 2 x 1 tiles uses `1x2-remnants`. Any other entity uses the generic
 ---remnants of the base game for its shorter side: `small-remnants` for 1 tile, `medium-small-remnants` for 2 tiles,
----and `medium-remnants` for 3 tiles. An entity with a shorter side of 4 tiles or more takes a corpse that repeats the
+---and `medium-remnants` for 3 tiles. An entity with a shorter side of 4 tiles or more uses a corpse that repeats the
 ---artwork of `medium-remnants` in a grid across a square of that side, centered on the entity. The outer copies of the
 ---artwork meet the edges of the square, and neighboring copies overlap by at least 1 tile.
 ---@param prototype EntityWithHealthPrototype The entity for which the remnants are selected.
----@return EntityID|CorpseSpriteSet # The name of the generic remnants of the base game, or the corpse that repeats the artwork of `medium-remnants`.
+---@return EntityID|CorpseSpriteSet # The name of the generic remnants from the base game, or the corpse that repeats the artwork of `medium-remnants`.
 ---@nodiscard
 function _corpses.get_generic_remnants(prototype)
 	local width, height = get_generic_remnants_size(prototype)
@@ -297,8 +297,8 @@ end
 ---`prototype`, in place.
 ---
 ---A `CorpseSpriteSet` is created as the corpse `ar-<entity name>-remnants`, which replaces a corpse of that name. The
----corpse takes the fields of `corpse`, the size of `prototype`, the localised name `{"remnant-name", ...}`, and a copy of
----the icon of `prototype`. It takes no field from the corpse that `prototype` names.
+---corpse uses the fields of `corpse`, the size of `prototype`, the localised name `{"remnant-name", ...}`, and a copy
+---of the icon from `prototype`. It uses no field from the corpse that `prototype` names.
 ---
 ---An `EntityID` is set as given. `_defines.generic_remnants` is replaced by the result of `get_generic_remnants` for
 ---`prototype`, which is then set or created in the same way. A flying robot creates its corpse when it falls to the
@@ -334,7 +334,7 @@ function _corpses.apply(prototype, corpse)
 		remnants.localised_name = { "remnant-name", get_entity_localised_name(prototype) }
 
 		-- A corpse with the `placeable-neutral` flag requires an icon. An entity with no icon gives its corpse the icon of
-		-- the generic remnants of the base game.
+		-- the generic remnants from the base game.
 		if prototype.icons then
 			remnants.icons = util.copy(prototype.icons)
 		elseif prototype.icon then

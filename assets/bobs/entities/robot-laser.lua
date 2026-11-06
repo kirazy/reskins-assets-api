@@ -12,7 +12,7 @@ local Remnants = require("assets.base.remnants")
 
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/robot-laser/"
 
----The tint of the small metal particles of the dying explosion, by the name of the particle.
+---The tint of the small metal particles in the dying explosion, by the name of the particle.
 ---@type table<ParticleID, Color>
 local particle_tints = {
 	["defender-robot-metal-particle-small"] = util.color("#7f4eca") --[[@as Color]],

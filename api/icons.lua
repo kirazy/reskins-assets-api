@@ -283,7 +283,7 @@ local equipment_background_tints = {
 
 ---The group of the equipment background in an icon composition, in the `backdrop` stratum.
 ---
----- The group is not tintable. The background takes its tint from `get_icon_background_layer`.
+---- The group is not tintable. The background gets its tint from `get_icon_background_layer`.
 ---- The group is not included in the `pictures` projection, so the item is drawn in the world without the background.
 ---
 ---#### Examples
@@ -346,7 +346,7 @@ local check_get_equipment_background_layer = V.signature("get_equipment_backgrou
 	{ "category", AssetsCommon.equipment_category },
 })
 
----Gets the icon layer of the background of the given equipment `category`, in the color of the category.
+---Gets the icon layer of the background for the given equipment `category`, in the color of the category.
 ---@param category EquipmentCategory The category of the equipment.
 ---@return SafeIconData background The background layer.
 ---

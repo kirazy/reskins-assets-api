@@ -29,7 +29,7 @@ return {
 	apply_to = apply_sprite_set_to_combat_robot,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `combat_robot_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `combat_robot_sprite_set`.
 ---@class (exact) CombatRobotSpriteSet : FlyingRobotSpriteSet
 ---When `nil`, the robot has no light.
 ---@field light? LightDefinition

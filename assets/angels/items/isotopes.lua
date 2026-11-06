@@ -19,7 +19,7 @@ local ISOTOPES = {
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/isotopes" })
 
----Provides methods for getting the icons of the isotopes folder of Angel's items, `isotopes/{isotope}.png`.
+---Provides methods for getting the icons in the isotopes folder of Angel's items, `isotopes/{isotope}.png`.
 ---
 ---#### Examples
 ---```lua

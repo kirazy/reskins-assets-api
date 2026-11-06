@@ -10,7 +10,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/pellets" })
 
----Provides methods for getting the icons of the pellets folder of Angel's items, `pellets/pellet-{material}.png`.
+---Provides methods for getting the icons in the pellets folder of Angel's items, `pellets/pellet-{material}.png`.
 ---
 ---#### Examples
 ---```lua

@@ -104,10 +104,10 @@ local function get_pipe_picture(variation)
 	}
 end
 
----Gets the graphics of the fluid boxes of Angel's filtration unit.
+---Gets the graphics for the fluid boxes of Angel's filtration unit.
 ---@return FluidBoxGraphics[]
 local function get_fluid_box_graphics()
-	-- The two connections on each side take opposite pipe pictures.
+	-- The two connections on each side use opposite pipe pictures.
 	return {
 		{
 			pipe_connections = {

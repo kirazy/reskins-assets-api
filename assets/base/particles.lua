@@ -120,7 +120,7 @@ local function default_ended_in_water_trigger_effect()
 	}
 end
 
----Gets the tint of the shadow of a particle.
+---Gets the tint for the shadow of a particle.
 ---@return Color
 local function shadowtint()
 	return { r = 0, g = 0, b = 0 }
@@ -154,7 +154,7 @@ local function make_particle(params)
 end
 
 ---Each particle of the base game that a dying explosion in `assets.base.explosions` creates, as a function of the tint
----of the particle. When the tint is `nil`, the tint of the base game is used.
+---for the particle. When the tint is `nil`, the tint of the base game is used.
 ---@type table<ParticleID, fun(tint?: Color): ParticleSpriteSet>
 local definitions = {
 	["accumulator-metal-particle-big"] = function(tint)
@@ -2040,7 +2040,7 @@ local definitions = {
 
 ---Defines the options for the dying explosion of a vanilla entity.
 ---@class (exact) BaseExplosionParams
----The tint of each particle of the explosion that is replaced by a copy in that tint, by the name of the particle. A
+---The tint of each particle in the explosion that is replaced by a copy in that tint, by the name of the particle. A
 ---particle with a `nil` tint is not replaced.
 ---@field tints? table<ParticleID, Color?>
 

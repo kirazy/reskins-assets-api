@@ -14,7 +14,7 @@ local Remnants = require("assets.base.remnants")
 local ASSETS_BOBS_PATH = "__reskins-assets-bobs__/graphics/entity/reinforced-wall/"
 local BASE_PATH = "__base__/graphics/entity/wall/"
 
----The tint of the stone particles of the dying explosion, by the name of the particle.
+---The tint of the stone particles in the dying explosion, by the name of the particle.
 ---@type table<ParticleID, Color>
 local particle_tints = {
 	["wall-stone-particle-medium"] = util.color("#9584ab") --[[@as Color]],
@@ -27,7 +27,7 @@ local M = {}
 ---Gets the sprite variations of the wall for the arrangement of the given `name`.
 ---@param name string The name of the arrangement in the file names, such as `"corner-left"`.
 ---@param variation_count integer The number of variations on the sheet of the sprite.
----@param sprite { width: integer, height: integer, shift: Vector } The size of one variation of the sprite, and its shift.
+---@param sprite { width: integer, height: integer, shift: Vector } The size of one variation in the sprite, and its shift.
 ---@param shadow { width: integer, height: integer, shift: Vector } The size and shift of the shadow, which is repeated for each variation.
 ---@return SpriteVariations
 local function get_variations(name, variation_count, sprite, shadow)

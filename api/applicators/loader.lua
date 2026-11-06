@@ -20,7 +20,7 @@ return {
 	apply_to = apply_sprite_set_to_loader,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `loader_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `loader_sprite_set`.
 ---@class (exact) LoaderSpriteSet : TransportBeltConnectableSpriteSet
 ---@field structure LoaderStructure
 ---@field structure_render_layer? RenderLayer

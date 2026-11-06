@@ -256,7 +256,7 @@ function M.get_sprite_set(params)
 	return definition
 end
 
----Gets the builder of the icon of the pipe to ground built from the given `pipe_material`.
+---Gets the builder for the icon of the pipe to ground built from the given `pipe_material`.
 ---@param pipe_material PipeMaterial
 ---@return FlatIconBuilder<{}>
 local function get_icon_builder(pipe_material)

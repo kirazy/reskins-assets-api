@@ -6,7 +6,7 @@
 local _assembly = require("api.icon-builder.assembly")
 local IconBuilderBase = require("api.icon-builder.icon-builder-base")
 
----Represents a builder for an icon with one layer, taken from a file selected by one parameter named by the caller.
+---Represents a builder for an icon with one layer, which uses a file selected by one parameter named by the caller.
 ---
 ---`keyed` on a `FlatIconBuilder` returns a `FlatIconBuilder1`. No further parameters can be added.
 ---@class FlatIconBuilder1<P, N1, V1> : IconBuilderBase
@@ -16,7 +16,7 @@ setmetatable(FlatIconBuilder1, IconBuilderBase)
 
 ---Builds a function that returns the icon for the given parameters.
 ---
----The function takes one table of parameters, in which the parameter added by `keyed` is required. An error is raised
+---The function accepts one table of parameters, in which the parameter added by `keyed` is required. An error is raised
 ---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
 ---the function is assigned.
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
@@ -35,7 +35,7 @@ end
 
 ---Builds a function that returns the icon as an `IconComposition`.
 ---
----The function takes one table of parameters, in which the parameter added by `keyed` is required. An error is raised
+---The function accepts one table of parameters, in which the parameter added by `keyed` is required. An error is raised
 ---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
 ---the function is assigned. The icon is added to the canvas group of a composition with the icon defaults type of the
 ---factory.

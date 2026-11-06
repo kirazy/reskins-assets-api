@@ -104,7 +104,7 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 
 ---Gets the sprite set for Angel's valve.
 ---
----The sprite set can also be applied to a storage tank, which takes the animations of the valve as its pictures and the
+---The sprite set can also be applied to a storage tank, which uses the animations of the valve as its pictures and the
 ---circuit connector of Angel's inspector valve.
 ---@param params PipeValveSpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<ValveSpriteSet> # The sprite set definition for Angel's valve.

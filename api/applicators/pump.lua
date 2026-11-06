@@ -27,7 +27,7 @@ return {
 	apply_to = apply_sprite_set_to_pump,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `pump_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `pump_sprite_set`.
 ---@class (exact) PumpSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `animations`.
 ---@field animations Animation4Way

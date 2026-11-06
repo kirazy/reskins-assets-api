@@ -53,17 +53,17 @@ local particle_tints = {
 	},
 }
 
----Defines the file name and the number of variations of the artwork of a field of `ConnectableEntityGraphics`.
+---Defines the file name and the number of variations in the artwork for a field of `ConnectableEntityGraphics`.
 ---@class (exact) HeatPipeTile
 ---The segment of the file names that selects the artwork. When `nil`, the name of the field is used, with each
 ---underscore replaced by a hyphen.
 ---@field name? string
 ---When `true`, indicates that the file name has no variation number. Default `false`.
 ---@field omit_number? boolean
----The number of variations of the artwork. Default `1`.
+---The number of variations in the artwork. Default `1`.
 ---@field variations? integer
 
--- The artwork of each field of `ConnectableEntityGraphics`.
+-- The artwork for each field of `ConnectableEntityGraphics`.
 ---@type table<string, HeatPipeTile>
 local TILES = {
 	single = { name = "straight-vertical-single", omit_number = true },
@@ -84,7 +84,7 @@ local TILES = {
 	ending_left = {},
 }
 
----Gets the segment of the file names of the given `variation` of the artwork of the given `field`.
+---Gets the segment of the file names for the given `variation` of the artwork for the given `field`.
 ---@param field string
 ---@param tile HeatPipeTile
 ---@param variation integer
@@ -128,7 +128,7 @@ local function make_connectable_entity_graphics(get_sprite)
 	return graphics
 end
 
----Gets the folder of the artwork of the heat pipe for the given `pipe_material`.
+---Gets the folder with the artwork of the heat pipe for the given `pipe_material`.
 ---@param pipe_material HeatPipeMaterial
 ---@return string
 local function get_material_path(pipe_material)
@@ -222,7 +222,7 @@ local function get_circuit_connector()
 	})
 end
 
----Gets one layer of the animation of the heat pipe remnants, from the file with the given `filename`.
+---Gets one layer of the animation for the heat pipe remnants, from the file with the given `filename`.
 ---@param filename string
 ---@return RotatedAnimation
 local function get_corpse_animation_layer(filename)
@@ -277,8 +277,8 @@ end
 
 ---Gets the tints of the metal particles in the dying explosion of the heat pipe for the given `params`.
 ---
----The particles take the fixed colors of `params.pipe_material` when it is given. Otherwise, the small particles take
----`params.tint`, the color of the pipes, and the medium particles take `params.plate_tint`, the color of the plates.
+---The particles use the fixed colors of `params.pipe_material` when it is given. Otherwise, the small particles use
+---`params.tint`, the color of the pipes, and the medium particles use `params.plate_tint`, the color of the plates.
 ---@param params HeatPipeSpriteSetParams
 ---@return table<ParticleID, Color>?
 local function get_particle_tints(params)
@@ -377,11 +377,11 @@ local vanilla_icons = IconBuilderFactory:create({ folder = "__base__/graphics/ic
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
----Gets the builder of the icon of the heat pipe built from the given `pipe_material`.
+---Gets the builder for the icon of the heat pipe built from the given `pipe_material`.
 ---@param pipe_material HeatPipeMaterial
 ---@return FlatIconBuilder<{}>|IconBuilder<{ base_tint?: Color }>
 local function get_icon_builder(pipe_material)
-	-- The icon of the heat pipe of the base material comes from the base game.
+	-- The icon of the heat pipe for the base material comes from the base game.
 	if pipe_material == "base" then
 		return vanilla_icons:flat("heat-pipe")
 	end

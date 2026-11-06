@@ -19,7 +19,7 @@ return {
 	apply_to = apply_sprite_set_to_valve,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `valve_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `valve_sprite_set`.
 ---@class (exact) ValveSpriteSet : EntityWithHealthSpriteSet
 ---See [ValvePrototype::animations](https://lua-api.factorio.com/latest/prototypes/ValvePrototype.html#animations).
 ---@field animations Animation4Way

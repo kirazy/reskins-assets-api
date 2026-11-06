@@ -199,7 +199,7 @@ local icons = IconBuilderFactory:create({ folder = "__reskins-assets-angels__/gr
 
 local VARIANTS = { "temperate", "desert", "swamp" }
 
----Gets the builder of the icon of the tree generator of the given `variant`.
+---Gets the builder for the icon of the tree generator for the given `variant`.
 ---@param variant TreeGeneratorVariant
 ---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
 local function get_icon_builder(variant)

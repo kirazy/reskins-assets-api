@@ -9,12 +9,12 @@ local _sprites = require("__reskins-sprite-utils__.sprites")
 
 local M = {}
 
----The name of a generic corpse of the base game that `assets.base.generic-remnants` duplicates.
+---The name of a generic corpse from the base game that `assets.base.generic-remnants` duplicates.
 ---@alias BaseGenericRemnantsID
 ---| "medium-remnants"
 
----The function that creates the fields of each generic corpse of the base game other than its name, icon, and size, by
----the name of the corpse.
+---The function that creates the fields of each generic corpse from the base game other than its name, icon, and size,
+---by the name of the corpse.
 ---@type table<BaseGenericRemnantsID, fun(): CorpseSpriteSet>
 local definitions = {
 	["medium-remnants"] = function()
@@ -43,7 +43,7 @@ local definitions = {
 
 ---Gets the generic corpse of the base game with the given `name`, with its artwork.
 ---
----The corpse has each field of the generic corpse of the base game other than its name, icon, and size. The result is
+---The corpse has each field of the generic corpse from the base game other than its name, icon, and size. The result is
 ---a new table on each call.
 ---@param name BaseGenericRemnantsID The name of the generic corpse.
 ---@return CorpseSpriteSet # The corpse.

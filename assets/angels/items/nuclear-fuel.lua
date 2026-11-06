@@ -10,7 +10,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 local icons =
 	IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/nuclear-fuel" })
 
----Provides methods for getting the icons of the nuclear-fuel folder of Angel's items, such as `nuclear-fuel-2.png`.
+---Provides methods for getting the icons in the nuclear-fuel folder of Angel's items, such as `nuclear-fuel-2.png`.
 ---
 ---#### Examples
 ---```lua

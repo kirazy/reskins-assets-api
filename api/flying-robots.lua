@@ -15,7 +15,7 @@ local Corpses = require("api.corpses")
 ---@class FlyingRobots
 local _flying_robots = {}
 
--- The shift of the shadow of the falling robot.
+-- The shift of the shadow for the falling robot.
 local SHADOW_SHIFT = { -0.75, -0.40 }
 
 -- The shift of the falling robot.

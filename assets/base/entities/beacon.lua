@@ -210,7 +210,7 @@ end
 ---Creates the slot to the upper right.
 ---@field slot_2 BeaconModuleSlotCreator
 
----The creators for each art style of the module slots of a beacon, by the name of the art style.
+---The creators for each art style of the module slots on a beacon, by the name of the art style.
 M.module_slots = {}
 
 ---Gets the creators for the base game's own module slots.
@@ -632,7 +632,7 @@ function M.module_slots.get_god_module_creators(variant)
 	}
 end
 
--- Where each pair of module slots sits, by the number of slots of the beacon.
+-- Where each pair of module slots sits, by the number of slots on the beacon.
 local SLOT_SHIFTS = {
 	[2] = {
 		{},

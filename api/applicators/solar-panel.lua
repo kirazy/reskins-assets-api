@@ -19,7 +19,7 @@ return {
 	apply_to = apply_sprite_set_to_solar_panel,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `solar_panel_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `solar_panel_sprite_set`.
 ---@class (exact) SolarPanelSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `picture`.
 ---@field picture? SpriteVariations

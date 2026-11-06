@@ -18,7 +18,7 @@ return {
 	apply_to = apply_sprite_set_to_electric_pole,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `electric_pole_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `electric_pole_sprite_set`.
 ---@class (exact) ElectricPoleSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `pictures`.
 ---@field pictures RotatedSprite

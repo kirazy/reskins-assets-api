@@ -137,7 +137,7 @@ end
 
 ---Defines the options of `FluidBoxes.apply`.
 ---@class (exact) ApplyFluidBoxGraphicsParams
----The material of the pipe covers of a fluid box when its `FluidBoxGraphics` does not define `pipe_covers`. Default
+---The material of the pipe covers for a fluid box when its `FluidBoxGraphics` does not define `pipe_covers`. Default
 ---`"iron"`.
 ---@field pipe_material? PipeMaterial
 
@@ -156,10 +156,10 @@ local check_apply = V.signature("apply", {
 ---Applies the given `fluid_box_graphics` to the fluid boxes of the given `prototype`, in place.
 ---
 ---Each fluid box, including the fluid box of a fluid energy source, is matched to an entry of `fluid_box_graphics` by
----the directions and positions of its pipe connections, and takes its graphics fields. A fluid box that matches no
----entry has its pipe pictures removed. Every fluid box takes the pipe covers of the matching entry, or the pipe covers
----of `params.pipe_material` when the entry defines none or no entry matches. Every fluid box takes the frozen pipe
----covers when the freezing feature is enabled and the matching entry defines none.
+---the directions and positions of its pipe connections, and uses the graphics fields of that entry. A fluid box that
+---matches no entry has its pipe pictures removed. Every fluid box uses the pipe covers of the matching entry, or the
+---pipe covers of `params.pipe_material` when the entry defines none or no entry matches. Every fluid box uses the
+---frozen pipe covers when the freezing feature is enabled and the matching entry defines none.
 ---
 ---The fluid boxes and the energy source of `prototype` are replaced with copies before they are modified.
 ---
@@ -174,7 +174,7 @@ local check_apply = V.signature("apply", {
 ---local FluidBoxes = require("__reskins-assets-api__.api.fluid-boxes")
 ---
 ---FluidBoxes.apply(data.raw["storage-tank"]["storage-tank"], {}, { pipe_material = "bronze" })
------ The `pipe_covers` of the fluid box of the storage tank are the bronze pipe covers.
+----- The `fluid_box.pipe_covers` of the storage tank are the bronze pipe covers.
 ---```
 ---@throws When `prototype` is not a prototype.
 ---@throws When `fluid_box_graphics` is not an array of `FluidBoxGraphics`.
@@ -207,7 +207,7 @@ local check_get_pipe_connection_directions = V.signature("get_pipe_connection_di
 	{ "prototype", AssetsCommon.prototype },
 })
 
----Gets the direction of each pipe connection of the fluid boxes of the given `prototype`, including the fluid box of a
+---Gets the direction of each pipe connection in the fluid boxes of the given `prototype`, including the fluid box of a
 ---fluid energy source.
 ---
 ---A direction appears once for each pipe connection in that direction.

@@ -59,7 +59,7 @@ local function get_animation(tint)
 	return { layers = layers }
 end
 
----Gets the graphics of the fluid boxes of Angel's electro-winning cell.
+---Gets the graphics for the fluid boxes of Angel's electro-winning cell.
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics()
 	-- The ore-floatation-cell picture set is used only for the electro-winning-cell entity.

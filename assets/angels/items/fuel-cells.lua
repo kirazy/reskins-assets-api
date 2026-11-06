@@ -15,7 +15,7 @@ local FUELS = {
 	"uranium-234",
 }
 
----Provides methods for getting the icons of the fuel-cells folder of Angel's items, `fuel-cells/{fuel}-fuel-cell.png`.
+---Provides methods for getting the icons in the fuel-cells folder of Angel's items, `fuel-cells/{fuel}-fuel-cell.png`.
 ---
 ---#### Examples
 ---```lua

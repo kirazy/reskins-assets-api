@@ -8,15 +8,15 @@ local _assembly = require("api.icon-builder.assembly")
 local IconBuilderBase = require("api.icon-builder.icon-builder-base")
 local IconBuilder1 = require("api.icon-builder.icon-builder-1")
 
----Represents a builder for an icon with several layers, each taken from its own file.
+---Represents a builder for an icon with several layers, each of which uses its own file.
 ---
 ---The file of each layer is `{folder}/{name}/{stem}[-{value}...][-{part}]-{role}.png`. The name of the icon is used as
 ---the stem when no stem is set. Each `{value}` is the value of a parameter added by `keyed`, `{part}` selects a group
 ---of layers within the icon, and `{role}` is the role of the layer. Each layer is drawn on top of the layers added
 ---before it.
 ---
----`build` creates a function that takes one table of parameters and returns the icon. A layer added by `base` is tinted
----by the `base_tint` parameter, and a layer added by `mask` is tinted by the `tint` parameter. Up to two further
+---`build` creates a function that accepts one table of parameters and returns the icon. A layer added by `base` is
+---tinted by the `base_tint` parameter, and a layer added by `mask` is tinted by the `tint` parameter. Up to two further
 ---parameters can be added with `keyed`, `tinted_layer`, and `tinted_part`.
 ---@class IconBuilder<P> : IconBuilderBase
 local IconBuilder = {}
@@ -111,7 +111,7 @@ end
 
 ---Adds a required parameter with the given `name` that selects the artwork of the icon.
 ---
----The value of the parameter is converted with `tostring` and appended to the stem of the file name of each of the
+---The value of the parameter is converted with `tostring` and appended to the stem of the file name for each of the
 ---given `layers`, as `{stem}-{value}[-{part}]-{role}.png`. Values are appended in the order in which their parameters
 ---are added. For example, the base layer of `roboport` keyed by `tier` for the `base` role is `roboport-2-base.png`
 ---when `tier` is 2.
@@ -198,7 +198,7 @@ end
 
 ---Builds a function that returns the icon for the given parameters.
 ---
----The function takes one table of parameters, or none. Each parameter is a tint, and is optional. An error is raised
+---The function accepts one table of parameters, or none. Each parameter is a tint, and is optional. An error is raised
 ---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
 ---the function is assigned.
 ---@param creator_name? string The name of the function in error messages. If `nil`, the name of the icon is used.
@@ -218,7 +218,7 @@ end
 
 ---Builds a function that returns the icon as an `IconComposition`.
 ---
----The function takes one table of parameters, or none. Each parameter is a tint, and is optional. An error is raised
+---The function accepts one table of parameters, or none. Each parameter is a tint, and is optional. An error is raised
 ---when the function is given an unknown parameter. `creator_name` is recommended to be the name of the field to which
 ---the function is assigned. The icon is added to the canvas group of a composition with the icon defaults type of the
 ---factory.

@@ -184,7 +184,7 @@ local icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/grap
 
 local TIERS = { 1, 2, 3, 4, 5 }
 
----Gets the builder of the icon of the electrolyser of the given `tier`.
+---Gets the builder for the icon of the electrolyser for the given `tier`.
 ---@param tier ElectrolyserTier
 ---@return IconBuilder<{ base_tint?: Color, tint?: Color }>
 local function get_icon_builder(tier)

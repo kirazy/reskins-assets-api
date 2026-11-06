@@ -551,7 +551,7 @@ local function get_pipe_picture(variation)
 	}
 end
 
----Gets the graphics of the fluid boxes of Angel's hydro plant.
+---Gets the graphics for the fluid boxes of Angel's hydro plant.
 ---@return FluidBoxGraphics[]
 local function get_fluid_box_graphics()
 	return {

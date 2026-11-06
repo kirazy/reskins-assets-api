@@ -18,7 +18,7 @@ local FOLDER = "__reskins-assets-angels__/graphics/entity/loader-1x2/loader-1x2-
 
 ---Gets one sheet of the loader structure, from the file with the given `suffix`, at the row of the sheet at the given
 ---`y`.
----@param suffix string The suffix of the file name of the sheet.
+---@param suffix string The suffix of the file name for the sheet.
 ---@param y integer The vertical position of the row in the sheet, in pixels.
 ---@param fields? table The other fields of the sheet.
 ---@return SpriteSheet
@@ -90,8 +90,8 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 
 ---Gets the sprite set for Angel's 1 x 2 loader.
 ---
----The loader takes the belt animation set of the transport belt for the given `params`, the corpse `small-remnants`,
----and the dying explosion of the vanilla splitter with its medium and big metal particles in `params.tint`.
+---The loader uses the belt animation set of the transport belt for the given `params`, the corpse `small-remnants`, and
+---the dying explosion of the vanilla splitter with its medium and big metal particles in `params.tint`.
 ---@param params Loader1x2SpriteSetParams The options for the sprite set.
 ---@return SpriteSetDefinition<LoaderSpriteSet> # The sprite set definition for Angel's 1 x 2 loader.
 ---

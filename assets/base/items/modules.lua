@@ -46,7 +46,7 @@ local EIGHT_LIGHTS_COLORS = {
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.base_assets .. "/graphics/icons/modules" })
 
 ---Provides methods for getting the icons of the modules folder, `modules/{n}-lights/{color}/{color}-{tier}.png`, in
----which the number of lit lights of a module is its tier.
+---which the number of lit lights on a module is its tier.
 ---
 ---#### Examples
 ---```lua

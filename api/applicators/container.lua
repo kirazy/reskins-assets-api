@@ -21,7 +21,7 @@ return {
 	apply_to = apply_sprite_set_to_container,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `container_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `container_sprite_set`.
 ---@class (exact) ContainerSpriteSet : EntityWithHealthSpriteSet
 ---The picture displayed for this entity.
 ---

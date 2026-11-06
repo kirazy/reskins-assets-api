@@ -432,7 +432,7 @@ local function get_platform_frozen()
 	}
 end
 
----Gets the light flicker of the burner or fluid energy source of the inserter, which shows no light.
+---Gets the light flicker of the burner or fluid energy source in the inserter, which shows no light.
 ---@return LightFlickeringDefinition
 local function get_light_flicker()
 	return { color = { 0, 0, 0 } }

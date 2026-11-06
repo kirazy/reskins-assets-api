@@ -22,7 +22,7 @@ local _assembly = {}
 ---@type Color
 _assembly.ADDITIVE_TINT = { 1, 1, 1, 0 }
 
----Defines the roles of the layers of an icon.
+---Defines the roles of the layers in an icon.
 ---
 ---The role of a layer is the last segment of its file name, such as the `mask` in `boiler-fire-mask.png`.
 ---@enum IconRole
@@ -44,7 +44,7 @@ _assembly.role = {
 ---@field part? string
 ---The tint of the layer when no parameter tints it. The layer added by `highlights` ignores this field. Default `nil`.
 ---@field tint? Color
----The size of the square file of the layer, in pixels. If `nil`, the size of the icon is used.
+---The size of the square file for the layer, in pixels. If `nil`, the size of the icon is used.
 ---@field icon_size? SpriteSizeType
 ---The name of the parameter without which the layer is omitted, or `false` to include the layer always. If `nil`, the
 ---layer requires the parameter that tints it, unless it is a base layer added by `base` or `tinted`, or is the first
@@ -75,20 +75,20 @@ _assembly.role = {
 ---@field tint_param? string
 ---The tint of the layer when no parameter tints it.
 ---@field tint? Color
----The size of the square file of the layer, in pixels. The field is `nil` when the layer uses the size of the icon.
+---The size of the square file for the layer, in pixels. The field is `nil` when the layer uses the size of the icon.
 ---@field icon_size? SpriteSizeType
 ---The name of the parameter that the layer requires, or `false` when the layer is always included. The field is `nil`
----when the layer takes the default described by `IconLayerOptions.requires`.
+---when the layer uses the default described by `IconLayerOptions.requires`.
 ---@field requires? string|false
 
----Defines a selection of the layers of an icon by part, or by part and role.
+---Defines a selection of the layers in an icon by part, or by part and role.
 ---@class IconLayerSelector
 ---The part of the selected layers.
 ---@field part string
 ---The role of the selected layer. If `nil`, every layer of `part` is selected.
 ---@field role? IconRole|string
 
----Defines a selection of the layers of an icon, as recorded by a builder.
+---Defines a selection of the layers in an icon, as recorded by a builder.
 ---@class IconBuilderSelector
 ---The role of the selected layers. The field is `nil` when every layer of `part` is selected.
 ---@field role? string
@@ -120,11 +120,11 @@ _assembly.role = {
 ---@field name string
 ---The stem of the file names. The field is `nil` when the name of the icon is used as the stem.
 ---@field stem? string
----When `true`, indicates that the icon has one layer, taken from a single file.
+---When `true`, indicates that the icon has one layer, which uses a single file.
 ---@field flat boolean
 ---The name of the type-specific icon defaults.
 ---@field defaults_type? IconDefaultsType
----The size of the square files of the layers, in pixels, if set.
+---The size of the square files for the layers, in pixels, if set.
 ---@field icon_size? SpriteSizeType
 ---The number of mipmaps in the files of the layers, if set.
 ---@field mipmap_count? integer
@@ -539,7 +539,7 @@ local function rules_rule(rules, fields)
 	}
 end
 
----Gets the number of picture variations of the icon described by the given `state` for the given `params`.
+---Gets the number of picture variations in the icon described by the given `state` for the given `params`.
 ---@param state IconBuilderState The state of the builder.
 ---@param params table<string, any> The parameters given to the creator.
 ---@return integer

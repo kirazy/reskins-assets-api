@@ -22,7 +22,7 @@ return {
 	apply_to = apply_sprite_set_to_storage_tank,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `storage_tank_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `storage_tank_sprite_set`.
 ---@class (exact) StorageTankSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `pictures`.
 ---@field pictures StorageTankPictures

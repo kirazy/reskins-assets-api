@@ -11,7 +11,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 local icons =
 	IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/liquid-material" })
 
----Provides methods for getting the icons of the liquid-material folder of Angel's items,
+---Provides methods for getting the icons in the liquid-material folder of Angel's items,
 ---`liquid-material/liquid-molten-{material}.png`.
 ---
 ---#### Examples

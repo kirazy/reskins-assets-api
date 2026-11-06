@@ -21,7 +21,7 @@ return {
 	apply_to = apply_sprite_set_to_accumulator,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `accumulator_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `accumulator_sprite_set`.
 ---@class (exact) AccumulatorSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `chargable_graphics`.
 ---@field chargable_graphics ChargableGraphics

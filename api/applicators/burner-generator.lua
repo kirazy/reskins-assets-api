@@ -19,7 +19,7 @@ return {
 	apply_to = apply_sprite_set_to_burner_generator,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `burner_generator_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `burner_generator_sprite_set`.
 ---@class (exact) BurnerGeneratorSpriteSet : EntityWithHealthSpriteSet
 ---Plays when the generator is active. `idle_animation` must have the same frame count as animation.
 ---

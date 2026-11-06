@@ -39,8 +39,8 @@ local check_get_belt_sprites = V.signature("get_belt_sprites", {
 
 ---Gets the belt sprites for the given transport belt `speed`.
 ---
----A speed below 30 items/s takes `belt_sprites.standard`, a speed below 60 items/s takes `belt_sprites.fast`, and any
----other speed takes `belt_sprites.turbo`.
+---A speed below 30 items/s gets `belt_sprites.standard`, a speed below 60 items/s gets `belt_sprites.fast`, and any
+---other speed gets `belt_sprites.turbo`.
 ---@param speed double The speed of the transport belt, in tiles per tick.
 ---@return BeltSprites # The belt sprites.
 ---
@@ -352,7 +352,7 @@ _defines.sprite_set_type = {
 ---@alias GenericRemnants "generic-remnants"
 
 ---Represents the request for the generic remnants of the base game that match the size of an entity, as the `corpse` of
----a sprite set. The value is the name of the subgroup of the generic remnants of the base game.
+---a sprite set. The value is the name of the subgroup for the generic remnants of the base game.
 ---@type GenericRemnants
 _defines.generic_remnants = "generic-remnants"
 

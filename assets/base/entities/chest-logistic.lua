@@ -128,7 +128,7 @@ local function get_dying_explosion(logistic_mode, material)
 end
 
 ---Gets the corpse of the logistic chest for the given `logistic_mode` and `material`, with the other fields of the
----vanilla remnants of the chest of `logistic_mode`.
+---vanilla remnants for the chest of `logistic_mode`.
 ---@param logistic_mode ChestLogisticMode
 ---@param material ChestLogisticMaterial
 ---@return CorpseSpriteSet

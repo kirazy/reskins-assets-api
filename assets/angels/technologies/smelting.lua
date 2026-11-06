@@ -36,7 +36,7 @@ local technologies = IconBuilderFactory:create({
 	defaults_type = "technology",
 })
 
----Provides methods for getting the technology icons of the smelting folder of Angel's technologies,
+---Provides methods for getting the technology icons in the smelting folder of Angel's technologies,
 ---`smelting/smelting-{material}.png`.
 ---
 ---#### Examples

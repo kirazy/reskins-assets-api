@@ -25,7 +25,7 @@ return {
 	apply_to = apply_sprite_set_to_pipe,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `pipe_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `pipe_sprite_set`.
 ---@class (exact) PipeSpriteSet : EntityWithHealthSpriteSet
 ---The prototype's `horizontal_window_bounding_box`.
 ---@field horizontal_window_bounding_box BoundingBox

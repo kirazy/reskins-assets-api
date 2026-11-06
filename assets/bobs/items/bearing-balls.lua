@@ -18,7 +18,7 @@ local MATERIALS = {
 	"titanium",
 }
 
----The files of the bearing balls in the colors of the materials of Angel's mods, by material.
+---The files of the bearing balls in the colors of the materials from Angel's mods, by material.
 local ANGELS_FILES = {
 	["brass"] = "brass-bearing-ball",
 	["ceramic"] = "ceramic-bearing-ball-white",
@@ -54,7 +54,7 @@ M.get_icon_composition = IconBuilderFactory.dispatch_composition(
 	end
 )
 
----Gets the icon for the bearing ball of the given `material`, in the colors of the materials of Angel's mods, as an
+---Gets the icon for the bearing ball of the given `material`, in the colors of the materials from Angel's mods, as an
 ---`IconComposition`.
 ---
 ---#### Examples

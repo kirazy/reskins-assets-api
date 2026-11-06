@@ -22,7 +22,7 @@ local BASE_FOLDER = "__base__/graphics/entity/electric-mining-drill/electric-min
 local BLUE_FOLDER = "__reskins-assets-bobs__/graphics/entity/mining-drill-electric/frame-blue/mining-drill-electric-"
 local DRILL_FOLDER = "__reskins-assets-base__/graphics/entity/mining-drill-electric/mining-drill-electric-"
 
----The color of the frame of the drill.
+---The color of the frame on the drill.
 ---@alias MiningDrillElectricFrame
 ---| "base" # The yellow frame of the base game.
 ---| "blue" # The hue-shifted blue frame of the base game.
@@ -1403,7 +1403,7 @@ end
 ---@class MiningDrillElectricSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
----The color of the frame of the drill. Default `"base"`.
+---The color of the frame on the drill. Default `"base"`.
 ---@field frame? MiningDrillElectricFrame
 ---The speed at which the head of the drill strokes. Default `0.4`.
 ---@field animation_speed? double

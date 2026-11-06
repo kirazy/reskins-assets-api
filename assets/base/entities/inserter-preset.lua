@@ -44,8 +44,8 @@ local particle_tints = {
 }
 
 -- The vanilla remnants that give the corpse of each preset its fields other than the artwork. A preset drawn from a
--- vanilla inserter takes the remnants of that inserter, a bulk preset takes the bulk inserter remnants, and any other
--- preset takes the inserter remnants.
+-- vanilla inserter uses the remnants of that inserter, a bulk preset uses the bulk inserter remnants, and any other
+-- preset uses the inserter remnants.
 ---@type table<InserterPreset, BaseRemnantsID>
 local remnants_names = {
 	["inserter"] = "inserter-remnants",
@@ -295,7 +295,7 @@ local function get_corpse(preset)
 	return Remnants.get_corpse(remnants_names[preset], { animation = get_corpse_animation(preset) })
 end
 
----Gets the light flicker of the burner or fluid energy source of the inserter, which shows no light.
+---Gets the light flicker of the burner or fluid energy source in the inserter, which shows no light.
 ---@return LightFlickeringDefinition
 local function get_light_flicker()
 	return { color = { 0, 0, 0 } }

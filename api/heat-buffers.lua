@@ -33,7 +33,7 @@ local check_apply = V.signature("apply", {
 ---place.
 ---
 ---The heat energy source and the heat buffer are each matched to an entry of `heat_buffer_graphics` by the directions
----and positions of their connections. Each takes the graphics fields that the matching entry defines. A heat energy
+---and positions of their connections. Each uses the graphics fields that the matching entry defines. A heat energy
 ---source or heat buffer that matches no entry is not modified.
 ---
 ---The energy source and the heat buffer of `prototype` are replaced with copies before they are modified.
@@ -49,7 +49,7 @@ local check_apply = V.signature("apply", {
 ---
 ---local heat_pipe_covers = { sheet = { filename = "__my-mod__/graphics/heat-pipe-covers.png", size = 64, scale = 0.5 } }
 ---HeatBuffers.apply(data.raw["boiler"]["heat-exchanger"], { { pipe_covers = heat_pipe_covers } })
------ The `pipe_covers` of the energy source of the heat exchanger are `heat_pipe_covers`.
+----- The `energy_source.pipe_covers` of the heat exchanger are `heat_pipe_covers`.
 ---```
 ---@throws When `prototype` is not a prototype.
 ---@throws When `heat_buffer_graphics` is not an array of `HeatBufferGraphics`.

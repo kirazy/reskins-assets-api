@@ -14,7 +14,7 @@ local icons = IconBuilderFactory:create({ folder = ICONS_FOLDER })
 
 local VARIANTS = { "antron", "tankotron", "logistic", "heavy" }
 
----Gets the builder of the icon of the spidertron of the given `variant`.
+---Gets the builder for the icon of the spidertron for the given `variant`.
 ---@param variant string
 ---@return FlatIconBuilder<{}>
 local function get_icon_builder(variant)

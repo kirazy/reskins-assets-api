@@ -151,7 +151,7 @@ local function get_circuit_connector()
 	})
 end
 
----Gets the graphics of the fluid box of the greenhouse, which has no pipe pictures.
+---Gets the graphics for the fluid box of the greenhouse, which has no pipe pictures.
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics()
 	return {

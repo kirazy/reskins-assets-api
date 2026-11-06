@@ -26,7 +26,7 @@ return {
 	apply_to = apply_sprite_set_to_gate,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `gate_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `gate_sprite_set`.
 ---@class (exact) GateSpriteSet : EntityWithHealthSpriteSet
 ---@field vertical_animation Animation
 ---@field horizontal_animation Animation

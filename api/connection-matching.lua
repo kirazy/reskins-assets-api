@@ -105,7 +105,7 @@ local check_find_graphics = V.signature("find_graphics", {
 	{ "connections", V.array(V.table()) },
 })
 
----Gets a copy of the entry of the given `graphics` that best matches the given `connections`, if found.
+---Gets a copy of the entry in the given `graphics` that best matches the given `connections`, if found.
 ---
 ---An entry with connection graphics in `connections_field` that match one of `connections` by direction and position
 ---is preferred, then an entry with connection graphics that match by direction alone, then an entry with no

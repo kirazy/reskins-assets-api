@@ -9,7 +9,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.assorted_assets .. "/graphics/icons" })
 
----Provides methods for getting the icon of a stack of science packs,
+---Provides methods for getting the icon for a stack of science packs,
 ---`stacked-science-pack/stacked-science-pack-{role}.png`.
 ---
 ---#### Examples

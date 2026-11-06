@@ -26,7 +26,7 @@ local check_safe_assign = V.signature("safe_assign", {
 ---
 ---#### Parameters
 ---@param target table The table to which the fields are assigned.
----@param source table The table from which the fields are taken.
+---@param source table The table from which the fields are copied.
 ---@param field_names string[] The names of the fields to assign.
 ---
 ---#### Examples

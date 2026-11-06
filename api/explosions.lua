@@ -14,7 +14,7 @@ local Assignment = require("api.assignment")
 ---@class Explosions
 local _explosions = {}
 
--- Each of these fields of an `ExplosionSpriteSet` is applied to the field of the same name of the explosion prototype.
+-- Each of these fields in an `ExplosionSpriteSet` is applied to the field of the same name on the explosion prototype.
 local explosion_fields = {
 	"animations",
 	"beam",
@@ -56,7 +56,7 @@ local explosion_fields = {
 	"order",
 }
 
--- Each of these fields of a `ParticleSpriteSet` is applied to the field of the same name of the particle prototype.
+-- Each of these fields in a `ParticleSpriteSet` is applied to the field of the same name on the particle prototype.
 local particle_fields = {
 	"draw_shadow_when_on_ground",
 	"ended_in_water_trigger_effect",
@@ -175,8 +175,8 @@ end
 ---the `dying_explosion` of `prototype`, in place.
 ---
 ---An `ExplosionSpriteSet` is created as the explosion `ar-<entity name>-explosion`, which replaces an explosion of that
----name. The explosion takes the fields of `dying_explosion`, the localised name `{"dying-explosion-name", ...}`, and a
----copy of the icon of `prototype`. Each particle in `dying_explosion.particles` is created as
+---name. The explosion uses the fields of `dying_explosion`, the localised name `{"dying-explosion-name", ...}`, and a
+---copy of the icon from `prototype`. Each particle in `dying_explosion.particles` is created as
 ---`ar-<entity name>-<particle name>`, and each explosion in `dying_explosion.explosions` is created as
 ---`ar-<entity name>-<explosion name>` in the same way, and each effect that creates the replaced particle or explosion
 ---creates the created one instead. An `EntityID` is set as given.

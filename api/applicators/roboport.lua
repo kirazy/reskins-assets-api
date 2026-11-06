@@ -61,7 +61,7 @@ return {
 ---@field stationing_offset? Vector
 ---@field charging_offsets? Vector[]
 
----Defines the sprite data of a `SpriteSetDefinition` of type `roboport_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `roboport_sprite_set`.
 ---@class (exact) RoboportSpriteSet : EntityWithHealthSpriteSet
 ---@field circuit_connector? CircuitConnectorDefinition
 ---The sprites making up the roboport, spread across the prototype's own fields.

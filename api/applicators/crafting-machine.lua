@@ -239,7 +239,7 @@ return {
 ---used; set explicitly if the flipped geometry doesn't mirror cleanly.
 ---@field flipped_front_directions? defines.direction[]
 
----Defines the sprite data of a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `crafting_machine_sprite_set`.
 ---@class (exact) CraftingMachineSpriteSet : EntityWithHealthSpriteSet
 ---@field circuit_connector? [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 ---When `nil`, the flipped circuit connector of the prototype is not modified.

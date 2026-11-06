@@ -33,7 +33,7 @@ local function get_stripes(path, width_in_frames)
 end
 
 ---Gets the stripes that draw the single picture of the given `filename` in each frame and direction of an animation
----of 2 frames and 64 directions.
+---with 2 frames and 64 directions.
 ---@param filename string
 ---@return Stripe[]
 local function get_repeated_stripes(filename)
@@ -184,7 +184,7 @@ local function get_corpse_animation(tint)
 	return { layers = layers }
 end
 
----Gets the corpse of the drone, which takes the drone artwork and the other fields of the vanilla tank remnants.
+---Gets the corpse of the drone, which uses the drone artwork and the other fields of the vanilla tank remnants.
 ---@param tint? Color
 ---@return CorpseSpriteSet
 local function get_corpse(tint)

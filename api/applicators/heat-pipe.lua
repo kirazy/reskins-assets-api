@@ -24,7 +24,7 @@ return {
 	apply_to = apply_sprite_set_to_heat_pipe,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `heat_pipe_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `heat_pipe_sprite_set`.
 ---@class (exact) HeatPipeSpriteSet : EntityWithHealthSpriteSet
 ---See [HeatPipePrototype::connection_sprites](https://lua-api.factorio.com/latest/prototypes/HeatPipePrototype.html#connection_sprites).
 ---@field connection_sprites ConnectableEntityGraphics

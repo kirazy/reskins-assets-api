@@ -63,7 +63,7 @@ local function get_frozen_patch(belt_sprite)
 	}
 end
 
----Gets one layer of the belt reader of the base game, from the file with the given `name`.
+---Gets one layer of the belt reader from the base game, from the file with the given `name`.
 ---@param name string
 ---@param render_layer RenderLayer
 ---@return BeltReaderLayer

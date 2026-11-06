@@ -10,7 +10,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 
 local icons = IconBuilderFactory:create({ folder = _defines.assets_source.angels_assets .. "/graphics/icons/wires" })
 
----Provides methods for getting the icons of the wires folder of Angel's items, `wires/wire-{material}.png`.
+---Provides methods for getting the icons in the wires folder of Angel's items, `wires/wire-{material}.png`.
 ---
 ---#### Examples
 ---```lua

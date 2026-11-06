@@ -92,7 +92,7 @@ local function get_pipe_cover_overlay(direction)
 	}
 end
 
----Gets the shadow patch of the vertical pipe of Angel's ore flotation cell.
+---Gets the shadow patch for the vertical pipe of Angel's ore flotation cell.
 ---@return Animation
 local function get_vertical_pipe_shadow_patch()
 	return {

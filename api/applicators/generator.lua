@@ -19,7 +19,7 @@ return {
 	apply_to = apply_sprite_set_to_generator,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `generator_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `generator_sprite_set`.
 ---@class (exact) GeneratorSpriteSet : EntityWithHealthSpriteSet
 ---When `true`, the sprite set uses only the `north` and `east` directions of the `pictures` field.
 ---@field two_direction_only boolean

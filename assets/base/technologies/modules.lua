@@ -50,7 +50,7 @@ local technologies = IconBuilderFactory:create({
 })
 
 ---Provides methods for getting the technology icons of the modules folder,
----`modules/{n}-lights/{color}/{color}-{tier}.png`, in which the number of lit lights of a module is its tier.
+---`modules/{n}-lights/{color}/{color}-{tier}.png`, in which the number of lit lights on a module is its tier.
 ---
 ---#### Examples
 ---```lua

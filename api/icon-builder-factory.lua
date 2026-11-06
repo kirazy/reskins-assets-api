@@ -14,7 +14,7 @@ local FlatIconBuilder = require("api.icon-builder.flat-icon-builder")
 
 ---Defines the defaults applied to every icon built from a factory.
 ---@class IconBuilderFactoryParams
----The path of the root folder of the icon artwork, such as `__reskins-assets-base__/graphics/icons`.
+---The path to the root folder of the icon artwork, such as `__reskins-assets-base__/graphics/icons`.
 ---@field folder string
 ---The name of the type-specific icon defaults applied to every layer. Default `"default"`.
 ---@field defaults_type? IconDefaultsType
@@ -41,7 +41,7 @@ local FactoryParams = V.struct({
 ---local IconBuilderFactory = require("__reskins-assets-api__.api.icon-builder-factory")
 ---```
 ---@class IconBuilderFactory
----The path of the root folder of the icon artwork.
+---The path to the root folder of the icon artwork.
 ---@field folder string
 ---The name of the type-specific icon defaults applied to every layer.
 ---@field defaults_type? IconDefaultsType
@@ -52,7 +52,7 @@ local FactoryParams = V.struct({
 local IconBuilderFactory = {}
 IconBuilderFactory.__index = IconBuilderFactory
 
----The roles of the layers of an icon.
+---The roles of the layers in an icon.
 IconBuilderFactory.role = _assembly.role
 
 local check_create = V.signature("create", {
@@ -68,7 +68,7 @@ local check_create = V.signature("create", {
 ---    folder = "__reskins-assets-base__/graphics/technology",
 ---    defaults_type = "technology",
 ---})
------ Icons built from the factory take their files from the technology folder and use the icon size of the
+----- Icons built from the factory get their files from the technology folder and use the icon size of the
 ----- technology icon defaults.
 ---```
 ---@param params IconBuilderFactoryParams The defaults applied to every icon built from the factory.
@@ -222,7 +222,7 @@ end
 ---Creates a function that calls the creator of the icon selected by the value of the parameter named `field`, with the
 ---other parameters.
 ---@param field string The name of the parameter that selects the icon.
----@param values table The values that the parameter can take.
+---@param values table The values that the parameter accepts.
 ---@param name string The name of the function in error messages.
 ---@param builder_factory fun(value: any): table The function that returns the builder for the icon selected by a value.
 ---@param method "build"|"build_composition" The method with which each builder is built.
@@ -270,7 +270,7 @@ local check_dispatch = V.signature("dispatch", {
 ---#### Parameters
 ---@generic const N : string, K, const V, P
 ---@param field N The name of the parameter that selects the icon.
----@param values table<K, V> The values that the parameter can take, as an array or as a table of names to values.
+---@param values table<K, V> The values that the parameter accepts, as an array or as a table of names to values.
 ---@param creator_name? string The name of the function in error messages. Default `"icon_creator"`.
 ---@param builder_factory fun(value: V): IconBuilder<P>|FlatIconBuilder<P> A function that returns the builder for the icon selected by the given value.
 ---
@@ -317,7 +317,7 @@ local check_dispatch_composition = V.signature("dispatch_composition", {
 ---#### Parameters
 ---@generic const N : string, K, const V, P
 ---@param field N The name of the parameter that selects the icon.
----@param values table<K, V> The values that the parameter can take, as an array or as a table of names to values.
+---@param values table<K, V> The values that the parameter accepts, as an array or as a table of names to values.
 ---@param creator_name? string The name of the function in error messages. Default `"icon_creator"`.
 ---@param builder_factory fun(value: V): IconBuilder<P>|FlatIconBuilder<P> A function that returns the builder for the icon selected by the given value.
 ---

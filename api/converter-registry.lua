@@ -63,7 +63,7 @@ function _factory.new()
 	---#### Parameters
 	---@param from_sprite_set SpriteSetType The sprite set type from which the transformer converts.
 	---@param to_sprite_set SpriteSetType The sprite set type to which the transformer converts.
-	---@param transformer AnySpriteSetTransformer A function that takes a sprite set of type `from_sprite_set` and returns a new sprite set of type `to_sprite_set`.
+	---@param transformer AnySpriteSetTransformer A function that accepts a sprite set of type `from_sprite_set` and returns a new sprite set of type `to_sprite_set`.
 	---@throws When `from_sprite_set` or `to_sprite_set` is not a `SpriteSetType`.
 	---@throws When `transformer` is not a function.
 	function registry.register(from_sprite_set, to_sprite_set, transformer)

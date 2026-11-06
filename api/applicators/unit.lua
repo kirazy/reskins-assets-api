@@ -24,7 +24,7 @@ return {
 	apply_to = apply_sprite_set_to_unit,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `unit_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `unit_sprite_set`.
 ---@class (exact) UnitSpriteSet : EntityWithHealthSpriteSet
 ---@field run_animation RotatedAnimation
 ---The animation of the unit when it attacks. The animation is set on the `attack_parameters` of the prototype.

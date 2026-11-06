@@ -12,7 +12,7 @@ local technologies = IconBuilderFactory:create({
 	defaults_type = "technology",
 })
 
----Provides methods for getting the technology icons of the armor folder of Angel's technologies, in the colors of
+---Provides methods for getting the technology icons in the armor folder of Angel's technologies, in the colors of
 ---Angel's materials.
 ---
 ---#### Examples

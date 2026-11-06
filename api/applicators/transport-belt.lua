@@ -21,7 +21,7 @@ return {
 	apply_to = apply_sprite_set_to_transport_belt,
 }
 
----Defines the sprite data of a `SpriteSetDefinition` of type `transport_belt_sprite_set`.
+---Defines the sprite data in a `SpriteSetDefinition` of type `transport_belt_sprite_set`.
 ---@class (exact) TransportBeltSpriteSet : TransportBeltConnectableSpriteSet
 ---@field belt_animation_set TransportBeltAnimationSetWithCorners
 ---Set of 7 circuit connector definitions in order: X, H, V, SE, SW, NE and NW.

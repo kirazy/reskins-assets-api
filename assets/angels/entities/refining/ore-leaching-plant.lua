@@ -52,7 +52,7 @@ local function get_animation(tint)
 	return { layers = layers }
 end
 
----Gets the graphics of the fluid boxes of Angel's ore leaching plant.
+---Gets the graphics for the fluid boxes of Angel's ore leaching plant.
 ---@return FluidBoxGraphics
 local function get_fluid_box_graphics()
 	return {
