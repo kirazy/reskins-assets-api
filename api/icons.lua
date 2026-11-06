@@ -398,23 +398,38 @@ function _icons.get_minified_symbol_overlay()
 	return icon_data
 end
 
----Gets a transparent technology icon layer that is placed beneath a miniature entity in a technology icon.
----@return SafeIconData underlay The underlay layer, in the icon defaults of a technology.
----
----#### Examples
----```lua
------ Compose the technology icon of a miniature furnace from the icon of the advanced material processing technology,
------ scaled down between the underlay and the overlay.
----local composition = IconComposition:from_icon(icons_api.get_minified_technology_underlay(), nil, "technology")
----    :add_canvas(data.raw.technology["advanced-material-processing"], { scale = 0.8 })
----    :add_symbol(icons_api.get_minified_technology_overlay())
------ The composition has the underlay, the icon of the technology at a scale of 0.8, and the overlay, in that order.
----```
----@see Reskins.Assets.Icons.get_minified_technology_overlay
+---Gets an icon layer with a symbol in the top-right corner that indicates a twice minified entity.
+---@return SafeIconData overlay The overlay layer.
 ---@nodiscard
-function _icons.get_minified_technology_underlay()
+function _icons.get_twice_minified_symbol_overlay()
 	local icon_data = {
-		icon = "__reskins-assets-api__/graphics/technology/mini-machine-underlay.png",
+		icon = "__reskins-assets-api__/graphics/icons/micro-machine-overlay.png",
+		icon_size = 64,
+		scale = 0.5,
+	}
+
+	return icon_data
+end
+
+---Gets an icon layer with a symbol in the top-right corner that indicates an entity that can be minified.
+---@return SafeIconData overlay The overlay layer.
+---@nodiscard
+function _icons.get_minifiable_symbol_overlay()
+	local icon_data = {
+		icon = "__reskins-assets-api__/graphics/icons/minifiable-machine-overlay.png",
+		icon_size = 64,
+		scale = 0.5,
+	}
+
+	return icon_data
+end
+
+---Gets a technology icon layer with a symbol in the top-right corner that indicates a minified entity.
+---@return SafeIconData overlay The overlay layer, in the icon defaults of a technology.
+---@nodiscard
+function _icons.get_minified_technology_overlay()
+	local icon_data = {
+		icon = "__reskins-assets-api__/graphics/technology/mini-machine-overlay.png",
 		icon_size = 256,
 		scale = 0.5,
 	}
@@ -422,13 +437,12 @@ function _icons.get_minified_technology_underlay()
 	return icon_data
 end
 
----Gets a technology icon layer with a symbol in the top-right corner that indicates a miniature entity.
+---Gets a technology icon layer with a symbol in the top-right corner that indicates a twice minified entity.
 ---@return SafeIconData overlay The overlay layer, in the icon defaults of a technology.
----@see Reskins.Assets.Icons.get_minified_technology_underlay
 ---@nodiscard
-function _icons.get_minified_technology_overlay()
+function _icons.get_twice_minified_technology_overlay()
 	local icon_data = {
-		icon = "__reskins-assets-api__/graphics/technology/mini-machine-overlay.png",
+		icon = "__reskins-assets-api__/graphics/technology/micro-machine-overlay.png",
 		icon_size = 256,
 		scale = 0.5,
 	}
