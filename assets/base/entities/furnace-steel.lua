@@ -565,36 +565,33 @@ local function get_water_reflection()
 	}
 end
 
----Gets the circuit connector of the steel furnace for each direction.
+---Gets the circuit connector of the steel furnace of the given `variant` for each direction.
+---@param variant "standard" | "fluid" | "chemical" | "chemical-fluid"
 ---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
-local function get_circuit_connector()
+local function get_circuit_connector(variant)
+	local definition = {
+		variation = 19,
+		main_offset = util.by_pixel(20, 15),
+		shadow_offset = util.by_pixel(20.5, 20),
+		show_shadow = true,
+	}
+
+	-- A variant that rotates has a pipe connection at the front corner in some directions, so its connector is on the
+	-- base of the chimney, clear of every pipe connection.
+	if variant ~= "standard" then
+		definition = {
+			variation = 17,
+			main_offset = util.by_pixel(14, -6),
+			shadow_offset = util.by_pixel(40, 21),
+			show_shadow = true,
+		}
+	end
+
 	---@diagnostic disable-next-line: param-type-mismatch
-	return circuit_connector_definitions.create_vector(universal_connector_template, {
-		{
-			variation = 19,
-			main_offset = util.by_pixel(20, 15),
-			shadow_offset = util.by_pixel(20.5, 20),
-			show_shadow = true,
-		},
-		{
-			variation = 19,
-			main_offset = util.by_pixel(20, 15),
-			shadow_offset = util.by_pixel(20.5, 20),
-			show_shadow = true,
-		},
-		{
-			variation = 19,
-			main_offset = util.by_pixel(20, 15),
-			shadow_offset = util.by_pixel(20.5, 20),
-			show_shadow = true,
-		},
-		{
-			variation = 19,
-			main_offset = util.by_pixel(20, 15),
-			shadow_offset = util.by_pixel(20.5, 20),
-			show_shadow = true,
-		},
-	})
+	return circuit_connector_definitions.create_vector(
+		universal_connector_template,
+		{ definition, definition, definition, definition }
+	)
 end
 
 ---Defines the options for the vanilla steel furnace sprite set.
@@ -642,7 +639,8 @@ function M.get_sprite_set(params)
 				{ animation = get_corpse_animation(params.tint, params.variant) }
 			),
 			water_reflection = get_water_reflection(),
-			circuit_connector = get_circuit_connector(),
+			circuit_connector = get_circuit_connector(params.variant),
+			circuit_connector_flipped = graphics_set_flipped and get_circuit_connector(params.variant) or nil,
 			light_flicker = EnergySources.get_zeroed_light_flicker(),
 			nominal_width = 1.6,
 			nominal_height = 2,
