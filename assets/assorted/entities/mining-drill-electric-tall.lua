@@ -499,11 +499,38 @@ end
 
 ---Gets the working visualisations with which both graphics sets open. They are the dust thrown up by the drill and the
 ---drill head.
----@param tint? Color
----@param speed double
+---@param tint? Color The tint of the tintable layers.
+---@param speed double The animation speed.
+---@param is_wet boolean When `true`, indicates that the dust in front of the head is not offset for the direction of the drill.
 ---@return WorkingVisualisation[]
 ---@nodiscard
-local function get_shared_working_visualisations(tint, speed)
+local function get_shared_working_visualisations(tint, speed, is_wet)
+	---@type WorkingVisualisation
+	local front_dust = {
+		constant_speed = true,
+		synced_fadeout = true,
+		align_to_waypoint = true,
+		apply_tint = "resource-color",
+		animation = {
+			priority = "high",
+			filename = FOLDER .. "smoke-front.png",
+			line_length = 6,
+			width = 148,
+			height = 132,
+			frame_count = 30,
+			animation_speed = 0.4,
+			shift = util.by_pixel(-3, 9),
+			scale = 0.5,
+		},
+	}
+
+	if not is_wet then
+		front_dust.north_position = { 0, 0.25 }
+		front_dust.east_position = { 0, 0 }
+		front_dust.south_position = { 0, 0.25 }
+		front_dust.west_position = { 0, 0 }
+	end
+
 	---@type WorkingVisualisation[]
 	return {
 		{
@@ -541,27 +568,7 @@ local function get_shared_working_visualisations(tint, speed)
 			south_animation = get_vertical_drill_animation(tint, speed),
 			west_animation = get_horizontal_drill_animation(tint, speed, false),
 		},
-		{
-			constant_speed = true,
-			synced_fadeout = true,
-			align_to_waypoint = true,
-			apply_tint = "resource-color",
-			animation = {
-				priority = "high",
-				filename = FOLDER .. "smoke-front.png",
-				line_length = 6,
-				width = 148,
-				height = 132,
-				frame_count = 30,
-				animation_speed = 0.4,
-				shift = util.by_pixel(-3, 9),
-				scale = 0.5,
-			},
-			north_position = { 0, 0.25 },
-			east_position = { 0, 0 },
-			south_position = { 0, 0.25 },
-			west_position = { 0, 0 },
-		},
+		front_dust,
 		{
 			constant_speed = true,
 			fadeout = true,
@@ -595,7 +602,7 @@ local function get_dry_working_visualisations(params, speed)
 	local frame = params.frame or "yellow"
 
 	---@type WorkingVisualisation[]
-	local visualisations = get_shared_working_visualisations(params.tint, speed)
+	local visualisations = get_shared_working_visualisations(params.tint, speed, false)
 
 	table.insert(visualisations, {
 		always_draw = true,
@@ -624,18 +631,18 @@ local function get_wet_working_visualisations(params, speed)
 	local frame = params.frame or "yellow"
 
 	---@type WorkingVisualisation[]
-	local visualisations = get_shared_working_visualisations(params.tint, speed)
+	local visualisations = get_shared_working_visualisations(params.tint, speed, true)
 
 	table.insert(visualisations, {
 		secondary_draw_order = -49,
 		always_draw = true,
-		north_animation = get_fluid_layer("north-wet-window-background", 30, 20, util.by_pixel(1, 21), speed),
+		north_animation = get_fluid_layer("north-wet-window-background-front", 132, 28, util.by_pixel(-1, -18), speed),
 		south_animation = get_fluid_layer("south-wet-window-background", 132, 88, util.by_pixel(-1, -33), speed),
 	})
 
 	table.insert(visualisations, {
 		always_draw = true,
-		north_animation = get_fluid_layer("north-wet-window-background-front", 132, 28, util.by_pixel(-1, -18), speed),
+		north_animation = get_fluid_layer("north-wet-window-background", 30, 20, util.by_pixel(1, 21), speed),
 		east_animation = get_fluid_layer("east-wet-window-background-front", 86, 86, util.by_pixel(-12, 0), speed),
 		west_animation = get_fluid_layer("west-wet-window-background-front", 88, 86, util.by_pixel(11, 0), speed),
 	})
@@ -644,14 +651,14 @@ local function get_wet_working_visualisations(params, speed)
 		always_draw = true,
 		secondary_draw_order = -48,
 		apply_tint = "input-fluid-base-color",
-		north_animation = get_fluid_layer("north-wet-fluid-background", 28, 22, util.by_pixel(2, 21), speed),
+		north_animation = get_fluid_layer("north-wet-fluid-background-front", 130, 36, util.by_pixel(0, -17), speed),
 		south_animation = get_fluid_layer("south-wet-fluid-background", 130, 96, util.by_pixel(0, -32), speed),
 	})
 
 	table.insert(visualisations, {
 		always_draw = true,
 		apply_tint = "input-fluid-base-color",
-		north_animation = get_fluid_layer("north-wet-fluid-background-front", 130, 36, util.by_pixel(0, -17), speed),
+		north_animation = get_fluid_layer("north-wet-fluid-background", 28, 22, util.by_pixel(2, 21), speed),
 		east_animation = get_fluid_layer("east-wet-fluid-background-front", 82, 88, util.by_pixel(-12, -1), speed),
 		west_animation = get_fluid_layer("west-wet-fluid-background-front", 82, 88, util.by_pixel(12, -1), speed),
 	})
@@ -660,14 +667,14 @@ local function get_wet_working_visualisations(params, speed)
 		secondary_draw_order = -47,
 		always_draw = true,
 		apply_tint = "input-fluid-flow-color",
-		north_animation = get_fluid_layer("north-wet-fluid-flow", 26, 20, util.by_pixel(2, 22), speed),
+		north_animation = get_fluid_layer("north-wet-fluid-flow-front", 130, 28, util.by_pixel(-2, -17), speed),
 		south_animation = get_fluid_layer("south-wet-fluid-flow", 130, 88, util.by_pixel(-2, -32), speed),
 	})
 
 	table.insert(visualisations, {
 		always_draw = true,
 		apply_tint = "input-fluid-flow-color",
-		north_animation = get_fluid_layer("north-wet-fluid-flow-front", 130, 28, util.by_pixel(-2, -17), speed),
+		north_animation = get_fluid_layer("north-wet-fluid-flow", 26, 20, util.by_pixel(2, 22), speed),
 		east_animation = get_fluid_layer("east-wet-fluid-flow-front", 82, 86, util.by_pixel(-12, 0), speed),
 		west_animation = get_fluid_layer("west-wet-fluid-flow-front", 84, 86, util.by_pixel(11, 0), speed),
 	})
@@ -919,29 +926,29 @@ local function get_circuit_connector()
 	return circuit_connector_definitions.create_vector(universal_connector_template, {
 		{
 			variation = 4,
-			main_offset = util.by_pixel(-44, -41),
-			shadow_offset = util.by_pixel(-34, -36),
+			main_offset = util.by_pixel(-42, -62),
+			shadow_offset = util.by_pixel(0, -34),
 			show_shadow = false,
 			secondary_draw_order = 14,
 		},
 		{
 			variation = 2,
-			main_offset = util.by_pixel(34, 30),
-			shadow_offset = util.by_pixel(36, 35),
+			main_offset = util.by_pixel(36, -1),
+			shadow_offset = util.by_pixel(70, 35),
 			show_shadow = false,
 			secondary_draw_order = 48,
 		},
 		{
 			variation = 0,
-			main_offset = util.by_pixel(-35, 24),
-			shadow_offset = util.by_pixel(-34, 31),
+			main_offset = util.by_pixel(-31, 4),
+			shadow_offset = util.by_pixel(0, 34),
 			show_shadow = false,
 			secondary_draw_order = 48,
 		},
 		{
 			variation = 6,
-			main_offset = util.by_pixel(-34, 37),
-			shadow_offset = util.by_pixel(-40, 49),
+			main_offset = util.by_pixel(-32, 5),
+			shadow_offset = util.by_pixel(0, 35),
 			show_shadow = false,
 			secondary_draw_order = 48,
 		},
