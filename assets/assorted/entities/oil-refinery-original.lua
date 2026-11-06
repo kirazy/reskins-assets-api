@@ -85,7 +85,7 @@ local function get_frozen_patch()
 		scale = 0.5,
 	}
 
-	return _sprites.make_4way_animation_from_spritesheet(sheet) --[[@as Sprite4Way]]
+	return _sprites.make_4way_animation_from_spritesheet(sheet --[[@as Animation]]) --[[@as Sprite4Way]]
 end
 
 ---@param tint? Color
