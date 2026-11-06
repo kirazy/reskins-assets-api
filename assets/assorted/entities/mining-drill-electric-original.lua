@@ -10,6 +10,7 @@ local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local ElectricMiningDrillExplosion = require("assets.base.explosions.electric-mining-drill")
 
 local M = {}
 
@@ -229,6 +230,24 @@ local function get_wet_working_visualisations(speed)
 	}
 end
 
+---Gets the water reflection of the drill.
+---@return WaterReflectionDefinition
+local function get_water_reflection()
+	return {
+		pictures = {
+			filename = "__base__/graphics/entity/electric-mining-drill/electric-mining-drill-reflection.png",
+			priority = "extra-high",
+			width = 28,
+			height = 36,
+			shift = util.by_pixel(5, 60),
+			variation_count = 4,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
+end
+
 ---Gets the circuit connector of the classic electric mining drill for each direction.
 ---@return [CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition, CircuitConnectorDefinition]
 local function get_circuit_connector()
@@ -319,9 +338,11 @@ function M.get_sprite_set(params)
 			-- The drill draws its own frame through which the fluid runs, so the engine draws none.
 			integration_patch = util.empty_sprite(),
 			integration_patch_render_layer = nil,
-			dying_explosion = nil,
-			corpse = nil,
-			water_reflection = nil,
+			dying_explosion = ElectricMiningDrillExplosion.get_explosion({
+				tints = params.tint and { ["electric-mining-drill-long-metal-particle-medium"] = params.tint },
+			}),
+			corpse = _defines.generic_remnants,
+			water_reflection = get_water_reflection(),
 			circuit_connector = get_circuit_connector(),
 			nominal_width = 3,
 			nominal_height = 3,
