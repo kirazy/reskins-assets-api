@@ -13,17 +13,19 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 local PipeExplosion = require("assets.base.explosions.pipe")
 local ValveToStorageTank = require("api.converters.valve-to-storage-tank-sprite-set-transformer")
 
-local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/pipe-valve/"
+local ASSETS_ANGELS_PATH = "__reskins-assets-angels__/graphics/entity/"
 
 local M = {}
 
----Gets the animations of Angel's valve.
----@param tint? Color
+---Gets the animations of Angel's valve, drawn from the artwork with the given `name`.
+---@param name "pipe-valve"|"pipe-inspector" The name of the artwork, which names its folder and is the stem of its file names.
+---@param tint? Color The color to tint the mask. When `nil`, the mask is omitted.
 ---@return Animation4Way
-local function get_animations(tint)
+local function get_animations(name, tint)
+	local folder = ASSETS_ANGELS_PATH .. name .. "/"
 	local source_layers = {
 		{
-			filename = ASSETS_ANGELS_PATH .. "pipe-valve-base.png",
+			filename = folder .. name .. "-base.png",
 			priority = "extra-high",
 			width = 128,
 			height = 128,
@@ -33,7 +35,7 @@ local function get_animations(tint)
 
 	if tint then
 		source_layers[#source_layers + 1] = {
-			filename = ASSETS_ANGELS_PATH .. "pipe-valve-mask.png",
+			filename = folder .. name .. "-mask.png",
 			priority = "extra-high",
 			width = 128,
 			height = 128,
@@ -92,12 +94,15 @@ end
 ---@class PipeValveSpriteSetParams
 ---The color to tint the artwork. When `nil`, the tintable layers are omitted from the set.
 ---@field tint? Color
+---When `true`, indicates that the artwork of the inspector valve, which has no arrow, is used. Default `false`.
+---@field use_inspector_set? boolean
 
 local check_get_sprite_set = V.signature("get_sprite_set", {
 	{
 		"params",
 		V.class("PipeValveSpriteSetParams", {
 			tint = Common.color:optional(),
+			use_inspector_set = V.boolean():optional(),
 		}):strict(),
 	},
 })
@@ -119,15 +124,18 @@ local check_get_sprite_set = V.signature("get_sprite_set", {
 ---```
 ---@throws When `params` defines an unrecognized field.
 ---@throws When `params.tint` is not a `Color`.
+---@throws When `params.use_inspector_set` is not a boolean.
 ---@nodiscard
 function M.get_sprite_set(params)
 	check_get_sprite_set(params)
+
+	local name = params.use_inspector_set and "pipe-inspector" or "pipe-valve"
 
 	---@type SpriteSetDefinition<ValveSpriteSet>
 	local definition = {
 		set_type = _defines.sprite_set_type.valve_sprite_set,
 		set = {
-			animations = get_animations(params.tint),
+			animations = get_animations(name, params.tint),
 			frozen_patch = nil,
 			integration_patch = nil,
 			integration_patch_render_layer = nil,
@@ -156,5 +164,14 @@ M.get_icon = icon_builder:build("get_icon")
 
 ---Gets the icon for Angel's valve as an `IconComposition`, in the tint given by `params`.
 M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local inspector_icon_builder = icons:layers("pipe-inspector"):base():mask()
+
+---Gets the icon for Angel's inspector valve, which has no arrow, in the tint given by `params`.
+M.get_inspector_icon = inspector_icon_builder:build("get_inspector_icon")
+
+---Gets the icon for Angel's inspector valve, which has no arrow, as an `IconComposition`, in the tint given by
+---`params`.
+M.get_inspector_icon_composition = inspector_icon_builder:build_composition("get_inspector_icon_composition")
 
 return M
