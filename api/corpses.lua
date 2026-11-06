@@ -228,12 +228,12 @@ local function get_grid_remnants(tiles)
 	local variations = {}
 	for variation_index = 1, #source_variations do
 		local layers = {}
-		for row, y in ipairs(positions) do
-			for column, x in ipairs(positions) do
+		for row, y in pairs(positions) do
+			for column, x in pairs(positions) do
 				-- Each step along a row moves to the next variation, and each step along a column moves two variations.
 				local source_index = (variation_index + column + 2 * row - 4) % #source_variations + 1
 				local source = source_variations[source_index] --[[@as RotatedAnimation]]
-				for _, layer in ipairs(source.layers or { source }) do
+				for _, layer in pairs(source.layers or { source }) do
 					local shift_x, shift_y = _sprite_utils.utils.unpack_vector(layer.shift or { 0, 0 })
 					local copy = util.copy(layer)
 					copy.shift = { shift_x + x, shift_y + y }

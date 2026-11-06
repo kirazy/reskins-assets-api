@@ -124,9 +124,9 @@ local function get_graphics_set(tint, tier, pad_positions, pad_scale)
 	local layers = {}
 	---@type Vector[]
 	local charging_offsets = {}
-	for _, position in ipairs(pad_positions) do
+	for _, position in pairs(pad_positions) do
 		local x, y = _sprite_utils.utils.unpack_vector(position)
-		for _, layer in ipairs(get_pad_layers(tint, tier, x, y, pad_scale)) do
+		for _, layer in pairs(get_pad_layers(tint, tier, x, y, pad_scale)) do
 			table.insert(layers, layer)
 		end
 		table.insert(charging_offsets, { x, y })
@@ -172,7 +172,7 @@ local function get_nominal_size(pad_positions, pad_scale)
 	local half_width = 0
 	---@type double
 	local half_height = 0
-	for _, position in ipairs(pad_positions) do
+	for _, position in pairs(pad_positions) do
 		local x, y = _sprite_utils.utils.unpack_vector(position)
 		half_width = math.max(half_width, math.abs(x) + half_pad)
 		half_height = math.max(half_height, math.abs(y) + half_pad)
