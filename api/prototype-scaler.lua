@@ -23,7 +23,8 @@ local ASPECT_RATIO_TOLERANCE = 0.05
 ---
 ---The scale factor is resolved when the scaler is created, from the first of these sources that applies:
 ---1. An explicit `scale_factor`, or an explicit `scale` relative to the baseline of 0.5.
----2. The largest factor at which the nominal size fits within the `selection_box` of the prototype.
+---2. The largest factor at which the nominal size fits within the `shape` of equipment, or within the
+---   `selection_box` of any other prototype.
 ---
 ---#### Examples
 ---```lua
@@ -47,11 +48,27 @@ local function get_bounding_box_dimensions(bounding_box)
 	return right - left, bottom - top
 end
 
+---Gets the width and height of the given `prototype`, in cells of the equipment grid from the `shape` of equipment, or
+---in tiles from the `selection_box` of any other prototype.
+---@param prototype EntityPrototype|EquipmentPrototype
+---@return double width
+---@return double height
+local function get_prototype_size(prototype)
+	if prototype.shape then
+		return prototype.shape.width, prototype.shape.height
+	end
+
+	---@cast prototype.selection_box -?
+	return get_bounding_box_dimensions(prototype.selection_box)
+end
+
 ---Defines the options that determine the scaling relationship of a `PrototypeScaler`.
 ---@class PrototypeScalerParams
----The width of the `selection_box` on the entity for which the artwork is designed.
+---The width of the `selection_box` on the entity, or of the `shape` on the equipment, for which the artwork is
+---designed.
 ---@field nominal_width? double
----The height of the `selection_box` on the entity for which the artwork is designed.
+---The height of the `selection_box` on the entity, or of the `shape` on the equipment, for which the artwork is
+---designed.
 ---@field nominal_height? double
 ---The desired resulting scale, relative to the baseline of 0.5. `scale` overrides the nominal size.
 ---@field scale? double
@@ -59,7 +76,7 @@ end
 ---@field scale_factor? double
 
 ---Gets the scale factor for the given `prototype` and `params`.
----@param prototype EntityPrototype
+---@param prototype EntityPrototype|EquipmentPrototype
 ---@param params PrototypeScalerParams
 ---@return double
 local function resolve_scalar(prototype, params)
@@ -71,22 +88,24 @@ local function resolve_scalar(prototype, params)
 		return params.scale / BASELINE_SCALE
 	end
 
-	---@cast prototype.selection_box -?
 	---@cast params.nominal_width -?
 	---@cast params.nominal_height -?
-	local proto_width, proto_height = get_bounding_box_dimensions(prototype.selection_box)
+	local proto_width, proto_height = get_prototype_size(prototype)
 	local width_ratio = proto_width / params.nominal_width
 	local height_ratio = proto_height / params.nominal_height
 
 	if math.abs(width_ratio - height_ratio) > ASPECT_RATIO_TOLERANCE * math.max(width_ratio, height_ratio) then
+		local size_name = prototype.shape and "shape" or "selection box"
 		log(
 			string.format(
-				"PrototypeScaler: aspect ratio mismatch for '%s' (selection box %g x %g, nominal %g x %g); fitting to selection box.",
+				"PrototypeScaler: aspect ratio mismatch for '%s' (%s %g x %g, nominal %g x %g); fitting to %s.",
 				prototype.name or "<unnamed>",
+				size_name,
 				proto_width,
 				proto_height,
 				params.nominal_width,
-				params.nominal_height
+				params.nominal_height,
+				size_name
 			)
 		)
 	end
@@ -96,9 +115,9 @@ end
 
 ---Indicates whether a scale factor can be resolved for the given `prototype` from the given `params`.
 ---
----Only a scale factor that is resolved from the size of the prototype requires a `selection_box` with a positive width
----and height.
----@param prototype EntityPrototype The prototype for which the scale factor is resolved.
+---Only a scale factor that is resolved from the size of the prototype requires a `shape` or a `selection_box` with a
+---positive width and height.
+---@param prototype EntityPrototype|EquipmentPrototype The prototype for which the scale factor is resolved.
 ---@param params PrototypeScalerParams The options that determine the scaling relationship.
 ---@return boolean # `true` when a scale factor can be resolved; otherwise, `false`.
 ---@return string? # A description of the fault, when a scale factor cannot be resolved.
@@ -110,6 +129,14 @@ function PrototypeScaler.can_resolve(prototype, params)
 
 	if not (params.nominal_width and params.nominal_height) then
 		return false, "cannot be scaled without a scale, a scale factor, or a nominal size"
+	end
+
+	if prototype.shape then
+		if (prototype.shape.width or 0) > 0 and (prototype.shape.height or 0) > 0 then
+			return true
+		end
+
+		return false, "has no shape with a positive width and height"
 	end
 
 	if prototype.selection_box then
@@ -159,7 +186,7 @@ local check_for_prototype = V.signature("for_prototype", {
 ---scaler:rescale(graphics_set_flipped)
 ----- Both graphics sets are rescaled by a factor of 3 / 5.
 ---```
----@param prototype EntityPrototype The prototype for which the scaling relationship is determined.
+---@param prototype EntityPrototype|EquipmentPrototype The prototype for which the scaling relationship is determined.
 ---@param params PrototypeScalerParams The options that determine the scaling relationship.
 ---@return PrototypeScaler
 ---@throws When `prototype` is not an entity prototype.
@@ -167,7 +194,7 @@ local check_for_prototype = V.signature("for_prototype", {
 ---@throws When `params` sets both `scale` and `scale_factor`.
 ---@throws When `params` sets only one of `nominal_width` and `nominal_height`.
 ---@throws When `params` sets no `scale`, `scale_factor`, or nominal size.
----@throws When the scale factor is resolved from the size of `prototype`, and `prototype` has no `selection_box` with a positive width and height.
+---@throws When the scale factor is resolved from the size of `prototype`, and `prototype` has no `shape` or `selection_box` with a positive width and height.
 ---@see PrototypeScaler
 ---@nodiscard
 function PrototypeScaler.for_prototype(prototype, params)

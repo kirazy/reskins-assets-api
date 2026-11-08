@@ -212,7 +212,7 @@ function _factory.new()
 	---`dying_explosion` and the `belt_animation_set` of the sprite set.
 	---@generic T extends AnySpriteSetDefinition
 	---@param definition T
-	---@param prototype EntityWithHealthPrototype|CorpsePrototype
+	---@param prototype EntityWithHealthPrototype|CorpsePrototype|EquipmentPrototype
 	---@param params ApplySpriteSetParams
 	---@return T
 	---@nodiscard
@@ -310,12 +310,15 @@ function _factory.new()
 		applicator.apply_to(prototype, resolved_set)
 	end
 
-	---Applies the given `definition` to the given equipment `prototype` in place, without scaling the sprite set.
+	---Applies the given `definition` to the given equipment `prototype` in place, with the sprite set scaled for
+	---`prototype`.
 	---@param prototype EquipmentPrototype
 	---@param definition AnySpriteSetDefinition
-	local function apply_sprite_set_to_equipment(prototype, definition)
+	---@param params ApplySpriteSetParams
+	local function apply_sprite_set_to_equipment(prototype, definition, params)
 		local applicator = applicators[set_type_by_prototype_type[prototype.type]]
-		local resolved_set = _converters.resolve(definition, applicator.set_type)
+		local scaled_source = rescale_sprite_set_for_prototype(definition, prototype, params)
+		local resolved_set = _converters.resolve(scaled_source, applicator.set_type)
 
 		applicator.apply_to(prototype, resolved_set)
 	end
@@ -352,14 +355,6 @@ function _factory.new()
 	---@return string?
 	local function can_scale(prototype, definition, params)
 		params = params or {}
-
-		if is_equipment(prototype) then
-			if params.scale or params.scale_factor then
-				return false, string.format("is equipment of type '%s', which is not scaled", prototype.type)
-			end
-
-			return true
-		end
 
 		return PrototypeScaler.can_resolve(prototype, {
 			nominal_width = definition.set.nominal_width,
@@ -404,8 +399,8 @@ function _factory.new()
 	---it, as `Corpses.apply` and `Explosions.apply` describe. When `prototype` is a corpse, it uses the fields of the
 	---`corpse` in the sprite set, when that is a `CorpseSpriteSet`.
 	---
-	---When `prototype` is equipment, the sprite set is applied without scaling, and its fields other than the artwork of
-	---the equipment are not used.
+	---When `prototype` is equipment, the size of `prototype` is the width and height of its `shape`, and the fields of
+	---the sprite set other than the artwork of the equipment are not used.
 	---
 	---#### Parameters
 	---@param prototype EntityWithHealthPrototype|CorpsePrototype|EquipmentPrototype The prototype to which `definition` is applied.
@@ -429,8 +424,7 @@ function _factory.new()
 	---@throws When an explosion in `definition.set.dying_explosion` replaces a particle or explosion that its `created_effect` does not create.
 	---@throws When `params` defines an unrecognized field, or a `scale` or `scale_factor` that is not a positive number.
 	---@throws When `params` sets both `scale` and `scale_factor`.
-	---@throws When neither `params.scale` nor `params.scale_factor` is given, and `prototype` is not equipment and has no `selection_box` with a positive width and height.
-	---@throws When `prototype` is equipment, and `params.scale` or `params.scale_factor` is given.
+	---@throws When neither `params.scale` nor `params.scale_factor` is given, and `prototype` has no `shape` or `selection_box` with a positive width and height.
 	---@throws When `prototype.type` has no known `SpriteSetType`.
 	---@throws When no applicator is registered for the `SpriteSetType` of `prototype.type`.
 	---@throws When `definition.set_type` does not match the sprite set type of the applicator and neither `definition.converters` nor a registered conversion connects them.
@@ -444,7 +438,7 @@ function _factory.new()
 		if is_corpse(prototype) then
 			apply_sprite_set_to_corpse(prototype, definition, params)
 		elseif is_equipment(prototype) then
-			apply_sprite_set_to_equipment(prototype, definition)
+			apply_sprite_set_to_equipment(prototype, definition, params)
 		else
 			apply_sprite_set_to_entity(prototype, definition, params)
 		end
