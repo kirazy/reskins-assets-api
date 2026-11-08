@@ -30,6 +30,7 @@ local function get_animation(tint)
 			frame_count = 30,
 			shift = { 0, 0 },
 			animation_speed = 0.5,
+			scale = 1,
 		},
 	}
 
@@ -42,6 +43,7 @@ local function get_animation(tint)
 			repeat_count = 30,
 			shift = { 0, 0 },
 			animation_speed = 0.5,
+			scale = 1,
 			tint = tint,
 		}
 		layers[#layers + 1] = {
@@ -52,6 +54,7 @@ local function get_animation(tint)
 			repeat_count = 30,
 			shift = { 0, 0 },
 			animation_speed = 0.5,
+			scale = 1,
 			blend_mode = "additive",
 		}
 	end

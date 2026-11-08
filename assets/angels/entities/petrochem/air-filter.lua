@@ -30,6 +30,7 @@ local function get_animation(tint)
 			line_length = 6,
 			shift = { 0.5, -0.5 },
 			animation_speed = 0.5,
+			scale = 1,
 		},
 	}
 
@@ -43,6 +44,7 @@ local function get_animation(tint)
 			line_length = 6,
 			shift = { 0.5, -0.5 },
 			animation_speed = 0.5,
+			scale = 1,
 			tint = tint,
 		}
 		layers[#layers + 1] = {
@@ -54,6 +56,7 @@ local function get_animation(tint)
 			line_length = 6,
 			shift = { 0.5, -0.5 },
 			animation_speed = 0.5,
+			scale = 1,
 			blend_mode = "additive",
 		}
 	end
