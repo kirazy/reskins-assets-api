@@ -454,21 +454,6 @@ function M.get_water_sprite_set(params)
 	)
 end
 
----@param prefix string The path the layers are filed under, up to the `-base`/`-mask`/`-highlights` suffix.
----@param tint? Color The color to tint the mask.
----@return SafeIconData[]
----@nodiscard
-local function get_tinted_layers(prefix, tint)
-	local layers = { { icon = prefix .. "base.png", icon_size = 64, scale = 0.5 } }
-
-	if tint then
-		table.insert(layers, { icon = prefix .. "mask.png", icon_size = 64, scale = 0.5, tint = tint })
-		table.insert(layers, { icon = prefix .. "highlights.png", icon_size = 64, scale = 0.5, tint = { 1, 1, 1, 0 } })
-	end
-
-	return layers
-end
-
 local base_icons = IconBuilderFactory:create({ folder = "__reskins-assets-base__/graphics/icons" })
 local bobs_icons = IconBuilderFactory:create({ folder = "__reskins-assets-bobs__/graphics/icons" })
 
@@ -479,6 +464,21 @@ M.get_icon = icon_builder:build("get_icon")
 
 ---Gets the icon for the vanilla pumpjack as an `IconComposition`, in the tints given by `params`.
 M.get_icon_composition = icon_builder:build_composition("get_icon_composition")
+
+local tintable_icon_builder = base_icons
+	:layers("pumpjack")
+	:layer("base", { part = "tintable" })
+	:tinted_part("tintable", "base_tint")
+	:mask()
+	:highlights({ requires = "tint" })
+
+---Gets the icon for the vanilla pumpjack from its tintable artwork, in the tints given by `params`. The body is tinted
+---by `base_tint`.
+M.get_tintable_icon = tintable_icon_builder:build("get_tintable_icon")
+
+---Gets the icon for the vanilla pumpjack from its tintable artwork as an `IconComposition`, in the tints given by
+---`params`. The body is tinted by `base_tint`.
+M.get_tintable_icon_composition = tintable_icon_builder:build_composition("get_tintable_icon_composition")
 
 local water_icon_builder = bobs_icons:tinted("pumpjack-water")
 
