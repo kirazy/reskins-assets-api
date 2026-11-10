@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.1
-Date: ????
+Date: 2026-11-09
   Features:
     - Added sprite sets for most remaining entities and equipment, as well as the corresponding applicators.
     - Added `defines.get_belt_sprites` to select a BeltSprites enum value based on the specified `speed`.
