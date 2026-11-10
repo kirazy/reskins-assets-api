@@ -1239,6 +1239,65 @@ local definitions = {
 			ended_in_water_trigger_effect = default_ended_in_water_trigger_effect(),
 		})
 	end,
+	["offshore-pump-glass-particle-small"] = function(tint)
+		return make_particle({
+			pictures = particle_animations.get_glass_particle_small_pictures({ tint = tint or { 1, 1, 1, 1 } }),
+			shadows = particle_animations.get_glass_particle_small_pictures({
+				tint = shadowtint(),
+				shift = util.by_pixel(1, 0),
+			}),
+			regular_trigger_effect = nil,
+			ended_in_water_trigger_effect = default_ended_in_water_trigger_effect(),
+		})
+	end,
+	["offshore-pump-mechanical-component-particle-medium"] = function(tint)
+		return make_particle({
+			pictures = particle_animations.get_mechanical_component_particle_medium_pictures({
+				tint = tint or { 0.859, 0.766, 0.680, 1 },
+			}),
+			shadows = particle_animations.get_mechanical_component_particle_medium_pictures({
+				tint = shadowtint(),
+				shift = util.by_pixel(1, 0),
+			}),
+			regular_trigger_effect = nil,
+			ended_in_water_trigger_effect = default_ended_in_water_trigger_effect(),
+		})
+	end,
+	["offshore-pump-metal-particle-big"] = function(tint)
+		return make_particle({
+			pictures = particle_animations.get_metal_particle_big_pictures({ tint = tint or { 0.502, 0.455, 0.435, 1 } }),
+			shadows = particle_animations.get_metal_particle_big_pictures({
+				tint = shadowtint(),
+				shift = util.by_pixel(1, 0),
+			}),
+			regular_trigger_effect = default_smoke_trigger_effect(),
+			ended_in_water_trigger_effect = default_ended_in_water_trigger_effect(),
+			render_layer = "object",
+		})
+	end,
+	["offshore-pump-metal-particle-medium"] = function(tint)
+		return make_particle({
+			pictures = particle_animations.get_metal_particle_medium_pictures({ tint = tint or { 0.600, 0.545, 0.518, 1 } }),
+			shadows = particle_animations.get_metal_particle_medium_pictures({
+				tint = shadowtint(),
+				shift = util.by_pixel(1, 0),
+			}),
+			regular_trigger_effect = small_smoke_trigger_effect(),
+			ended_in_water_trigger_effect = default_ended_in_water_trigger_effect(),
+			render_layer = "object",
+		})
+	end,
+	["offshore-pump-metal-particle-small"] = function(tint)
+		return make_particle({
+			pictures = particle_animations.get_metal_particle_small_pictures({ tint = tint or { 0.776, 0.600, 0.224, 1 } }),
+			shadows = particle_animations.get_metal_particle_small_pictures({
+				tint = shadowtint(),
+				shift = util.by_pixel(1, 0),
+			}),
+			regular_trigger_effect = nil,
+			ended_in_water_trigger_effect = default_ended_in_water_trigger_effect(),
+		})
+	end,
 	["oil-refinery-long-metal-particle-medium"] = function(tint)
 		return make_particle({
 			pictures = particle_animations.get_metal_particle_medium_long_pictures({

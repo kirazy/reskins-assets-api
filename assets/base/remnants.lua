@@ -45,6 +45,7 @@ local M = {}
 ---| "long-handed-inserter-remnants"
 ---| "medium-electric-pole-remnants"
 ---| "nuclear-reactor-remnants"
+---| "offshore-pump-remnants"
 ---| "oil-refinery-remnants"
 ---| "passive-provider-chest-remnants"
 ---| "pipe-remnants"
@@ -433,6 +434,17 @@ local definitions = {
 		subgroup = "energy-remnants",
 		order = "a-e-a",
 		selectable_in_game = false,
+		time_before_removed = 60 * 60 * 15,
+		expires = false,
+		final_render_layer = "remnants",
+		remove_on_tile_placement = false,
+	},
+	["offshore-pump-remnants"] = {
+		flags = { "placeable-neutral", "building-direction-8-way", "not-on-map" },
+		hidden_in_factoriopedia = true,
+		selectable_in_game = false,
+		subgroup = "extraction-machine-remnants",
+		order = "a-d-b",
 		time_before_removed = 60 * 60 * 15,
 		expires = false,
 		final_render_layer = "remnants",
