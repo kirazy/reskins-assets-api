@@ -20,12 +20,12 @@ Date: ????
     - Added methods to `icons` for retrieving technology constants, equipment overlays and backgrounds, and the overlays of minified machines.
     - Added `icons.classify_symbol_layers`, which places symbol and letter layers in the symbol group of an icon composition.
   Changes:
-    - Applying a sprite set now automatically creates and associates a correctly configured corps, dying explosion, and particles.
+    - Applying a sprite set now automatically creates and associates a correctly configured corpse, dying explosion, and particles.
       - This now correctly sets up the death spiral for flying robots.
     - Sprite sets now include water reflections, circuit connectors, frozen sprites, integration patches, heat pictures and pipe covers, drawing box extensions, and light flickers as appropriate.
     - Sprite sets with the artwork of an earlier Factorio release now use the circuit connectors, frozen sprites, and water reflections of that release.
     - `apply_sprite_set` now applies the `fluid_boxes`, `heat_buffers`, and `pipe_material` of every sprite set.
-      - Any existing `pie_pictures` are removed from fluid boxes when not provided by the sprite set.
+      - Any existing pipe pictures are removed from fluid boxes when not provided by the sprite set.
     - The `corpse` and `dying_explosion` of a sprite set now accept a definition or a prototype name.
     - Added additional fields to `CorpseSpriteSet`, such as its flags and lifetime.
     - The transport belt, underground belt, and splitter sprite sets now include the belt reader sprites and frozen patches.
@@ -43,11 +43,12 @@ Date: ????
     - Fixed that the tall electric mining drill sprite set draw order for the north wet window was incorrect.
   Breaking Changes:
     - Renamed `defines.sprite_set_type.flying_robot_sprite_set` to `combat_robot_sprite_set`.
+    - Renamed `assets.angels.entities.assorted.loader` to `loader-1x2`, and `assets.assorted.entities.vanilla-loader` to `vanilla-loader-1x2`.
     - Removed `apply_to_explosion` from `SpriteSetApplicator`, and the `include_frozen_pictures` parameter and `fluid_box` field from the pipe sprite sets.
     - Removed the radius visualisation from the beacon and mining drill sprite sets.
-    - Removed `assets.base.items.icons` and `assets.base.technologies.icons`; use the sprite set modules and the catalog modules instead.
+    - Removed `assets.base.items.icons`, and `research_speed` from `assets.base.technologies.icons`; use the sprite set modules and the catalog modules instead.
     - `transport_belt_sprite_set` now applies only to transport belts.
-    - The transport belt, underground belt, and splitter applicators now set the `belt_animation_set` of the given prototype. 
+    - The transport belt, underground belt, and splitter applicators now set the `belt_animation_set` of the given prototype.
       - `apply_sprite_set` no longer scales `belt_animation_set` automatically.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
