@@ -5,12 +5,34 @@
 ---@namespace Reskins.Assets.Bobs.Items
 
 local _defines = require("api.defines")
+local V = require("__reskins-sprite-utils__.validation")
 local IconBuilderFactory = require("api.icon-builder-factory")
 
-local icons = IconBuilderFactory:create({ folder = _defines.assets_source.bobs_assets .. "/graphics/icons/fuel-cells" })
+-- The colors with artwork for the fuel cell of each fuel.
+local FUEL_COLORS = {
+	["deuterium"] = { ["blue"] = true, ["pink"] = true },
+	["deuterium-2"] = { ["blue"] = true, ["pink"] = true },
+	["depleted-deuterium"] = { ["blue"] = true, ["pink"] = true },
+	["thorium"] = { ["yellow"] = true },
+	["depleted-thorium"] = { ["yellow"] = true },
+	["plutonium"] = { ["green"] = true },
+	["thorium-plutonium"] = { ["orange"] = true },
+}
 
----Provides methods for getting the icons of the fuel-cells folder, such as
----`fuel-cells/depleted-deuterium-fuel-cell-blue.png`.
+local FUEL = V.one_of({
+	"deuterium",
+	"deuterium-2",
+	"depleted-deuterium",
+	"thorium",
+	"depleted-thorium",
+	"plutonium",
+	"thorium-plutonium",
+})
+local COLOR = V.one_of({ "blue", "green", "orange", "pink", "yellow" })
+
+local icons = IconBuilderFactory:create({ folder = _defines.assets_source.bobs_assets .. "/graphics/icons" })
+
+---Provides methods for getting the icons of the fuel-cells folder, `fuel-cells/{fuel}/fuel-cell-{fuel}-{color}.png`.
 ---
 ---#### Examples
 ---```lua
@@ -19,46 +41,29 @@ local icons = IconBuilderFactory:create({ folder = _defines.assets_source.bobs_a
 ---@class FuelCells
 local M = {}
 
----Gets the icon for the depleted deuterium fuel cell as an `IconComposition`, with blue deuterium.
-M.get_depleted_deuterium_fuel_cell_blue_icon_composition = icons
-	:flat("depleted-deuterium-fuel-cell-blue")
-	:build_composition("get_depleted_deuterium_fuel_cell_blue_icon_composition")
-
----Gets the icon for the depleted deuterium fuel cell as an `IconComposition`, with pink deuterium.
-M.get_depleted_deuterium_fuel_cell_pink_icon_composition = icons
-	:flat("depleted-deuterium-fuel-cell-pink")
-	:build_composition("get_depleted_deuterium_fuel_cell_pink_icon_composition")
-
----Gets the icon for the depleted thorium fuel cell as an `IconComposition`.
-M.get_depleted_thorium_fuel_cell_icon_composition =
-	icons:flat("depleted-thorium-fuel-cell"):build_composition("get_depleted_thorium_fuel_cell_icon_composition")
-
----Gets the icon for the deuterium fuel cell 2 as an `IconComposition`, with blue deuterium.
-M.get_deuterium_fuel_cell_2_blue_icon_composition =
-	icons:flat("deuterium-fuel-cell-2-blue"):build_composition("get_deuterium_fuel_cell_2_blue_icon_composition")
-
----Gets the icon for the deuterium fuel cell 2 as an `IconComposition`, with pink deuterium.
-M.get_deuterium_fuel_cell_2_pink_icon_composition =
-	icons:flat("deuterium-fuel-cell-2-pink"):build_composition("get_deuterium_fuel_cell_2_pink_icon_composition")
-
----Gets the icon for the deuterium fuel cell as an `IconComposition`, with blue deuterium.
-M.get_deuterium_fuel_cell_blue_icon_composition =
-	icons:flat("deuterium-fuel-cell-blue"):build_composition("get_deuterium_fuel_cell_blue_icon_composition")
-
----Gets the icon for the deuterium fuel cell as an `IconComposition`, with pink deuterium.
-M.get_deuterium_fuel_cell_pink_icon_composition =
-	icons:flat("deuterium-fuel-cell-pink"):build_composition("get_deuterium_fuel_cell_pink_icon_composition")
-
----Gets the icon for the plutonium fuel cell as an `IconComposition`.
-M.get_plutonium_fuel_cell_icon_composition =
-	icons:flat("plutonium-fuel-cell"):build_composition("get_plutonium_fuel_cell_icon_composition")
-
----Gets the icon for the thorium fuel cell as an `IconComposition`.
-M.get_thorium_fuel_cell_icon_composition =
-	icons:flat("thorium-fuel-cell"):build_composition("get_thorium_fuel_cell_icon_composition")
-
----Gets the icon for the thorium-plutonium fuel cell as an `IconComposition`.
-M.get_thorium_plutonium_fuel_cell_icon_composition =
-	icons:flat("thorium-plutonium-fuel-cell"):build_composition("get_thorium_plutonium_fuel_cell_icon_composition")
+---Gets the icon for the fuel cell of the given `fuel` in the given `color` as an `IconComposition`.
+---
+---Not every fuel has artwork in every color.
+---
+---#### Examples
+---```lua
+----- Get the icon for the deuterium fuel cell in blue.
+---local icon_data = FuelCells.get_icon_composition({ fuel = "deuterium", color = "blue" }):build()
+----- The icon is fuel-cells/deuterium/fuel-cell-deuterium-blue.png.
+---```
+M.get_icon_composition = icons
+	:collection("fuel-cells", "fuel", FUEL)
+	:stem("fuel-cell")
+	:keyed("color", COLOR)
+	:build_composition("get_icon_composition", {
+		{
+			field = "color",
+			fields = { "fuel", "color" },
+			check = function(fuel, color)
+				return FUEL_COLORS[fuel][color] == true
+			end,
+			message = "a color in which the fuel cell of the given fuel has artwork",
+		},
+	})
 
 return M
