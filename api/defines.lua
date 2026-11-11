@@ -319,6 +319,9 @@ _defines.sprite_set_type = {
 	---The sprite set for `SolarPanelPrototype`.
 	solar_panel_sprite_set = "SolarPanelSpriteSet",
 
+	---The sprite set for `ElectricEnergyInterfacePrototype`.
+	electric_energy_interface_sprite_set = "ElectricEnergyInterfaceSpriteSet",
+
 	---The sprite set for `StorageTankPrototype`.
 	storage_tank_sprite_set = "StorageTankSpriteSet",
 
