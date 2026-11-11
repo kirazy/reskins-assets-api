@@ -3,6 +3,7 @@ Version: 0.2.2
 Date: ????
   Features:
     - Added an applicator for electric energy interfaces.
+    - Added the wind turbine sprite set and technology icon.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 2026-11-09
