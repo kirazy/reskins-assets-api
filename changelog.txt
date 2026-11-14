@@ -3,6 +3,7 @@ Version: 0.2.3
 Date: ????
   Features:
     - Added `ApplicatorRegistry.get_applied_sprite_set` to retrieve the most recently applied sprite set and the used parameters for a given prototype.
+    - Added methods to the Lab assets to apply various pieces of its sprite definitions.
   Changes:
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
