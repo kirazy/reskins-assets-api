@@ -8,6 +8,7 @@
 local _defines = require("api.defines")
 local V = require("__reskins-sprite-utils__.validation")
 local Common = require("__reskins-sprite-utils__.validation.common")
+local AssetsCommon = require("api.validation")
 local EnergySources = require("api.energy-sources")
 local IconBuilderFactory = require("api.icon-builder-factory")
 local NuclearReactorExplosion = require("assets.base.explosions.nuclear-reactor")
@@ -336,6 +337,236 @@ function M.get_sprite_set(params)
 	}
 
 	return definition
+end
+
+---The width and height of each file for the heat pipes beneath the reactor, in pixels.
+local LOWER_LAYER_WIDTH, LOWER_LAYER_HEIGHT = 320, 316
+
+---The region for each piece of the heat pipes beneath the reactor, under the position of the tile with the heat
+---connections that the piece draws. A region is given as the left, top, right, and bottom edges, in pixels from the
+---centre of the reactor at 64 pixels per tile, and holds the piece in every material and in its heated form.
+---@type table<string, [integer, integer, integer, integer]>
+local HEAT_PIPE_REGIONS = {
+	["-2,-2"] = { -164, -170, -92, -81 },
+	["0,-2"] = { -20, -170, 20, -137 },
+	["2,-2"] = { 89, -170, 161, -65 },
+	["-2,0"] = { -164, -22, -123, 24 },
+	["2,0"] = { 122, -18, 161, 18 },
+	["-2,2"] = { -157, 74, -51, 151 },
+	["0,2"] = { -31, 87, 44, 151 },
+	["2,2"] = { 82, 51, 161, 151 },
+}
+
+---Gets the key of the given tile `position` in the regions of the heat pipes.
+---@param position Vector
+---@return string
+local function get_tile_key(position)
+	local x, y = position.x or position[1], position.y or position[2]
+
+	return string.format("%d,%d", x, y)
+end
+
+---Gets the x and y of the given `vector`, in either form.
+---@param vector Vector
+---@return double x
+---@return double y
+local function get_coordinates(vector)
+	return vector.x or vector[1], vector.y or vector[2]
+end
+
+---Gets a copy of the given `layer` that draws only the given region of its file, moved by the given `offset`.
+---@param layer Sprite A layer that draws its whole file.
+---@param left integer The left edge of the region, in pixels of the file.
+---@param top integer The top edge of the region, in pixels of the file.
+---@param right integer The right edge of the region, in pixels of the file.
+---@param bottom integer The bottom edge of the region, in pixels of the file.
+---@param offset Vector The offset by which the region is moved, in tiles.
+---@return Sprite
+local function get_layer_region(layer, left, top, right, bottom, offset)
+	local pixels_per_tile = 32 / (layer.scale or 1)
+	local shift_x, shift_y = get_coordinates(layer.shift or { 0, 0 })
+	local offset_x, offset_y = get_coordinates(offset)
+
+	local region = util.copy(layer)
+	region.x = (layer.x or 0) + left
+	region.y = (layer.y or 0) + top
+	region.width = right - left
+	region.height = bottom - top
+	region.shift = {
+		shift_x + ((left + right) / 2 - layer.width / 2) / pixels_per_tile + offset_x,
+		shift_y + ((top + bottom) / 2 - layer.height / 2) / pixels_per_tile + offset_y,
+	}
+
+	return region
+end
+
+---Gets the offset from the `from` tile to the `to` tile of the given `move`, in tiles.
+---@param move NuclearReactorHeatPipeMove
+---@return Vector
+local function get_offset(move)
+	local from_x, from_y = get_coordinates(move.from)
+	local to_x, to_y = get_coordinates(move.to)
+
+	return { to_x - from_x, to_y - from_y }
+end
+
+---Gets the pieces of the given heat pipes beneath the reactor, each moved as given by `moves`, as the layers of one
+---sprite.
+---@param picture Sprite The heat pipes beneath the reactor.
+---@param moves NuclearReactorHeatPipeMove[] The tile from which each piece is cut and the tile on which it is drawn.
+---@return Sprite
+local function get_moved_lower_layer(picture, moves)
+	---@type Sprite[]
+	local layers = {}
+	for _, layer in pairs(picture.layers or { picture }) do
+		if layer.width ~= LOWER_LAYER_WIDTH or layer.height ~= LOWER_LAYER_HEIGHT then
+			error("The heat pipes beneath the reactor do not have the layout of the nuclear reactor.")
+		end
+
+		-- The regions are given in pixels from the centre of the reactor, at 64 pixels per tile.
+		local pixels_per_tile = 32 / (layer.scale or 1)
+		local factor = pixels_per_tile / 64
+		local shift_x, shift_y = get_coordinates(layer.shift or { 0, 0 })
+		local centre_x = layer.width / 2 - shift_x * pixels_per_tile
+		local centre_y = layer.height / 2 - shift_y * pixels_per_tile
+
+		for _, move in pairs(moves) do
+			local region = HEAT_PIPE_REGIONS[get_tile_key(move.from)]
+			local left = math.max(0, math.floor(centre_x + region[1] * factor))
+			local top = math.max(0, math.floor(centre_y + region[2] * factor))
+			local right = math.min(layer.width, math.ceil(centre_x + region[3] * factor))
+			local bottom = math.min(layer.height, math.ceil(centre_y + region[4] * factor))
+
+			layers[#layers + 1] = get_layer_region(layer, left, top, right, bottom, get_offset(move))
+		end
+	end
+
+	return { layers = layers }
+end
+
+---Defines where a piece of the heat pipes beneath the nuclear reactor is drawn on a reactor of another size.
+---@class NuclearReactorHeatPipeMove
+---The position of the tile with the heat connections that the piece draws on the nuclear reactor, in tiles from its
+---centre, such as `{ -2, 0 }`.
+---@field from Vector
+---The position of the tile on which the piece is drawn, in tiles from the centre of the reactor.
+---@field to Vector
+
+---Defines the heat pipes beneath the nuclear reactor, drawn in pieces.
+---@class NuclearReactorHeatPipes
+---The heat pipes beneath the reactor.
+---@field lower_layer_picture Sprite
+---The heated heat pipes beneath the reactor.
+---@field heat_lower_layer_picture Sprite
+
+local check_get_moved_heat_pipes = V.signature("get_moved_heat_pipes", {
+	{ "definition", AssetsCommon.sprite_set_definition },
+	{
+		"moves",
+		V.array(V.struct({
+			from = Common.vector,
+			to = Common.vector,
+		}):where(function(value)
+			return HEAT_PIPE_REGIONS[get_tile_key(value.from)] ~= nil
+		end, "has a 'from' that is not a tile with heat connections on the nuclear reactor")),
+	},
+})
+
+---Gets the heat pipes beneath the nuclear reactor of the given `definition`, cut into pieces at its heat connections
+---and moved as given by `moves`, at their full size.
+---
+---Each piece is the length of heat pipe that leads to the heat connections on one tile at the edge of the reactor. A
+---reactor of another size draws the pieces at its own heat connections, where they meet heat pipes at their full size.
+---A piece that no move names is not drawn.
+---@param definition SpriteSetDefinition<ReactorSpriteSet> The sprite set definition from `get_sprite_set`.
+---@param moves NuclearReactorHeatPipeMove[] The tile from which each piece is cut and the tile on which it is drawn.
+---@return NuclearReactorHeatPipes # The heat pipes, which are drawn in pieces.
+---
+---#### Examples
+---```lua
+----- Draw the piece at the north edge of the reactor at `{ 0, -1 }` on a 3 x 3 reactor.
+---local NuclearReactor = require("__reskins-assets-api__.assets.base.entities.nuclear-reactor")
+---
+---local definition = NuclearReactor.get_sprite_set({ pipe_material = "gold-copper" })
+---local heat_pipes = NuclearReactor.get_moved_heat_pipes(definition, { { from = { 0, -2 }, to = { 0, -1 } } })
+----- heat_pipes.lower_layer_picture draws the piece one tile closer to the centre than on the nuclear reactor.
+---```
+---@throws When `definition` is not a `SpriteSetDefinition`.
+---@throws When a move has a `from` that is not a tile with heat connections on the nuclear reactor.
+---@throws When a move has a `to` that is not a `Vector`.
+---@throws When the heat pipes of `definition` do not have the layout of the nuclear reactor.
+---@see get_heat_pipe_shadow
+---@nodiscard
+function M.get_moved_heat_pipes(definition, moves)
+	check_get_moved_heat_pipes(definition, moves)
+
+	local graphics_set = definition.set.graphics_set --[[@as ReactorGraphicsSet]]
+
+	return {
+		lower_layer_picture = get_moved_lower_layer(graphics_set.lower_layer_picture, moves),
+		heat_lower_layer_picture = get_moved_lower_layer(graphics_set.heat_lower_layer_picture, moves),
+	}
+end
+
+---Gets the shadow of the nuclear reactor without the shadows of its heat pipes, for a reactor that draws the shadows of
+---its heat pipes apart from the shadow of its body.
+---@return Sprite # The shadow, at the size of the nuclear reactor.
+---@see get_heat_pipe_shadow
+---@nodiscard
+function M.get_shadow_without_heat_pipes()
+	---@type Sprite
+	local shadow = {
+		filename = "__reskins-assets-base__/graphics/entity/nuclear-reactor/reactor-shadow-without-pipes.png",
+		width = 525,
+		height = 323,
+		shift = { 1.625, 0 },
+		draw_as_shadow = true,
+		scale = 0.5,
+	}
+
+	return shadow
+end
+
+---The width and height in pixels of the heat pipe shadow on a reactor of each size, under the size of the reactor in
+---tiles.
+---@type table<integer, integer>
+local HEAT_PIPE_SHADOW_SIZES = {
+	[1] = 69,
+	[3] = 256,
+}
+
+local check_get_heat_pipe_shadow = V.signature("get_heat_pipe_shadow", {
+	{ "size", V.one_of({ 1, 3 }) },
+})
+
+---Gets the shadow of the heat pipes and their ends on a reactor of the given `size`, with the pieces of the heat pipes
+---that `get_moved_heat_pipes` cuts drawn at the centre of each tile at its edges.
+---
+---The shadow of a reactor that is 1 tile across holds the pieces at the middle tile on each edge of the nuclear
+---reactor.
+---@param size 1|3 The width and height of the reactor, in tiles.
+---@return Sprite # The shadow, which is centred on the reactor.
+---@throws When `size` is not 1 or 3.
+---@nodiscard
+function M.get_heat_pipe_shadow(size)
+	check_get_heat_pipe_shadow(size)
+
+	local pixels = HEAT_PIPE_SHADOW_SIZES[size]
+
+	---@type Sprite
+	local shadow = {
+		filename = string.format(
+			"__reskins-assets-base__/graphics/entity/nuclear-reactor/nuclear-reactor-connect-patch-shadow-%dx%d.png",
+			size,
+			size
+		),
+		width = pixels,
+		height = pixels,
+		draw_as_shadow = true,
+		scale = 0.5,
+	}
+
+	return shadow
 end
 
 ---The fuel a reactor burns, which selects the artwork of its core.
