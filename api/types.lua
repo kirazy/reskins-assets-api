@@ -22,6 +22,14 @@
 ---A multiplier applied to the scale of the sprites, which overrides automatic scaling.
 ---@field scale_factor? double
 
+---Defines a sprite set definition and the options with which `ApplicatorRegistry.apply_sprite_set` applied it to a
+---prototype.
+---@class (exact) AppliedSpriteSet
+---The sprite set definition that was applied.
+---@field definition AnySpriteSetDefinition
+---The options with which the sprite set definition was applied.
+---@field params ApplySpriteSetParams
+
 ---Defines the corpse and the dying explosion that `ApplicatorRegistry.apply_corpse_and_explosion` gives an entity.
 ---@class (exact) CorpseAndExplosionDefinition
 ---The corpse of the entity, in any form that the `corpse` of a sprite set accepts. When `nil`, the corpse of the entity

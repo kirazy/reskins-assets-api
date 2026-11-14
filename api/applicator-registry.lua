@@ -200,6 +200,10 @@ function _factory.new()
 	---set, scale it, or apply the fields common to every applicator; `apply_sprite_set` does all of these.
 	registry.applicators = applicators
 
+	---The sprite set last applied to each entity and equipment prototype, by the type and the name of the prototype.
+	---@type table<PrototypeType, table<string, AppliedSpriteSet>>
+	local applied_sprite_sets = {}
+
 	---Registers the given `applicator` for the `SpriteSetType` it declares.
 	---@param applicator AnySpriteSetApplicator The applicator to register.
 	---@throws When `applicator` is not a `SpriteSetApplicator`.
@@ -438,11 +442,55 @@ function _factory.new()
 
 		if is_corpse(prototype) then
 			apply_sprite_set_to_corpse(prototype, definition, params)
-		elseif is_equipment(prototype) then
+			return
+		end
+
+		if is_equipment(prototype) then
 			apply_sprite_set_to_equipment(prototype, definition, params)
 		else
 			apply_sprite_set_to_entity(prototype, definition, params)
 		end
+
+		applied_sprite_sets[prototype.type] = applied_sprite_sets[prototype.type] or {}
+		applied_sprite_sets[prototype.type][prototype.name] =
+			{ definition = util.copy(definition), params = util.copy(params) }
+	end
+
+	local check_get_applied_sprite_set = V.signature("get_applied_sprite_set", {
+		{ "prototype", AssetsCommon.prototype },
+	})
+
+	---Gets the sprite set definition that `apply_sprite_set` last applied to the given `prototype`, and the options with
+	---which it was applied.
+	---
+	---The prototype is found by its type and name. A sprite set applied to a corpse is not kept. Changes made to the
+	---prototype after the sprite set was applied are not part of the result.
+	---
+	---#### Parameters
+	---@param prototype EntityWithHealthPrototype|EquipmentPrototype The prototype to which the sprite set was applied.
+	---
+	---#### Returns
+	---@return AppliedSpriteSet? # A copy of the sprite set definition and its options, or `nil` when no sprite set was applied to `prototype`.
+	---
+	---#### Examples
+	---```lua
+	----- Apply the sprite set of a machine to a smaller copy of the machine.
+	---local Applicators = require("__reskins-assets-api__.api.applicators")
+	---
+	---local applied = Applicators.get_applied_sprite_set(data.raw["assembling-machine"]["assembling-machine-2"])
+	---if applied then
+	---    Applicators.apply_sprite_set(data.raw["assembling-machine"]["small-assembling-machine-2"], applied.definition)
+	---end
+	----- The smaller machine uses the artwork of "assembling-machine-2", scaled to its own size.
+	---```
+	---@throws When `prototype` is not a prototype.
+	---@nodiscard
+	function registry.get_applied_sprite_set(prototype)
+		check_get_applied_sprite_set(prototype)
+
+		local applied = applied_sprite_sets[prototype.type] and applied_sprite_sets[prototype.type][prototype.name]
+
+		return applied and util.copy(applied)
 	end
 
 	---Sets the corpse and the dying explosion of the given entity `prototype` to those of the given `definition`, in
