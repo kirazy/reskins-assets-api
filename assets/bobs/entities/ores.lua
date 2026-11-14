@@ -9,7 +9,7 @@ local V = require("__reskins-sprite-utils__.validation")
 local FOLDER = _defines.assets_source.bobs_assets .. "/graphics/entity/ores/"
 
 ---A solid resource that has stages in the ores folder.
----@alias OreResource "bauxite-ore"|"cobalt-ore"|"gold-ore"|"lead-ore"|"nickel-ore"|"quartz"|"rutile-ore"|"silver-ore"|"sulfur"|"thorium-ore"|"tin-ore"|"tungsten-ore"|"zinc-ore"
+---@alias OreResource "bauxite-ore"|"cobalt-ore"|"fluorite-ore"|"gold-ore"|"lead-ore"|"nickel-ore"|"quartz"|"rutile-ore"|"silver-ore"|"sulfur"|"thorium-ore"|"tin-ore"|"tungsten-ore"|"zinc-ore"
 
 ---A solid resource that has a glow in the ores folder.
 ---@alias GlowingOreResource "thorium-ore"
@@ -21,6 +21,7 @@ local FOLDER = _defines.assets_source.bobs_assets .. "/graphics/entity/ores/"
 local ORES = {
 	"bauxite-ore",
 	"cobalt-ore",
+	"fluorite-ore",
 	"gold-ore",
 	"lead-ore",
 	"nickel-ore",

@@ -11,11 +11,14 @@ local FOLDER = _defines.assets_source.bobs_assets .. "/graphics/icons/bearing-ba
 
 local MATERIALS = {
 	"brass",
+	"bronze",
 	"ceramic",
 	"cobalt-steel",
 	"nitinol",
+	"ptfe",
 	"steel",
 	"titanium",
+	"vanadium",
 }
 
 ---The files of the bearing balls in the colors of the materials from Angel's mods, by material.

@@ -11,6 +11,7 @@ local IconBuilderFactory = require("api.icon-builder-factory")
 local ORES = {
 	"bauxite-ore",
 	"cobalt-ore",
+	"fluorite-ore",
 	"gold-ore",
 	"lead-ore",
 	"nickel-ore",

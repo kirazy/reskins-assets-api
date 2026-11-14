@@ -15,6 +15,7 @@ local MATERIALS = {
 	"steel",
 	"titanium",
 	"tungsten",
+	"vanadium",
 }
 
 ---Provides methods for getting the icons of the gears folder, `gears/{material}-gear-wheel.png`.
