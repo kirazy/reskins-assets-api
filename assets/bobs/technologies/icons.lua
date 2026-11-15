@@ -6,6 +6,8 @@
 
 local _defines = require("api.defines")
 local IconBuilderFactory = require("api.icon-builder-factory")
+local V = require("__reskins-sprite-utils__.validation")
+local Common = require("__reskins-sprite-utils__.validation.common")
 
 local technologies = IconBuilderFactory:create({
 	folder = _defines.assets_source.bobs_assets .. "/graphics/technology",
@@ -313,6 +315,21 @@ M.get_greenhouse_icon = greenhouse:build("get_greenhouse_icon")
 
 ---Gets the technology icon for the greenhouse as an `IconComposition`.
 M.get_greenhouse_icon_composition = greenhouse:build_composition("get_greenhouse_icon_composition")
+
+local tinted_greenhouse = technologies:tinted("greenhouse")
+
+---Gets the technology icon for the greenhouse.
+M.get_tinted_greenhouse_icon = tinted_greenhouse:build("get_greenhouse_icon")
+
+---Gets the technology icon for the greenhouse as an `IconComposition`.
+M.get_tinted_greenhouse_icon_composition = tinted_greenhouse:build_composition("get_greenhouse_icon_composition")
+
+local tinted_greenhouse_variant =
+	tinted_greenhouse:keyed("glass", V.one_of({ "pink", "cyan" }), { IconBuilderFactory.role.base })
+
+M.get_tinted_greenhouse_variant_icon = tinted_greenhouse_variant:build("get_tinted_greenhouse_variant_icon")
+M.get_tinted_greenhouse_variant_icon_composition =
+	tinted_greenhouse_variant:build_composition("get_tinted_greenhouse_icon_composition")
 
 local grinding = technologies:flat("grinding")
 
